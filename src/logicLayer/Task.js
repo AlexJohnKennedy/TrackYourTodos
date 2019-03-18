@@ -49,13 +49,26 @@ function DowngradeCategory(category) {
 // TODO: Replace this will a persistence-safe method of acquiring a unique, new id value!
 const GetNewId = ((startVal) => () => startVal++)(0);
 
-class ActiveTasks {
-    constructor(handlerFuncs) {
+export class ActiveTasks {
+    constructor() {
         this.tasks = [];
+    }
 
+    RegisterForUpdates(handlerFuncs) {
         // the 'handler funcs' object contains a set of functions which this object should invoke when the appropriate event occurs.
         this.invokeTaskAddedEvent = handlerFuncs.taskAddedHandler;
         this.invokeTaskDeletedEvent = handlerFuncs.taskDeletedHandler;
+        this.invokeTaskChangedEvent = handlerFuncs.taskChangedHandler;
+    }
+
+    // Get tasks. WARNING, the Task objects returned will be exposed! Do not send beyond the interaction layer!!
+    GetActiveTasks(filterFunc = null) {
+        if (filterFunc == null) {
+            return this.tasks.slice(0);                         // Shallow copy
+        }
+        else {
+            return this.tasks.slice(0).filter(filterFunc);      // Filtered shallow copy
+        }
     }
 
     // Creates a parentless task, in a specified category!
@@ -69,6 +82,10 @@ class ActiveTasks {
     // Creates a new child task, in the category one level below the parent's category
     CreateNewSubtask(name, parent) {
         let newTask = new Task(GetNewId(), name, DowngradeCategory(parent.category), parent, parent.colourid);
+        this.tasks.push(newTask);
+        parent.addChild(newTask);
+
+        this.invokeTaskAddedEvent(this, newTask);
     }
 
     DeleteTask(task) {
@@ -94,15 +111,11 @@ class Task {
         this.id = id;   // MUST NEVER CHANGE
         this.name = name;
         this.category = category;
+        this.progressStatus = ProgressStatus.NotStarted;
         this.parent = parent;
         this.colourid = colourid;
         this.children = [];     // A newly created task should never have children
         this.siblings = this.getSiblingList();
-        this.listenerFuncs = {
-            state : [],
-            childAdded : [],
-            childRemoved : []
-        }
     }
 
     getSiblingList() {
@@ -113,38 +126,20 @@ class Task {
             return this.parent.children.slice(0).filter((child) => child !== this); // Shallow copy of parent's children, excluding self
         }
     }
-
-    registerForStateUpdateEvents(handler) {
-        this.listenerFuncs.state.push(handler);
-    }
-    registerForChildUpdateEvents(handler) {
-        this.listenerFuncs.child.push(handler);
-    }
     
     updateState(stateObj) {
         if ('name' in stateObj) this.name = stateObj.name;
         if ('category' in stateObj) this.category = stateObj.category;
         if ('colourid' in stateObj) this.colourid = stateObj.colourid;
-        for (handler of listenerFuncs.state) {
-            handler(this, stateObj);
-        }
     }
 
     addChild(childTask) {
         this.children.push(childTask);
         childTask.parent = this;
-        for (handler of listenerFuncs.childAdded) {
-            handler(this, childTask);
-        }
     }
     removeChild(task) {
         let prevlen = this.children.length;
         this.children.filter((c) => c !== task);
-        if (prevlen > this.children.length) {
-            task.parent = null;
-            for (handler of listenerFuncs.childRemoved) {
-                handler(this, task);
-            }
-        }
+        task.parent = null;
     }
 }

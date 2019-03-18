@@ -12,9 +12,37 @@ class Board extends Component {
         return <BoardBackground key={props.category}>
             <div class="board-title-container"> {props.boardTitle} 
                 <h2> {props.boardTitle} </h2>
-                <AddTastButton></AddTastButton>
+                <AddTaskButton/>
             </div>
             {taskComponentArray}
         </BoardBackground>
+    }
+}
+
+class GoalBoard extends Component {
+    render() {
+        return <Board
+            category="Goal"
+            boardTitle="Goals"
+            tasks={props.tasks}
+        />;
+    }
+}
+class WeeklyBoard extends Component {
+    render() {
+        return <Board
+            category="Weekly"
+            boardTitle="Weekly Tasks"
+            tasks={props.tasks}
+        />;
+    }
+}
+class DailyBoard extends Component {
+    render() {
+        return <Board
+            category="Daily"
+            boardTitle="Daily Tasks"
+            tasks={props.tasks}
+        />;
     }
 }
