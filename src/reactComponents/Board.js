@@ -14,7 +14,7 @@ export class Board extends Component {
         // Everything is wrapped in a 'bubble' thing.
         // The bubble thing has children; for the board, we want a title, an add task button, following by a list of tasks.
         return <React.Fragment key={this.props.category}>
-            <div className="board-title-container"> {this.props.boardTitle} 
+            <div className="board-title-container"> 
                 <h2> {this.props.boardTitle} </h2>
                 <NewTaskButton creationFunction={this.props.creationFunction}/>
             </div>

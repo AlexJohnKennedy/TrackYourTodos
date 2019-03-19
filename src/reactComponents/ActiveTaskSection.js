@@ -14,14 +14,18 @@ export class ActiveTaskSection extends Component {
             weekCreationFunc : () => {},
             dayCreationFunc : () => {}
         };
+        this.handleChange = this.handleChange.bind(this)
     }
     componentDidMount() {
         // This is the 'root' component which receives callbacks from the interaction layer, and passes down
         // all of the data views down to the child components.
-        this.activeTaskListAPI = RegisterToActiveTaskListAPI(this.handleChange.bind(this));     // We must make sure the callback is bound to this class.
+        this.activeTaskListAPI = RegisterToActiveTaskListAPI(this.handleChange);     // We must make sure the callback is bound to this class.
 
         // Initialise state of this component
         this.handleChange();
+
+        console.log("Finished mounting");
+        console.log(this.state);
     }
 
     // Update callback. In this design, the entire list will re-populate all tasks upon any change.
@@ -50,15 +54,15 @@ export class ActiveTaskSection extends Component {
             <React.Fragment>
                 <GoalBoard 
                 tasks={this.state.goalTaskViews}
-                creationFunction={this.goalCreationFunc}
+                creationFunction={this.state.goalCreationFunc}
                 />
                 <WeeklyBoard 
                     tasks={this.state.weekTaskViews}
-                    creationFunction={this.weekCreationFunc}
+                    creationFunction={this.state.weekCreationFunc}
                 />
                 <DailyBoard 
                     tasks={this.state.dayTaskViews}
-                    creationFunction={this.dayCreationFunc}
+                    creationFunction={this.state.dayCreationFunc}
                 />
             </React.Fragment>
         );
