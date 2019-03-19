@@ -19,6 +19,6 @@ export class NewTaskButton extends Component {
     }
     
     handleClick(e) {
-        this.props.creationFunction("NEW TASK WE JUST MADE!");
+        this.props.creationFunction("Dummy text");
     }
 }
