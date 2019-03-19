@@ -132,6 +132,7 @@ function BuildNewTaskView(activeList, domainTaskObj, viewLayerCallbackFunc) {
     }
 
     function deleteTask() {
+        // Note that this method call automatically invokes a viewLayerCallbackFunc!
         activeList.DeleteTask(domainTaskObj);
     }
 
@@ -141,6 +142,7 @@ function BuildNewTaskView(activeList, domainTaskObj, viewLayerCallbackFunc) {
         name : domainTaskObj.name,
         id   : domainTaskObj.id,
         colourid : domainTaskObj.colourid,
+        category : domainTaskObj.category,
         // Update functions
         SetState : setState,
         CanCreateChildren : canCreateChildren,
