@@ -77,6 +77,8 @@ export class ActiveTasks {
         this.tasks.push(newTask);
 
         this.invokeTaskAddedEvent(this, newTask);
+
+        return newTask;
     }
     
     // Creates a new child task, in the category one level below the parent's category
@@ -86,6 +88,8 @@ export class ActiveTasks {
         parent.addChild(newTask);
 
         this.invokeTaskAddedEvent(this, newTask);
+
+        return newTask;
     }
 
     DeleteTask(task) {
