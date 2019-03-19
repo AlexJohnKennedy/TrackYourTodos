@@ -39,7 +39,7 @@ export const ProgressStatus = Object.freeze({
 const DefaultColourId = 0;
 function DowngradeCategory(category) {
     if (category >= Category.Daily) {
-        throw "CANNOT DOWNGRADE";
+        throw new Error("CANNOT DOWNGRADE");
     }
     else {
         return category + 1;
@@ -55,6 +55,7 @@ export class ActiveTasks {
     }
 
     RegisterForUpdates(handlerFuncs) {
+        console.log(handlerFuncs);
         // the 'handler funcs' object contains a set of functions which this object should invoke when the appropriate event occurs.
         this.invokeTaskAddedEvent = handlerFuncs.taskAddedHandler;
         this.invokeTaskDeletedEvent = handlerFuncs.taskDeletedHandler;
@@ -76,7 +77,7 @@ export class ActiveTasks {
         let newTask = new Task(GetNewId(), name, category, null, colourid);
         this.tasks.push(newTask);
 
-        this.invokeTaskAddedEvent(this, newTask);
+        if (this.invokeTaskAddedEvent) this.invokeTaskAddedEvent(this, newTask);
 
         return newTask;
     }
@@ -87,7 +88,7 @@ export class ActiveTasks {
         this.tasks.push(newTask);
         parent.addChild(newTask);
 
-        this.invokeTaskAddedEvent(this, newTask);
+        if (this.invokeTaskAddedEvent) this.invokeTaskAddedEvent(this, newTask);
 
         return newTask;
     }
@@ -95,12 +96,12 @@ export class ActiveTasks {
     DeleteTask(task) {
         // Clear all parent and child links from the deleted task!
         if (task.parent) task.parent.removeChild(task);
-        for (child in task.children) {
+        for (let child in task.children) {
             task.removeChild(child);
         }
         // Remove it from our list, and invoke!
         this.tasks.filter((t) => t !== task);
-        this.invokeTaskDeletedEvent(this, task);
+        if (this.invokeTaskDeletedEvent) this.invokeTaskDeletedEvent(this, task);
     }
 }
 

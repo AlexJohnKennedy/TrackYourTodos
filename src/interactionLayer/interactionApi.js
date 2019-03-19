@@ -42,9 +42,9 @@ export function RegisterToActiveTaskListAPI(viewLayerCallbackFunc) {
 
     // Wrapper to allow interaction layer to mediate the way in which callbacks are
     // sent back to the viewLayerCallback.
-    function updateCallbackFunc(tasklist, taskWhichChanged) {
+    let updateCallbackFunc = (tasklist, taskWhichChanged) => {
         viewLayerCallbackFunc();    // For now, the view layer doesn't need any additional event parameters.
-    }
+    };
 
     // Register for global updates
     ActiveTaskDataObj.RegisterForUpdates({
@@ -118,7 +118,7 @@ export function RegisterToActiveTaskListAPI(viewLayerCallbackFunc) {
 function BuildNewTaskView(activeList, domainTaskObj, viewLayerCallbackFunc) {
 
     function setState(newState) {
-        domaintTaskObj.updateState(newState);
+        domainTaskObj.updateState(newState);
         viewLayerCallbackFunc();
     }
 
@@ -128,7 +128,7 @@ function BuildNewTaskView(activeList, domainTaskObj, viewLayerCallbackFunc) {
 
     function createChild(name) {
         // Note that this method call automatically invokes a viewLayerCallbackFunc!
-        activeList.CreateNewSubtask(name, domaintTaskObj);
+        activeList.CreateNewSubtask(name, domainTaskObj);
     }
 
     function deleteTask() {

@@ -1,3 +1,4 @@
+import React, { Component } from 'react';
 import { RegisterToActiveTaskListAPI } from '../interactionLayer/interactionApi';
 import { Category } from '../logicLayer/Task';
 import { GoalBoard, WeeklyBoard, DailyBoard } from './Board';
@@ -5,7 +6,16 @@ import { GoalBoard, WeeklyBoard, DailyBoard } from './Board';
 export class ActiveTaskSection extends Component {
     constructor(props) {
         super(props);
-
+        this.state = {
+            goalTaskViews : [],
+            weekTaskViews : [],
+            dayTaskViews : [],
+            goalCreationFunc : () => {},
+            weekCreationFunc : () => {},
+            dayCreationFunc : () => {}
+        };
+    }
+    componentDidMount() {
         // This is the 'root' component which receives callbacks from the interaction layer, and passes down
         // all of the data views down to the child components.
         this.activeTaskListAPI = RegisterToActiveTaskListAPI(this.handleChange.bind(this));     // We must make sure the callback is bound to this class.
