@@ -1,0 +1,9 @@
+.ActiveTaskSection {
+    display: inline-flex;
+    justify-content: center;
+
+    /* For the sake of testing */
+    background-color: #ffda9b;
+    width: 100%;
+    border-radius: 15px;
+}

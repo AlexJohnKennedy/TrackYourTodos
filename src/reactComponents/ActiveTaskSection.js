@@ -51,7 +51,7 @@ export class ActiveTaskSection extends Component {
     // Render the child elements and pass in the correct callbacks and taskviews from our react-state.
     render() {
         return (
-            <React.Fragment>
+            <div className="ActiveTaskSection">
                 <GoalBoard 
                 tasks={this.state.goalTaskViews}
                 creationFunction={this.state.goalCreationFunc}
@@ -64,7 +64,7 @@ export class ActiveTaskSection extends Component {
                     tasks={this.state.dayTaskViews}
                     creationFunction={this.state.dayCreationFunc}
                 />
-            </React.Fragment>
+            </div>
         );
     }
 }

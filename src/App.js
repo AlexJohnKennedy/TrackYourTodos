@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
-import './App.css';
+import './css/App.css';
+import './css/Board.css';
+import './css/ActiveTaskSection.css';
+import './css/Task.css';
 import { ActiveTaskSection } from './reactComponents/ActiveTaskSection';
 
 class App extends Component {
