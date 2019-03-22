@@ -1,9 +1,19 @@
 .TaskStatisticsSection {
-    border-style: solid;
-    border-color: var(--divider-colour);
-    border-width: 1px;
     border-radius: 0px;
 
     /* TEMP PLACEHOLDER */
     height: 45rem;
+
+    padding-top: var(--top-padding-amount);
+    padding-bottom: var(--top-padding-amount);
+    padding-left: var(--board-spacing-amount);
+    padding-right: var(--board-spacing-amount);
+
+    display: inline-flex;
+}
+
+.TaskStatisticsSection .placeholder {
+    background-color: var(--editor-background-colour);
+    border-radius: var(--border-radius);
+    flex-grow: 1;
 }

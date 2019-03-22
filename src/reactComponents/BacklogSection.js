@@ -4,7 +4,7 @@ export class BacklogSection extends Component {
     render() {
         return(
             <div className="BacklogSection">
-                <div className="placeholder-content">
+                <div className="placeholder">
                 </div>
             </div>
         );

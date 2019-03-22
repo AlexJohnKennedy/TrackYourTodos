@@ -3,11 +3,6 @@
     justify-content: space-between;
 
     background-color: rgba(0, 0, 0, 0);
-    border-style: solid;
-    border-color: var(--divider-colour);
-    border-width: 1px;
-    border-bottom-width: 0px;   /* Rely on the section below for bordering */
-    border-right-width: 0px;
     border-radius: 0px;
 
     box-sizing: border-box;
@@ -16,7 +11,6 @@
     min-width: var(--active-tasks-min-total-width);
 
     padding-top: var(--top-padding-amount);
-    padding-bottom: var(--top-padding-amount);
     padding-left: var(--board-spacing-amount);
     padding-right: var(--board-spacing-amount);
 }
@@ -27,7 +21,7 @@
     padding: 0.4rem;
     padding-bottom: 0rem;   /* tasks have a margin on the bottom, which will form this spacing instead */
     background-color: var(--editor-background-colour);
-    border-radius: 3px;
+    border-radius: var(--border-radius);
     min-height: 40rem;
     max-height: 60rem;
 
