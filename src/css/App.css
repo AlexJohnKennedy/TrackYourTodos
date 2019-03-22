@@ -20,9 +20,8 @@
   --muted-green-icon: #587C0C;
   --light-blue-icon: #36A3F0;
 
-  /* layout spacings */
-
-  font-size: 62.5%;
+  font-size: 62.5%;   /* Converts 10px == 1rem */
+  --font-size-ratio: 1000px;   /* used for media query calculations */
 }
 
 * {

@@ -6,10 +6,6 @@
     padding-top: var(--top-padding-amount);
     padding-left: var(--board-spacing-amount);
     padding-right: var(--board-spacing-amount);
-
-    border-left: 1px solid var(--divider-colour);
-
-    display: inline-flex;
 }
 
 .BacklogSection .placeholder {
