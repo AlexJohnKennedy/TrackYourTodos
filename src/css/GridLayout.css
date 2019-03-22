@@ -1,6 +1,6 @@
 #root {
     --top-padding-amount: 0.4rem;
-    --board-spacing-amount: 0.4rem;
+    --board-spacing-amount: 0.8rem;
 
     --active-tasks-min-total-width: 100rem;
     --active-tasks-min-total-width-when-squashed: 80rem;
@@ -31,3 +31,4 @@
     grid-row-start: 2;
     grid-row-end: 3;
 }
+
