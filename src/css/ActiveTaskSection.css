@@ -2,14 +2,17 @@
     display: inline-flex;
     justify-content: space-between;
 
-    /* For the sake of testing */
     background-color: rgba(0, 0, 0, 0);
     border-style: solid;
     border-color: var(--divider-colour);
     border-width: 1px;
-    width: 100%;
     border-radius: 4px;
-    
+
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 115rem;
+    min-width: 75rem;
+
     --top-padding-amount: 0.4rem;
     --side-padding-amount: 0.4rem;
     --board-spacing-amount: 0.4rem;
@@ -25,7 +28,7 @@
     padding: 0.4rem;
     background-color: var(--editor-background-colour);
     border-radius: 3px;
-    min-height: 25rem;
+    min-height: 30rem;
 
     box-sizing: border-box;
     /* Do a calculation to ensure that there is always exactly '--board-spacing-amount' space between each board */
@@ -39,8 +42,8 @@
 .task {
     background-color: var(--blue-icon);
     border-radius: 3px;
-    padding: 5px;
-    margin-bottom: 0.25rem;
+    padding: 0.5rem;
+    margin-bottom: 0.4rem;
 
     box-sizing: border-box;
     width: 100%;    /* Always jus fit the board we are in. Use the Board's padding to control spacing. */

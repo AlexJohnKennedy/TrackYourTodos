@@ -15,16 +15,20 @@
   --muted-yellow-icon: #CBCB41;
   --muted-green-icon: #587C0C;
   --light-blue-icon: #36A3F0;
+
+  font-size: 62.5%;
 }
 
-
-html {
-  font-size: 16px;
+* {
+  font-size: 1.6rem;
+}
+button {
+  font-size: 1rem;
 }
 body {
-  padding-top: 2rem;
-  padding-left: 1.8rem;
-  padding-right: 1.8rem;
+  padding-top: 1rem;
+  padding-left: 0.8rem;
+  padding-right: 0.8rem;
   text-align: center;
   font-family: monaco, monospace;
   color: var(--bright-text-colour);
@@ -35,10 +39,10 @@ h1, h2 {
   display: inline-block;
 }
 h1 {
-  font-size: 2rem;
+  font-size: 2.8rem;
 }
 h2 {
-  font-size: 1.6rem;
+  font-size: 2rem;
   margin-right: 1rem;
   margin-left: 1rem;
 }
