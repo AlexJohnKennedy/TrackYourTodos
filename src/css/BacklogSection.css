@@ -1,17 +1,20 @@
 .BacklogSection {
     width: var(--backlog-tasks-total-width);
 
-    border-radius: 0px;
+    background-color: var(--middle-tone-background-colour);
 
     padding-top: var(--top-padding-amount);
     padding-left: var(--board-spacing-amount);
     padding-right: var(--board-spacing-amount);
 
+    border-left: 1px solid var(--divider-colour);
+
     display: inline-flex;
 }
 
 .BacklogSection .placeholder {
-    background-color: var(--editor-background-colour);
+    background-color: rgb(0,0,0,0);
+    
     border-radius: var(--border-radius);
     flex-grow: 1;
 }
