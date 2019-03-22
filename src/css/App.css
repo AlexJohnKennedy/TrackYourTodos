@@ -1,7 +1,11 @@
 @import "./ActiveTaskSection.css";
+@import "./GridLayout.css";
+@import "./BacklogSection.css";
+@import "./TaskStatisticsSection.css";
 
 /* Define some global variables to define VSCode colour scheme colours! */
 :root {
+  /* colours */
   --editor-background-colour: #1E1E1E;
   --middle-tone-background-colour: #252526;
   --sidebar-background-colour: #333333;
@@ -15,6 +19,8 @@
   --muted-yellow-icon: #CBCB41;
   --muted-green-icon: #587C0C;
   --light-blue-icon: #36A3F0;
+
+  /* layout spacings */
 
   font-size: 62.5%;
 }

@@ -6,20 +6,19 @@
     border-style: solid;
     border-color: var(--divider-colour);
     border-width: 1px;
-    border-radius: 4px;
+    border-bottom-width: 0px;   /* Rely on the section below for bordering */
+    border-right-width: 0px;
+    border-radius: 0px;
 
     box-sizing: border-box;
     width: 100%;
-    max-width: 115rem;
-    min-width: 75rem;
+    max-width: var(--active-tasks-max-total-width);
+    min-width: var(--active-tasks-min-total-width);
 
-    --top-padding-amount: 0.4rem;
-    --side-padding-amount: 0.4rem;
-    --board-spacing-amount: 0.4rem;
     padding-top: var(--top-padding-amount);
     padding-bottom: var(--top-padding-amount);
-    padding-left: var(--side-padding-amount);
-    padding-right: var(--side-padding-amount);
+    padding-left: var(--board-spacing-amount);
+    padding-right: var(--board-spacing-amount);
 }
 
 .board {
@@ -32,6 +31,12 @@
     min-height: 40rem;
     max-height: 60rem;
 
+    /* the two children of a board are title container, and list container. We want them to be layout flexibly, in vertical direction */
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+.ActiveTaskSection .board {
     box-sizing: border-box;
     /* Do a calculation to ensure that there is always exactly '--board-spacing-amount' space between each board */
     /* flex-basis sets the size of each item in a flex container, i.e. the boards. (in the flex direction, i.e., the width) */
@@ -39,11 +44,6 @@
     --total-spacing: calc( var(--board-spacing-amount) * (var(--num-boards)-1) );
     --space-occupied-by-each-board: calc(100% - var(--total-spacing));
     flex-basis: calc(var(--space-occupied-by-each-board) / var(--num-boards));
-
-    /* the two children of a board are title container, and list container. We want them to be layout flexibly, in vertical direction */
-    display: inline-flex;
-    flex-direction: column;
-    justify-content: flex-start;
 }
 
 .board .board-title-container {
@@ -76,5 +76,4 @@
     margin-bottom: var(--top-padding-amount);
 
     box-sizing: border-box;
-    width: 100%;    /* Always jus fit the board we are in. Use the Board's padding to control spacing. */
 }

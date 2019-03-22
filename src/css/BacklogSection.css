@@ -1,0 +1,10 @@
+.BacklogSection {
+    width: var(--backlog-tasks-total-width);
+
+    border-style: solid;
+    border-color: var(--divider-colour);
+    border-width: 1px;
+    border-radius: 0px;
+    border-bottom-width: 0px;   /* Rely on the section below for bordering */
+    border-left-width: 0px;
+}

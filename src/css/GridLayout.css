@@ -1,0 +1,32 @@
+#root {
+    --top-padding-amount: 0.4rem;
+    --board-spacing-amount: 0.4rem;
+
+    --active-tasks-min-total-width: 100rem;
+    --active-tasks-min-total-width-when-squashed: 80rem;
+    --backlog-tasks-total-width: 33.6rem;
+
+    --divider-column-width: 1rem;
+
+    display: grid;
+    grid-template-columns: 1fr auto var(--divider-column-width) auto 1fr;
+}
+
+.ActiveTaskSection {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 1;
+    grid-row-end: 2;
+}
+.BacklogSection {
+    grid-column-start: 4;
+    grid-column-end: 5;
+    grid-row-start: 1;
+    grid-row-end: 2;
+}
+.TaskStatisticsSection {
+    grid-column-start: 2;
+    grid-column-end: 5;
+    grid-row-start: 2;
+    grid-row-end: 3;
+}

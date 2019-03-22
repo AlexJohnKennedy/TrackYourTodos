@@ -143,7 +143,6 @@ class Task {
         childTask.parent = this;
     }
     removeChild(task) {
-        let prevlen = this.children.length;
         this.children.filter((c) => c !== task);
         task.parent = null;
     }

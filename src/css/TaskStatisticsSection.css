@@ -1,0 +1,9 @@
+.TaskStatisticsSection {
+    border-style: solid;
+    border-color: var(--divider-colour);
+    border-width: 1px;
+    border-radius: 0px;
+
+    /* TEMP PLACEHOLDER */
+    height: 45rem;
+}
