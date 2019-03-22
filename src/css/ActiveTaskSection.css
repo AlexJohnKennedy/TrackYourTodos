@@ -48,18 +48,24 @@
 
 .board .board-title-container {
     flex-grow: 0;       /* Make title never re-size itself based on board size */
+    position: relative; /* Make this container the 'point of reference' for any absolutely positioned children */
 }
 .board .task-list-container {
     flex-grow: 1;       /* Make the task list always fill the Board. The title grow should be zero, to insist it stays default size */
     overflow: auto;     /* Make individual tasklists scrollable if too many tasks are added */
 }
 
-.task-list-container ::-webkit-scrollbar {
+.task-list-container::-webkit-scrollbar {
     width: 0rem;        /* MAKE THE SCROLLBAR INVISIBLE LIKE A SEXY MOFO */
 } 
-.board .board-title-container h2 {
+.board-title-container h2 {
     margin-top: 0.8rem;
     margin-bottom: 0.8rem;
+}
+.board-title-container button {
+    position: absolute;
+    right: 0.4rem;
+    top: 0.8rem;
 }
 
 
