@@ -6,8 +6,6 @@
     border-radius: 0px;
 
     box-sizing: border-box;
-    width: 100%;
-    min-width: var(--active-tasks-min-total-width);
 
     padding-top: var(--top-padding-amount);
     padding-left: var(--board-spacing-amount);
