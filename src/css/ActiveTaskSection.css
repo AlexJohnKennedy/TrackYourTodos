@@ -1,9 +1,47 @@
 .ActiveTaskSection {
     display: inline-flex;
-    justify-content: center;
+    justify-content: space-between;
 
     /* For the sake of testing */
-    background-color: #ffda9b;
+    background-color: rgba(0, 0, 0, 0);
+    border-style: solid;
+    border-color: var(--divider-colour);
+    border-width: 1px;
     width: 100%;
-    border-radius: 15px;
+    border-radius: 4px;
+    
+    --top-padding-amount: 0.4rem;
+    --side-padding-amount: 0.4rem;
+    --board-spacing-amount: 0.4rem;
+    padding-top: var(--top-padding-amount);
+    padding-bottom: var(--top-padding-amount);
+    padding-left: var(--side-padding-amount);
+    padding-right: var(--side-padding-amount);
+}
+
+.ActiveTaskSection .board {
+    margin-left: 0rem;
+    margin-right: 0rem;
+    padding: 0.4rem;
+    background-color: var(--editor-background-colour);
+    border-radius: 3px;
+    min-height: 25rem;
+
+    box-sizing: border-box;
+    /* Do a calculation to ensure that there is always exactly '--board-spacing-amount' space between each board */
+    /* flex-basis sets the size of each item in a flex container, i.e. the boards. (in the flex direction, i.e., the width) */
+    --num-boards: 3;
+    --total-spacing: calc( var(--board-spacing-amount) * (var(--num-boards)-1) );
+    --space-occupied-by-each-board: calc(100% - var(--total-spacing));
+    flex-basis: calc(var(--space-occupied-by-each-board) / var(--num-boards));
+}
+
+.task {
+    background-color: var(--blue-icon);
+    border-radius: 3px;
+    padding: 5px;
+    margin-bottom: 0.25rem;
+
+    box-sizing: border-box;
+    width: 100%;    /* Always jus fit the board we are in. Use the Board's padding to control spacing. */
 }

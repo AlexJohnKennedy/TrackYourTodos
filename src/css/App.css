@@ -1,3 +1,23 @@
+@import "./ActiveTaskSection.css";
+
+/* Define some global variables to define VSCode colour scheme colours! */
+:root {
+  --editor-background-colour: #1E1E1E;
+  --middle-tone-background-colour: #252526;
+  --sidebar-background-colour: #333333;
+  --text-colour: #ADADAD;
+  --bright-text-colour: #CCCCCC;
+  --selected-text-colour: #FFFFFF;
+  --dull-text-colour: #7D7D7D;
+  --divider-colour: #414141;
+
+  --blue-icon: #007ACC;
+  --muted-yellow-icon: #CBCB41;
+  --muted-green-icon: #587C0C;
+  --light-blue-icon: #36A3F0;
+}
+
+
 html {
   font-size: 16px;
 }
@@ -7,7 +27,8 @@ body {
   padding-right: 1.8rem;
   text-align: center;
   font-family: monaco, monospace;
-  
+  color: var(--bright-text-colour);
+  background-color: var(--sidebar-background-colour);
   background-size: cover;
 }
 h1, h2 {
