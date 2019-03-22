@@ -18,7 +18,9 @@ export class Board extends Component {
                 <h2> {this.props.boardTitle} </h2>
                 <NewTaskButton creationFunction={this.props.creationFunction}/>
             </div>
-            {taskComponentArray}
+            <div className="task-list-container">
+                {taskComponentArray}
+            </div>
         </div>
     }
 }

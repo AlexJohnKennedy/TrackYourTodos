@@ -30,21 +30,20 @@ body {
   padding-left: 0.8rem;
   padding-right: 0.8rem;
   text-align: center;
-  font-family: monaco, monospace;
   color: var(--bright-text-colour);
   background-color: var(--sidebar-background-colour);
   background-size: cover;
 }
 h1, h2 {
   display: inline-block;
+  font-family: monaco, monospace;
+  margin: 0rem;
 }
 h1 {
   font-size: 2.8rem;
 }
 h2 {
   font-size: 2rem;
-  margin-right: 1rem;
-  margin-left: 1rem;
 }
 span {
   background: #fd0;
