@@ -5,12 +5,18 @@ export class CreationForm extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {value: ''};
+        // Setup a ref to the text-input DOM element, so we can automatically trigger focus when it is rendered visible.
+        this.textInputRef = React.createRef();
 
+        this.state = {value: ''};
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
-
+    componentDidUpdate() {
+        if (this.props.showingForm) {
+            this.textInputRef.current.focus();  // Set the focus automatically, for SPEEEED!
+        }
+    }
     handleChange(event) {
         // Do not update if the string is already the max length
         if (event.target.value != null && event.target.value.length === MAX_TASK_NAME_LEN) {
@@ -48,7 +54,7 @@ export class CreationForm extends Component {
             <div className={classstring}>
                 <h2> {this.props.formText} </h2>
                 <form onSubmit={this.handleSubmit}>
-                    <input type="text" value={this.state.value} onChange={this.handleChange}/>
+                    <input type="text" value={this.state.value} onChange={this.handleChange} ref={this.textInputRef}/>
                     <input type="submit" value="Submit"/>
                 </form>
             </div>
