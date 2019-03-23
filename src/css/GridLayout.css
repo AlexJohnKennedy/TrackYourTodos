@@ -5,6 +5,8 @@
 
     --active-tasks-min-total-width: 100rem;
     --active-tasks-min-total-width-when-squashed: 80rem;
+    --active-tasks-single-board-max-width: 45rem;
+    --active-tasks-single-board-min-width: 30rem;
     --backlog-tasks-total-width: 33.6rem;
     --backlog-tasks-total-width-squashed: 25rem;
 
@@ -28,6 +30,9 @@
 
         width: 100%;
         min-width: var(--active-tasks-min-total-width);
+
+        display: inline-flex;
+        justify-content: space-between;
     }
     .BacklogSection {
         grid-column-start: 4;
@@ -68,6 +73,9 @@
         grid-row-end: 2;
 
         width: 100%;
+
+        display: inline-flex;
+        justify-content: space-between;
     }
     .BacklogSection {
         display: none;  /* For now. Later we will make the backlog section tab-selectable in the same section as the stats section! */
@@ -86,5 +94,21 @@
         height: 45rem;
     }
 }
+@media (max-width: 800px) {
+    #root {
+        display: grid;
+        grid-template-columns: 1fr minmax(var(--active-tasks-single-board-min-width), var(--active-tasks-single-board-max-width)) 1fr;
+    }
+    .ActiveTaskSection {
+        grid-column-start: 2;
+        grid-column-end: 3;
+        grid-row-start: 1;
+        grid-row-end: 2;
 
+        width: 100%;
 
+        display: inline-flex;
+        justify-content: space-between;
+        flex-direction: column;
+    }
+}

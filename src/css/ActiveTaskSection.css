@@ -1,7 +1,4 @@
 .ActiveTaskSection {
-    display: inline-flex;
-    justify-content: space-between;
-
     background-color: var(--editor-background-colour);
     border-radius: 0px;
 
