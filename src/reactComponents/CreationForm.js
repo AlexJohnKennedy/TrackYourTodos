@@ -21,7 +21,7 @@ export class CreationForm extends Component {
         this.setState({value: event.target.value});
     }
     handleSubmit(event) {
-        let nameText = this.state.value;
+        let nameText = this.state.value.trim();
         
         if (nameText.length > 0) {
             // All we need to do at the moment, is pass in the name field into the creation function we have been given!
@@ -40,12 +40,14 @@ export class CreationForm extends Component {
     
     // This component is simply a form wrapped by a background div.
     render() {
+        // If we are being told we are NOT showing, then make sure to additionally add the 'hidden' classname. CSS will
+        // then not render us.
+        let classstring = "creation-form" + (this.props.showingForm ? "" : " hidden");
+
         return (
-            // If we are being told we are NOT showing, then make sure to additionally add the 'hidden' classname. CSS will
-            // then not render us.
-            <div className={"creation-form " + (this.props.showingForm ? "" : "hidden")}>
+            <div className={classstring}>
+                <h2> {this.props.formText} </h2>
                 <form onSubmit={this.handleSubmit}>
-                    <h2> {this.props.formText} </h2>
                     <input type="text" value={this.state.value} onChange={this.handleChange}/>
                     <input type="submit" value="Submit"/>
                 </form>

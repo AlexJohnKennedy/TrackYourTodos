@@ -2,6 +2,7 @@
 @import "./GridLayout.css";
 @import "./BacklogSection.css";
 @import "./TaskStatisticsSection.css";
+@import "./CreationForm.css";
 
 /* Define some global variables to define VSCode colour scheme colours! */
 :root {
@@ -22,6 +23,10 @@
 
   font-size: 62.5%;   /* Converts 10px == 1rem */
   --font-size-ratio: 1000px;   /* used for media query calculations */
+}
+
+html .hidden {
+  display: none;
 }
 
 * {

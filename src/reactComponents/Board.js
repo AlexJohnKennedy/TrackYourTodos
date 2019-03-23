@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Task } from './Task';
 import { NewTaskButton } from './NewTaskButton.js';
 import { CreationForm } from './CreationForm.js';
-import { brotliCompress } from 'zlib';
 
 // the 'Board' component generically represents an active task list.
 // E.g., each of the three main 'lists' are Board components!
@@ -49,8 +48,9 @@ export class Board extends Component {
                 <CreationForm 
                     creationFunction={this.props.creationFunction} 
                     textPrompt={this.props.formText} 
-                    showing={this.state.showingForm}
+                    showingForm={this.state.showingForm}
                     submitAction={this.toggleFormOff}
+                    formText={this.props.formText}
                 />
             </div>
         );
