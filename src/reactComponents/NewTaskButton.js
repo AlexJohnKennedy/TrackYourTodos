@@ -19,6 +19,6 @@ export class NewTaskButton extends Component {
     }
     
     handleClick(e) {
-        this.props.creationFunction("Dummy text");
+        this.props.clickAction();   // Soon we will add parameters here which will allow us to set colour, +1 time (i.e. next day vs today), etc.
     }
 }
