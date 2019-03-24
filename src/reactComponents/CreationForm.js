@@ -11,6 +11,7 @@ export class CreationForm extends Component {
         this.state = {value: ''};
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleCancel = this.handleCancel.bind(this);
     }
     componentDidUpdate() {
         if (this.props.showingForm) {
@@ -41,6 +42,11 @@ export class CreationForm extends Component {
         this.setState({value: ""});
 
         // We must call this to override the default HTML form behaviours, i.e., stop the page from reloading.
+        event.preventDefault();
+    }
+    handleCancel(event) {
+        this.setState({value: ""});
+        this.props.submitAction();
         event.preventDefault();
     }
     
