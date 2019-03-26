@@ -3,6 +3,8 @@
 @import "./BacklogSection.css";
 @import "./TaskStatisticsSection.css";
 @import "./CreationForm.css";
+@import "./Task.css";
+@import "./Board.css";
 
 /* Define some global variables to define VSCode colour scheme colours! */
 :root {

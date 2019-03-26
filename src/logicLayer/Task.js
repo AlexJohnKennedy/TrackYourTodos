@@ -15,8 +15,10 @@
 
 /* Global settings */
 
+export const PUT_NEW_TASKS_AT_TOP_OF_LIST = false;
+
 // Character limit for text fields of an item.
-export const MAX_TASK_NAME_LEN = 30;
+export const MAX_TASK_NAME_LEN = 45;
 
 // Enumeration object, specifying the possible categories for an item. These will basically dictate where an item
 // appears on the UI, under which board. (PSST): 'Boards' themselves are just a UI-layer concept, so they will not
@@ -75,7 +77,12 @@ export class ActiveTasks {
     // Creates a parentless task, in a specified category!
     CreateNewIndependentTask(name, category, colourid = DefaultColourId) {
         let newTask = new Task(GetNewId(), name, category, null, colourid);
-        this.tasks.push(newTask);
+        if (PUT_NEW_TASKS_AT_TOP_OF_LIST) {
+            this.tasks.unshift(newTask);
+        }
+        else {
+            this.tasks.push(newTask);
+        }
 
         if (this.invokeTaskAddedEvent) this.invokeTaskAddedEvent(this, newTask);
 

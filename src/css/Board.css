@@ -1,0 +1,46 @@
+.board {
+    margin-left: 0rem;
+    margin-right: 0rem;
+    --board-padding: 0.6rem;
+    padding: var(--board-padding);
+    padding-bottom: 0rem;   /* tasks have a margin on the bottom, which will form this spacing instead */
+    background-color: rgb(0,0,0,0);
+    border-radius: var(--border-radius);
+    min-height: 40rem;
+    max-height: 60rem;
+
+    /* the two children of a board are title container, and list container. We want them to be layout flexibly, in vertical direction */
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: flex-start;
+
+    position: relative;
+}
+.ActiveTaskSection .board {
+    /* Do a calculation to ensure that there is always exactly '--board-spacing-amount' space between each board */
+    /* flex-basis sets the size of each item in a flex container, i.e. the boards. (in the flex direction, i.e., the width) */
+    --num-boards: 3;
+    flex-basis: calc(100% / var(--num-boards));
+}
+
+.board .board-title-container {
+    flex-grow: 0;       /* Make title never re-size itself based on board size */
+    position: relative; /* Make this container the 'point of reference' for any absolutely positioned children */
+}
+.board .task-list-container {
+    flex-grow: 1;       /* Make the task list always fill the Board. The title grow should be zero, to insist it stays default size */
+    overflow: auto;     /* Make individual tasklists scrollable if too many tasks are added */
+}
+.board h2 {
+    margin-top: 0.8rem;
+    margin-bottom: 0.8rem;
+}
+
+.task-list-container::-webkit-scrollbar {
+    width: 0rem;        /* MAKE THE SCROLLBAR INVISIBLE LIKE A SEXY MOFO */
+}
+.board-title-container button {
+    position: absolute;
+    right: 0.4rem;
+    top: 0.8rem;
+}

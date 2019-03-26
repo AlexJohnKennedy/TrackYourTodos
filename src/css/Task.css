@@ -1,0 +1,23 @@
+.task {
+    background-color: var(--blue-icon);
+    border-radius: 0px;
+    padding: 0.5rem;
+    /*margin-bottom: calc(1.5 *var(--top-padding-amount));*/
+    border-bottom: 0.2rem solid var(--editor-background-colour);
+
+    box-sizing: border-box;
+}
+
+/* Define an 'entrance' animation for whenever a task is created */
+.task {
+    animation-duration: 0.2s;
+    animation-name: slidein-left;
+}
+@keyframes slidein-left {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(0px);
+    }
+}
