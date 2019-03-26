@@ -55,14 +55,17 @@ export class ActiveTaskSection extends Component {
                 <GoalBoard 
                 tasks={this.state.goalTaskViews}
                 creationFunction={this.state.goalCreationFunc}
+                formStateManager={this.props.formStateManager}
                 />
                 <WeeklyBoard 
                     tasks={this.state.weekTaskViews}
                     creationFunction={this.state.weekCreationFunc}
+                    formStateManager={this.props.formStateManager}
                 />
                 <DailyBoard 
                     tasks={this.state.dayTaskViews}
                     creationFunction={this.state.dayCreationFunc}
+                    formStateManager={this.props.formStateManager}
                 />
             </div>
         );

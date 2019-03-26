@@ -15,6 +15,7 @@ export class CreationForm extends Component {
     }
     componentDidUpdate() {
         if (this.props.showingForm) {
+            this.props.formStateManager.registerCleanUpCallback(this.handleCancel);
             this.textInputRef.current.focus();  // Set the focus automatically, for SPEEEED!
         }
     }
@@ -44,10 +45,9 @@ export class CreationForm extends Component {
         // We must call this to override the default HTML form behaviours, i.e., stop the page from reloading.
         event.preventDefault();
     }
-    handleCancel(event) {
+    handleCancel() {
         this.setState({value: ""});
         this.props.submitAction();
-        event.preventDefault();
     }
     
     // This component is simply a form wrapped by a background div.

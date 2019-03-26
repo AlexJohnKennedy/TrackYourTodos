@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Task } from './Task';
 import { NewTaskButton } from './NewTaskButton.js';
 import { CreationForm } from './CreationForm.js';
+import { ShortCutManager } from '../viewLogic/keyboardShortcutHandler';
 
 // the 'Board' component generically represents an active task list.
 // E.g., each of the three main 'lists' are Board components!
@@ -17,8 +18,12 @@ export class Board extends Component {
         this.toggleFormOn = this.toggleFormOn.bind(this);
         this.toggleFormOff = this.toggleFormOff.bind(this);
     }
+    componentDidMount() {
+        ShortCutManager.registerShiftShortcut(this.props.shortcutkey, this.toggleFormOn);
+    }
     
     toggleFormOn() {
+        this.props.formStateManager.triggerCleanup();
         this.setState({
             showingForm: true
         });
@@ -50,6 +55,7 @@ export class Board extends Component {
                     textPrompt={this.props.formText} 
                     showingForm={this.state.showingForm}
                     submitAction={this.toggleFormOff}
+                    formStateManager={this.props.formStateManager}
                     formText={this.props.formText}
                 />
             </div>
@@ -65,6 +71,8 @@ export class GoalBoard extends Component {
             tasks={this.props.tasks}
             creationFunction={this.props.creationFunction}
             formText="New goal"
+            formStateManager={this.props.formStateManager}
+            shortcutkey="Digit1"
         />;
     }
 }
@@ -76,6 +84,8 @@ export class WeeklyBoard extends Component {
             tasks={this.props.tasks}
             creationFunction={this.props.creationFunction}
             formText="New weekly task"
+            formStateManager={this.props.formStateManager}
+            shortcutkey="Digit2"
         />;
     }
 }
@@ -87,6 +97,8 @@ export class DailyBoard extends Component {
             tasks={this.props.tasks}
             creationFunction={this.props.creationFunction}
             formText="New daily task"
+            formStateManager={this.props.formStateManager}
+            shortcutkey="Digit3"
         />;
     }
 }
