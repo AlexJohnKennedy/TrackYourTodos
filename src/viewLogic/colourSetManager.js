@@ -1,3 +1,5 @@
+import { start } from "repl";
+
 // This file is responsible for producing objects which contain the colour values for
 // each respective 'colourId'; I.e., tasks have associated colour ids, and then each
 // id should be mapped to an actual colour value to be rendered by react. This manager
@@ -12,17 +14,26 @@
 // the sidebar, such that whenever a new task is created, the 'next' colour will
 // be chosen automatically unless overriden by the user on the creation form.
 export function GetColourSet(themeId) {
-    return colourSets.getSet(themeId);
+    return sets.getSet(themeId);
 }
 
-const colourSets = BuildColourSets();
+const sets = BuildColourSets();
 
 function BuildColourSets() {
     let colourSets = [];
 
     // TODO Define colour sets here
+    let defaultSet = CreateNewColourSet();
+    defaultSet.addColourToFrontOfList("#007ACC");
+    defaultSet.addColourToBackOfList("#CBCB41");
+    defaultSet.addColourToBackOfList("#587C0C");
+    defaultSet.addColourToBackOfList("#36A3F0");
+    colourSets.push(defaultSet);
 
     function getSet(id) {
+        if (id < 0 || id >= colourSets.length) {
+            return null;
+        }
         return colourSets[id];
     }
     return Object.freeze({
@@ -50,22 +61,38 @@ function CreateNewColourSet() {
         front = front + 1;
     }
 
+    // Returns the front colour value, increments its usage, and moves it to the back of the list.
     function useNextColour() {
         let c = colours[front];
         c.usages++;
-        front = cycleFront();
+        front = cycleFront(front);
         return c.value;
     }
-    function peekColours(index) {
-        let ret = []
-        for (let i=0; i < index + 1; i++) {
 
+    // Returns the front most 'numToPeek' colours, but does not use them, and does not cycle the front
+    // of the list at all.
+    function peekColours(numToPeek) {
+        let ret = []
+        ret.push(colours[front].value);
+        let val = front;
+        for (let i=0; i < numToPeek - 1; i++) {
+            val = cycleFront(val);
+            ret.push(colours[val]);
+        }
+        return ret;
+    }
+
+    // Moves the front of the list to the n'th next colour
+    function defer(n) {
+        if (n === 0) return;
+        for (let i=0; i < n; i++) {
+            front = cycleFront(front);
         }
     }
-    function deferTo(index)
+    
     // helper
-    function cycleFront() {
-        let i = front;
+    function cycleFront(startPoint) {
+        let i = startPoint;
         let usageTarget = 0;    // Look for next colour with this many current usages.
         let prevFront = i++;
         if (i === colours.length) i = 0;
@@ -81,10 +108,11 @@ function CreateNewColourSet() {
         return i;
     }
 
-
-
     return Object.freeze({
         addColourToFrontOfList: addColourToFrontOfList,
-        addColourToBackOfList: addColourToBackOfList
+        addColourToBackOfList: addColourToBackOfList,
+        useNextColour: useNextColour,
+        peekColours: peekColours,
+        defer: defer
     });
 }
