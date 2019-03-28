@@ -57,7 +57,6 @@ export class ActiveTasks {
     }
 
     RegisterForUpdates(handlerFuncs) {
-        console.log(handlerFuncs);
         // the 'handler funcs' object contains a set of functions which this object should invoke when the appropriate event occurs.
         this.invokeTaskAddedEvent = handlerFuncs.taskAddedHandler;
         this.invokeTaskDeletedEvent = handlerFuncs.taskDeletedHandler;
@@ -119,7 +118,7 @@ class Task {
     // -- NOTE: Any passed colourid will be overridden by a passed parent's colorid; it is enforeced that they match! 
     constructor(id, name, category, parent, colourid) {
         // Setup the state for this Task.
-        if (name.length > MAX_TASK_NAME_LEN) throw "name too long!";
+        if (name.length > MAX_TASK_NAME_LEN) throw new Error("name too long!");
         this.id = id;   // MUST NEVER CHANGE
         this.name = name;
         this.category = category;

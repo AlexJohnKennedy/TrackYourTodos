@@ -27,7 +27,6 @@ function BuildShortCutManager() {
 
     // Define a method which will handle all keyboard events.
     function globalHandler(event) {
-        console.log(event.code);
         if (event.repeat) {
             return;     // Shortcuts all require ctrl to be pressed. We don't want successive repeats to trigger these either.
         }

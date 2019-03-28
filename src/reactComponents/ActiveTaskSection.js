@@ -23,9 +23,6 @@ export class ActiveTaskSection extends Component {
 
         // Initialise state of this component
         this.handleChange();
-
-        console.log("Finished mounting");
-        console.log(this.state);
     }
 
     // Update callback. In this design, the entire list will re-populate all tasks upon any change.

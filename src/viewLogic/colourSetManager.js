@@ -1,5 +1,3 @@
-import { start } from "repl";
-
 // This file is responsible for producing objects which contain the colour values for
 // each respective 'colourId'; I.e., tasks have associated colour ids, and then each
 // id should be mapped to an actual colour value to be rendered by react. This manager
@@ -13,35 +11,47 @@ import { start } from "repl";
 // used yet. The UI will render colour-swatches in the creation forms and possibly in
 // the sidebar, such that whenever a new task is created, the 'next' colour will
 // be chosen automatically unless overriden by the user on the creation form.
-export function GetColourSet(themeId) {
-    return sets.getSet(themeId);
+import React from 'react';
+
+// Set up a context value to define the theme. (Default value 0).
+const themes = {
+    blueboys: 1,
+    multineonboys: 0,
+    purpleboys: 2
+};
+export const currThemeId = themes.blueboys;
+export const ThemeId = React.createContext({ themeId: themes.blueboys});
+
+const maps = SetupColourSets();
+export const ColourIdTracker = CreateNewColourTracker(maps[currThemeId].size);
+export function GetColourMapping(themeId) {
+    return Object.freeze(maps[themeId]);
 }
 
-const sets = BuildColourSets();
+function SetupColourSets() {
+    const maps = [];
+    
+    // For now, only default theme exists
+    let map = new Map();
+    map.set(0, "#007ACC");
+    map.set(2, "#CF3333");      // map.set(1, "#004D81");
+    map.set(1, "#D48E00");      // map.set(2, "#8800B0");
+    map.set(3, "#AC33CF");
+    maps.push(map);
 
-function BuildColourSets() {
-    let colourSets = [];
+    map = new Map();
+    map.set(0, "#007ACC");
+    maps.push(map);
 
-    // TODO Define colour sets here
-    let defaultSet = CreateNewColourSet();
-    defaultSet.addColourToFrontOfList("#007ACC");
-    defaultSet.addColourToBackOfList("#CBCB41");
-    defaultSet.addColourToBackOfList("#587C0C");
-    defaultSet.addColourToBackOfList("#36A3F0");
-    colourSets.push(defaultSet);
+    map = new Map();
+    map.set(0, "#AC33CF");
+    maps.push(map);
 
-    function getSet(id) {
-        if (id < 0 || id >= colourSets.length) {
-            return null;
-        }
-        return colourSets[id];
-    }
-    return Object.freeze({
-        getSet: getSet
-    });
+    return maps;
 }
 
-function CreateNewColourSet() {
+function CreateNewColourTracker(numColours) {
+    console.log("Num colours: "+numColours);
     function Colour(value) {
         return {
             value: value,
@@ -52,13 +62,11 @@ function CreateNewColourSet() {
     // Track the front of the list with a pointer.
     let colours = [];
     let front = 0;
-
-    function addColourToFrontOfList(value) {
-        colours.splice(front, 0, Colour(value));
+    for (let i=0; i < numColours; i++) {
+        addNew(i);
     }
-    function addColourToBackOfList(value) {
-        colours.splice(front, 0, Colour(value));
-        front = front + 1;
+    function addNew(id) {
+        colours.push(Colour(id));
     }
 
     // Returns the front colour value, increments its usage, and moves it to the back of the list.
@@ -66,6 +74,7 @@ function CreateNewColourSet() {
         let c = colours[front];
         c.usages++;
         front = cycleFront(front);
+        console.log("returning: " + c.value + " front: " + front);
         return c.value;
     }
 
@@ -109,8 +118,6 @@ function CreateNewColourSet() {
     }
 
     return Object.freeze({
-        addColourToFrontOfList: addColourToFrontOfList,
-        addColourToBackOfList: addColourToBackOfList,
         useNextColour: useNextColour,
         peekColours: peekColours,
         defer: defer
