@@ -5,6 +5,7 @@ import { TaskStatisticsSection } from './reactComponents/TaskStatisticsSection';
 import { BacklogSection } from './reactComponents/BacklogSection';
 import { TemporaryStateManager } from './viewLogic/temporaryStateManager';
 import { ShortCutManager } from './viewLogic/keyboardShortcutHandler';
+import { ThemeId, currThemeId } from './viewLogic/colourSetManager';
 
 class App extends Component {
   constructor(props) {
@@ -25,11 +26,11 @@ class App extends Component {
   render() {
     return (
       // Return each 'section' of the app as siblings, so that the root div can arrange them using CSS Grid!
-      <React.Fragment>
+      <ThemeId.Provider value={{ themeId: currThemeId }}>
         <ActiveTaskSection formStateManager={this.formStateManager}/>
         <TaskStatisticsSection formStateManager={this.formStateManager}/>
         <BacklogSection formStateManager={this.formStateManager}/>
-      </React.Fragment>
+      </ThemeId.Provider>
     );
   }
 }
