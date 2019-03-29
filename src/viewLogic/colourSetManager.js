@@ -19,7 +19,7 @@ const themes = {
     multineonboys: 0,
     purpleboys: 2
 };
-export const currThemeId = themes.blueboys;
+export const currThemeId = themes.multineonboys;
 export const ThemeId = React.createContext({ themeId: themes.blueboys});
 
 const maps = SetupColourSets();
@@ -101,17 +101,20 @@ function CreateNewColourTracker(numColours) {
     
     // helper
     function cycleFront(startPoint) {
+        function inc(x) {
+            x++;
+            if (x === colours.length) x = 0;
+            return x;
+        }
         let i = startPoint;
         let usageTarget = 0;    // Look for next colour with this many current usages.
-        let prevFront = i++;
-        if (i === colours.length) i = 0;
+        let prevFront = i;
+        i = inc(i);
         while (colours[i].usages > usageTarget) {
-            i++;
-            if (i === colours.length) {
-                i = 0;
-            }
+            i = inc(i);
             if (i === prevFront) {
                 usageTarget++;
+                i = inc(i);    // avoid immediately picking the same colour as previous in this occurance
             }
         }
         return i;
