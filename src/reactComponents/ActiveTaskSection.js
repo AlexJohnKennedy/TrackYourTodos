@@ -35,6 +35,7 @@ export class ActiveTaskSection extends Component {
         console.log("ENTERED: " + id);
         let map = this.taskMap;
         let task = map.get(id);
+        console.log(task);
         let relatives = [id];
         this.searchUp(map.get(task.parent), relatives, map);
         for (let childid of task.children) {

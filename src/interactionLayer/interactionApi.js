@@ -144,7 +144,7 @@ function BuildNewTaskView(activeList, domainTaskObj, viewLayerCallbackFunc) {
         colourid : domainTaskObj.colourid,
         category : domainTaskObj.category,
         parent : (domainTaskObj.parent === null) ? null : domainTaskObj.parent.id,
-        children : domainTaskObj.children.filter((task) => task.id),
+        children : domainTaskObj.children.map((task) => task.id),
         // Update functions
         SetState : setState,
         CanCreateChildren : canCreateChildren,
