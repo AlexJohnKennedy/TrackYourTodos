@@ -16,6 +16,7 @@ export class ActiveTaskSection extends Component {
             dayCreationFunc : () => {},
             highlightedTaskIds: []
         };
+        this.highlightedTaskIds = [];
         this.handleChange = this.handleChange.bind(this);
         this.registerForHighlights = this.registerForHighlights.bind(this);
         this.unregisterForHighlights = this.unregisterForHighlights.bind(this);
@@ -31,6 +32,7 @@ export class ActiveTaskSection extends Component {
 
     // Callback for when tasks are hovered over and we need to highlight them, and all their relatives.
     registerForHighlights(id) {
+        console.log("ENTERED: " + id);
         let map = this.taskMap;
         let task = map.get(id);
         let relatives = [id];
@@ -38,12 +40,13 @@ export class ActiveTaskSection extends Component {
         for (let childid of task.children) {
             this.searchDown(map.get(childid), relatives, map);
         }
-
+        this.highlightedTaskIds = this.highlightedTaskIds.concat(relatives);
         this.setState({
-            highlightedTaskIds: this.state.highlightedTaskIds.concat(relatives)
+            highlightedTaskIds: this.highlightedTaskIds
         });
     }
     unregisterForHighlights(id) {
+        console.log("EXITED: " + id);
         let map = this.taskMap;
         let task = map.get(id);
         let relatives = [id];
@@ -51,9 +54,9 @@ export class ActiveTaskSection extends Component {
         for (let childid of task.children) {
             this.searchDown(map.get(childid), relatives, map);
         }
-
+        this.highlightedTaskIds = this.highlightedTaskIds.filter((id) => !relatives.includes(id));
         this.setState({
-            highlightedTaskIds: this.state.highlightedTaskIds.filter((id) => !relatives.includes(id))
+            highlightedTaskIds: this.highlightedTaskIds
         });
     }
     searchUp(t, relatives, map) {
