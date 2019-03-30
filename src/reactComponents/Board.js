@@ -37,7 +37,9 @@ export class Board extends Component {
     render() {
         // Create a list of Task components, passing in a read-only taskView object to each, as a property! We also need to specify a key, since these items are 'keyed'
         const taskDomainObjectsArray = this.props.tasks;
-        const taskComponentArray = taskDomainObjectsArray.map((taskView) => <Task key={taskView.id} taskView={taskView}/>);
+        const taskComponentArray = taskDomainObjectsArray.map(
+            (taskView) => <Task key={taskView.id} taskView={taskView} highlights={this.props.highlights} hightlightEventCallbacks={this.props.hightlightEventCallbacks}/>
+        );
 
         // Everything is wrapped in a 'bubble' thing.
         // The bubble thing has children; for the board, we want a title, an add task button, following by a list of tasks.
@@ -73,6 +75,8 @@ export class GoalBoard extends Component {
             formText="New goal"
             formStateManager={this.props.formStateManager}
             shortcutkey="Digit1"
+            highlights={this.props.highlights}
+            hightlightEventCallbacks={this.props.hightlightEventCallbacks}
         />;
     }
 }
@@ -86,6 +90,8 @@ export class WeeklyBoard extends Component {
             formText="New weekly task"
             formStateManager={this.props.formStateManager}
             shortcutkey="Digit2"
+            highlights={this.props.highlights}
+            hightlightEventCallbacks={this.props.hightlightEventCallbacks}
         />;
     }
 }
@@ -99,6 +105,8 @@ export class DailyBoard extends Component {
             formText="New daily task"
             formStateManager={this.props.formStateManager}
             shortcutkey="Digit3"
+            highlights={this.props.highlights}
+            hightlightEventCallbacks={this.props.hightlightEventCallbacks}
         />;
     }
 }
