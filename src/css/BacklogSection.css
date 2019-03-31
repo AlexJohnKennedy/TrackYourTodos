@@ -1,16 +1,29 @@
 .BacklogSection {
     background-color: var(--middle-tone-background-colour);
 
-    padding-top: var(--top-padding-amount);
-    padding-left: var(--board-spacing-amount);
-    padding-right: var(--board-spacing-amount);
-
     box-sizing: border-box;
 }
 
-.BacklogSection .placeholder {
+.BacklogSection .navigation-tabs-container {
     background-color: rgb(0,0,0,0);
     
     border-radius: var(--border-radius);
+    flex-grow: 0;
+
+    display: inline-flex;
+    justify-content: space-around;
+
+    height: 3.42rem;
+    line-height: 3.42rem;
+}
+
+.BacklogSection .navigation-tabs-container .navigation-tab {
     flex-grow: 1;
+    text-align: center;
+    cursor: pointer;
+    background-color: var(--sidebar-background-colour);
+}
+
+.BacklogSection .navigation-tabs-container > .active-navigation-tab {
+    background-color: var(--middle-tone-background-colour);
 }

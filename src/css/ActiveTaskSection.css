@@ -4,7 +4,6 @@
 
     box-sizing: border-box;
 
-    padding-top: var(--top-padding-amount);
     padding-left: var(--board-spacing-amount);
     padding-right: var(--board-spacing-amount);
 }
