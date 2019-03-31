@@ -14,23 +14,38 @@ export class Task extends Component {
 
         // Setup state. The only state this component requires is whether we are currently rendering the creation form.
         this.state = {
-            showingForm: false
+            showingForm: false,
+            showingDailyForm: false
         };
 
         this.toggleFormOn = this.toggleFormOn.bind(this);
         this.toggleFormOff = this.toggleFormOff.bind(this);
     }
     
-    toggleFormOn() {
+    toggleFormOn(daily) {
         this.props.formStateManager.triggerCleanup();
-        this.setState({
-            showingForm: true
-        });
+        if (!daily) {
+            this.setState({
+                showingForm: true
+            });
+        }
+        else {
+            this.setState({
+                showingDailyForm: true
+            });
+        }
     }
-    toggleFormOff() {
-        this.setState({
-            showingForm: false
-        });
+    toggleFormOff(daily) {
+        if (!daily) {
+            this.setState({
+                showingForm: false
+            });
+        }
+        else {
+            this.setState({
+                showingDailyForm: false
+            });
+        }
     }
 
     onMouseEnter() {
@@ -52,14 +67,26 @@ export class Task extends Component {
         return (
             <div className={classstring} style={style} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
                 <p> { this.props.taskView.name } </p>
+                { this.props.taskView.category < Category.Weekly &&
+                    <>
+                    <NewTaskButton clickAction={() => this.toggleFormOn(true)}/>
+                    <CreationForm 
+                        creationFunction={this.props.taskView.CreateDailyChild} 
+                        formText="New daily subtask" 
+                        showingForm={this.state.showingDailyForm}
+                        submitAction={() => this.toggleFormOff(true)}
+                        formStateManager={this.props.formStateManager}
+                    />
+                    </>
+                }
                 { this.props.taskView.category < Category.Daily &&
                     <>
-                    <NewTaskButton clickAction={this.toggleFormOn}/>
+                    <NewTaskButton clickAction={() => this.toggleFormOn(false)}/>
                     <CreationForm 
                         creationFunction={this.props.taskView.CreateChild} 
                         formText="New subtask" 
                         showingForm={this.state.showingForm}
-                        submitAction={this.toggleFormOff}
+                        submitAction={() => this.toggleFormOff(false)}
                         formStateManager={this.props.formStateManager}
                     />
                     </>

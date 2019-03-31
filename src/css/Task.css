@@ -30,6 +30,11 @@
     right: 0.4rem;
     top: 0.4rem;
 }
+.task button ~ button {
+    position: absolute;
+    right: 3rem;
+    top: 0.4rem;
+}
 
 .highlighted p {
     font-weight: bold;
