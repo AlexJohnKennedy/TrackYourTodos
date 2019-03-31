@@ -11,7 +11,9 @@ export function GetActiveTaskObject() {
     let goaltask2 = tasklist.CreateNewIndependentTask('different goal with child', Category.Goal, ColourIdTracker.useNextColour());
     let subtask = tasklist.CreateNewSubtask('weekly subtask', goaltask2);
     tasklist.CreateNewSubtask('daily sub subby boi', subtask);
-    tasklist.CreateNewSubtask('this is a separate subboi!! :)', subtask);
+    //tasklist.CreateNewSubtask('this is a separate subboi!! :)', subtask);
+    //let subtask2 = tasklist.CreateNewSubtask('MEMEMEMEMEMES', goaltask2);
+    //tasklist.CreateNewSubtask('A B C D E F G H I J K L M N O P', subtask2);
 
     // Create a weekly task with one daily subtask.
     let weektask2 = tasklist.CreateNewIndependentTask('independent weekly task', Category.Weekly, ColourIdTracker.useNextColour());
