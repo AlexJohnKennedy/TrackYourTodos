@@ -33,10 +33,8 @@ export class ActiveTaskSection extends Component {
 
     // Callback for when tasks are hovered over and we need to highlight them, and all their relatives.
     registerForHighlights(id) {
-        console.log("ENTERED: " + id);
         let map = this.taskMap;
         let task = map.get(id);
-        console.log(task);
         let relatives = [id];
         this.searchUp(map.get(task.parent), relatives, map);
         for (let childid of task.children) {
@@ -48,7 +46,6 @@ export class ActiveTaskSection extends Component {
         });
     }
     unregisterForHighlights(id) {
-        console.log("EXITED: " + id);
         let map = this.taskMap;
         let task = map.get(id);
         let relatives = [id];

@@ -33,6 +33,7 @@
     width: 1.4rem;
     height: 1.4rem;
 }
+/* Make the second button even further over. Note that a second button only exists on Goal tasks */
 .task button ~ button {
     position: absolute;
     right: 2rem;
