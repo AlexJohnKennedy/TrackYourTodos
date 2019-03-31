@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { RegisterToActiveTaskListAPI } from '../interactionLayer/interactionApi';
 import { Category } from '../logicLayer/Task';
 import { GoalBoard, WeeklyBoard, DailyBoard } from './Board';
+import { ColourIdTracker } from '../viewLogic/colourSetManager';
 
 export class ActiveTaskSection extends Component {
     constructor(props) {
@@ -91,9 +92,9 @@ export class ActiveTaskSection extends Component {
             goalTaskViews : goalTaskViews,
             weekTaskViews : weekTaskViews,
             dayTaskViews : dayTaskViews,
-            goalCreationFunc : this.activeTaskListAPI.GetCreationFunction(Category.Goal),
-            weekCreationFunc : this.activeTaskListAPI.GetCreationFunction(Category.Weekly),
-            dayCreationFunc : this.activeTaskListAPI.GetCreationFunction(Category.Daily)
+            goalCreationFunc : this.activeTaskListAPI.GetCreationFunction(Category.Goal, ColourIdTracker.useNextColour),
+            weekCreationFunc : this.activeTaskListAPI.GetCreationFunction(Category.Weekly, ColourIdTracker.useNextColour),
+            dayCreationFunc : this.activeTaskListAPI.GetCreationFunction(Category.Daily, ColourIdTracker.useNextColour)
         });
     }
 

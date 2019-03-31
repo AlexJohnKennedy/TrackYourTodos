@@ -38,7 +38,12 @@ export class Board extends Component {
         // Create a list of Task components, passing in a read-only taskView object to each, as a property! We also need to specify a key, since these items are 'keyed'
         const taskDomainObjectsArray = this.props.tasks;
         const taskComponentArray = taskDomainObjectsArray.map(
-            (taskView) => <Task key={taskView.id} taskView={taskView} highlights={this.props.highlights} hightlightEventCallbacks={this.props.hightlightEventCallbacks}/>
+            (taskView) => <Task 
+                key={taskView.id} 
+                taskView={taskView} 
+                highlights={this.props.highlights} 
+                hightlightEventCallbacks={this.props.hightlightEventCallbacks}
+                formStateManager={this.props.formStateManager}/>
         );
 
         // Everything is wrapped in a 'bubble' thing.

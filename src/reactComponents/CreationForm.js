@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { MAX_TASK_NAME_LEN } from '../logicLayer/Task';
-import { ColourIdTracker } from '../viewLogic/colourSetManager';
 
 export class CreationForm extends Component {
     constructor(props) {
@@ -34,7 +33,7 @@ export class CreationForm extends Component {
         
         if (nameText.length > 0) {
             // All we need to do at the moment, is pass in the name field into the creation function we have been given!
-            this.props.creationFunction(nameText, ColourIdTracker.useNextColour());
+            this.props.creationFunction(nameText);
         }
 
         // Always finish this by calling our passed-in 'submit action' function; Which will most likely perform some cleanup.

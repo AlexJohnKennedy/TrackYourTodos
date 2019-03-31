@@ -58,10 +58,10 @@ export function RegisterToActiveTaskListAPI(viewLayerCallbackFunc) {
         return ActiveTaskDataObj.GetActiveTasks().map((task) => BuildNewTaskView(ActiveTaskDataObj, task, viewLayerCallbackFunc));
     }
 
-    function getCreationFunction(categoryVal) {
-        return function(name, colourid = null) {
-            if (colourid !== null) {
-                ActiveTaskDataObj.CreateNewIndependentTask(name, categoryVal, colourid);
+    function getCreationFunction(categoryVal, colourIdGetterFunc) {
+        return function(name) {
+            if (colourIdGetterFunc !== null) {
+                ActiveTaskDataObj.CreateNewIndependentTask(name, categoryVal, colourIdGetterFunc());
             }
             else {
                 ActiveTaskDataObj.CreateNewIndependentTask(name, categoryVal);
@@ -131,6 +131,11 @@ function BuildNewTaskView(activeList, domainTaskObj, viewLayerCallbackFunc) {
         activeList.CreateNewSubtask(name, domainTaskObj);
     }
 
+    function createDailyChild(name) {
+        // Note that this method call automatically invokes a viewLayerCallbackFunc!
+        activeList.CreateNewDailySubtask(name, domainTaskObj);
+    }
+
     function deleteTask() {
         // Note that this method call automatically invokes a viewLayerCallbackFunc!
         activeList.DeleteTask(domainTaskObj);
@@ -149,6 +154,7 @@ function BuildNewTaskView(activeList, domainTaskObj, viewLayerCallbackFunc) {
         SetState : setState,
         CanCreateChildren : canCreateChildren,
         CreateChild : createChild,
+        CreateDailyChild : createDailyChild,
         DeleteTask : deleteTask
     });
 }
