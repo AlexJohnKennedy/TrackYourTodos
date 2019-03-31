@@ -33,7 +33,7 @@ export class BacklogSection extends Component {
                 <NavigationStateWrapper
                     names={['Backlog', 'Completed', 'Graveyard']}
                 />
-                
+                <div className="spacer"/>
             </div>
         );
     }

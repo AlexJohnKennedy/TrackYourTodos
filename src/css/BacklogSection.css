@@ -27,3 +27,8 @@
 .BacklogSection .navigation-tabs-container > .active-navigation-tab {
     background-color: var(--middle-tone-background-colour);
 }
+
+.BacklogSection .spacer {
+    flex-grow: 0;
+    height: 1rem;
+}
