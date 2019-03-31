@@ -27,8 +27,8 @@
   --font-size-ratio: 1000px;   /* used for media query calculations */
 }
 
-html .hidden {
-  display: none;
+.hidden {
+  display: none    !important;  /* Justified usage of !important; this should always override as a utility class */
 }
 
 * {

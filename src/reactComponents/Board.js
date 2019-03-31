@@ -59,7 +59,6 @@ export class Board extends Component {
                 </div>
                 <CreationForm 
                     creationFunction={this.props.creationFunction} 
-                    textPrompt={this.props.formText} 
                     showingForm={this.state.showingForm}
                     submitAction={this.toggleFormOff}
                     formStateManager={this.props.formStateManager}
