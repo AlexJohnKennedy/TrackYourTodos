@@ -5,6 +5,7 @@
 @import "./CreationForm.css";
 @import "./Task.css";
 @import "./Board.css";
+@import "./Footer.css";
 
 /* Define some global variables to define VSCode colour scheme colours! */
 :root {
@@ -38,9 +39,10 @@ button {
   font-size: 1rem;
 }
 body {
-  padding-top: 1rem;
+  padding-top: 0.8rem;
   padding-left: 0.8rem;
   padding-right: 0.8rem;
+  padding-bottom: 0.8rem;
   text-align: center;
   color: var(--bright-text-colour);
   background-color: var(--sidebar-background-colour);

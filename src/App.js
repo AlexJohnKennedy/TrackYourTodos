@@ -6,6 +6,7 @@ import { BacklogSection } from './reactComponents/BacklogSection';
 import { TemporaryStateManager } from './viewLogic/temporaryStateManager';
 import { ShortCutManager } from './viewLogic/keyboardShortcutHandler';
 import { ThemeId, currThemeId } from './viewLogic/colourSetManager';
+import { Footer } from './reactComponents/Footer';
 
 class App extends Component {
   constructor(props) {
@@ -30,6 +31,7 @@ class App extends Component {
         <ActiveTaskSection formStateManager={this.formStateManager}/>
         <TaskStatisticsSection formStateManager={this.formStateManager}/>
         <BacklogSection formStateManager={this.formStateManager}/>
+        <Footer/>
       </ThemeId.Provider>
     );
   }

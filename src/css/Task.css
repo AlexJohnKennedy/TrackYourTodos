@@ -1,4 +1,6 @@
 .task {
+    position: relative;
+
     /* Task colours are defined programmatically with colourIds now */
     /* background-color: var(--blue-icon); */
     border-radius: 0px;
@@ -21,6 +23,12 @@
     100% {
         transform: translateX(0px);
     }
+}
+
+.task button {
+    position: absolute;
+    right: 0.4rem;
+    top: 0.4rem;
 }
 
 .highlighted p {

@@ -59,6 +59,12 @@
         /* TEMP PLACEHOLDER */
         height: 45rem;
     }
+    .Footer {
+        grid-column-start: 2;
+        grid-column-end: 5;
+        grid-row-start: 3;
+        grid-row-end: 4;
+    }
 }
 @media (max-width: 1270px) {
     #root {
@@ -93,6 +99,12 @@
         /* TEMP PLACEHOLDER */
         height: 45rem;
     }
+    .Footer {
+        grid-column-start: 2;
+        grid-column-end: 3;
+        grid-row-start: 3;
+        grid-row-end: 4;
+    }
 }
 @media (max-width: 800px) {
     #root {
@@ -110,5 +122,11 @@
         display: inline-flex;
         justify-content: space-between;
         flex-direction: column;
+    }
+    .Footer {
+        grid-column-start: 2;
+        grid-column-end: 3;
+        grid-row-start: 2;
+        grid-row-end: 3;
     }
 }

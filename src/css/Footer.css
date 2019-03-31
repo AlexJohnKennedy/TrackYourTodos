@@ -1,0 +1,8 @@
+.Footer {
+    padding: 1rem;
+    padding-bottom: 0.3rem;
+}
+.Footer div, .Footer a {
+    font-size: 1rem;
+    color: var(--bright-text-colour);
+}

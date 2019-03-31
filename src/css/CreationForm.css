@@ -13,7 +13,7 @@
 .creation-form h2 {
     flex-grow: 0;
 }
-.creation-form form {
+.board > .creation-form form {
     flex-grow: 1;
     padding-top: 1.6rem;
 }
