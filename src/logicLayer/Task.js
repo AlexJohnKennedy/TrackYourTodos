@@ -98,6 +98,16 @@ export class ActiveTasks {
 
         return newTask;
     }
+    // Creates a new child task, two categories below the parent's category, if the parent task is a Goal object.
+    CreateNewDailySubtask(name, parent) {
+        let newTask = new Task(GetNewId(), name, Category.Daily, parent, parent.colourid);
+        this.tasks.push(newTask);
+        parent.addChild(newTask);
+
+        if (this.invokeTaskAddedEvent) this.invokeTaskAddedEvent(this, newTask);
+
+        return newTask;
+    }
 
     DeleteTask(task) {
         // Clear all parent and child links from the deleted task!
