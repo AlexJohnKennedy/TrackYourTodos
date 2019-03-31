@@ -22,3 +22,7 @@
         transform: translateX(0px);
     }
 }
+
+.highlighted p {
+    font-weight: bold;
+}

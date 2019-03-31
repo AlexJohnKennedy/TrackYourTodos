@@ -51,7 +51,6 @@ function SetupColourSets() {
 }
 
 function CreateNewColourTracker(numColours) {
-    console.log("Num colours: "+numColours);
     function Colour(value) {
         return {
             value: value,
@@ -74,7 +73,6 @@ function CreateNewColourTracker(numColours) {
         let c = colours[front];
         c.usages++;
         front = cycleFront(front);
-        console.log("returning: " + c.value + " front: " + front);
         return c.value;
     }
 
