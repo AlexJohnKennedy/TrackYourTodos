@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { NavigationTabs } from './NavigationTabs';
+import { NavigationStateWrapper } from './NavigationTabs';
 
 export class BacklogSection extends Component {
     constructor(props) {
@@ -30,10 +30,8 @@ export class BacklogSection extends Component {
     render() {
         return(
             <div className="BacklogSection">
-                <NavigationTabs
+                <NavigationStateWrapper
                     names={['Backlog', 'Completed', 'Graveyard']}
-                    callbackList={[() => this.toggleTab(0), () => this.toggleTab(1), () => this.toggleTab(2)]}
-                    currActiveList={[this.state.showingBacklog, this.state.showingCompleted, this.state.showingGraveyard]}
                 />
                 
             </div>
