@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { NavigationStateWrapper } from './NavigationTabs';
+import { TaskList } from './TaskList';
 
 export class BacklogSection extends Component {
     constructor(props) {
@@ -34,6 +35,9 @@ export class BacklogSection extends Component {
                     names={['Backlog', 'Completed', 'Graveyard']}
                 />
                 <div className="spacer"/>
+                <TaskList
+
+                />
             </div>
         );
     }
