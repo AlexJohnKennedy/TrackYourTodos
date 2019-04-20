@@ -35,4 +35,9 @@
 .BacklogSection .wrapper {
     padding-left: 0.8rem;
     padding-right: 0.8rem;
+    overflow: auto;
+}
+
+.wrapper::-webkit-scrollbar {
+    width: 0rem;        /* MAKE THE SCROLLBAR INVISIBLE LIKE A SEXY MOFO */
 }

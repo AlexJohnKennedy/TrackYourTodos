@@ -19,6 +19,24 @@ export class NewTaskButton extends Component {
     }
     
     handleClick(e) {
-        this.props.clickAction();   // Soon we will add parameters here which will allow us to set colour, +1 time (i.e. next day vs today), etc.
+        this.props.clickAction();
+    }
+}
+
+export class CheckBox extends Component {
+    constructor(props) {
+        super(props);
+
+        this.handleClick = this.handleClick.bind(this);
+    }
+    
+    handleClick(e) {
+        this.props.clickAction();
+    }
+
+    render() {
+        return (
+            <input type="checkbox" className="checkbox" onClick={this.handleClick}/>
+        );
     }
 }

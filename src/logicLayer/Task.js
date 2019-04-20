@@ -146,7 +146,7 @@ export class TaskObjects {
         // When a task is completed, all of the currently active children of that task are automatically 'complete' also.
         let idsToRemove = new Set();
         function complete(curr) {
-            if (curr.category > Category.Daily) throw new Error("Cannot complete a task that is not currently on an active board");
+            if (curr.category > Category.Daily) return;
             curr.category = category;
             curr.progressStatus = progress;
             idsToRemove.add(curr.id);
@@ -209,6 +209,7 @@ class Task {
         if ('name' in stateObj) this.name = stateObj.name;
         if ('category' in stateObj) this.category = stateObj.category;
         if ('colourid' in stateObj) this.colourid = stateObj.colourid;
+        if ('progressStatus' in stateObj) this.progressStatus = stateObj.progressStatus;
     }
 
     addChild(childTask) {

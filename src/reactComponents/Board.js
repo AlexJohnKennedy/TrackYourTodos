@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Task } from './Task';
-import { NewTaskButton } from './NewTaskButton.js';
+import { NewTaskButton } from './TaskButtons.js';
 import { CreationForm } from './CreationForm.js';
 import { ShortCutManager } from '../viewLogic/keyboardShortcutHandler';
 import { TaskList } from './TaskList';

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { GetColourMapping, ThemeId, HSLAColour } from '../viewLogic/colourSetManager';
-import { NewTaskButton } from './NewTaskButton';
+import { NewTaskButton, CheckBox } from './TaskButtons';
 import { CreationForm } from './CreationForm.js';
 import { Category } from '../logicLayer/Task';
 
@@ -109,6 +109,9 @@ export class Task extends Component {
                         formStateManager={this.props.formStateManager}
                     />
                     </>
+                }
+                { this.props.taskView.category <= Category.Daily &&
+                    <CheckBox clickAction={() => this.props.taskView.CompleteTask()} />
                 }
                 { this.props.taskView.category === Category.Deferred &&
                     <>
