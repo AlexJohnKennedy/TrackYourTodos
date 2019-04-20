@@ -69,7 +69,7 @@ export class Task extends Component {
                 <p> { this.props.taskView.name } </p>
                 { this.props.taskView.category < Category.Weekly &&
                     <>
-                    <NewTaskButton clickAction={() => this.toggleFormOn(true)}/>
+                    <NewTaskButton clickAction={() => this.toggleFormOn(true)} text={'>'}/>
                     <CreationForm 
                         creationFunction={this.props.taskView.CreateDailyChild} 
                         formText="New daily subtask" 
@@ -81,7 +81,7 @@ export class Task extends Component {
                 }
                 { this.props.taskView.category < Category.Daily &&
                     <>
-                    <NewTaskButton clickAction={() => this.toggleFormOn(false)}/>
+                    <NewTaskButton clickAction={() => this.toggleFormOn(false)} text={'>'}/>
                     <CreationForm 
                         creationFunction={this.props.taskView.CreateChild} 
                         formText="New subtask" 
@@ -89,6 +89,13 @@ export class Task extends Component {
                         submitAction={() => this.toggleFormOff(false)}
                         formStateManager={this.props.formStateManager}
                     />
+                    </>
+                }
+                { this.props.taskView.category === Category.Deferred &&
+                    <>
+                    <NewTaskButton clickAction={() => this.props.taskView.SetCategory(Category.Daily)} text={'D'}/>
+                    <NewTaskButton clickAction={() => this.props.taskView.SetCategory(Category.Weekly)} text={'W'}/>
+                    <NewTaskButton clickAction={() => this.props.taskView.SetCategory(Category.Goal)} text={'G'}/>
                     </>
                 }
             </div>

@@ -36,10 +36,10 @@
 import { GetActiveTaskObject } from './dummy/dummyDataModel';
 import { Category, ProgressStatus } from '../logicLayer/Task';
 
-export function RegisterToActiveTaskListAPI(viewLayerCallbackFunc) {
-    // Acquire access to data model
-    let ActiveTaskDataObj = GetActiveTaskObject();
+// Gain access as a global singleton to the DataModel object.
+const ActiveTaskDataObj = GetActiveTaskObject();
 
+export function RegisterToActiveTaskListAPI(viewLayerCallbackFunc) {
     // Wrapper to allow interaction layer to mediate the way in which callbacks are
     // sent back to the viewLayerCallback.
     let updateCallbackFunc = (tasklist, taskWhichChanged) => {
@@ -114,6 +114,11 @@ export function RegisterToActiveTaskListAPI(viewLayerCallbackFunc) {
 // void DeleteTask()
 // --- Deletes the associated task from existance.
 // --- Calling this will instigate an update in the domain model.
+//
+// void SetCategory()
+// --- Attempts to update the category of the task object. Note that this will fail with an Error if
+// --- the task you call it on has any relatives, i.e. a parent or any children.
+// --- Calling this will instigate an update in the domain model.
 
 function BuildNewTaskView(activeList, domainTaskObj, viewLayerCallbackFunc) {
 
@@ -141,6 +146,11 @@ function BuildNewTaskView(activeList, domainTaskObj, viewLayerCallbackFunc) {
         activeList.DeleteTask(domainTaskObj);
     }
 
+    function setCategory(newCategory) {
+        // Note that this method call automatically invokes a viewLayerCallbackFunc!
+        activeList.MoveCategory(domainTaskObj, newCategory);
+    }
+
     // Return the interface object. Immutable!
     return Object.freeze({
         // State properties
@@ -155,6 +165,7 @@ function BuildNewTaskView(activeList, domainTaskObj, viewLayerCallbackFunc) {
         CanCreateChildren : canCreateChildren,
         CreateChild : createChild,
         CreateDailyChild : createDailyChild,
-        DeleteTask : deleteTask
+        DeleteTask : deleteTask,
+        SetCategory : setCategory
     });
 }

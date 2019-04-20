@@ -1,6 +1,5 @@
 .BacklogSection {
     background-color: var(--middle-tone-background-colour);
-
     box-sizing: border-box;
 }
 
@@ -31,4 +30,9 @@
 .BacklogSection .spacer {
     flex-grow: 0;
     height: 1rem;
+}
+
+.BacklogSection .wrapper {
+    padding-left: 0.8rem;
+    padding-right: 0.8rem;
 }

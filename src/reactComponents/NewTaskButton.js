@@ -13,7 +13,7 @@ export class NewTaskButton extends Component {
     render() {
         return (
             <button onClick={this.handleClick}>
-                +
+                {this.props.text}
             </button>
         );
     }

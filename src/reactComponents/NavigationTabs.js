@@ -35,7 +35,7 @@ export class NavigationStateWrapper extends Component {
 
     toggleTab(tabId) {
         if (tabId < 0 || tabId > this.props.names.length) throw new Error("Navigation state wrapper passed invalid tab id in callback!");
-        
+        this.props.toggleCallback(tabId);
         this.setState({
             currActiveIndex: tabId
         });

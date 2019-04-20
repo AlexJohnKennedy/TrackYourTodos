@@ -33,18 +33,18 @@ function SetupColourSets() {
     
     // For now, only default theme exists
     let map = new Map();
-    map.set(0, "#007ACC");
-    map.set(2, "#CF3333");      // map.set(1, "#004D81");
-    map.set(1, "#D48E00");      // map.set(2, "#8800B0");
-    map.set(3, "#AC33CF");
+    map.set(0, "hsla(204, 100%, 40%, 100%)");
+    map.set(2, "hsla(0, 62%, 51%, 100%)");      // map.set(1, "#004D81");
+    map.set(1, "hsla(40, 100%, 42%, 100%)");      // map.set(2, "#8800B0");
+    map.set(3, "hsla(287, 62%, 51%, 100%)");
     maps.push(map);
 
     map = new Map();
-    map.set(0, "#007ACC");
+    map.set(0, "hsla(287, 62%, 51%, 100%)");
     maps.push(map);
 
     map = new Map();
-    map.set(0, "#AC33CF");
+    map.set(0, "hsla(287, 62%, 51%, 100%)");
     maps.push(map);
 
     return maps;

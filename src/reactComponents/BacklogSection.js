@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import { NavigationStateWrapper } from './NavigationTabs';
+import { RegisterToActiveTaskListAPI } from '../interactionLayer/interactionApi';
+import { ColourIdTracker } from '../viewLogic/colourSetManager';
+import { Category } from '../logicLayer/Task';
 import { TaskList } from './TaskList';
 
 export class BacklogSection extends Component {
@@ -9,10 +12,30 @@ export class BacklogSection extends Component {
         this.state = {
             showingBacklog: true,
             showingCompleted: false,
-            showingGraveyard: false
-        };
+            showingGraveyard: false,
 
+            deferredTaskViews: [],
+            deferredTaskCreationFunc: null
+        };
+        
+        this.handleActiveChange = this.handleActiveChange.bind(this);
         this.toggleTab = this.toggleTab.bind(this);
+    }
+    componentDidMount() {
+        this.activeTaskListAPI = RegisterToActiveTaskListAPI(this.handleActiveChange);
+
+        // Initialise state of this component.
+        this.handleActiveChange();
+    }
+
+    handleActiveChange() {
+        let deferredTaskViews = this.activeTaskListAPI.GetActiveTasks().filter((task) => task.category === Category.Deferred);
+
+        // Update this component's state; which will re-render everything!
+        this.setState({
+            deferredTaskViews : deferredTaskViews,
+            deferredTaskCreationFunc : this.activeTaskListAPI.GetCreationFunction(Category.Deferred, ColourIdTracker.useNextColour)
+        });
     }
 
     toggleTab(tabId) {
@@ -33,11 +56,22 @@ export class BacklogSection extends Component {
             <div className="BacklogSection">
                 <NavigationStateWrapper
                     names={['Backlog', 'Completed', 'Graveyard']}
+                    toggleCallback={this.toggleTab}
                 />
                 <div className="spacer"/>
-                <TaskList
-
-                />
+                <div className="wrapper">
+                    { this.state.showingBacklog && 
+                        <TaskList
+                            tasks={this.state.deferredTaskViews}
+                            highlights={[]}
+                            hightlightEventCallbacks={{ 
+                                register : (id) => id,
+                                unregister : (id) => id
+                            }}
+                            formStateManager={ null }
+                        />
+                    }
+                </div>
             </div>
         );
     }

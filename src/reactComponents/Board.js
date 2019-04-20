@@ -42,7 +42,7 @@ export class Board extends Component {
             <div className="board" key={this.props.category}>
                 <div className="board-title-container"> 
                     <h2> {this.props.boardTitle} </h2>
-                    <NewTaskButton clickAction={this.toggleFormOn}/>
+                    <NewTaskButton clickAction={this.toggleFormOn} text={'+'}/>
                 </div>
                 <TaskList
                     tasks={this.props.tasks}

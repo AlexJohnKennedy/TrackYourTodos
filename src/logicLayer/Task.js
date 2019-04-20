@@ -27,16 +27,15 @@ export const Category = Object.freeze({
     Goal : 0,
     Weekly : 1,
     Daily: 2,
-    Deferred : 3,
-    Completed : 4,
-    Failed : 5
+    Deferred : 3
 });
 export const ProgressStatus = Object.freeze({
     NotStarted : 0,
     Started : 1,
     Completed : 2,
-    Aborted : 3
-})
+    Aborted : 3,
+    Failed : 4
+});
 
 const DefaultColourId = 0;
 function DowngradeCategory(category) {
@@ -54,13 +53,16 @@ const GetNewId = ((startVal) => () => startVal++)(0);
 export class ActiveTasks {
     constructor() {
         this.tasks = [];
+        this.invokeTaskAddedEvent = [];
+        this.invokeTaskChangedEvent = [];
+        this.invokeTaskDeletedEvent = [];
     }
 
     RegisterForUpdates(handlerFuncs) {
         // the 'handler funcs' object contains a set of functions which this object should invoke when the appropriate event occurs.
-        this.invokeTaskAddedEvent = handlerFuncs.taskAddedHandler;
-        this.invokeTaskDeletedEvent = handlerFuncs.taskDeletedHandler;
-        this.invokeTaskChangedEvent = handlerFuncs.taskChangedHandler;
+        this.invokeTaskAddedEvent.push(handlerFuncs.taskAddedHandler);
+        this.invokeTaskDeletedEvent.push(handlerFuncs.taskDeletedHandler);
+        this.invokeTaskChangedEvent.push(handlerFuncs.taskChangedHandler);
     }
 
     // Get tasks. WARNING, the Task objects returned will be exposed! Do not send beyond the interaction layer!!
@@ -83,7 +85,7 @@ export class ActiveTasks {
             this.tasks.push(newTask);
         }
 
-        if (this.invokeTaskAddedEvent) this.invokeTaskAddedEvent(this, newTask);
+        this.invokeTaskAddedEvent.forEach((callback) => callback(this, newTask));
 
         return newTask;
     }
@@ -94,7 +96,7 @@ export class ActiveTasks {
         this.tasks.push(newTask);
         parent.addChild(newTask);
 
-        if (this.invokeTaskAddedEvent) this.invokeTaskAddedEvent(this, newTask);
+        this.invokeTaskAddedEvent.forEach((callback) => callback(this, newTask));        
 
         return newTask;
     }
@@ -104,9 +106,18 @@ export class ActiveTasks {
         this.tasks.push(newTask);
         parent.addChild(newTask);
 
-        if (this.invokeTaskAddedEvent) this.invokeTaskAddedEvent(this, newTask);
+        this.invokeTaskAddedEvent.forEach((callback) => callback(this, newTask));        
 
         return newTask;
+    }
+    
+    // Function which modifies the category of a task. This is only allowed if the task does not have any children or parent.
+    // This is most likely only used to 'activate' a deferred task and move it into the active Boards.
+    MoveCategory(task, newCategory) {
+        if (task.parent !== null || task.children.length > 0) throw new Error("Cannot modify category of a task with relatives");
+
+        task.category = newCategory;
+        this.invokeTaskChangedEvent.forEach((callback) => callback(this, task));
     }
 
     DeleteTask(task) {
@@ -117,7 +128,7 @@ export class ActiveTasks {
         }
         // Remove it from our list, and invoke!
         this.tasks.filter((t) => t !== task);
-        if (this.invokeTaskDeletedEvent) this.invokeTaskDeletedEvent(this, task);
+        this.invokeTaskDeletedEvent.forEach((callback) => callback(this, task));
     }
 }
 

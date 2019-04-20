@@ -23,5 +23,9 @@ export function GetActiveTaskObject() {
     // Create an independent daily task.
     tasklist.CreateNewIndependentTask('solo daily boy', Category.Daily, ColourIdTracker.useNextColour());
 
+    // Create some deferred tasks.
+    tasklist.CreateNewIndependentTask('eeeh later', Category.Deferred, ColourIdTracker.useNextColour());
+    tasklist.CreateNewIndependentTask('ill do it soon, for real this time', Category.Deferred, ColourIdTracker.useNextColour());
+
     return tasklist;
 }
