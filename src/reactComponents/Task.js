@@ -58,11 +58,17 @@ export class Task extends Component {
     processColour(hslacol) {
         if (this.props.taskView.category === Category.Deferred) {
             // Deferred tasks should be slightly desaturated, and slightly transparent!
-            return new HSLAColour(hslacol.hue, hslacol.sat * 0.5, hslacol.light * 0.5, 100);
+            return new HSLAColour(hslacol.hue, hslacol.sat * 0.025, hslacol.light * 0.5, 100);
+        }
+        else if (this.props.taskView.category === Category.Completed) {
+            return new HSLAColour(hslacol.hue, hslacol.sat * 0.05, hslacol.light * 0.75, 100);
+        }
+        else if (this.props.taskView.category === Category.Failed) {
+            return new HSLAColour(hslacol.hue, 0, hslacol.light * 0.4, 100);
         }
         else {
             // Lets just darken all colours a tad..
-            return new HSLAColour(hslacol.hue, hslacol.sat, hslacol.light * 0.9, 100);
+            return new HSLAColour(hslacol.hue, hslacol.sat, hslacol.light * 0.85, 100);
         }
     }
 

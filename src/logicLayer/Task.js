@@ -27,7 +27,9 @@ export const Category = Object.freeze({
     Goal : 0,
     Weekly : 1,
     Daily: 2,
-    Deferred : 3
+    Deferred : 3,
+    Completed : 4,
+    Failed : 5
 });
 export const ProgressStatus = Object.freeze({
     NotStarted : 0,
@@ -50,9 +52,11 @@ function DowngradeCategory(category) {
 // TODO: Replace this will a persistence-safe method of acquiring a unique, new id value!
 const GetNewId = ((startVal) => () => startVal++)(0);
 
-export class ActiveTasks {
+export class TaskObjects {
     constructor() {
         this.tasks = [];
+        this.failedTasks = [];
+        this.completedTasks = [];
         this.invokeTaskAddedEvent = [];
         this.invokeTaskChangedEvent = [];
         this.invokeTaskDeletedEvent = [];
@@ -72,6 +76,24 @@ export class ActiveTasks {
         }
         else {
             return this.tasks.slice(0).filter(filterFunc);      // Filtered shallow copy
+        }
+    }
+
+    GetCompletedTasks(filterFunc = null) {
+        if (filterFunc == null) {
+            return this.completedTasks.slice(0);                         // Shallow copy
+        }
+        else {
+            return this.completedTasks.slice(0).filter(filterFunc);      // Filtered shallow copy
+        }
+    }
+
+    GetFailedTasks(filterFunc = null) {
+        if (filterFunc == null) {
+            return this.failedTasks.slice(0);                         // Shallow copy
+        }
+        else {
+            return this.failedTasks.slice(0).filter(filterFunc);      // Filtered shallow copy
         }
     }
 
@@ -118,6 +140,30 @@ export class ActiveTasks {
 
         task.category = newCategory;
         this.invokeTaskChangedEvent.forEach((callback) => callback(this, task));
+    }
+
+    FinishTask(task, category, progress, list) {
+        // When a task is completed, all of the currently active children of that task are automatically 'complete' also.
+        let idsToRemove = new Set();
+        function complete(curr) {
+            if (curr.category > Category.Daily) throw new Error("Cannot complete a task that is not currently on an active board");
+            curr.category = category;
+            curr.progressStatus = progress;
+            idsToRemove.add(curr.id);
+            list.push(curr);
+
+            curr.children.forEach((curr) => complete(curr));
+        }
+        
+        complete(task);
+        this.tasks = this.tasks.filter((t) => !idsToRemove.has(t.id));
+        this.invokeTaskChangedEvent.forEach((callback) => callback(this, task));
+    }
+    FailTask(task) {
+        this.FinishTask(task, Category.Failed, ProgressStatus.Failed, this.failedTasks);
+    }
+    CompleteTask(task) {
+        this.FinishTask(task, Category.Completed, ProgressStatus.Completed, this.completedTasks);
     }
 
     DeleteTask(task) {

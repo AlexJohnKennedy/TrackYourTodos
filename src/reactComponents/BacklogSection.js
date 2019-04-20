@@ -34,6 +34,8 @@ export class BacklogSection extends Component {
         // Update this component's state; which will re-render everything!
         this.setState({
             deferredTaskViews : deferredTaskViews,
+            completedTaskViews : this.activeTaskListAPI.GetCompletedTasks(),
+            failedTaskViews : this.activeTaskListAPI.GetFailedTasks(),
             deferredTaskCreationFunc : this.activeTaskListAPI.GetCreationFunction(Category.Deferred, ColourIdTracker.useNextColour)
         });
     }
@@ -63,6 +65,28 @@ export class BacklogSection extends Component {
                     { this.state.showingBacklog && 
                         <TaskList
                             tasks={this.state.deferredTaskViews}
+                            highlights={[]}
+                            hightlightEventCallbacks={{ 
+                                register : (id) => id,
+                                unregister : (id) => id
+                            }}
+                            formStateManager={ null }
+                        />
+                    }
+                    { this.state.showingCompleted &&
+                        <TaskList
+                            tasks={this.state.completedTaskViews}
+                            highlights={[]}
+                            hightlightEventCallbacks={{ 
+                                register : (id) => id,
+                                unregister : (id) => id
+                            }}
+                            formStateManager={ null }
+                        />
+                    }
+                    { this.state.showingGraveyard &&
+                        <TaskList
+                            tasks={this.state.failedTaskViews}
                             highlights={[]}
                             hightlightEventCallbacks={{ 
                                 register : (id) => id,

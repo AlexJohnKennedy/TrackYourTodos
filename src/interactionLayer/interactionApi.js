@@ -58,6 +58,9 @@ export function RegisterToActiveTaskListAPI(viewLayerCallbackFunc) {
         return ActiveTaskDataObj.GetActiveTasks().map((task) => BuildNewTaskView(ActiveTaskDataObj, task, viewLayerCallbackFunc));
     }
 
+    const getCompletedTasks = () => ActiveTaskDataObj.GetCompletedTasks().map((task) => BuildNewInactiveTaskView(task));
+    const getFailedTasks = () => ActiveTaskDataObj.GetFailedTasks().map((task) => BuildNewInactiveTaskView(task));
+
     function getCreationFunction(categoryVal, colourIdGetterFunc) {
         return function(name) {
             if (colourIdGetterFunc !== null) {
@@ -72,10 +75,11 @@ export function RegisterToActiveTaskListAPI(viewLayerCallbackFunc) {
     // Return the interface object. Note that for interfaces, we always return immutable objects.
     return Object.freeze({
         GetActiveTasks : getActiveTasks,
+        GetCompletedTasks : getCompletedTasks,
+        GetFailedTasks : getFailedTasks,
         GetCreationFunction : getCreationFunction
     });
 };
-
 
 // TaskView interaction description:
 // - - - - - - - - - - - - - - - - -
@@ -167,5 +171,15 @@ function BuildNewTaskView(activeList, domainTaskObj, viewLayerCallbackFunc) {
         CreateDailyChild : createDailyChild,
         DeleteTask : deleteTask,
         SetCategory : setCategory
+    });
+}
+
+function BuildNewInactiveTaskView(domainTaskObj) {
+    return Object.freeze({
+        // State properties
+        name : domainTaskObj.name,
+        id   : domainTaskObj.id,
+        colourid : domainTaskObj.colourid,
+        category : domainTaskObj.category
     });
 }
