@@ -12,7 +12,7 @@
 }
 
 /* Define an 'entrance' animation for whenever a task is created */
-.task {
+.ActiveTaskSection .task {
     animation-duration: 0.2s;
     animation-name: slidein-left;
 }
