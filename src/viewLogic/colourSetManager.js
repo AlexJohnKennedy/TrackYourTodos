@@ -13,6 +13,19 @@
 // be chosen automatically unless overriden by the user on the creation form.
 import React from 'react';
 
+export class HSLAColour {
+    constructor(hue, sat, light, alpha) {
+        this.hue = hue;
+        this.sat = sat;
+        this.light = light;
+        this.alpha = alpha;
+    }
+
+    toString() {
+        return "hsla(" + this.hue + ", " + this.sat + "%, " + this.light + "%, " + this.alpha + "%)";
+    }
+}
+
 // Set up a context value to define the theme. (Default value 0).
 const themes = {
     blueboys: 1,
@@ -33,10 +46,10 @@ function SetupColourSets() {
     
     // For now, only default theme exists
     let map = new Map();
-    map.set(0, "hsla(204, 100%, 40%, 100%)");
-    map.set(2, "hsla(0, 62%, 51%, 100%)");      // map.set(1, "#004D81");
-    map.set(1, "hsla(40, 100%, 42%, 100%)");      // map.set(2, "#8800B0");
-    map.set(3, "hsla(287, 62%, 51%, 100%)");
+    map.set(0, Object.freeze(new HSLAColour(204, 100, 40, 100)));
+    map.set(2, Object.freeze(new HSLAColour(0, 62, 51, 100)));      // map.set(1, "#004D81");
+    map.set(1, Object.freeze(new HSLAColour(40, 100, 42, 100)));      // map.set(2, "#8800B0");
+    map.set(3, Object.freeze(new HSLAColour(287, 62, 51, 100)));
     maps.push(map);
 
     map = new Map();

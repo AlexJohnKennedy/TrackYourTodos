@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { GetColourMapping } from '../viewLogic/colourSetManager';
-import { ThemeId } from '../viewLogic/colourSetManager';
+import { GetColourMapping, ThemeId, HSLAColour } from '../viewLogic/colourSetManager';
 import { NewTaskButton } from './NewTaskButton';
 import { CreationForm } from './CreationForm.js';
 import { Category } from '../logicLayer/Task';
@@ -55,11 +54,24 @@ export class Task extends Component {
         this.props.hightlightEventCallbacks.unregister(this.props.taskView.id);
     }
 
+    // Private method which 'processes' a colour based on attributes of this task. e.g. desaturate grave-tasks.
+    processColour(hslacol) {
+        if (this.props.taskView.category === Category.Deferred) {
+            // Deferred tasks should be slightly desaturated, and slightly transparent!
+            return new HSLAColour(hslacol.hue, hslacol.sat, hslacol.light * 0.7, 100);
+        }
+        else {
+            // Lets just darken all colours a tad..
+            return new HSLAColour(hslacol.hue, hslacol.sat, hslacol.light * 0.9, 100);
+        }
+    }
+
     // For now, just represent a task as a div with text in it!
     render() {
-        // Attain background colour programmatically
+        // Attain background colour programmatically.
+        let processedColour = this.processColour(GetColourMapping(this.context.themeId).get(this.props.taskView.colourid));
         const style = {
-            backgroundColor: GetColourMapping(this.context.themeId).get(this.props.taskView.colourid)
+            backgroundColor: processedColour.toString()
         };
         let highlight = this.props.highlights.filter((id) => id === this.props.taskView.id);
         let classstring = "task" + (highlight.length === 0 ? "" : " highlighted");
