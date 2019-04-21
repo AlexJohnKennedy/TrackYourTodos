@@ -150,9 +150,10 @@ export class TaskObjects {
             curr.category = category;
             curr.progressStatus = progress;
             idsToRemove.add(curr.id);
-            list.unshift(curr);
-
+            
             curr.children.forEach((curr) => complete(curr));
+
+            list.unshift(curr);
         }
         
         complete(task);
