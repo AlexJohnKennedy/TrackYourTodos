@@ -27,16 +27,15 @@ export const Category = Object.freeze({
     Goal : 0,
     Weekly : 1,
     Daily: 2,
-    Deferred : 3,
-    Completed : 4,
-    Failed : 5
+    Deferred : 3
 });
 export const ProgressStatus = Object.freeze({
     NotStarted : 0,
     Started : 1,
     Completed : 2,
     Aborted : 3,
-    Failed : 4
+    Failed : 4,
+    Reattempted : 5
 });
 
 const DefaultColourId = 0;
@@ -142,12 +141,11 @@ export class TaskObjects {
         this.invokeTaskChangedEvent.forEach((callback) => callback(this, task));
     }
 
-    FinishTask(task, category, progress, list) {
+    FinishTask(task, progress, list) {
         // When a task is completed, all of the currently active children of that task are automatically 'complete' also.
         let idsToRemove = new Set();
         function complete(curr) {
-            if (curr.category > Category.Daily) return;
-            curr.category = category;
+            if (curr.category > Category.Daily || curr.ProgressStatus > ProgressStatus.Started) return;
             curr.progressStatus = progress;
             idsToRemove.add(curr.id);
             
@@ -161,10 +159,10 @@ export class TaskObjects {
         this.invokeTaskChangedEvent.forEach((callback) => callback(this, task));
     }
     FailTask(task) {
-        this.FinishTask(task, Category.Failed, ProgressStatus.Failed, this.failedTasks);
+        this.FinishTask(task, ProgressStatus.Failed, this.failedTasks);
     }
     CompleteTask(task) {
-        this.FinishTask(task, Category.Completed, ProgressStatus.Completed, this.completedTasks);
+        this.FinishTask(task, ProgressStatus.Completed, this.completedTasks);
     }
 
     DeleteTask(task) {
@@ -190,6 +188,15 @@ export class TaskObjects {
             task.progressStatus = ProgressStatus.Started
             this.invokeTaskChangedEvent.forEach((callback) => callback(this, task));
         }
+    }
+
+    ReviveTaskAsClone(task, asActive) {
+        // Used to take a dead/failed task and 'revive' it by making a copy of it as an active or deferred task
+        if (task.progressStatus !== ProgressStatus.Failed) throw new Error("Cannot revive a task which is not in the graveyard");
+        let category = asActive ? task.category : Category.Deferred;
+        this.CreateNewIndependentTask(task.name, category, task.colourid);
+        task.progressStatus = ProgressStatus.Reattempted;   // Signal that this task has been revived. We only want to be able to do this once per failure.
+        this.invokeTaskAddedEvent.forEach((callback) => callback(this, task));
     }
 }
 

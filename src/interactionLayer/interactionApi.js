@@ -58,8 +58,8 @@ export function RegisterToActiveTaskListAPI(viewLayerCallbackFunc) {
         return ActiveTaskDataObj.GetActiveTasks().map((task) => BuildNewTaskView(ActiveTaskDataObj, task, viewLayerCallbackFunc));
     }
 
-    const getCompletedTasks = () => ActiveTaskDataObj.GetCompletedTasks().map((task) => BuildNewInactiveTaskView(task));
-    const getFailedTasks = () => ActiveTaskDataObj.GetFailedTasks().map((task) => BuildNewInactiveTaskView(task));
+    const getCompletedTasks = () => ActiveTaskDataObj.GetCompletedTasks().map((task) => BuildNewInactiveTaskView(task, ActiveTaskDataObj));
+    const getFailedTasks = () => ActiveTaskDataObj.GetFailedTasks().map((task) => BuildNewInactiveTaskView(task, ActiveTaskDataObj));
 
     function getCreationFunction(categoryVal, colourIdGetterFunc) {
         return function(name) {
@@ -170,6 +170,7 @@ function BuildNewTaskView(activeList, domainTaskObj, viewLayerCallbackFunc) {
         id   : domainTaskObj.id,
         colourid : domainTaskObj.colourid,
         category : domainTaskObj.category,
+        progressStatus : domainTaskObj.progressStatus,
         parent : (domainTaskObj.parent === null) ? null : domainTaskObj.parent.id,
         children : domainTaskObj.children.map((task) => task.id),
         // Update functions
@@ -184,12 +185,16 @@ function BuildNewTaskView(activeList, domainTaskObj, viewLayerCallbackFunc) {
     });
 }
 
-function BuildNewInactiveTaskView(domainTaskObj) {
+function BuildNewInactiveTaskView(domainTaskObj, tasklistobj) {
     return Object.freeze({
         // State properties
         name : domainTaskObj.name,
         id   : domainTaskObj.id,
         colourid : domainTaskObj.colourid,
-        category : domainTaskObj.category
+        category : domainTaskObj.category,
+        progressStatus : domainTaskObj.progressStatus,
+
+        // Revive method, to create a new clone who is not inactive
+        ReviveTask : (asActive) => tasklistobj.ReviveTaskAsClone(domainTaskObj, asActive)
     });
 }
