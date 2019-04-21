@@ -1,13 +1,8 @@
 .task {
     position: relative;
-
-    /* Task colours are defined programmatically with colourIds now */
-    /* background-color: var(--blue-icon); */
     border-radius: 0px;
     padding: 0.5rem;
-    /*margin-bottom: calc(1.5 *var(--top-padding-amount));*/
     border-bottom: 0.2rem solid var(--editor-background-colour);
-
     box-sizing: border-box;
 }
 

@@ -75,11 +75,15 @@ export class Task extends Component {
 
     // For now, just represent a task as a div with text in it!
     render() {
-        // Attain background colour programmatically.
+        // Attain background colour programmatically, and apply side padding iff the checkbox is present.
         let processedColour = this.processColour(GetColourMapping(this.context.themeId).get(this.props.taskView.colourid));
         const style = {
-            backgroundColor: processedColour.toString()
+            backgroundColor: processedColour.toString(),
         };
+        if (this.props.taskView.category <= Category.Daily) {
+            style.paddingLeft = "2rem";
+            style.paddingRight = "2rem";
+        }
         let highlight = this.props.highlights.filter((id) => id === this.props.taskView.id);
         let classstring = "task" + (highlight.length === 0 ? "" : " highlighted");
 
