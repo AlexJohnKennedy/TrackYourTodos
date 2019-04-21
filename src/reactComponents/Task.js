@@ -111,7 +111,10 @@ export class Task extends Component {
                     </>
                 }
                 { this.props.taskView.category <= Category.Daily &&
-                    <CheckBox clickAction={() => this.props.taskView.CompleteTask()} />
+                    <CheckBox 
+                        firstClickAction={() => this.props.taskView.StartTask()}
+                        secondClickAction={() => this.props.taskView.CompleteTask()}
+                    />
                 }
                 { this.props.taskView.category === Category.Deferred &&
                     <>

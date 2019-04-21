@@ -26,17 +26,45 @@ export class NewTaskButton extends Component {
 export class CheckBox extends Component {
     constructor(props) {
         super(props);
-
+        this.state = {
+            clicks: 0
+        };
+        this.CheckboxInputRef = React.createRef();
         this.handleClick = this.handleClick.bind(this);
     }
-    
+
+    componentDidUpdate() {
+        if (this.state.clicks === 0) {
+            this.CheckboxInputRef.current.checked = false;
+            this.CheckboxInputRef.current.indeterminate = false;
+        }
+        else if (this.state.clicks === 1) {
+            this.CheckboxInputRef.current.checked = false;
+            this.CheckboxInputRef.current.indeterminate = true;
+        }
+        else {
+            this.CheckboxInputRef.current.checked = true;
+            this.CheckboxInputRef.current.indeterminate = false;
+        }
+    }
+
     handleClick(e) {
-        this.props.clickAction();
+        // If this is the first click, that means we are 'starting' the task.
+        if (this.state.clicks === 0) {
+            this.setState({
+                clicks: 1
+            });
+            this.props.firstClickAction();
+        }
+        // If this is the second click, that means we are 'completing' the task.
+        else {
+            this.props.secondClickAction();
+        }
     }
 
     render() {
         return (
-            <input type="checkbox" className="checkbox" onClick={this.handleClick}/>
+            <input type="checkbox" className="checkbox" ref={this.CheckboxInputRef} onClick={this.handleClick}/>
         );
     }
 }

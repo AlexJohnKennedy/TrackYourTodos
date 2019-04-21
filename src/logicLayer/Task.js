@@ -150,7 +150,7 @@ export class TaskObjects {
             curr.category = category;
             curr.progressStatus = progress;
             idsToRemove.add(curr.id);
-            list.push(curr);
+            list.unshift(curr);
 
             curr.children.forEach((curr) => complete(curr));
         }
@@ -175,6 +175,20 @@ export class TaskObjects {
         // Remove it from our list, and invoke!
         this.tasks.filter((t) => t !== task);
         this.invokeTaskDeletedEvent.forEach((callback) => callback(this, task));
+    }
+
+    StartTask(task) {
+        // All we do here is set the progress of a task to 'started'.
+        if (task.category > Category.Daily || task.progressStatus > ProgressStatus.Started) {
+            throw new Error("Tried to start a task which was not on the active board, and not 'not-started'");
+        }
+        else if (task.progressStatus === ProgressStatus.Started) {
+            return;     // Just do nothing in this case.
+        }
+        else {
+            task.progressStatus = ProgressStatus.Started
+            this.invokeTaskChangedEvent.forEach((callback) => callback(this, task));
+        }
     }
 }
 

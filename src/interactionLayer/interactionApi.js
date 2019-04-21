@@ -159,6 +159,10 @@ function BuildNewTaskView(activeList, domainTaskObj, viewLayerCallbackFunc) {
         activeList.CompleteTask(domainTaskObj);
     }
 
+    function startTask() {
+        activeList.StartTask(domainTaskObj);
+    }
+
     // Return the interface object. Immutable!
     return Object.freeze({
         // State properties
@@ -175,7 +179,8 @@ function BuildNewTaskView(activeList, domainTaskObj, viewLayerCallbackFunc) {
         CreateDailyChild : createDailyChild,
         DeleteTask : deleteTask,
         SetCategory : setCategory,
-        CompleteTask : completeTask
+        CompleteTask : completeTask,
+        StartTask : startTask
     });
 }
 
