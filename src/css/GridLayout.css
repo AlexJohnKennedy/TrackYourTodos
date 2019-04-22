@@ -1,7 +1,7 @@
 /* 'global' variables for spacings, colours, etc. */
 #root {
     --top-padding-amount: 0.4rem;
-    --board-spacing-amount: 0.8rem;
+    --board-spacing-amount: 0.6rem;
 
     --active-tasks-min-total-width: 100rem;
     --active-tasks-min-total-width-when-squashed: 80rem;
@@ -34,6 +34,8 @@
 
         width: 100%;
         min-width: var(--active-tasks-min-total-width);
+        padding-left: var(--board-spacing-amount);
+        padding-right: var(--board-spacing-amount);
 
         display: inline-flex;
         justify-content: space-between;
@@ -71,11 +73,16 @@
         grid-row-start: 3;
         grid-row-end: 4;
     }
+    .board {
+        padding: 0.6rem;
+        padding-bottom: 0rem;   /* tasks have a margin on the bottom, which will form this spacing instead */
+    }
 }
 @media (max-width: 1270px) {
     #root {
         display: grid;
         grid-template-columns: 1fr minmax(var(--active-tasks-min-total-width-when-squashed), var(--active-tasks-min-total-width)) 1fr;
+        grid-template-rows: auto 45rem auto;
     }
     
     .ActiveTaskSection {
@@ -83,6 +90,11 @@
         grid-column-end: 3;
         grid-row-start: 1;
         grid-row-end: 2;
+
+        min-height: 25rem;
+        max-height: 40rem;
+        padding-left: var(--board-spacing-amount);
+        padding-right: var(--board-spacing-amount);
 
         width: 100%;
 
@@ -111,11 +123,16 @@
         grid-row-start: 3;
         grid-row-end: 4;
     }
+    .board {
+        padding: 0.6rem;
+        padding-bottom: 0rem;   /* tasks have a margin on the bottom, which will form this spacing instead */
+    }
 }
 @media (max-width: 800px) {
     #root {
         display: grid;
         grid-template-columns: 1fr minmax(var(--active-tasks-single-board-min-width), var(--active-tasks-single-board-max-width)) 1fr;
+        grid-template-rows: auto 45rem auto;
     }
     .ActiveTaskSection {
         grid-column-start: 2;
@@ -123,16 +140,37 @@
         grid-row-start: 1;
         grid-row-end: 2;
 
+        min-height: 0rem;
+        max-height: 1000rem;
+        padding-left: 0rem;
+        padding-right: 0rem;
+
         width: 100%;
 
         display: inline-flex;
         justify-content: space-between;
         flex-direction: column;
     }
-    .Footer {
+    .board {
+        min-height: 10rem;
+        max-height: 40rem;
+        border-bottom: 0.2rem solid var(--sidebar-background-colour);
+        padding: 1rem;
+        padding-bottom: 0.4rem;   /* tasks have a margin on the bottom, which will form this spacing instead */
+        padding-top: 0.2rem;
+    }
+    .TaskStatisticsSection {
         grid-column-start: 2;
         grid-column-end: 3;
         grid-row-start: 2;
         grid-row-end: 3;
+
+        border-top: none;
+    }
+    .Footer {
+        grid-column-start: 2;
+        grid-column-end: 3;
+        grid-row-start: 3;
+        grid-row-end: 4;
     }
 }

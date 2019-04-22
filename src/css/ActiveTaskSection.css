@@ -3,7 +3,4 @@
     border-radius: 0px;
 
     box-sizing: border-box;
-
-    padding-left: var(--board-spacing-amount);
-    padding-right: var(--board-spacing-amount);
 }
