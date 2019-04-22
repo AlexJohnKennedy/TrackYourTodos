@@ -33,7 +33,5 @@ export function GetActiveTaskObject() {
     // Create some tasks and fail them.
     tasklist.FailTask(tasklist.CreateNewIndependentTask('memes', Category.Daily, ColourIdTracker.useNextColour()));
 
-    console.log(tasklist);
-
     return tasklist;
 }
