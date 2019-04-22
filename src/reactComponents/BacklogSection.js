@@ -4,6 +4,8 @@ import { RegisterToActiveTaskListAPI } from '../interactionLayer/interactionApi'
 import { ColourIdTracker } from '../viewLogic/colourSetManager';
 import { Category } from '../logicLayer/Task';
 import { TaskList } from './TaskList';
+import { ShortCutManager } from '../viewLogic/keyboardShortcutHandler';
+import { CreationForm } from './CreationForm';
 
 export class BacklogSection extends Component {
     constructor(props) {
@@ -13,6 +15,9 @@ export class BacklogSection extends Component {
             showingBacklog: true,
             showingCompleted: false,
             showingGraveyard: false,
+            tabId: 0,
+
+            showingForm: true,
 
             deferredTaskViews: [],
             deferredTaskCreationFunc: null
@@ -20,12 +25,28 @@ export class BacklogSection extends Component {
         
         this.handleActiveChange = this.handleActiveChange.bind(this);
         this.toggleTab = this.toggleTab.bind(this);
+        this.toggleFormOn = this.toggleFormOn.bind(this);
+        this.toggleFormOff = this.toggleFormOff.bind(this);
     }
     componentDidMount() {
         this.activeTaskListAPI = RegisterToActiveTaskListAPI(this.handleActiveChange);
 
         // Initialise state of this component.
         this.handleActiveChange();
+
+        ShortCutManager.registerShiftShortcut("Digit4", this.toggleFormOn);
+    }
+    toggleFormOn() {
+        this.props.formStateManager.triggerCleanup();
+        this.toggleTab(0);
+        this.setState({
+            showingForm: true
+        });
+    }
+    toggleFormOff() {
+        this.setState({
+            showingForm: false
+        });
     }
 
     handleActiveChange() {
@@ -46,10 +67,16 @@ export class BacklogSection extends Component {
         let cm = tabId === 1 ? true : false;
         let gy = tabId === 2 ? true : false;
 
+        // Toggle off the backlog creation form if the tab clicked is not the backlog tab.
+        if (tabId > 0) {
+            this.toggleFormOff();
+        }
+
         this.setState({
             showingBacklog: bl,
             showingCompleted: cm,
-            showingGraveyard: gy
+            showingGraveyard: gy,
+            tabId: tabId
         });
     }
     
@@ -59,10 +86,11 @@ export class BacklogSection extends Component {
                 <NavigationStateWrapper
                     names={['Backlog', 'Completed', 'Graveyard']}
                     toggleCallback={this.toggleTab}
+                    currActiveIndex={this.state.tabId}
                 />
                 <div className="spacer"/>
                 <div className="wrapper">
-                    { this.state.showingBacklog && 
+                    { this.state.showingBacklog &&
                         <TaskList
                             tasks={this.state.deferredTaskViews}
                             highlights={[]}
@@ -95,6 +123,13 @@ export class BacklogSection extends Component {
                             formStateManager={ null }
                         />
                     }
+                    <CreationForm
+                            creationFunction={this.state.deferredTaskCreationFunc} 
+                            showingForm={this.state.showingForm}
+                            submitAction={this.toggleFormOff}
+                            formStateManager={this.props.formStateManager}
+                            formText={this.props.formText}
+                    />
                 </div>
             </div>
         );

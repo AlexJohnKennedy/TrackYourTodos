@@ -46,6 +46,7 @@
         border-left: 1px solid var(--divider-colour);
         display: inline-flex;
         flex-direction: column;
+        justify-content: flex-start;
     }
     .TaskStatisticsSection {
         grid-column-start: 2;

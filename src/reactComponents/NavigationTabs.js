@@ -25,20 +25,12 @@ export class NavigationTabs extends Component {
 export class NavigationStateWrapper extends Component {
     constructor(props) {
         super(props);
-
-        this.state = {
-            currActiveIndex: 0
-        };
-
         this.toggleTab = this.toggleTab.bind(this);
     }
 
     toggleTab(tabId) {
         if (tabId < 0 || tabId > this.props.names.length) throw new Error("Navigation state wrapper passed invalid tab id in callback!");
         this.props.toggleCallback(tabId);
-        this.setState({
-            currActiveIndex: tabId
-        });
     }
 
     render() {
@@ -51,7 +43,7 @@ export class NavigationStateWrapper extends Component {
             <NavigationTabs
                 names={this.props.names}
                 callbackList={callbacks}
-                currActiveIndex={this.state.currActiveIndex}
+                currActiveIndex={this.props.currActiveIndex}
             />
         );
     }
