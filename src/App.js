@@ -28,9 +28,9 @@ class App extends Component {
     return (
       // Return each 'section' of the app as siblings, so that the root div can arrange them using CSS Grid!
       <ThemeId.Provider value={{ themeId: currThemeId }}>
+        <BacklogSection formStateManager={this.formStateManager}/>
         <ActiveTaskSection formStateManager={this.formStateManager}/>
         <TaskStatisticsSection formStateManager={this.formStateManager}/>
-        <BacklogSection formStateManager={this.formStateManager}/>
         <Footer/>
       </ThemeId.Provider>
     );

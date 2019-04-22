@@ -1,10 +1,10 @@
 // This is simply some hardcoded tasks inside an active task list, used for developing the react ui as test!
-import { Category, ActiveTasks } from '../../logicLayer/Task';
+import { Category, TaskObjects } from '../../logicLayer/Task';
 import { ColourIdTracker } from '../../viewLogic/colourSetManager';
 
 export function GetActiveTaskObject() {
     // Create a new task list, and populate with some basic shit.
-    let tasklist = new ActiveTasks();
+    let tasklist = new TaskObjects();
 
     // Create a couple of 'goal' tasks, and a weekly subtask for the second one.
     let goaltask = tasklist.CreateNewIndependentTask('goal task numero uno', Category.Goal, ColourIdTracker.useNextColour());
@@ -12,7 +12,6 @@ export function GetActiveTaskObject() {
     let subtask = tasklist.CreateNewSubtask('weekly subtask', goaltask2);
     tasklist.CreateNewSubtask('daily sub subby boi', subtask);
     tasklist.CreateNewDailySubtask('This is a skipped subtask', goaltask);
-    //tasklist.CreateNewSubtask('this is a separate subboi!! :)', subtask);
     //let subtask2 = tasklist.CreateNewSubtask('MEMEMEMEMEMES', goaltask2);
     //tasklist.CreateNewSubtask('A B C D E F G H I J K L M N O P', subtask2);
 
@@ -22,6 +21,17 @@ export function GetActiveTaskObject() {
 
     // Create an independent daily task.
     tasklist.CreateNewIndependentTask('solo daily boy', Category.Daily, ColourIdTracker.useNextColour());
+
+    // Create some deferred tasks.
+    tasklist.CreateNewIndependentTask('eeeh later', Category.Deferred, ColourIdTracker.useNextColour());
+    tasklist.CreateNewIndependentTask('ill do it soon, for real this time', Category.Deferred, ColourIdTracker.useNextColour());
+
+    // Create some tasks and complete them.
+    tasklist.CompleteTask(tasklist.CreateNewIndependentTask('oompa loompa', Category.Daily, ColourIdTracker.useNextColour()));
+    tasklist.CompleteTask(tasklist.CreateNewSubtask('this is a separate subboi!! :)', subtask));
+
+    // Create some tasks and fail them.
+    tasklist.FailTask(tasklist.CreateNewIndependentTask('memes', Category.Daily, ColourIdTracker.useNextColour()));
 
     return tasklist;
 }

@@ -1,18 +1,13 @@
 .task {
     position: relative;
-
-    /* Task colours are defined programmatically with colourIds now */
-    /* background-color: var(--blue-icon); */
     border-radius: 0px;
     padding: 0.5rem;
-    /*margin-bottom: calc(1.5 *var(--top-padding-amount));*/
     border-bottom: 0.2rem solid var(--editor-background-colour);
-
     box-sizing: border-box;
 }
 
 /* Define an 'entrance' animation for whenever a task is created */
-.task {
+.ActiveTaskSection .task {
     animation-duration: 0.2s;
     animation-name: slidein-left;
 }
@@ -29,14 +24,31 @@
     position: absolute;
     right: 0.4rem;
     top: 0.4rem;
-
+    
     width: 1.4rem;
     height: 1.4rem;
 }
+/* Make the second button even further over. */
 .task button ~ button {
     position: absolute;
     right: 2rem;
     top: 0.4rem;
+}
+/* Make the third button even FURTHER over. */
+.task button ~ button ~ button {
+    position: absolute;
+    right: 3.6rem;
+    top: 0.4rem;
+}
+
+.task .checkbox {
+    position: absolute;
+    left: 0.4rem;
+    top: 0rem;
+    height: 100%;
+    padding: 0rem;
+    margin: 0rem;
+    opacity: 0.6;
 }
 
 .highlighted p {

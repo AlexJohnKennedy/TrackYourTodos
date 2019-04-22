@@ -6,8 +6,6 @@
     padding-bottom: 0rem;   /* tasks have a margin on the bottom, which will form this spacing instead */
     background-color: rgb(0,0,0,0);
     border-radius: var(--border-radius);
-    min-height: 40rem;
-    max-height: 60rem;
 
     /* the two children of a board are title container, and list container. We want them to be layout flexibly, in vertical direction */
     display: inline-flex;

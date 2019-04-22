@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { GetColourMapping } from '../viewLogic/colourSetManager';
-import { ThemeId } from '../viewLogic/colourSetManager';
-import { NewTaskButton } from './NewTaskButton';
+import { GetColourMapping, ThemeId, HSLAColour } from '../viewLogic/colourSetManager';
+import { NewTaskButton, CheckBox } from './TaskButtons';
 import { CreationForm } from './CreationForm.js';
-import { Category } from '../logicLayer/Task';
+import { Category, ProgressStatus } from '../logicLayer/Task';
 
 export class Task extends Component {
     constructor(props) {
@@ -55,21 +54,45 @@ export class Task extends Component {
         this.props.hightlightEventCallbacks.unregister(this.props.taskView.id);
     }
 
+    // Private method which 'processes' a colour based on attributes of this task. e.g. desaturate grave-tasks.
+    processColour(hslacol) {
+        if (this.props.taskView.category === Category.Deferred) {
+            // Deferred tasks should be slightly desaturated, and slightly transparent!
+            return new HSLAColour(hslacol.hue, hslacol.sat * 0.025, hslacol.light * 0.5, 100);
+        }
+        else if (this.props.taskView.progressStatus === ProgressStatus.Completed) {
+            //return new HSLAColour(hslacol.hue, hslacol.sat, hslacol.light * 0.75, 100);
+            return new HSLAColour(122, 75, 35, 100);
+        }
+        else if (this.props.taskView.progressStatus >= ProgressStatus.Failed) {
+            return new HSLAColour(hslacol.hue, hslacol.sat * 0.025, hslacol.light * 0.4, 100);
+        }
+        else {
+            // Lets just darken all colours a tad..
+            return new HSLAColour(hslacol.hue, hslacol.sat, hslacol.light * 0.85, 100);
+        }
+    }
+
     // For now, just represent a task as a div with text in it!
     render() {
-        // Attain background colour programmatically
+        // Attain background colour programmatically, and apply side padding iff the checkbox is present.
+        let processedColour = this.processColour(GetColourMapping(this.context.themeId).get(this.props.taskView.colourid));
         const style = {
-            backgroundColor: GetColourMapping(this.context.themeId).get(this.props.taskView.colourid)
+            backgroundColor: processedColour.toString(),
         };
+        if (this.props.taskView.category <= Category.Daily) {
+            style.paddingLeft = "2rem";
+            style.paddingRight = "2rem";
+        }
         let highlight = this.props.highlights.filter((id) => id === this.props.taskView.id);
         let classstring = "task" + (highlight.length === 0 ? "" : " highlighted");
 
         return (
             <div className={classstring} style={style} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
                 <p> { this.props.taskView.name } </p>
-                { this.props.taskView.category < Category.Weekly &&
+                { this.props.taskView.category < Category.Weekly && this.props.taskView.progressStatus <= ProgressStatus.Started &&
                     <>
-                    <NewTaskButton clickAction={() => this.toggleFormOn(true)}/>
+                    <NewTaskButton clickAction={() => this.toggleFormOn(true)} text={'>'}/>
                     <CreationForm 
                         creationFunction={this.props.taskView.CreateDailyChild} 
                         formText="New daily subtask" 
@@ -79,9 +102,9 @@ export class Task extends Component {
                     />
                     </>
                 }
-                { this.props.taskView.category < Category.Daily &&
+                { this.props.taskView.category < Category.Daily && this.props.taskView.progressStatus <= ProgressStatus.Started &&
                     <>
-                    <NewTaskButton clickAction={() => this.toggleFormOn(false)}/>
+                    <NewTaskButton clickAction={() => this.toggleFormOn(false)} text={'>'}/>
                     <CreationForm 
                         creationFunction={this.props.taskView.CreateChild} 
                         formText="New subtask" 
@@ -89,6 +112,25 @@ export class Task extends Component {
                         submitAction={() => this.toggleFormOff(false)}
                         formStateManager={this.props.formStateManager}
                     />
+                    </>
+                }
+                { this.props.taskView.category <= Category.Daily && this.props.taskView.progressStatus <= ProgressStatus.Started &&
+                    <CheckBox 
+                        firstClickAction={() => this.props.taskView.StartTask()}
+                        secondClickAction={() => this.props.taskView.CompleteTask()}
+                    />
+                }
+                { this.props.taskView.category === Category.Deferred &&
+                    <>
+                    <NewTaskButton clickAction={() => this.props.taskView.SetCategory(Category.Daily)} text={'D'}/>
+                    <NewTaskButton clickAction={() => this.props.taskView.SetCategory(Category.Weekly)} text={'W'}/>
+                    <NewTaskButton clickAction={() => this.props.taskView.SetCategory(Category.Goal)} text={'G'}/>
+                    </>
+                }
+                { this.props.taskView.progressStatus === ProgressStatus.Failed &&
+                    <>
+                    <NewTaskButton clickAction={() => this.props.taskView.ReviveTask(false)} text={'<'}/>
+                    <NewTaskButton clickAction={() => this.props.taskView.ReviveTask(true)} text={'<'}/>
                     </>
                 }
             </div>

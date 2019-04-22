@@ -27,16 +27,16 @@ export const Category = Object.freeze({
     Goal : 0,
     Weekly : 1,
     Daily: 2,
-    Deferred : 3,
-    Completed : 4,
-    Failed : 5
+    Deferred : 3
 });
 export const ProgressStatus = Object.freeze({
     NotStarted : 0,
     Started : 1,
     Completed : 2,
-    Aborted : 3
-})
+    Aborted : 3,
+    Failed : 4,
+    Reattempted : 5
+});
 
 const DefaultColourId = 0;
 function DowngradeCategory(category) {
@@ -51,16 +51,21 @@ function DowngradeCategory(category) {
 // TODO: Replace this will a persistence-safe method of acquiring a unique, new id value!
 const GetNewId = ((startVal) => () => startVal++)(0);
 
-export class ActiveTasks {
+export class TaskObjects {
     constructor() {
         this.tasks = [];
+        this.failedTasks = [];
+        this.completedTasks = [];
+        this.invokeTaskAddedEvent = [];
+        this.invokeTaskChangedEvent = [];
+        this.invokeTaskDeletedEvent = [];
     }
 
     RegisterForUpdates(handlerFuncs) {
         // the 'handler funcs' object contains a set of functions which this object should invoke when the appropriate event occurs.
-        this.invokeTaskAddedEvent = handlerFuncs.taskAddedHandler;
-        this.invokeTaskDeletedEvent = handlerFuncs.taskDeletedHandler;
-        this.invokeTaskChangedEvent = handlerFuncs.taskChangedHandler;
+        this.invokeTaskAddedEvent.push(handlerFuncs.taskAddedHandler);
+        this.invokeTaskDeletedEvent.push(handlerFuncs.taskDeletedHandler);
+        this.invokeTaskChangedEvent.push(handlerFuncs.taskChangedHandler);
     }
 
     // Get tasks. WARNING, the Task objects returned will be exposed! Do not send beyond the interaction layer!!
@@ -70,6 +75,24 @@ export class ActiveTasks {
         }
         else {
             return this.tasks.slice(0).filter(filterFunc);      // Filtered shallow copy
+        }
+    }
+
+    GetCompletedTasks(filterFunc = null) {
+        if (filterFunc == null) {
+            return this.completedTasks.slice(0);                         // Shallow copy
+        }
+        else {
+            return this.completedTasks.slice(0).filter(filterFunc);      // Filtered shallow copy
+        }
+    }
+
+    GetFailedTasks(filterFunc = null) {
+        if (filterFunc == null) {
+            return this.failedTasks.slice(0);                         // Shallow copy
+        }
+        else {
+            return this.failedTasks.slice(0).filter(filterFunc);      // Filtered shallow copy
         }
     }
 
@@ -83,7 +106,7 @@ export class ActiveTasks {
             this.tasks.push(newTask);
         }
 
-        if (this.invokeTaskAddedEvent) this.invokeTaskAddedEvent(this, newTask);
+        this.invokeTaskAddedEvent.forEach((callback) => callback(this, newTask));
 
         return newTask;
     }
@@ -94,7 +117,7 @@ export class ActiveTasks {
         this.tasks.push(newTask);
         parent.addChild(newTask);
 
-        if (this.invokeTaskAddedEvent) this.invokeTaskAddedEvent(this, newTask);
+        this.invokeTaskAddedEvent.forEach((callback) => callback(this, newTask));        
 
         return newTask;
     }
@@ -104,9 +127,42 @@ export class ActiveTasks {
         this.tasks.push(newTask);
         parent.addChild(newTask);
 
-        if (this.invokeTaskAddedEvent) this.invokeTaskAddedEvent(this, newTask);
+        this.invokeTaskAddedEvent.forEach((callback) => callback(this, newTask));        
 
         return newTask;
+    }
+    
+    // Function which modifies the category of a task. This is only allowed if the task does not have any children or parent.
+    // This is most likely only used to 'activate' a deferred task and move it into the active Boards.
+    MoveCategory(task, newCategory) {
+        if (task.parent !== null || task.children.length > 0) throw new Error("Cannot modify category of a task with relatives");
+
+        task.category = newCategory;
+        this.invokeTaskChangedEvent.forEach((callback) => callback(this, task));
+    }
+
+    FinishTask(task, progress, list) {
+        // When a task is completed, all of the currently active children of that task are automatically 'complete' also.
+        let idsToRemove = new Set();
+        function complete(curr) {
+            if (curr.category > Category.Daily || curr.progressStatus > ProgressStatus.Started) return;
+            curr.progressStatus = progress;
+            idsToRemove.add(curr.id);
+            
+            curr.children.forEach((curr) => complete(curr));
+
+            list.unshift(curr);
+        }
+        
+        complete(task);
+        this.tasks = this.tasks.filter((t) => !idsToRemove.has(t.id));
+        this.invokeTaskChangedEvent.forEach((callback) => callback(this, task));
+    }
+    FailTask(task) {
+        this.FinishTask(task, ProgressStatus.Failed, this.failedTasks);
+    }
+    CompleteTask(task) {
+        this.FinishTask(task, ProgressStatus.Completed, this.completedTasks);
     }
 
     DeleteTask(task) {
@@ -117,7 +173,30 @@ export class ActiveTasks {
         }
         // Remove it from our list, and invoke!
         this.tasks.filter((t) => t !== task);
-        if (this.invokeTaskDeletedEvent) this.invokeTaskDeletedEvent(this, task);
+        this.invokeTaskDeletedEvent.forEach((callback) => callback(this, task));
+    }
+
+    StartTask(task) {
+        // All we do here is set the progress of a task to 'started'.
+        if (task.category > Category.Daily || task.progressStatus > ProgressStatus.Started) {
+            throw new Error("Tried to start a task which was not on the active board, and not 'not-started'");
+        }
+        else if (task.progressStatus === ProgressStatus.Started) {
+            return;     // Just do nothing in this case.
+        }
+        else {
+            task.progressStatus = ProgressStatus.Started
+            this.invokeTaskChangedEvent.forEach((callback) => callback(this, task));
+        }
+    }
+
+    ReviveTaskAsClone(task, asActive) {
+        // Used to take a dead/failed task and 'revive' it by making a copy of it as an active or deferred task
+        if (task.progressStatus !== ProgressStatus.Failed) throw new Error("Cannot revive a task which is not in the graveyard");
+        let category = asActive ? task.category : Category.Deferred;
+        this.CreateNewIndependentTask(task.name, category, task.colourid);
+        task.progressStatus = ProgressStatus.Reattempted;   // Signal that this task has been revived. We only want to be able to do this once per failure.
+        this.invokeTaskAddedEvent.forEach((callback) => callback(this, task));
     }
 }
 
@@ -152,6 +231,7 @@ class Task {
         if ('name' in stateObj) this.name = stateObj.name;
         if ('category' in stateObj) this.category = stateObj.category;
         if ('colourid' in stateObj) this.colourid = stateObj.colourid;
+        if ('progressStatus' in stateObj) this.progressStatus = stateObj.progressStatus;
     }
 
     addChild(childTask) {

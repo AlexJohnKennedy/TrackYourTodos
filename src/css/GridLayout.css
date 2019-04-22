@@ -20,6 +20,7 @@
     #root {
         display: grid;
         grid-template-columns: 1fr auto var(--divider-column-width) minmax(var(--backlog-tasks-total-width-squashed), var(--backlog-tasks-total-width)) 1fr;
+        grid-template-rows: auto 45rem auto;
     }
     
     .ActiveTaskSection {
@@ -27,6 +28,9 @@
         grid-column-end: 3;
         grid-row-start: 1;
         grid-row-end: 2;
+
+        min-height: 25rem;
+        max-height: 40rem;
 
         width: 100%;
         min-width: var(--active-tasks-min-total-width);
@@ -43,8 +47,13 @@
         box-sizing: border-box;
         width: 100%;
 
+        min-height: 0;
+        max-height: 85rem;
+
         border-left: 1px solid var(--divider-colour);
         display: inline-flex;
+        flex-direction: column;
+        justify-content: flex-start;
     }
     .TaskStatisticsSection {
         grid-column-start: 2;
@@ -55,9 +64,6 @@
         display: inline-flex;
 
         border-top: 1px solid var(--divider-colour);
-
-        /* TEMP PLACEHOLDER */
-        height: 45rem;
     }
     .Footer {
         grid-column-start: 2;

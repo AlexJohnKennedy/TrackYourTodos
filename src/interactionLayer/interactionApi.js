@@ -36,10 +36,10 @@
 import { GetActiveTaskObject } from './dummy/dummyDataModel';
 import { Category, ProgressStatus } from '../logicLayer/Task';
 
-export function RegisterToActiveTaskListAPI(viewLayerCallbackFunc) {
-    // Acquire access to data model
-    let ActiveTaskDataObj = GetActiveTaskObject();
+// Gain access as a global singleton to the DataModel object.
+const ActiveTaskDataObj = GetActiveTaskObject();
 
+export function RegisterToActiveTaskListAPI(viewLayerCallbackFunc) {
     // Wrapper to allow interaction layer to mediate the way in which callbacks are
     // sent back to the viewLayerCallback.
     let updateCallbackFunc = (tasklist, taskWhichChanged) => {
@@ -58,6 +58,9 @@ export function RegisterToActiveTaskListAPI(viewLayerCallbackFunc) {
         return ActiveTaskDataObj.GetActiveTasks().map((task) => BuildNewTaskView(ActiveTaskDataObj, task, viewLayerCallbackFunc));
     }
 
+    const getCompletedTasks = () => ActiveTaskDataObj.GetCompletedTasks().map((task) => BuildNewInactiveTaskView(task, ActiveTaskDataObj));
+    const getFailedTasks = () => ActiveTaskDataObj.GetFailedTasks().map((task) => BuildNewInactiveTaskView(task, ActiveTaskDataObj));
+
     function getCreationFunction(categoryVal, colourIdGetterFunc) {
         return function(name) {
             if (colourIdGetterFunc !== null) {
@@ -72,10 +75,11 @@ export function RegisterToActiveTaskListAPI(viewLayerCallbackFunc) {
     // Return the interface object. Note that for interfaces, we always return immutable objects.
     return Object.freeze({
         GetActiveTasks : getActiveTasks,
+        GetCompletedTasks : getCompletedTasks,
+        GetFailedTasks : getFailedTasks,
         GetCreationFunction : getCreationFunction
     });
 };
-
 
 // TaskView interaction description:
 // - - - - - - - - - - - - - - - - -
@@ -114,6 +118,11 @@ export function RegisterToActiveTaskListAPI(viewLayerCallbackFunc) {
 // void DeleteTask()
 // --- Deletes the associated task from existance.
 // --- Calling this will instigate an update in the domain model.
+//
+// void SetCategory()
+// --- Attempts to update the category of the task object. Note that this will fail with an Error if
+// --- the task you call it on has any relatives, i.e. a parent or any children.
+// --- Calling this will instigate an update in the domain model.
 
 function BuildNewTaskView(activeList, domainTaskObj, viewLayerCallbackFunc) {
 
@@ -141,6 +150,19 @@ function BuildNewTaskView(activeList, domainTaskObj, viewLayerCallbackFunc) {
         activeList.DeleteTask(domainTaskObj);
     }
 
+    function setCategory(newCategory) {
+        // Note that this method call automatically invokes a viewLayerCallbackFunc!
+        activeList.MoveCategory(domainTaskObj, newCategory);
+    }
+
+    function completeTask() {
+        activeList.CompleteTask(domainTaskObj);
+    }
+
+    function startTask() {
+        activeList.StartTask(domainTaskObj);
+    }
+
     // Return the interface object. Immutable!
     return Object.freeze({
         // State properties
@@ -148,6 +170,7 @@ function BuildNewTaskView(activeList, domainTaskObj, viewLayerCallbackFunc) {
         id   : domainTaskObj.id,
         colourid : domainTaskObj.colourid,
         category : domainTaskObj.category,
+        progressStatus : domainTaskObj.progressStatus,
         parent : (domainTaskObj.parent === null) ? null : domainTaskObj.parent.id,
         children : domainTaskObj.children.map((task) => task.id),
         // Update functions
@@ -155,6 +178,23 @@ function BuildNewTaskView(activeList, domainTaskObj, viewLayerCallbackFunc) {
         CanCreateChildren : canCreateChildren,
         CreateChild : createChild,
         CreateDailyChild : createDailyChild,
-        DeleteTask : deleteTask
+        DeleteTask : deleteTask,
+        SetCategory : setCategory,
+        CompleteTask : completeTask,
+        StartTask : startTask
+    });
+}
+
+function BuildNewInactiveTaskView(domainTaskObj, tasklistobj) {
+    return Object.freeze({
+        // State properties
+        name : domainTaskObj.name,
+        id   : domainTaskObj.id,
+        colourid : domainTaskObj.colourid,
+        category : domainTaskObj.category,
+        progressStatus : domainTaskObj.progressStatus,
+
+        // Revive method, to create a new clone who is not inactive
+        ReviveTask : (asActive) => tasklistobj.ReviveTaskAsClone(domainTaskObj, asActive)
     });
 }
