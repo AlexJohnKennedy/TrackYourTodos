@@ -145,7 +145,7 @@ export class TaskObjects {
         // When a task is completed, all of the currently active children of that task are automatically 'complete' also.
         let idsToRemove = new Set();
         function complete(curr) {
-            if (curr.category > Category.Daily || curr.ProgressStatus > ProgressStatus.Started) return;
+            if (curr.category > Category.Daily || curr.progressStatus > ProgressStatus.Started) return;
             curr.progressStatus = progress;
             idsToRemove.add(curr.id);
             

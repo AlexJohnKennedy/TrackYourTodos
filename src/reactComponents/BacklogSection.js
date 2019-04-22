@@ -16,9 +16,7 @@ export class BacklogSection extends Component {
             showingCompleted: false,
             showingGraveyard: false,
             tabId: 0,
-
-            showingForm: true,
-
+            showingForm: false,
             deferredTaskViews: [],
             deferredTaskCreationFunc: null
         };
