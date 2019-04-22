@@ -7,6 +7,7 @@ import { TemporaryStateManager } from './viewLogic/temporaryStateManager';
 import { ShortCutManager } from './viewLogic/keyboardShortcutHandler';
 import { ThemeId, currThemeId } from './viewLogic/colourSetManager';
 import { Footer } from './reactComponents/Footer';
+import { Registration } from './interactionLayer/dataEventLogger';
 
 class App extends Component {
   constructor(props) {

@@ -38,7 +38,8 @@
 import { GetActiveTaskObject } from './dummy/dummyDataModel';
 import { Category, ProgressStatus } from '../logicLayer/Task';
 
-// Gain access as a global singleton to the DataModel object.
+// Gain access as a global singleton to the DataModel object. TODO: Move this into a separate 'data model' scope, which sits in
+// the logic layer, and which interaction layer objects (such as code in this file) access into.
 const ActiveTaskDataObj = GetActiveTaskObject();
 
 // Store a global list of viewLayerCallbacks.
@@ -50,8 +51,18 @@ const DataEventCallbackHandlers = {
     taskDeletedHandlers : [],
     taskCompletedHandlers : [],
     taskFailedHandlers : [],
-    taskUpdatedHandlers : []
+    taskUpdatedHandlers : [],
+    taskStartedHandlers : []
 };
+
+export function RegisterForDataEvents(dataEventhandlers) {
+    DataEventCallbackHandlers.taskAddedHandlers.push(dataEventhandlers.taskAddedHandler);
+    DataEventCallbackHandlers.taskDeletedHandlers.push(dataEventhandlers.taskDeletedHandler);
+    DataEventCallbackHandlers.taskCompletedHandlers.push(dataEventhandlers.taskCompletedHandler);
+    DataEventCallbackHandlers.taskFailedHandlers.push(dataEventhandlers.taskFailedHandler);
+    DataEventCallbackHandlers.taskUpdatedHandlers.push(dataEventhandlers.taskUpdatedHandler);
+    DataEventCallbackHandlers.taskStartedHandlers.push(dataEventhandlers.taskStartedHandler);
+}
 
 export function RegisterToActiveTaskListAPI(viewLayerCallbackFunc) {
     
@@ -169,7 +180,7 @@ function BuildNewTaskView(domainTaskObj, activeList, viewLayerCallbackList, data
     function startTask() {
         activeList.StartTask(domainTaskObj);
         viewLayerCallbackList.forEach(callback => callback());
-        dataEventCallbacksLists.taskCompletedHandlers.forEach(callback => callback(domainTaskObj, activeList));
+        dataEventCallbacksLists.taskStartedHandlers.forEach(callback => callback(domainTaskObj, activeList));
     }
 
     // Return the interface object. Immutable!
