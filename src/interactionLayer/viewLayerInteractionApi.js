@@ -1,4 +1,6 @@
 // API Calls for the view layer to call upon, whenever it needs to rebuild the view
+// Note that these actions will invoke data events as well, which can be sent to
+// other interaction apis, for example for persistence system updates.
 // --------------------------------------------------------------------------------
 
 // ActiveTaskList interaction description:
@@ -39,36 +41,40 @@ import { Category, ProgressStatus } from '../logicLayer/Task';
 // Gain access as a global singleton to the DataModel object.
 const ActiveTaskDataObj = GetActiveTaskObject();
 
-export function RegisterToActiveTaskListAPI(viewLayerCallbackFunc) {
-    // Wrapper to allow interaction layer to mediate the way in which callbacks are
-    // sent back to the viewLayerCallback.
-    let updateCallbackFunc = (tasklist, taskWhichChanged) => {
-        viewLayerCallbackFunc();    // For now, the view layer doesn't need any additional event parameters.
-    };
+// Store a global list of viewLayerCallbacks.
+const ViewLayerCallbacks = [];
 
-    // Register for global updates
-    ActiveTaskDataObj.RegisterForUpdates({
-        taskAddedHandler : updateCallbackFunc,
-        taskDeletedHandler : updateCallbackFunc,
-        taskChangedHandler : updateCallbackFunc
-    });
+// Store a global list of data event callbacks.
+const DataEventCallbackHandlers = {
+    taskAddedHandlers : [],
+    taskDeletedHandlers : [],
+    taskCompletedHandlers : [],
+    taskFailedHandlers : [],
+    taskUpdatedHandlers : []
+};
+
+export function RegisterToActiveTaskListAPI(viewLayerCallbackFunc) {
+    
+    ViewLayerCallbacks.push(viewLayerCallbackFunc);
 
     function getActiveTasks() {
         // Return a big list of TaskView objects from the current Active Task List!
-        return ActiveTaskDataObj.GetActiveTasks().map((task) => BuildNewTaskView(ActiveTaskDataObj, task, viewLayerCallbackFunc));
+        return ActiveTaskDataObj.GetActiveTasks().map((task) => BuildNewTaskView(task, ActiveTaskDataObj, ViewLayerCallbacks, DataEventCallbackHandlers));
     }
-
-    const getCompletedTasks = () => ActiveTaskDataObj.GetCompletedTasks().map((task) => BuildNewInactiveTaskView(task, ActiveTaskDataObj));
-    const getFailedTasks = () => ActiveTaskDataObj.GetFailedTasks().map((task) => BuildNewInactiveTaskView(task, ActiveTaskDataObj));
+    const getCompletedTasks = () => ActiveTaskDataObj.GetCompletedTasks().map((task) => BuildNewInactiveTaskView(task, ActiveTaskDataObj, ViewLayerCallbacks, DataEventCallbackHandlers));
+    const getFailedTasks = () => ActiveTaskDataObj.GetFailedTasks().map((task) => BuildNewInactiveTaskView(task, ActiveTaskDataObj, ViewLayerCallbacks, DataEventCallbackHandlers));
 
     function getCreationFunction(categoryVal, colourIdGetterFunc) {
         return function(name) {
+            let newTask;
             if (colourIdGetterFunc !== null) {
-                ActiveTaskDataObj.CreateNewIndependentTask(name, categoryVal, colourIdGetterFunc());
+                newTask = ActiveTaskDataObj.CreateNewIndependentTask(name, categoryVal, colourIdGetterFunc());
             }
             else {
-                ActiveTaskDataObj.CreateNewIndependentTask(name, categoryVal);
+                newTask = ActiveTaskDataObj.CreateNewIndependentTask(name, categoryVal);
             }
+            ViewLayerCallbacks.forEach(callback => callback());
+            DataEventCallbackHandlers.taskAddedHandlers.forEach(callback => callback(newTask, ActiveTaskDataObj));
         }
     }
 
@@ -124,43 +130,46 @@ export function RegisterToActiveTaskListAPI(viewLayerCallbackFunc) {
 // --- the task you call it on has any relatives, i.e. a parent or any children.
 // --- Calling this will instigate an update in the domain model.
 
-function BuildNewTaskView(activeList, domainTaskObj, viewLayerCallbackFunc) {
-
-    function setState(newState) {
-        domainTaskObj.updateState(newState);
-        viewLayerCallbackFunc();
-    }
+function BuildNewTaskView(domainTaskObj, activeList, viewLayerCallbackList, dataEventCallbacksLists) {
 
     function canCreateChildren() {
         return (domainTaskObj.category < Category.Daily && domainTaskObj.progressStatus < ProgressStatus.Completed);
     }
 
     function createChild(name) {
-        // Note that this method call automatically invokes a viewLayerCallbackFunc!
-        activeList.CreateNewSubtask(name, domainTaskObj);
+        let newTask = activeList.CreateNewSubtask(name, domainTaskObj);
+        viewLayerCallbackList.forEach(callback => callback());
+        dataEventCallbacksLists.taskAddedHandlers.forEach(callback => callback(newTask, activeList));
     }
 
     function createDailyChild(name) {
-        // Note that this method call automatically invokes a viewLayerCallbackFunc!
-        activeList.CreateNewDailySubtask(name, domainTaskObj);
+        let newTask = activeList.CreateNewDailySubtask(name, domainTaskObj);
+        viewLayerCallbackList.forEach(callback => callback());
+        dataEventCallbacksLists.taskAddedHandlers.forEach(callback => callback(newTask, activeList));
     }
 
     function deleteTask() {
-        // Note that this method call automatically invokes a viewLayerCallbackFunc!
         activeList.DeleteTask(domainTaskObj);
+        viewLayerCallbackList.forEach(callback => callback());
+        dataEventCallbacksLists.taskDeletedHandlers.forEach(callback => callback(domainTaskObj, activeList));
     }
 
     function setCategory(newCategory) {
-        // Note that this method call automatically invokes a viewLayerCallbackFunc!
         activeList.MoveCategory(domainTaskObj, newCategory);
+        viewLayerCallbackList.forEach(callback => callback());
+        dataEventCallbacksLists.taskUpdatedHandlers.forEach(callback => callback(domainTaskObj, activeList));
     }
 
     function completeTask() {
         activeList.CompleteTask(domainTaskObj);
+        viewLayerCallbackList.forEach(callback => callback());
+        dataEventCallbacksLists.taskCompletedHandlers.forEach(callback => callback(domainTaskObj, activeList));
     }
 
     function startTask() {
         activeList.StartTask(domainTaskObj);
+        viewLayerCallbackList.forEach(callback => callback());
+        dataEventCallbacksLists.taskCompletedHandlers.forEach(callback => callback(domainTaskObj, activeList));
     }
 
     // Return the interface object. Immutable!
@@ -174,7 +183,6 @@ function BuildNewTaskView(activeList, domainTaskObj, viewLayerCallbackFunc) {
         parent : (domainTaskObj.parent === null) ? null : domainTaskObj.parent.id,
         children : domainTaskObj.children.map((task) => task.id),
         // Update functions
-        SetState : setState,
         CanCreateChildren : canCreateChildren,
         CreateChild : createChild,
         CreateDailyChild : createDailyChild,
@@ -185,7 +193,13 @@ function BuildNewTaskView(activeList, domainTaskObj, viewLayerCallbackFunc) {
     });
 }
 
-function BuildNewInactiveTaskView(domainTaskObj, tasklistobj) {
+function BuildNewInactiveTaskView(domainTaskObj, tasklistobj, viewLayerCallbackList, dataEventCallbacksLists) {
+    function reviveTask(asActive) {
+        let newTask = tasklistobj.ReviveTaskAsClone(domainTaskObj, asActive);
+        viewLayerCallbackList.forEach(callback => callback());
+        dataEventCallbacksLists.taskAddedHandlers.forEach(callback => callback(newTask, tasklistobj));
+    }
+    
     return Object.freeze({
         // State properties
         name : domainTaskObj.name,
@@ -195,6 +209,6 @@ function BuildNewInactiveTaskView(domainTaskObj, tasklistobj) {
         progressStatus : domainTaskObj.progressStatus,
 
         // Revive method, to create a new clone who is not inactive
-        ReviveTask : (asActive) => tasklistobj.ReviveTaskAsClone(domainTaskObj, asActive)
+        ReviveTask : reviveTask
     });
 }

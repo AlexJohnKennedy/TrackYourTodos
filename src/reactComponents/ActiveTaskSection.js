@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { RegisterToActiveTaskListAPI } from '../interactionLayer/interactionApi';
+import { RegisterToActiveTaskListAPI } from '../interactionLayer/viewLayerInteractionApi';
 import { Category } from '../logicLayer/Task';
 import { GoalBoard, WeeklyBoard, DailyBoard } from './Board';
 import { ColourIdTracker } from '../viewLogic/colourSetManager';
