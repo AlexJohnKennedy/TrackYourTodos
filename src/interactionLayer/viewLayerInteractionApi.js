@@ -48,6 +48,7 @@ const ViewLayerCallbacks = [];
 // Store a global list of data event callbacks.
 const DataEventCallbackHandlers = {
     taskAddedHandlers : [],
+    childTaskAddedHandlers : [],
     taskDeletedHandlers : [],
     taskCompletedHandlers : [],
     taskFailedHandlers : [],
@@ -58,6 +59,7 @@ const DataEventCallbackHandlers = {
 export function RegisterForDataEvents(dataEventhandlers) {
     DataEventCallbackHandlers.taskAddedHandlers.push(dataEventhandlers.taskAddedHandler);
     DataEventCallbackHandlers.taskDeletedHandlers.push(dataEventhandlers.taskDeletedHandler);
+    DataEventCallbackHandlers.childTaskAddedHandlers.push(dataEventhandlers.childTaskAddedHandler);
     DataEventCallbackHandlers.taskCompletedHandlers.push(dataEventhandlers.taskCompletedHandler);
     DataEventCallbackHandlers.taskFailedHandlers.push(dataEventhandlers.taskFailedHandler);
     DataEventCallbackHandlers.taskUpdatedHandlers.push(dataEventhandlers.taskUpdatedHandler);
@@ -150,7 +152,7 @@ function BuildNewTaskView(domainTaskObj, activeList, viewLayerCallbackList, data
     function createChild(name) {
         let newTask = activeList.CreateNewSubtask(name, domainTaskObj);
         viewLayerCallbackList.forEach(callback => callback());
-        dataEventCallbacksLists.taskAddedHandlers.forEach(callback => callback(newTask, activeList));
+        dataEventCallbacksLists.childTaskAddedHandlers.forEach(callback => callback(domainTaskObj, newTask, activeList));
     }
 
     function createDailyChild(name) {

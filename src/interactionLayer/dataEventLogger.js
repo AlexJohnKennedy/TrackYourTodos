@@ -3,6 +3,7 @@ import { SerialiseTaskObject } from '../logicLayer/JsonSerialiser';
 
 export const Registration = RegisterForDataEvents({
     taskAddedHandler: taskAddedLogger,
+    childTaskAddedHandler: childTaskAddedLogger,
     taskUpdatedHandler: taskUpdatedLogger,
     taskDeletedHandler: taskDeletedLogger,
     taskStartedHandler: taskStartedLogger,
@@ -13,6 +14,12 @@ export const Registration = RegisterForDataEvents({
 function logTask(task) {
     let jsonString = SerialiseTaskObject(task);
     console.log(jsonString);
+}
+
+function childTaskAddedLogger(parent, child, tasklist) {
+    console.log("A new substask was just created!");
+    logTask(parent);
+    logTask(child);
 }
 
 function taskAddedLogger(task, tasklist) {

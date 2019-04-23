@@ -56,9 +56,6 @@ export class TaskObjects {
         this.tasks = [];
         this.failedTasks = [];
         this.completedTasks = [];
-        this.invokeTaskAddedEvent = [];
-        this.invokeTaskChangedEvent = [];
-        this.invokeTaskDeletedEvent = [];
     }
 
     // Get tasks. WARNING, the Task objects returned will be exposed! Do not send beyond the interaction layer!!
