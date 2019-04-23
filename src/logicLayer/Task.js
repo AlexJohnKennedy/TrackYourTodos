@@ -87,8 +87,8 @@ export class TaskObjects {
     }
 
     // Creates a parentless task, in a specified category!
-    CreateNewIndependentTask(name, category, colourid = DefaultColourId) {
-        let newTask = new Task(GetNewId(), name, category, null, colourid);
+    CreateNewIndependentTask(name, category, timeCreatedUNIX, colourid = DefaultColourId) {
+        let newTask = new Task(GetNewId(), name, category, null, colourid, timeCreatedUNIX);
         if (PUT_NEW_TASKS_AT_TOP_OF_LIST) {
             this.tasks.unshift(newTask);
         }
@@ -100,16 +100,16 @@ export class TaskObjects {
     }
     
     // Creates a new child task, in the category one level below the parent's category
-    CreateNewSubtask(name, parent) {
-        let newTask = new Task(GetNewId(), name, DowngradeCategory(parent.category), parent, parent.colourid);
+    CreateNewSubtask(name, parent, timeCreatedUNIX) {
+        let newTask = new Task(GetNewId(), name, DowngradeCategory(parent.category), parent, parent.colourid, timeCreatedUNIX);
         this.tasks.push(newTask);
         parent.addChild(newTask);
 
         return newTask;
     }
     // Creates a new child task, two categories below the parent's category, if the parent task is a Goal object.
-    CreateNewDailySubtask(name, parent) {
-        let newTask = new Task(GetNewId(), name, Category.Daily, parent, parent.colourid);
+    CreateNewDailySubtask(name, parent, timeCreatedUNIX) {
+        let newTask = new Task(GetNewId(), name, Category.Daily, parent, parent.colourid, timeCreatedUNIX);
         this.tasks.push(newTask);
         parent.addChild(newTask);
 
@@ -118,33 +118,36 @@ export class TaskObjects {
     
     // Function which modifies the category of a task. This is only allowed if the task does not have any children or parent.
     // This is most likely only used to 'activate' a deferred task and move it into the active Boards.
-    MoveCategory(task, newCategory) {
+    MoveCategory(task, newCategory, timeStampUNIX) {
         if (task.parent !== null || task.children.length > 0) throw new Error("Cannot modify category of a task with relatives");
-
+        if (newCategory <= Category.Daily) {
+            task.eventTimestamps.timeActivated = timeStampUNIX;
+        }
         task.category = newCategory;
     }
 
-    CloseTask(task, progress, list) {
+    CloseTask(task, progress, list, timeStampUNIX) {
         // When a task is completed, all of the currently active children of that task are automatically 'complete' also.
         let idsToRemove = new Set();
-        function complete(curr) {
+        function close(curr) {
             if (curr.category > Category.Daily || curr.progressStatus > ProgressStatus.Started) return;
             curr.progressStatus = progress;
+            curr.eventTimestamps.timeClosed = timeStampUNIX;
             idsToRemove.add(curr.id);
             
-            curr.children.forEach((curr) => complete(curr));
+            curr.children.forEach((curr) => close(curr));
 
             list.unshift(curr);
         }
         
-        complete(task);
+        close(task);
         this.tasks = this.tasks.filter((t) => !idsToRemove.has(t.id));
     }
-    FailTask(task) {
-        this.CloseTask(task, ProgressStatus.Failed, this.failedTasks);
+    FailTask(task, timeStampUNIX) {
+        this.CloseTask(task, ProgressStatus.Failed, this.failedTasks, timeStampUNIX);
     }
-    CompleteTask(task) {
-        this.CloseTask(task, ProgressStatus.Completed, this.completedTasks);
+    CompleteTask(task, timeStampUNIX) {
+        this.CloseTask(task, ProgressStatus.Completed, this.completedTasks, timeStampUNIX);
     }
 
     DeleteTask(task) {
@@ -157,7 +160,7 @@ export class TaskObjects {
         this.tasks.filter((t) => t !== task);
     }
 
-    StartTask(task) {
+    StartTask(task, timeStartedUNIX) {
         // All we do here is set the progress of a task to 'started'.
         if (task.category > Category.Daily || task.progressStatus > ProgressStatus.Started) {
             throw new Error("Tried to start a task which was not on the active board, and not 'not-started'");
@@ -167,15 +170,17 @@ export class TaskObjects {
         }
         else {
             task.progressStatus = ProgressStatus.Started
+            task.eventTimestamps.timeStarted = timeStartedUNIX;
         }
     }
 
-    ReviveTaskAsClone(task, asActive) {
+    ReviveTaskAsClone(task, asActive, timeRevivedUNIX) {
         // Used to take a dead/failed task and 'revive' it by making a copy of it as an active or deferred task
         if (task.progressStatus !== ProgressStatus.Failed) throw new Error("Cannot revive a task which is not in the graveyard");
         let category = asActive ? task.category : Category.Deferred;
         task.progressStatus = ProgressStatus.Reattempted;   // Signal that this task has been revived. We only want to be able to do this once per failure.
-        return this.CreateNewIndependentTask(task.name, category, task.colourid);
+        task.eventTimestamps.timeRevived = timeRevivedUNIX;
+        return this.CreateNewIndependentTask(task.name, category, timeRevivedUNIX, task.colourid);
     }
 }
 
@@ -200,7 +205,7 @@ class Task {
         // provided as parameters to the mutation methods in TaskList; this will allow us to 'rebuild' the state using event-sourced persistent data!
         this.eventTimestamps = {
             timeCreated:   timeCreatedUNIX,
-            timeActivated: null,
+            timeActivated: (category <= Category.Daily) ? timeCreatedUNIX : null,
             timeStarted:   null,
             timeClosed:    null,
             timeRevived:   null
