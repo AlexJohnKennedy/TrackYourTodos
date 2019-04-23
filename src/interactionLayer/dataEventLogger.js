@@ -1,7 +1,6 @@
-import { RegisterForDataEvents } from './viewLayerInteractionApi';
 import { SerialiseTaskObject } from '../logicLayer/JsonSerialiser';
 
-export const Registration = RegisterForDataEvents({
+export const DataEventHandlers = {
     taskAddedHandler: taskAddedLogger,
     childTaskAddedHandler: childTaskAddedLogger,
     taskRevivedHandler: taskRevivedLogger,
@@ -10,7 +9,7 @@ export const Registration = RegisterForDataEvents({
     taskStartedHandler: taskStartedLogger,
     taskCompletedHandler: taskCompletedLogger,
     taskFailedHandler: taskFailedLogger
-});
+};
 
 function logTask(task) {
     let jsonString = SerialiseTaskObject(task);
