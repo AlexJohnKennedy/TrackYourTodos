@@ -197,7 +197,6 @@ class Task {
         this.parent = parent;
         this.colourid = colourid;
         this.children = [];     // A newly created task should never have children
-        this.siblings = this.getSiblingList();
     }
 
     getSiblingList() {
