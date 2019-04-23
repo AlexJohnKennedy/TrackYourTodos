@@ -49,6 +49,7 @@ const ViewLayerCallbacks = [];
 const DataEventCallbackHandlers = {
     taskAddedHandlers : [],
     childTaskAddedHandlers : [],
+    taskRevivedHandlers : [],
     taskDeletedHandlers : [],
     taskCompletedHandlers : [],
     taskFailedHandlers : [],
@@ -60,6 +61,7 @@ export function RegisterForDataEvents(dataEventhandlers) {
     DataEventCallbackHandlers.taskAddedHandlers.push(dataEventhandlers.taskAddedHandler);
     DataEventCallbackHandlers.taskDeletedHandlers.push(dataEventhandlers.taskDeletedHandler);
     DataEventCallbackHandlers.childTaskAddedHandlers.push(dataEventhandlers.childTaskAddedHandler);
+    DataEventCallbackHandlers.taskRevivedHandlers.push(dataEventhandlers.taskRevivedHandler);
     DataEventCallbackHandlers.taskCompletedHandlers.push(dataEventhandlers.taskCompletedHandler);
     DataEventCallbackHandlers.taskFailedHandlers.push(dataEventhandlers.taskFailedHandler);
     DataEventCallbackHandlers.taskUpdatedHandlers.push(dataEventhandlers.taskUpdatedHandler);
@@ -210,7 +212,7 @@ function BuildNewInactiveTaskView(domainTaskObj, tasklistobj, viewLayerCallbackL
     function reviveTask(asActive) {
         let newTask = tasklistobj.ReviveTaskAsClone(domainTaskObj, asActive);
         viewLayerCallbackList.forEach(callback => callback());
-        dataEventCallbacksLists.taskAddedHandlers.forEach(callback => callback(newTask, tasklistobj));
+        dataEventCallbacksLists.taskRevivedHandlers.forEach(callback => callback(domainTaskObj, newTask, tasklistobj));
     }
     
     return Object.freeze({

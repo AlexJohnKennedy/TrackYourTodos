@@ -124,7 +124,7 @@ export class TaskObjects {
         task.category = newCategory;
     }
 
-    FinishTask(task, progress, list) {
+    CloseTask(task, progress, list) {
         // When a task is completed, all of the currently active children of that task are automatically 'complete' also.
         let idsToRemove = new Set();
         function complete(curr) {
@@ -141,10 +141,10 @@ export class TaskObjects {
         this.tasks = this.tasks.filter((t) => !idsToRemove.has(t.id));
     }
     FailTask(task) {
-        this.FinishTask(task, ProgressStatus.Failed, this.failedTasks);
+        this.CloseTask(task, ProgressStatus.Failed, this.failedTasks);
     }
     CompleteTask(task) {
-        this.FinishTask(task, ProgressStatus.Completed, this.completedTasks);
+        this.CloseTask(task, ProgressStatus.Completed, this.completedTasks);
     }
 
     DeleteTask(task) {
@@ -184,7 +184,7 @@ class Task {
     // It may optionally be passed a parent Task; if none is provided, this task is created without a parent!
     // It may optionally be passed a colourid value; if none is provided, this task is assigned the current default colour.
     // -- NOTE: Any passed colourid will be overridden by a passed parent's colorid; it is enforeced that they match! 
-    constructor(id, name, category, parent, colourid) {
+    constructor(id, name, category, parent, colourid, timeCreatedUNIX) {
         // Setup the state for this Task.
         if (name.length > MAX_TASK_NAME_LEN) throw new Error("name too long!");
         this.id = id;   // MUST NEVER CHANGE
@@ -194,6 +194,17 @@ class Task {
         this.parent = parent;
         this.colourid = colourid;
         this.children = [];     // A newly created task should never have children
+
+        // Setup data-event time stamp state object. This will contain the information for when the task object was created, started, closed, etc. (note 'closed' can mean either completed or failed)
+        // IMPORTANT: The creation time is not initiated here as Date.now() because this Task instance may be representing a persisted-task which was re-built from database data. Hence, these timestamps are
+        // provided as parameters to the mutation methods in TaskList; this will allow us to 'rebuild' the state using event-sourced persistent data!
+        this.eventTimestamps = {
+            timeCreated:   timeCreatedUNIX,
+            timeActivated: null,
+            timeStarted:   null,
+            timeClosed:    null,
+            timeRevived:   null
+        };
     }
 
     getSiblingList() {
@@ -205,12 +216,14 @@ class Task {
         }
     }
     
+    /* Deprecated. Since we will use event-sourcing 'replays' to rebuild and audit our state, we'll never use this. 
     updateState(stateObj) {
         if ('name' in stateObj) this.name = stateObj.name;
         if ('category' in stateObj) this.category = stateObj.category;
         if ('colourid' in stateObj) this.colourid = stateObj.colourid;
         if ('progressStatus' in stateObj) this.progressStatus = stateObj.progressStatus;
     }
+    */
 
     addChild(childTask) {
         this.children.push(childTask);

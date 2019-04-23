@@ -4,6 +4,7 @@ import { SerialiseTaskObject } from '../logicLayer/JsonSerialiser';
 export const Registration = RegisterForDataEvents({
     taskAddedHandler: taskAddedLogger,
     childTaskAddedHandler: childTaskAddedLogger,
+    taskRevivedHandler: taskRevivedLogger,
     taskUpdatedHandler: taskUpdatedLogger,
     taskDeletedHandler: taskDeletedLogger,
     taskStartedHandler: taskStartedLogger,
@@ -20,6 +21,12 @@ function childTaskAddedLogger(parent, child, tasklist) {
     console.log("A new substask was just created!");
     logTask(parent);
     logTask(child);
+}
+
+function taskRevivedLogger(oldtask, newtask, tasklist) {
+    console.log("A dead task was just revived! oooooOOOOOoooOOOOOO");
+    logTask(oldtask);
+    logTask(newtask);
 }
 
 function taskAddedLogger(task, tasklist) {
