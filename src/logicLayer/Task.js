@@ -61,13 +61,6 @@ export class TaskObjects {
         this.invokeTaskDeletedEvent = [];
     }
 
-    RegisterForUpdates(handlerFuncs) {
-        // the 'handler funcs' object contains a set of functions which this object should invoke when the appropriate event occurs.
-        this.invokeTaskAddedEvent.push(handlerFuncs.taskAddedHandler);
-        this.invokeTaskDeletedEvent.push(handlerFuncs.taskDeletedHandler);
-        this.invokeTaskChangedEvent.push(handlerFuncs.taskChangedHandler);
-    }
-
     // Get tasks. WARNING, the Task objects returned will be exposed! Do not send beyond the interaction layer!!
     GetActiveTasks(filterFunc = null) {
         if (filterFunc == null) {
@@ -106,8 +99,6 @@ export class TaskObjects {
             this.tasks.push(newTask);
         }
 
-        this.invokeTaskAddedEvent.forEach((callback) => callback(this, newTask));
-
         return newTask;
     }
     
@@ -117,8 +108,6 @@ export class TaskObjects {
         this.tasks.push(newTask);
         parent.addChild(newTask);
 
-        this.invokeTaskAddedEvent.forEach((callback) => callback(this, newTask));        
-
         return newTask;
     }
     // Creates a new child task, two categories below the parent's category, if the parent task is a Goal object.
@@ -126,8 +115,6 @@ export class TaskObjects {
         let newTask = new Task(GetNewId(), name, Category.Daily, parent, parent.colourid);
         this.tasks.push(newTask);
         parent.addChild(newTask);
-
-        this.invokeTaskAddedEvent.forEach((callback) => callback(this, newTask));        
 
         return newTask;
     }
@@ -138,7 +125,6 @@ export class TaskObjects {
         if (task.parent !== null || task.children.length > 0) throw new Error("Cannot modify category of a task with relatives");
 
         task.category = newCategory;
-        this.invokeTaskChangedEvent.forEach((callback) => callback(this, task));
     }
 
     FinishTask(task, progress, list) {
@@ -156,7 +142,6 @@ export class TaskObjects {
         
         complete(task);
         this.tasks = this.tasks.filter((t) => !idsToRemove.has(t.id));
-        this.invokeTaskChangedEvent.forEach((callback) => callback(this, task));
     }
     FailTask(task) {
         this.FinishTask(task, ProgressStatus.Failed, this.failedTasks);
@@ -173,7 +158,6 @@ export class TaskObjects {
         }
         // Remove it from our list, and invoke!
         this.tasks.filter((t) => t !== task);
-        this.invokeTaskDeletedEvent.forEach((callback) => callback(this, task));
     }
 
     StartTask(task) {
@@ -186,7 +170,6 @@ export class TaskObjects {
         }
         else {
             task.progressStatus = ProgressStatus.Started
-            this.invokeTaskChangedEvent.forEach((callback) => callback(this, task));
         }
     }
 
@@ -194,9 +177,8 @@ export class TaskObjects {
         // Used to take a dead/failed task and 'revive' it by making a copy of it as an active or deferred task
         if (task.progressStatus !== ProgressStatus.Failed) throw new Error("Cannot revive a task which is not in the graveyard");
         let category = asActive ? task.category : Category.Deferred;
-        this.CreateNewIndependentTask(task.name, category, task.colourid);
         task.progressStatus = ProgressStatus.Reattempted;   // Signal that this task has been revived. We only want to be able to do this once per failure.
-        this.invokeTaskAddedEvent.forEach((callback) => callback(this, task));
+        return this.CreateNewIndependentTask(task.name, category, task.colourid);
     }
 }
 
@@ -215,7 +197,6 @@ class Task {
         this.parent = parent;
         this.colourid = colourid;
         this.children = [];     // A newly created task should never have children
-        this.siblings = this.getSiblingList();
     }
 
     getSiblingList() {

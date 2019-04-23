@@ -33,5 +33,16 @@ export function GetActiveTaskObject() {
     // Create some tasks and fail them.
     tasklist.FailTask(tasklist.CreateNewIndependentTask('memes', Category.Daily, ColourIdTracker.useNextColour()));
 
+    // TEST LOAD: make 20,000 tasks, failing and completing every second one.
+    for (let i=0; i < 0; i++) {
+        let task = tasklist.CreateNewIndependentTask(i, Category.Daily, ColourIdTracker.useNextColour());
+        if (i % 2 === 0) {
+            tasklist.CompleteTask(task);
+        }
+        else {
+            tasklist.FailTask(task);
+        }
+    }
+
     return tasklist;
 }

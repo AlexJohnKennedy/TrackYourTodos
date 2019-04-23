@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { NavigationStateWrapper } from './NavigationTabs';
-import { RegisterToActiveTaskListAPI } from '../interactionLayer/interactionApi';
+import { RegisterToActiveTaskListAPI } from '../interactionLayer/viewLayerInteractionApi';
 import { ColourIdTracker } from '../viewLogic/colourSetManager';
 import { Category } from '../logicLayer/Task';
 import { TaskList } from './TaskList';
