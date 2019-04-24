@@ -22,6 +22,11 @@ const EventReplayFunctions = new Map([
     [EventTypes.taskStarted, replayTaskStartedEvent]
 ]);
 
+export function RebuildState(eventLogAsJsonArray, tasklist) {
+    let taskMap = createTaskMap(tasklist);
+    JSON.parse(eventLogAsJsonArray).forEach(eventObj => replayEvent(eventObj, tasklist, taskMap));
+}
+
 function replayTaskAddedEvent(eventData, tasklist, taskMap) {
     if (eventData.parent !== null) throw new Error("Invalid event state: Tried to add a new independent task but event data state the new task already had a parent!");
     taskMap.set(eventData.id, tasklist.CreateNewIndependentTask(eventData.name, eventData.category, eventData.timestamp, eventData.colourid, eventData.id));
@@ -65,10 +70,6 @@ function replayTaskStartedEvent(eventData, tasklist, taskMap) {
     tasklist.StartTask(taskMap.get(eventData.id), eventData.timestamp);
 }
 
-export function RebuildState(eventLogAsJsonArray, tasklist) {
-    let taskMap = createTaskMap(tasklist);
-    JSON.parse(eventLogAsJsonArray).forEach(eventObj => replayEvent(eventObj, tasklist, taskMap));
-}
 function replayEvent(event, tasklist, taskMap) {
     if (!EventReplayFunctions.has(event.eventType)) {
         throw new Error("Could not identify the event type of a parsed data event! The invalid event type was: " + event.eventType);
@@ -79,7 +80,8 @@ function replayEvent(event, tasklist, taskMap) {
 }
 function createTaskMap(tasklist) {
     let map = new Map();
-    tasklist.GetActiveTasks().array.forEach(task => map.set(task.id, task));
-    tasklist.GetCompletedTasks().array.forEach(task => map.set(task.id, task));
-    tasklist.GetFailedTasks().array.forEach(task => map.set(task.id, task));
+    tasklist.GetActiveTasks().forEach(task => map.set(task.id, task));
+    tasklist.GetCompletedTasks().forEach(task => map.set(task.id, task));
+    tasklist.GetFailedTasks().forEach(task => map.set(task.id, task));
+    return map;
 }
