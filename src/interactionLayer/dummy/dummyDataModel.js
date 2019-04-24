@@ -4,11 +4,12 @@ import { ColourIdTracker } from '../../viewLogic/colourSetManager';
 import { RebuildState } from '../../logicLayer/StateRebuilder';
 
 // Dummy data log
-import { dummyEventLog } from './dummyEventlogDataModel';
+import { dummyEventLog, dummyEventLog2 } from './dummyEventlogDataModel';
 
 export function GetActiveTaskObject() {
     let tasklist = new TaskObjects();
     SetIdStartVal(RebuildState(dummyEventLog, tasklist) + 1);
+    SetIdStartVal(RebuildState(dummyEventLog2, tasklist) + 1);
     return tasklist;
 }
 
