@@ -87,8 +87,12 @@ export class TaskObjects {
     }
 
     // Creates a parentless task, in a specified category!
-    CreateNewIndependentTask(name, category, timeCreatedUNIX, colourid = DefaultColourId) {
-        let newTask = new Task(GetNewId(), name, category, null, colourid, timeCreatedUNIX);
+    CreateNewIndependentTask(name, category, timeCreatedUNIX, colourid = DefaultColourId, id = null) {
+        if (id === null || id === undefined) {
+            id = GetNewId();
+        }
+
+        let newTask = new Task(id, name, category, null, colourid, timeCreatedUNIX);
         if (PUT_NEW_TASKS_AT_TOP_OF_LIST) {
             this.tasks.unshift(newTask);
         }
@@ -100,16 +104,24 @@ export class TaskObjects {
     }
     
     // Creates a new child task, in the category one level below the parent's category
-    CreateNewSubtask(name, parent, timeCreatedUNIX) {
-        let newTask = new Task(GetNewId(), name, DowngradeCategory(parent.category), parent, parent.colourid, timeCreatedUNIX);
+    CreateNewSubtask(name, parent, timeCreatedUNIX, id = null) {
+        if (id === null || id === undefined) {
+            id = GetNewId();
+        }
+
+        let newTask = new Task(id, name, DowngradeCategory(parent.category), parent, parent.colourid, timeCreatedUNIX);
         this.tasks.push(newTask);
         parent.addChild(newTask);
 
         return newTask;
     }
     // Creates a new child task, two categories below the parent's category, if the parent task is a Goal object.
-    CreateNewDailySubtask(name, parent, timeCreatedUNIX) {
-        let newTask = new Task(GetNewId(), name, Category.Daily, parent, parent.colourid, timeCreatedUNIX);
+    CreateNewDailySubtask(name, parent, timeCreatedUNIX, id = null) {
+        if (id === null || id === undefined) {
+            id = GetNewId();
+        }
+
+        let newTask = new Task(id, name, Category.Daily, parent, parent.colourid, timeCreatedUNIX);
         this.tasks.push(newTask);
         parent.addChild(newTask);
 
@@ -150,6 +162,7 @@ export class TaskObjects {
         this.CloseTask(task, ProgressStatus.Completed, this.completedTasks, timeStampUNIX);
     }
 
+    // TODO: Probably just remove this? Not sure if deltion is required.
     DeleteTask(task) {
         // Clear all parent and child links from the deleted task!
         if (task.parent) task.parent.removeChild(task);
@@ -174,13 +187,13 @@ export class TaskObjects {
         }
     }
 
-    ReviveTaskAsClone(task, asActive, timeRevivedUNIX) {
+    ReviveTaskAsClone(task, asActive, timeRevivedUNIX, id = null) {
         // Used to take a dead/failed task and 'revive' it by making a copy of it as an active or deferred task
         if (task.progressStatus !== ProgressStatus.Failed) throw new Error("Cannot revive a task which is not in the graveyard");
         let category = asActive ? task.category : Category.Deferred;
         task.progressStatus = ProgressStatus.Reattempted;   // Signal that this task has been revived. We only want to be able to do this once per failure.
         task.eventTimestamps.timeRevived = timeRevivedUNIX;
-        return this.CreateNewIndependentTask(task.name, category, timeRevivedUNIX, task.colourid);
+        return this.CreateNewIndependentTask(task.name, category, timeRevivedUNIX, task.colourid, id);
     }
 }
 

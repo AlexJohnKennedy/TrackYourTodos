@@ -9,6 +9,7 @@
 
 // Define the strings to match against in the JSON parsing!
 import { EventTypes } from './dataEventJsonSchema';
+import { Category } from './Task';
 
 const EventReplayFunctions = new Map([
     [EventTypes.taskAdded, replayTaskAddedEvent],
@@ -22,28 +23,46 @@ const EventReplayFunctions = new Map([
 ]);
 
 function replayTaskAddedEvent(eventData, tasklist, taskMap) {
-
+    if (eventData.parent !== null) throw new Error("Invalid event state: Tried to add a new independent task but event data state the new task already had a parent!");
+    tasklist.CreateNewIndependentTask(eventData.name, eventData.category, eventData.timestamp, eventData.colourid, eventData.id);
 }
 function replayChildTaskAddedEvent(eventData, tasklist, taskMap) {
-
+    if (eventData.parent === null) throw new Error("Invalid event state: Tried to add a child, but the eventData stated the task had no parent");
+    let parentTask = taskMap.get(eventData.parent);
+    if (eventData.category === Category.Weekly) {
+        tasklist.CreateNewSubtask(eventData.name, parentTask, eventData.timestamp, eventData.id);
+    }
+    else if (eventData.category === Category.Daily) {
+        tasklist.CreateNewDailySubtask(eventData.name, parentTask, eventData.timestamp, eventData.id);
+    }
+    else {
+        throw new Error("Illegal category for subtask event!");
+    }
 }
 function replayTaskRevivedEvent(eventData, tasklist, taskMap) {
-
+    if (eventData.original === null) throw new Error("Invalid event state: Tried to revive a task, but there was no 'original' id in the eventData");
+    let originalTask = taskMap.get(eventData.original);
+    if (eventData.category === Category.Deferred) {
+        tasklist.ReviveTaskAsClone(originalTask, false, eventData.timestamp, eventData.id);
+    }
+    else {
+        tasklist.ReviveTaskAsClone(originalTask, true, eventData.timestamp, eventData.id);
+    }
 }
 function replayTaskDeletedEvent(eventData, tasklist, taskMap) {
-
+    tasklist.DeleteTask(taskMap.get(eventData.id));
 }
 function replayTaskCompletedEvent(eventData, tasklist, taskMap) {
-
+    tasklist.CompleteTask(taskMap.get(eventData.id), eventData.timestamp);
 }
 function replayTaskFailedEvent(eventData, tasklist, taskMap) {
-
+    tasklist.FailTask(taskMap.get(eventData.id), eventData.timestamp);
 }
 function replayTaskUpdatedEvent(eventData, tasklist, taskMap) {
-
+    tasklist.MoveCategory(taskMap.get(eventData.id), eventData.category, eventData.timestamp);
 }
 function replayTaskStartedEvent(eventData, tasklist, taskMap) {
-
+    tasklist.StartTask(taskMap.get(eventData.id), eventData.timestamp);
 }
 
 export function RebuildState(eventLogAsJsonArray, tasklist) {
