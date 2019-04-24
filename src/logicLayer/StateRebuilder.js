@@ -22,11 +22,37 @@ const EventReplayFunctions = new Map([
     [EventTypes.taskStarted, replayTaskStartedEvent]
 ]);
 
+// Replays all event in the json log to rebuild the state exactly. It also tracks the largest id it found, which is returned.
+// The return value should therefore be used to tell the logic layer what 'id' to start at to avoid id collisions when new
+// tasks are created by the user. TODO: replace all ids with UUID generations to avoid this stupid incrementing method.
 export function RebuildState(eventLogAsJsonArray, tasklist) {
     let taskMap = createTaskMap(tasklist);
-    JSON.parse(eventLogAsJsonArray).forEach(eventObj => replayEvent(eventObj, tasklist, taskMap));
+    let maxid = 0;
+    JSON.parse(eventLogAsJsonArray).forEach(eventObj => {
+        replayEvent(eventObj, tasklist, taskMap);
+        if (eventObj.id > maxid) maxid = eventObj.id;
+    });
+    return maxid;
 }
 
+function createTaskMap(tasklist) {
+    let map = new Map();
+    tasklist.GetActiveTasks().forEach(task => map.set(task.id, task));
+    tasklist.GetCompletedTasks().forEach(task => map.set(task.id, task));
+    tasklist.GetFailedTasks().forEach(task => map.set(task.id, task));
+    return map;
+}
+
+function replayEvent(event, tasklist, taskMap) {
+    if (!EventReplayFunctions.has(event.eventType)) {
+        throw new Error("Could not identify the event type of a parsed data event! The invalid event type was: " + event.eventType);
+    }
+    else {
+        EventReplayFunctions.get(event.eventType)(event, tasklist, taskMap);
+    }
+}
+
+// Specific Handlers
 function replayTaskAddedEvent(eventData, tasklist, taskMap) {
     if (eventData.parent !== null) throw new Error("Invalid event state: Tried to add a new independent task but event data state the new task already had a parent!");
     taskMap.set(eventData.id, tasklist.CreateNewIndependentTask(eventData.name, eventData.category, eventData.timestamp, eventData.colourid, eventData.id));
@@ -68,20 +94,4 @@ function replayTaskUpdatedEvent(eventData, tasklist, taskMap) {
 }
 function replayTaskStartedEvent(eventData, tasklist, taskMap) {
     tasklist.StartTask(taskMap.get(eventData.id), eventData.timestamp);
-}
-
-function replayEvent(event, tasklist, taskMap) {
-    if (!EventReplayFunctions.has(event.eventType)) {
-        throw new Error("Could not identify the event type of a parsed data event! The invalid event type was: " + event.eventType);
-    }
-    else {
-        EventReplayFunctions.get(event.eventType)(event, tasklist, taskMap);
-    }
-}
-function createTaskMap(tasklist) {
-    let map = new Map();
-    tasklist.GetActiveTasks().forEach(task => map.set(task.id, task));
-    tasklist.GetCompletedTasks().forEach(task => map.set(task.id, task));
-    tasklist.GetFailedTasks().forEach(task => map.set(task.id, task));
-    return map;
 }

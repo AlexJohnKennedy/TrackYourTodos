@@ -1,5 +1,5 @@
 // This is simply some hardcoded tasks inside an active task list, used for developing the react ui as test!
-import { Category, TaskObjects } from '../../logicLayer/Task';
+import { Category, TaskObjects, SetIdStartVal } from '../../logicLayer/Task';
 import { ColourIdTracker } from '../../viewLogic/colourSetManager';
 import { RebuildState } from '../../logicLayer/StateRebuilder';
 
@@ -8,7 +8,7 @@ import { dummyEventLog } from './dummyEventlogDataModel';
 
 export function GetActiveTaskObject() {
     let tasklist = new TaskObjects();
-    RebuildState(dummyEventLog, tasklist);
+    SetIdStartVal(RebuildState(dummyEventLog, tasklist) + 1);
     return tasklist;
 }
 

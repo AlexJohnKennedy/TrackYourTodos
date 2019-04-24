@@ -49,7 +49,10 @@ function DowngradeCategory(category) {
 }
 
 // TODO: Replace this will a persistence-safe method of acquiring a unique, new id value!
-const GetNewId = ((startVal) => () => startVal++)(0);
+let GetNewId = ((startVal) => () => startVal++)(0);
+export function SetIdStartVal(newStartVal) {
+    GetNewId = ((startVal) => () => startVal++)(newStartVal);
+} 
 
 export class TaskObjects {
     constructor() {
