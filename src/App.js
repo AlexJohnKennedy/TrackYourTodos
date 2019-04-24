@@ -19,7 +19,7 @@ class App extends Component {
     RegisterForDataEvents(DataEventHandlers);
 
     // For development purposes, log change events
-    LogDummyDataEventObjects();
+    // LogDummyDataEventObjects();
 
     // Create a temporary state context for creation forms
     this.formStateManager = TemporaryStateManager();
