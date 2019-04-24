@@ -133,11 +133,12 @@ export class TaskObjects {
     
     // Function which modifies the category of a task. This is only allowed if the task does not have any children or parent.
     // This is most likely only used to 'activate' a deferred task and move it into the active Boards.
-    MoveCategory(task, newCategory, timeStampUNIX) {
+    ActivateTask(task, newCategory, timeStampUNIX) {
         if (task.parent !== null || task.children.length > 0) throw new Error("Cannot modify category of a task with relatives");
-        if (newCategory <= Category.Daily) {
-            task.eventTimestamps.timeActivated = timeStampUNIX;
+        if (newCategory > Category.Daily) {
+            throw new Error("Can't activate a task which is already activated!");
         }
+        task.eventTimestamps.timeActivated = timeStampUNIX;
         task.category = newCategory;
     }
 

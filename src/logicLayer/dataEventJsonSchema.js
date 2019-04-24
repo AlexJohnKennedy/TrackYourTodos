@@ -5,6 +5,6 @@ export const EventTypes = {
     taskDeleted : "taskDeleted",
     taskCompleted : "taskCompleted",
     taskFailed : "taskFailed",
-    taskUpdated : "taskUpdated",
+    taskActivated : "taskActivated",
     taskStarted : "taskStarted"
 }

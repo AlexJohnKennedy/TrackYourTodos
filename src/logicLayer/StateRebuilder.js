@@ -18,7 +18,7 @@ const EventReplayFunctions = new Map([
     [EventTypes.taskDeleted, replayTaskDeletedEvent],
     [EventTypes.taskCompleted, replayTaskCompletedEvent],
     [EventTypes.taskFailed, replayTaskFailedEvent],
-    [EventTypes.taskUpdated, replayTaskUpdatedEvent],
+    [EventTypes.taskActivated, replayTaskActivatedEvent],
     [EventTypes.taskStarted, replayTaskStartedEvent]
 ]);
 
@@ -89,7 +89,7 @@ function replayTaskCompletedEvent(eventData, tasklist, taskMap) {
 function replayTaskFailedEvent(eventData, tasklist, taskMap) {
     tasklist.FailTask(taskMap.get(eventData.id), eventData.timestamp);
 }
-function replayTaskUpdatedEvent(eventData, tasklist, taskMap) {
+function replayTaskActivatedEvent(eventData, tasklist, taskMap) {
     tasklist.MoveCategory(taskMap.get(eventData.id), eventData.category, eventData.timestamp);
 }
 function replayTaskStartedEvent(eventData, tasklist, taskMap) {

@@ -53,7 +53,7 @@ const DataEventCallbackHandlers = {
     taskDeletedHandlers : [],
     taskCompletedHandlers : [],
     taskFailedHandlers : [],
-    taskUpdatedHandlers : [],
+    taskActivatedHandlers : [],
     taskStartedHandlers : []
 };
 
@@ -64,7 +64,7 @@ export function RegisterForDataEvents(dataEventhandlers) {
     DataEventCallbackHandlers.taskRevivedHandlers.push(dataEventhandlers.taskRevivedHandler);
     DataEventCallbackHandlers.taskCompletedHandlers.push(dataEventhandlers.taskCompletedHandler);
     DataEventCallbackHandlers.taskFailedHandlers.push(dataEventhandlers.taskFailedHandler);
-    DataEventCallbackHandlers.taskUpdatedHandlers.push(dataEventhandlers.taskUpdatedHandler);
+    DataEventCallbackHandlers.taskActivatedHandlers.push(dataEventhandlers.taskActivatedHandler);
     DataEventCallbackHandlers.taskStartedHandlers.push(dataEventhandlers.taskStartedHandler);
 }
 
@@ -160,7 +160,7 @@ function BuildNewTaskView(domainTaskObj, activeList, viewLayerCallbackList, data
     function createDailyChild(name) {
         let newTask = activeList.CreateNewDailySubtask(name, domainTaskObj, Date.now());
         viewLayerCallbackList.forEach(callback => callback());
-        dataEventCallbacksLists.taskAddedHandlers.forEach(callback => callback(newTask, activeList));
+        dataEventCallbacksLists.childTaskAddedHandlers.forEach(callback => callback(domainTaskObj, newTask, activeList));
     }
 
     function deleteTask() {
@@ -169,10 +169,10 @@ function BuildNewTaskView(domainTaskObj, activeList, viewLayerCallbackList, data
         dataEventCallbacksLists.taskDeletedHandlers.forEach(callback => callback(domainTaskObj, activeList));
     }
 
-    function setCategory(newCategory) {
-        activeList.MoveCategory(domainTaskObj, newCategory, Date.now());
+    function activateTask(newCategory) {
+        activeList.ActivateTask(domainTaskObj, newCategory, Date.now());
         viewLayerCallbackList.forEach(callback => callback());
-        dataEventCallbacksLists.taskUpdatedHandlers.forEach(callback => callback(domainTaskObj, activeList));
+        dataEventCallbacksLists.taskActivatedHandlers.forEach(callback => callback(domainTaskObj, activeList));
     }
 
     function completeTask() {
@@ -202,7 +202,7 @@ function BuildNewTaskView(domainTaskObj, activeList, viewLayerCallbackList, data
         CreateChild : createChild,
         CreateDailyChild : createDailyChild,
         DeleteTask : deleteTask,
-        SetCategory : setCategory,
+        ActivateTask : activateTask,
         CompleteTask : completeTask,
         StartTask : startTask
     });
