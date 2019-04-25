@@ -55,17 +55,17 @@ export class Task extends Component {
     }
 
     // Private method which 'processes' a colour based on attributes of this task. e.g. desaturate grave-tasks.
-    processColour(hslacol) {
-        if (this.props.taskView.category === Category.Deferred) {
-            // Deferred tasks should be slightly desaturated, and slightly transparent!
-            return new HSLAColour(hslacol.hue, hslacol.sat * 0.025, hslacol.light * 0.5, 100);
-        }
-        else if (this.props.taskView.progressStatus === ProgressStatus.Completed) {
+    processColour(hslacol, completionOverride, failureOverride) {
+        if (completionOverride || this.props.taskView.progressStatus === ProgressStatus.Completed) {
             //return new HSLAColour(hslacol.hue, hslacol.sat, hslacol.light * 0.75, 100);
             return new HSLAColour(122, 75, 35, 100);
         }
-        else if (this.props.taskView.progressStatus >= ProgressStatus.Failed) {
+        else if (failureOverride || this.props.taskView.progressStatus >= ProgressStatus.Failed) {
             return new HSLAColour(hslacol.hue, hslacol.sat * 0.025, hslacol.light * 0.4, 100);
+        }
+        else if (this.props.taskView.category === Category.Deferred) {
+            // Deferred tasks should be slightly desaturated, and slightly transparent!
+            return new HSLAColour(hslacol.hue, hslacol.sat * 0.025, hslacol.light * 0.5, 100);
         }
         else {
             // Lets just darken all colours a tad..
@@ -75,16 +75,6 @@ export class Task extends Component {
 
     // For now, just represent a task as a div with text in it!
     render() {
-        // Attain background colour programmatically, and apply side padding iff the checkbox is present.
-        let processedColour = this.processColour(GetColourMapping(this.context.themeId).get(this.props.taskView.colourid));
-        const style = {
-            backgroundColor: processedColour.toString(),
-        };
-        if (this.props.taskView.category <= Category.Daily) {
-            style.paddingLeft = "2rem";
-            style.paddingRight = "2rem";
-        }
-
         // Determine if this task should be highlighted, by determining if our id is in the highlight list.
         let highlight = this.props.highlights.filter((id) => id === this.props.taskView.id);
 
@@ -98,8 +88,18 @@ export class Task extends Component {
         else if (failure.length > 0) {
             animClassname = " failureAnim";
         }
-
         let classstring = "task" + (highlight.length === 0 ? "" : " highlighted") + (animClassname === null ? " entranceAnim" : animClassname);
+        
+        // Attain background colour programmatically, and apply side padding iff the checkbox is present.
+        let processedColour = this.processColour(GetColourMapping(this.context.themeId).get(this.props.taskView.colourid), completion.length > 0, failure.length > 0);
+        const style = {
+            backgroundColor: processedColour.toString(),
+        };
+        if (this.props.taskView.category <= Category.Daily) {
+            style.paddingLeft = "2rem";
+            style.paddingRight = "2rem";
+        }
+
         return (
             <div className={classstring} style={style} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
                 <p> { this.props.taskView.name } </p>

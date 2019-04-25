@@ -13,7 +13,7 @@
     /* transitions setup to handle completion and failure colour fading, when animations play */
     transition-property: background-color;
     transition-delay: 0.2s;
-    transition-duration: 0.6s;
+    transition-duration: 0.5s;
     transition-timing-function: ease-in;
 }
 
@@ -41,14 +41,9 @@
 @keyframes completion {
     0% {
         transform: translateX(0px);
-        opacity: 1;
-    }
-    30% {
-        opacity: 1;
     }
     100% {
         transform: translateX(105%);
-        opacity: 0;
     }
 }
 
