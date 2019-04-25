@@ -48,6 +48,9 @@ export class Board extends Component {
                     tasks={this.props.tasks}
                     highlights={this.props.highlights}
                     hightlightEventCallbacks={this.props.hightlightEventCallbacks}
+                    completionAnimIds={this.props.completionAnimIds}
+                    failureAnimIds={this.props.failureAnimIds}
+                    animTriggerCallbacks={this.props.animTriggerCallbacks}
                     formStateManager={this.props.formStateManager}
                 />
                 <CreationForm 
@@ -74,6 +77,9 @@ export class GoalBoard extends Component {
             shortcutkey="Digit1"
             highlights={this.props.highlights}
             hightlightEventCallbacks={this.props.hightlightEventCallbacks}
+            completionAnimIds={this.props.completionAnimIds}
+            failureAnimIds={this.props.failureAnimIds}
+            animTriggerCallbacks={this.props.animTriggerCallbacks}
         />;
     }
 }
@@ -89,6 +95,9 @@ export class WeeklyBoard extends Component {
             shortcutkey="Digit2"
             highlights={this.props.highlights}
             hightlightEventCallbacks={this.props.hightlightEventCallbacks}
+            completionAnimIds={this.props.completionAnimIds}
+            failureAnimIds={this.props.failureAnimIds}
+            animTriggerCallbacks={this.props.animTriggerCallbacks}
         />;
     }
 }
@@ -104,6 +113,9 @@ export class DailyBoard extends Component {
             shortcutkey="Digit3"
             highlights={this.props.highlights}
             hightlightEventCallbacks={this.props.hightlightEventCallbacks}
+            completionAnimIds={this.props.completionAnimIds}
+            failureAnimIds={this.props.failureAnimIds}
+            animTriggerCallbacks={this.props.animTriggerCallbacks}
         />;
     }
 }

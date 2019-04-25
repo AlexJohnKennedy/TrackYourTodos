@@ -84,8 +84,22 @@ export class Task extends Component {
             style.paddingLeft = "2rem";
             style.paddingRight = "2rem";
         }
+
+        // Determine if this task should be highlighted, by determining if our id is in the highlight list.
         let highlight = this.props.highlights.filter((id) => id === this.props.taskView.id);
-        let classstring = "task" + (highlight.length === 0 ? "" : " highlighted");
+
+        // Determine if we need to apply an animation class name.
+        let completion = this.props.completionAnimIds.filter(id => id === this.props.taskView.id);
+        let failure = this.props.failureAnimIds.filter(id => id === this.props.taskView.id);
+        let animClassname = null;
+        if (completion.length > 0) {
+            animClassname = " completionAnim";
+        }
+        else if (failure.length > 0) {
+            animClassname = " failureAnim";
+        }
+
+        let classstring = "task" + (highlight.length === 0 ? "" : " highlighted") + (animClassname === null ? "" : animClassname);
 
         return (
             <div className={classstring} style={style} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
