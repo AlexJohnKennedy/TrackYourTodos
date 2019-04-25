@@ -51,7 +51,7 @@
 .failureAnim {
     animation-duration: 0.8s;
     animation-delay: 0s;
-    animation-timing-function: cubic-bezier(0.910, -0.090, 0.745, 0.220);
+    animation-timing-function: cubic-bezier(0.550, 0.055, 0.675, 0.190);
     animation-name: failure;
 }
 @keyframes failure {
