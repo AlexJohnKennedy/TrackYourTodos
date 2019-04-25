@@ -58,6 +58,9 @@ export class CheckBox extends Component {
         }
         // If this is the second click, that means we are 'completing' the task.
         else {
+            this.setState({
+                clicks: 2
+            });
             this.props.secondClickAction();
         }
     }

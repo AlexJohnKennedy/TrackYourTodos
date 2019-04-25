@@ -99,8 +99,7 @@ export class Task extends Component {
             animClassname = " failureAnim";
         }
 
-        let classstring = "task" + (highlight.length === 0 ? "" : " highlighted") + (animClassname === null ? "" : animClassname);
-
+        let classstring = "task" + (highlight.length === 0 ? "" : " highlighted") + (animClassname === null ? " entranceAnim" : animClassname);
         return (
             <div className={classstring} style={style} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
                 <p> { this.props.taskView.name } </p>
@@ -136,7 +135,7 @@ export class Task extends Component {
                             window.setTimeout(() => {
                                 this.props.animTriggerCallbacks.unregister(this.props.taskView.id, true);
                                 this.props.taskView.CompleteTask();
-                            }, 5000);
+                            }, 699);
                         }}
                     />
                 }

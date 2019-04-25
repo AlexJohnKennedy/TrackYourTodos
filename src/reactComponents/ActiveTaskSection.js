@@ -65,6 +65,7 @@ export class ActiveTaskSection extends Component {
         });
     }
     registerForAnimation(id, completionAnim) {
+        console.log("registering for animation: " + id + " and " + completionAnim);
         // Apply anim classname to this id, and all children.
         let map = this.taskMap;
         let task = map.get(id);
@@ -72,14 +73,17 @@ export class ActiveTaskSection extends Component {
         task.children.forEach(childid => this.searchDown(map.get(childid), relatives, map));
         if (completionAnim) {
             this.completionAnimIds = this.completionAnimIds.concat(relatives);
+            console.log("results: " + this.completionAnimIds);
             this.setState({ completionAnimIds: this.completionAnimIds });
         }
         else {
             this.failureAnimIds = this.failureAnimIds.concat(relatives);
+            console.log("results: " + this.failureAnimIds);
             this.setState({ failureAnimIds: this.failureAnimIds });
         }
     }
     unregisterForAnimation(id, completionAnim) {
+        console.log("unregistering for animation: " + id + " and " + completionAnim);
         if (completionAnim) {
             this.completionAnimIds = this.completionAnimIds.filter(curr => curr !== id);
         }

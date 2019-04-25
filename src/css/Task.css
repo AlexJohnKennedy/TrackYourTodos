@@ -9,16 +9,18 @@
     transition-timing-function: ease-in;
 }
 
-/* Define an 'entrance' animation for whenever a task is created */
 .ActiveTaskSection .task {
-    animation-duration: 0.2s;
-    animation-name: slidein-left;
-
     /* transitions setup to handle completion and failure colour fading, when animations play */
     transition-property: background-color;
     transition-delay: 0.2s;
     transition-duration: 0.6s;
     transition-timing-function: ease-in;
+}
+
+/* Define an 'entrance' animation for whenever a task is created */
+.ActiveTaskSection .entranceAnim {
+    animation-duration: 0.2s;
+    animation-name: slidein-left;
 }
 @keyframes slidein-left {
     0% {
@@ -31,17 +33,14 @@
 
 /* Define a 'completion' animation for whenever a task is completed */
 .completionAnim {
-    animation-duration: 0.3s;
-    animation-delay: 0.2;
+    animation-duration: 0.5s;
+    animation-delay: 0.2s;
     animation-timing-function: ease-in;
     animation-name: completion;
 }
 @keyframes completion {
     0% {
         transform: translateX(0px);
-        opacity: 100%;
-    }
-    20% {
         opacity: 100%;
     }
     100% {
