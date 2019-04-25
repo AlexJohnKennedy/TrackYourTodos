@@ -35,7 +35,7 @@
 .completionAnim {
     animation-duration: 0.5s;
     animation-delay: 0.2s;
-    animation-timing-function: ease-in;
+    animation-timing-function: cubic-bezier(0.910, -0.090, 0.745, 0.220);
     animation-name: completion;
 }
 @keyframes completion {
@@ -51,7 +51,7 @@
 .failureAnim {
     animation-duration: 0.8s;
     animation-delay: 0s;
-    animation-timing-function: ease-in;
+    animation-timing-function: cubic-bezier(0.910, -0.090, 0.745, 0.220);
     animation-name: failure;
 }
 @keyframes failure {
