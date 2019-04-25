@@ -146,7 +146,7 @@ export class TaskObjects {
         // When a task is completed, all of the currently active children of that task are automatically 'complete' also.
         let idsToRemove = new Set();
         function close(curr) {
-            if (curr.category > Category.Daily || curr.progressStatus > ProgressStatus.Started) return;
+            if (curr.category > Category.Daily || curr.progressStatus > ProgressStatus.Started) return false;
             curr.progressStatus = progress;
             curr.eventTimestamps.timeClosed = timeStampUNIX;
             idsToRemove.add(curr.id);
@@ -154,16 +154,18 @@ export class TaskObjects {
             curr.children.forEach((curr) => close(curr));
 
             list.unshift(curr);
+            return true;
         }
         
-        close(task);
+        let result = close(task);
         this.tasks = this.tasks.filter((t) => !idsToRemove.has(t.id));
+        return result;
     }
     FailTask(task, timeStampUNIX) {
-        this.CloseTask(task, ProgressStatus.Failed, this.failedTasks, timeStampUNIX);
+        return this.CloseTask(task, ProgressStatus.Failed, this.failedTasks, timeStampUNIX);
     }
     CompleteTask(task, timeStampUNIX) {
-        this.CloseTask(task, ProgressStatus.Completed, this.completedTasks, timeStampUNIX);
+        return this.CloseTask(task, ProgressStatus.Completed, this.completedTasks, timeStampUNIX);
     }
 
     // TODO: Probably just remove this? Not sure if deltion is required.

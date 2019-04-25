@@ -69,7 +69,7 @@ export class ActiveTaskSection extends Component {
         let map = this.taskMap;
         let task = map.get(id);
         let relatives = [id];
-        task.children.forEach(childid => this.searchDown(map.get(childid, relatives, map)));
+        task.children.forEach(childid => this.searchDown(map.get(childid), relatives, map));
         if (completionAnim) {
             this.completionAnimIds = this.completionAnimIds.concat(relatives);
             this.setState({ completionAnimIds: this.completionAnimIds });

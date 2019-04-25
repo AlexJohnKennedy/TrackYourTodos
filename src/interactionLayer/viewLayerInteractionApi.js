@@ -176,9 +176,10 @@ function BuildNewTaskView(domainTaskObj, activeList, viewLayerCallbackList, data
     }
 
     function completeTask() {
-        activeList.CompleteTask(domainTaskObj, Date.now());
-        viewLayerCallbackList.forEach(callback => callback());
-        dataEventCallbacksLists.taskCompletedHandlers.forEach(callback => callback(domainTaskObj, activeList));
+        if (activeList.CompleteTask(domainTaskObj, Date.now())) {
+            viewLayerCallbackList.forEach(callback => callback());
+            dataEventCallbacksLists.taskCompletedHandlers.forEach(callback => callback(domainTaskObj, activeList));
+        }
     }
 
     function startTask() {

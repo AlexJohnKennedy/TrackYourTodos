@@ -131,7 +131,13 @@ export class Task extends Component {
                 { this.props.taskView.category <= Category.Daily && this.props.taskView.progressStatus <= ProgressStatus.Started &&
                     <CheckBox 
                         firstClickAction={() => this.props.taskView.StartTask()}
-                        secondClickAction={() => this.props.taskView.CompleteTask()}
+                        secondClickAction={() => {
+                            this.props.animTriggerCallbacks.register(this.props.taskView.id, true);
+                            window.setTimeout(() => {
+                                this.props.animTriggerCallbacks.unregister(this.props.taskView.id, true);
+                                this.props.taskView.CompleteTask();
+                            }, 5000);
+                        }}
                     />
                 }
                 { this.props.taskView.category === Category.Deferred &&
