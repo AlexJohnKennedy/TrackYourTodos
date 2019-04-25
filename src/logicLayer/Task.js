@@ -49,16 +49,16 @@ function DowngradeCategory(category) {
 }
 
 // TODO: Replace this will a persistence-safe method of acquiring a unique, new id value!
-const GetNewId = ((startVal) => () => startVal++)(0);
+let GetNewId = ((startVal) => () => startVal++)(0);
+export function SetIdStartVal(newStartVal) {
+    GetNewId = ((startVal) => () => startVal++)(newStartVal);
+} 
 
 export class TaskObjects {
     constructor() {
         this.tasks = [];
         this.failedTasks = [];
         this.completedTasks = [];
-        this.invokeTaskAddedEvent = [];
-        this.invokeTaskChangedEvent = [];
-        this.invokeTaskDeletedEvent = [];
     }
 
     // Get tasks. WARNING, the Task objects returned will be exposed! Do not send beyond the interaction layer!!
@@ -90,8 +90,12 @@ export class TaskObjects {
     }
 
     // Creates a parentless task, in a specified category!
-    CreateNewIndependentTask(name, category, colourid = DefaultColourId) {
-        let newTask = new Task(GetNewId(), name, category, null, colourid);
+    CreateNewIndependentTask(name, category, timeCreatedUNIX, colourid = DefaultColourId, id = null) {
+        if (id === null || id === undefined) {
+            id = GetNewId();
+        }
+
+        let newTask = new Task(id, name, category, null, colourid, timeCreatedUNIX);
         if (PUT_NEW_TASKS_AT_TOP_OF_LIST) {
             this.tasks.unshift(newTask);
         }
@@ -103,16 +107,24 @@ export class TaskObjects {
     }
     
     // Creates a new child task, in the category one level below the parent's category
-    CreateNewSubtask(name, parent) {
-        let newTask = new Task(GetNewId(), name, DowngradeCategory(parent.category), parent, parent.colourid);
+    CreateNewSubtask(name, parent, timeCreatedUNIX, id = null) {
+        if (id === null || id === undefined) {
+            id = GetNewId();
+        }
+
+        let newTask = new Task(id, name, DowngradeCategory(parent.category), parent, parent.colourid, timeCreatedUNIX);
         this.tasks.push(newTask);
         parent.addChild(newTask);
 
         return newTask;
     }
     // Creates a new child task, two categories below the parent's category, if the parent task is a Goal object.
-    CreateNewDailySubtask(name, parent) {
-        let newTask = new Task(GetNewId(), name, Category.Daily, parent, parent.colourid);
+    CreateNewDailySubtask(name, parent, timeCreatedUNIX, id = null) {
+        if (id === null || id === undefined) {
+            id = GetNewId();
+        }
+
+        let newTask = new Task(id, name, Category.Daily, parent, parent.colourid, timeCreatedUNIX);
         this.tasks.push(newTask);
         parent.addChild(newTask);
 
@@ -121,35 +133,40 @@ export class TaskObjects {
     
     // Function which modifies the category of a task. This is only allowed if the task does not have any children or parent.
     // This is most likely only used to 'activate' a deferred task and move it into the active Boards.
-    MoveCategory(task, newCategory) {
+    ActivateTask(task, newCategory, timeStampUNIX) {
         if (task.parent !== null || task.children.length > 0) throw new Error("Cannot modify category of a task with relatives");
-
+        if (newCategory > Category.Daily) {
+            throw new Error("Can't activate a task which is already activated!");
+        }
+        task.eventTimestamps.timeActivated = timeStampUNIX;
         task.category = newCategory;
     }
 
-    FinishTask(task, progress, list) {
+    CloseTask(task, progress, list, timeStampUNIX) {
         // When a task is completed, all of the currently active children of that task are automatically 'complete' also.
         let idsToRemove = new Set();
-        function complete(curr) {
+        function close(curr) {
             if (curr.category > Category.Daily || curr.progressStatus > ProgressStatus.Started) return;
             curr.progressStatus = progress;
+            curr.eventTimestamps.timeClosed = timeStampUNIX;
             idsToRemove.add(curr.id);
             
-            curr.children.forEach((curr) => complete(curr));
+            curr.children.forEach((curr) => close(curr));
 
             list.unshift(curr);
         }
         
-        complete(task);
+        close(task);
         this.tasks = this.tasks.filter((t) => !idsToRemove.has(t.id));
     }
-    FailTask(task) {
-        this.FinishTask(task, ProgressStatus.Failed, this.failedTasks);
+    FailTask(task, timeStampUNIX) {
+        this.CloseTask(task, ProgressStatus.Failed, this.failedTasks, timeStampUNIX);
     }
-    CompleteTask(task) {
-        this.FinishTask(task, ProgressStatus.Completed, this.completedTasks);
+    CompleteTask(task, timeStampUNIX) {
+        this.CloseTask(task, ProgressStatus.Completed, this.completedTasks, timeStampUNIX);
     }
 
+    // TODO: Probably just remove this? Not sure if deltion is required.
     DeleteTask(task) {
         // Clear all parent and child links from the deleted task!
         if (task.parent) task.parent.removeChild(task);
@@ -160,7 +177,7 @@ export class TaskObjects {
         this.tasks.filter((t) => t !== task);
     }
 
-    StartTask(task) {
+    StartTask(task, timeStartedUNIX) {
         // All we do here is set the progress of a task to 'started'.
         if (task.category > Category.Daily || task.progressStatus > ProgressStatus.Started) {
             throw new Error("Tried to start a task which was not on the active board, and not 'not-started'");
@@ -170,15 +187,17 @@ export class TaskObjects {
         }
         else {
             task.progressStatus = ProgressStatus.Started
+            task.eventTimestamps.timeStarted = timeStartedUNIX;
         }
     }
 
-    ReviveTaskAsClone(task, asActive) {
+    ReviveTaskAsClone(task, asActive, timeRevivedUNIX, id = null) {
         // Used to take a dead/failed task and 'revive' it by making a copy of it as an active or deferred task
         if (task.progressStatus !== ProgressStatus.Failed) throw new Error("Cannot revive a task which is not in the graveyard");
         let category = asActive ? task.category : Category.Deferred;
         task.progressStatus = ProgressStatus.Reattempted;   // Signal that this task has been revived. We only want to be able to do this once per failure.
-        return this.CreateNewIndependentTask(task.name, category, task.colourid);
+        task.eventTimestamps.timeRevived = timeRevivedUNIX;
+        return this.CreateNewIndependentTask(task.name, category, timeRevivedUNIX, task.colourid, id);
     }
 }
 
@@ -187,7 +206,7 @@ class Task {
     // It may optionally be passed a parent Task; if none is provided, this task is created without a parent!
     // It may optionally be passed a colourid value; if none is provided, this task is assigned the current default colour.
     // -- NOTE: Any passed colourid will be overridden by a passed parent's colorid; it is enforeced that they match! 
-    constructor(id, name, category, parent, colourid) {
+    constructor(id, name, category, parent, colourid, timeCreatedUNIX) {
         // Setup the state for this Task.
         if (name.length > MAX_TASK_NAME_LEN) throw new Error("name too long!");
         this.id = id;   // MUST NEVER CHANGE
@@ -197,6 +216,17 @@ class Task {
         this.parent = parent;
         this.colourid = colourid;
         this.children = [];     // A newly created task should never have children
+
+        // Setup data-event time stamp state object. This will contain the information for when the task object was created, started, closed, etc. (note 'closed' can mean either completed or failed)
+        // IMPORTANT: The creation time is not initiated here as Date.now() because this Task instance may be representing a persisted-task which was re-built from database data. Hence, these timestamps are
+        // provided as parameters to the mutation methods in TaskList; this will allow us to 'rebuild' the state using event-sourced persistent data!
+        this.eventTimestamps = {
+            timeCreated:   timeCreatedUNIX,
+            timeActivated: (category <= Category.Daily) ? timeCreatedUNIX : null,
+            timeStarted:   null,
+            timeClosed:    null,
+            timeRevived:   null
+        };
     }
 
     getSiblingList() {
@@ -208,12 +238,14 @@ class Task {
         }
     }
     
+    /* Deprecated. Since we will use event-sourcing 'replays' to rebuild and audit our state, we'll never use this. 
     updateState(stateObj) {
         if ('name' in stateObj) this.name = stateObj.name;
         if ('category' in stateObj) this.category = stateObj.category;
         if ('colourid' in stateObj) this.colourid = stateObj.colourid;
         if ('progressStatus' in stateObj) this.progressStatus = stateObj.progressStatus;
     }
+    */
 
     addChild(childTask) {
         this.children.push(childTask);

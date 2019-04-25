@@ -48,19 +48,23 @@ const ViewLayerCallbacks = [];
 // Store a global list of data event callbacks.
 const DataEventCallbackHandlers = {
     taskAddedHandlers : [],
+    childTaskAddedHandlers : [],
+    taskRevivedHandlers : [],
     taskDeletedHandlers : [],
     taskCompletedHandlers : [],
     taskFailedHandlers : [],
-    taskUpdatedHandlers : [],
+    taskActivatedHandlers : [],
     taskStartedHandlers : []
 };
 
 export function RegisterForDataEvents(dataEventhandlers) {
     DataEventCallbackHandlers.taskAddedHandlers.push(dataEventhandlers.taskAddedHandler);
     DataEventCallbackHandlers.taskDeletedHandlers.push(dataEventhandlers.taskDeletedHandler);
+    DataEventCallbackHandlers.childTaskAddedHandlers.push(dataEventhandlers.childTaskAddedHandler);
+    DataEventCallbackHandlers.taskRevivedHandlers.push(dataEventhandlers.taskRevivedHandler);
     DataEventCallbackHandlers.taskCompletedHandlers.push(dataEventhandlers.taskCompletedHandler);
     DataEventCallbackHandlers.taskFailedHandlers.push(dataEventhandlers.taskFailedHandler);
-    DataEventCallbackHandlers.taskUpdatedHandlers.push(dataEventhandlers.taskUpdatedHandler);
+    DataEventCallbackHandlers.taskActivatedHandlers.push(dataEventhandlers.taskActivatedHandler);
     DataEventCallbackHandlers.taskStartedHandlers.push(dataEventhandlers.taskStartedHandler);
 }
 
@@ -79,10 +83,10 @@ export function RegisterToActiveTaskListAPI(viewLayerCallbackFunc) {
         return function(name) {
             let newTask;
             if (colourIdGetterFunc !== null) {
-                newTask = ActiveTaskDataObj.CreateNewIndependentTask(name, categoryVal, colourIdGetterFunc());
+                newTask = ActiveTaskDataObj.CreateNewIndependentTask(name, categoryVal, Date.now(), colourIdGetterFunc());
             }
             else {
-                newTask = ActiveTaskDataObj.CreateNewIndependentTask(name, categoryVal);
+                newTask = ActiveTaskDataObj.CreateNewIndependentTask(name, categoryVal, Date.now());
             }
             ViewLayerCallbacks.forEach(callback => callback());
             DataEventCallbackHandlers.taskAddedHandlers.forEach(callback => callback(newTask, ActiveTaskDataObj));
@@ -148,15 +152,15 @@ function BuildNewTaskView(domainTaskObj, activeList, viewLayerCallbackList, data
     }
 
     function createChild(name) {
-        let newTask = activeList.CreateNewSubtask(name, domainTaskObj);
+        let newTask = activeList.CreateNewSubtask(name, domainTaskObj, Date.now());
         viewLayerCallbackList.forEach(callback => callback());
-        dataEventCallbacksLists.taskAddedHandlers.forEach(callback => callback(newTask, activeList));
+        dataEventCallbacksLists.childTaskAddedHandlers.forEach(callback => callback(domainTaskObj, newTask, activeList));
     }
 
     function createDailyChild(name) {
-        let newTask = activeList.CreateNewDailySubtask(name, domainTaskObj);
+        let newTask = activeList.CreateNewDailySubtask(name, domainTaskObj, Date.now());
         viewLayerCallbackList.forEach(callback => callback());
-        dataEventCallbacksLists.taskAddedHandlers.forEach(callback => callback(newTask, activeList));
+        dataEventCallbacksLists.childTaskAddedHandlers.forEach(callback => callback(domainTaskObj, newTask, activeList));
     }
 
     function deleteTask() {
@@ -165,20 +169,20 @@ function BuildNewTaskView(domainTaskObj, activeList, viewLayerCallbackList, data
         dataEventCallbacksLists.taskDeletedHandlers.forEach(callback => callback(domainTaskObj, activeList));
     }
 
-    function setCategory(newCategory) {
-        activeList.MoveCategory(domainTaskObj, newCategory);
+    function activateTask(newCategory) {
+        activeList.ActivateTask(domainTaskObj, newCategory, Date.now());
         viewLayerCallbackList.forEach(callback => callback());
-        dataEventCallbacksLists.taskUpdatedHandlers.forEach(callback => callback(domainTaskObj, activeList));
+        dataEventCallbacksLists.taskActivatedHandlers.forEach(callback => callback(domainTaskObj, activeList));
     }
 
     function completeTask() {
-        activeList.CompleteTask(domainTaskObj);
+        activeList.CompleteTask(domainTaskObj, Date.now());
         viewLayerCallbackList.forEach(callback => callback());
         dataEventCallbacksLists.taskCompletedHandlers.forEach(callback => callback(domainTaskObj, activeList));
     }
 
     function startTask() {
-        activeList.StartTask(domainTaskObj);
+        activeList.StartTask(domainTaskObj, Date.now());
         viewLayerCallbackList.forEach(callback => callback());
         dataEventCallbacksLists.taskStartedHandlers.forEach(callback => callback(domainTaskObj, activeList));
     }
@@ -198,7 +202,7 @@ function BuildNewTaskView(domainTaskObj, activeList, viewLayerCallbackList, data
         CreateChild : createChild,
         CreateDailyChild : createDailyChild,
         DeleteTask : deleteTask,
-        SetCategory : setCategory,
+        ActivateTask : activateTask,
         CompleteTask : completeTask,
         StartTask : startTask
     });
@@ -206,9 +210,9 @@ function BuildNewTaskView(domainTaskObj, activeList, viewLayerCallbackList, data
 
 function BuildNewInactiveTaskView(domainTaskObj, tasklistobj, viewLayerCallbackList, dataEventCallbacksLists) {
     function reviveTask(asActive) {
-        let newTask = tasklistobj.ReviveTaskAsClone(domainTaskObj, asActive);
+        let newTask = tasklistobj.ReviveTaskAsClone(domainTaskObj, asActive, Date.now());
         viewLayerCallbackList.forEach(callback => callback());
-        dataEventCallbacksLists.taskAddedHandlers.forEach(callback => callback(newTask, tasklistobj));
+        dataEventCallbacksLists.taskRevivedHandlers.forEach(callback => callback(domainTaskObj, newTask, tasklistobj));
     }
     
     return Object.freeze({

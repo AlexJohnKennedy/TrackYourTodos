@@ -122,9 +122,9 @@ export class Task extends Component {
                 }
                 { this.props.taskView.category === Category.Deferred &&
                     <>
-                    <NewTaskButton clickAction={() => this.props.taskView.SetCategory(Category.Daily)} text={'D'}/>
-                    <NewTaskButton clickAction={() => this.props.taskView.SetCategory(Category.Weekly)} text={'W'}/>
-                    <NewTaskButton clickAction={() => this.props.taskView.SetCategory(Category.Goal)} text={'G'}/>
+                    <NewTaskButton clickAction={() => this.props.taskView.ActivateTask(Category.Daily)} text={'D'}/>
+                    <NewTaskButton clickAction={() => this.props.taskView.ActivateTask(Category.Weekly)} text={'W'}/>
+                    <NewTaskButton clickAction={() => this.props.taskView.ActivateTask(Category.Goal)} text={'G'}/>
                     </>
                 }
                 { this.props.taskView.progressStatus === ProgressStatus.Failed &&

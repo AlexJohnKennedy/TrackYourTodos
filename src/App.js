@@ -7,11 +7,19 @@ import { TemporaryStateManager } from './viewLogic/temporaryStateManager';
 import { ShortCutManager } from './viewLogic/keyboardShortcutHandler';
 import { ThemeId, currThemeId } from './viewLogic/colourSetManager';
 import { Footer } from './reactComponents/Footer';
-import { Registration } from './interactionLayer/dataEventLogger';
+import { DataEventHandlers, DataEventSerialisationHandlers } from './interactionLayer/dataEventLogger';
+import { RegisterForDataEvents } from './interactionLayer/viewLayerInteractionApi';
 
 class App extends Component {
   constructor(props) {
     super(props);
+
+    // Register the logger to receive data event updates sent from the view-layer triggers.
+    // RegisterForDataEvents(DataEventHandlers);
+    RegisterForDataEvents(DataEventSerialisationHandlers);
+
+    // For development purposes, log change events
+    // LogDummyDataEventObjects();
 
     // Create a temporary state context for creation forms
     this.formStateManager = TemporaryStateManager();
