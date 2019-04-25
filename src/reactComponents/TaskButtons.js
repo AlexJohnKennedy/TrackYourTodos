@@ -27,13 +27,18 @@ export class CheckBox extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            clicks: 0
+            clicks: this.props.currClicks
         };
         this.CheckboxInputRef = React.createRef();
         this.handleClick = this.handleClick.bind(this);
     }
-
+    componentDidMount() {
+        this.setCheckState();
+    }
     componentDidUpdate() {
+        this.setCheckState();
+    }
+    setCheckState() {
         if (this.state.clicks === 0) {
             this.CheckboxInputRef.current.checked = false;
             this.CheckboxInputRef.current.indeterminate = false;

@@ -129,6 +129,7 @@ export class Task extends Component {
                 }
                 { this.props.taskView.category <= Category.Daily && this.props.taskView.progressStatus <= ProgressStatus.Started &&
                     <CheckBox 
+                        currClicks={this.props.taskView.progressStatus}
                         firstClickAction={() => this.props.taskView.StartTask()}
                         secondClickAction={() => {
                             this.props.animTriggerCallbacks.register(this.props.taskView.id, true);
