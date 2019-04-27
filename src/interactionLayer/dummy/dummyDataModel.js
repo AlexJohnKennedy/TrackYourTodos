@@ -14,7 +14,7 @@ export function GetActiveTaskObject() {
 
     // DEBUG:
     let failureChecker = RegisterForFailureChecking(tasklist);
-    console.log(failureChecker.FailTasks());
+    console.log(failureChecker.PeekTasksToFail());
 
     return tasklist;
 }

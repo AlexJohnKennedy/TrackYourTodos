@@ -6,7 +6,7 @@ import { Category } from './Task';
 export function RegisterForFailureChecking(tasklist) {
 
     function PeekTasksToFail() {
-        tasklist.GetActiveTasks().map(expirationCheck).filter(resObj => resObj.failureDate !== null).map(resObj => resObj.task);
+        return tasklist.GetActiveTasks().map(expirationCheck).filter(resObj => resObj.failureDate !== null).map(resObj => resObj.task);
     }
 
     // Returns a list of all the task which were failed in this check. It also actively performs the fail update in the
@@ -24,10 +24,10 @@ export function RegisterForFailureChecking(tasklist) {
 
     function expirationCheck(task) {
         
-        console.log("CHECKING TASK FOR FAILURE: ");
-        console.log(task);
-        console.log("Activation time: ");
-        console.log(new Date(task.eventTimestamps.timeActivated));
+        //console.log("CHECKING TASK FOR FAILURE: ");
+        //console.log(task);
+        //console.log("Activation time: ");
+        //console.log(new Date(task.eventTimestamps.timeActivated));
 
         if (task.category === Category.Goal || task.category === Category.Deferred) {
             // These don't ever expire in the current design.
@@ -67,9 +67,9 @@ export function RegisterForFailureChecking(tasklist) {
         failureDate.setDate(activationDate.getDate() - activationDate.getDay() + 8);
         failureDate.setHours(1, 0, 0, 0);
 
-        console.log("Checking Weekly:");
-        console.log("Time now:  " + new Date(Date.now()));
-        console.log("Fail time: " + failureDate);
+        //console.log("Checking Weekly:");
+        //console.log("Time now:  " + new Date(Date.now()));
+        //console.log("Fail time: " + failureDate);
 
         return Date.now() >= failureDate.valueOf() ? failureDate : null;
     }
@@ -88,9 +88,9 @@ export function RegisterForFailureChecking(tasklist) {
         failureDate.setDate(activationDate.getDate() + 1);
         failureDate.setHours(1, 0, 0, 0);
 
-        console.log("Checking Daily:");
-        console.log("Time now:  " + new Date(Date.now()));
-        console.log("Fail time: " + failureDate);
+        //console.log("Checking Daily:");
+        //console.log("Time now:  " + new Date(Date.now()));
+        //console.log("Fail time: " + failureDate);
 
         return Date.now() >= failureDate.valueOf() ? failureDate : null;
     }

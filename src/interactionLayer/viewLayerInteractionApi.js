@@ -37,6 +37,7 @@
 // --------------------------------------------------------------------------------
 import { GetActiveTaskObject } from './dummy/dummyDataModel';
 import { Category, ProgressStatus } from '../logicLayer/Task';
+import { RegisterForFailureChecking } from '../logicLayer/checkForFailure';
 
 // Gain access as a global singleton to the DataModel object. TODO: Move this into a separate 'data model' scope, which sits in
 // the logic layer, and which interaction layer objects (such as code in this file) access into.
@@ -69,7 +70,7 @@ export function RegisterForDataEvents(dataEventhandlers) {
 }
 
 export function RegisterToActiveTaskListAPI(viewLayerCallbackFunc) {
-    
+    const logicLayerFailureChecker = RegisterForFailureChecking(ActiveTaskDataObj);
     ViewLayerCallbacks.push(viewLayerCallbackFunc);
 
     function getActiveTasks() {
@@ -93,12 +94,26 @@ export function RegisterToActiveTaskListAPI(viewLayerCallbackFunc) {
         }
     }
 
+    // Peeks all of the items which are to be failed, and return their ids. It also schedules a callback for an actual domain
+    // layer update, which then invokes view layer and data event callbacks. The reason that is delayed is to allow the view layer
+    // to play an animation
+    function performFailureCheck(updateDelayMilliseconds) {
+        window.setTimeout(() => {
+            logicLayerFailureChecker.FailTasks().forEach(task => {
+                DataEventCallbackHandlers.taskFailedHandlers.forEach(callback => callback(task, ActiveTaskDataObj));
+            });
+            ViewLayerCallbacks.forEach(callback => callback());
+        }, updateDelayMilliseconds);
+        return logicLayerFailureChecker.PeekTasksToFail().map(task => task.id);
+    }
+
     // Return the interface object. Note that for interfaces, we always return immutable objects.
     return Object.freeze({
         GetActiveTasks : getActiveTasks,
         GetCompletedTasks : getCompletedTasks,
         GetFailedTasks : getFailedTasks,
-        GetCreationFunction : getCreationFunction
+        GetCreationFunction : getCreationFunction,
+        PerformFailureCheck : performFailureCheck
     });
 };
 
