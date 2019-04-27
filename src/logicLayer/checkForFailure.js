@@ -2,30 +2,67 @@
 // Contains two exported functions: One for attaining a list of all of the tasks which need
 // to be 'failed', and one for executing a fail action on all of those tasks.
 import { Category } from './Task';
+import { fail } from 'assert';
+import { resolve } from 'dns';
 
 export function RegisterForFailureChecking(tasklist) {
-    function GetTasksToFail() {
-        return tasklist.GetActiveTasks().filter(isExpired);
+
+    // Returns a list of all the task which were failed in this check. It also actively performs the fail update in the
+    // domain layer!
+    function FailTasks() {
+        // Create a collection of objects of failed tasks, and their corresponding timestamp.
+        let failureCheckResults = tasklist.GetActiveTasks().map(expirationCheck).filter(resObj => resObj.failureDate !== null);
+
+        // Apply the 'fail' action to each of the remaining ones, and return an array of those tasks back to the caller.
+        return failureCheckResults.map(resObj => {
+            tasklist.FailTask(resObj.task, resObj.failureDate.valueOf());
+            return resObj.task;
+        });
     }
-    function isExpired(task) {
+
+    function expirationCheck(task) {
         if (task.category === Category.Goal || task.category === Category.Deferred) {
-            return false;   // These don't ever expire in the current design.
+            // These don't ever expire in the current design.
+            return { 
+                task: task, 
+                failureDate: null 
+            };
         }
         else if (task.category === Category.Weekly) {
-            return checkWeekly(task);
+            return { 
+                task: task,
+                failureDate: checkWeekly(task)
+            };
         }
         else if (task.category === Category.Daily) {
-            return checkDaily(task);
+            return {
+                task: task,
+                failureDate: checkDaily(task)
+            };
         }
         else {
             throw new Error("Invalid category value passed to failure checker: " + task);
         }
     }
+    // Returns a date containing the exact moment a task was failed, or null, if the task has not failed yet.
     function checkWeekly(task) {
-        
+        if (task.eventTimestamps.timeActivated === null) return null;
+
+        // If the task was activated on friday, saturday or sunday, roll it over to the next week before failing it.
+        let activationDate = new Date(task.eventTimestamps.timeActivated);
+        if (activationDate.getDate() === 5 || activationDate.getDate() === 6 || activationDate.getDate() === 0) {
+            activationDate.setDate(activationDate.getDate() + 7);   // Increments the date to the next week.
+        }
+
+        // Calculate the exact moment the task becomes failed. It will be at 1am of the first day of the next week.
+        let failureDate = new Date().setDate(activationDate.getDate() - activationDate.getDay() + 8);
+        failureDate.setHours(1, 0, 0, 0);
+
+        return Date.now() >= failureDate.valueOf() ? failureDate : null;
     }
+    // Returns a date containing the exact moment a task was failed, or null, if the task has not failed yet.
     function checkDaily(task) {
-        if (task.eventTimestamps.timeActivated === null) return false;
+        if (task.eventTimestamps.timeActivated === null) return null;
 
         // If the task was activated after 5pm, roll it over to the next day before failing it.
         let activationDate = new Date(task.eventTimestamps.timeActivated);
@@ -33,21 +70,14 @@ export function RegisterForFailureChecking(tasklist) {
             activationDate.setDate(activationDate.getDate() + 1);   // Increments the date to the next day.
         }
 
-        // Okay. If the current time is larger than the activation time, and it's NOT the same day, then we fail the task.
-        let now = new Date(Date.now());
-        return (now.valueOf() > activationDate.valueOf() && now.getFullYear() === activationDate.getFullYear() &&
-                now.getMonth() === activationDate.getMonth() && now.getDate() === activationDate.getDate());
-    }
+        // Calculate the exact moment the task becomes failed. It will be at 1am the next day.
+        let failureDate = new Date().setDate(activationDate.getDate() + 1);
+        failureDate.setHours(1, 0, 0, 0);
 
-    function FailTasks(tasks) {
-        tasks.foreach(task => tasklist.FailTask(task, calculateFailureTime(task)));
-    }
-    function calculateFailureTime(task) {
-
+        return Date.now() >= failureDate.valueOf() ? failureDate : null;
     }
 
     return Object.freeze({
-        GetTasksToFail : GetTasksToFail,
         FailTasks : FailTasks
     });
 }
