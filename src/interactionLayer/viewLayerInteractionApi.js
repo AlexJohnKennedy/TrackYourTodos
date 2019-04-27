@@ -97,9 +97,10 @@ export function RegisterToActiveTaskListAPI(viewLayerCallbackFunc) {
     // Peeks all of the items which are to be failed, and return their ids. It also schedules a callback for an actual domain
     // layer update, which then invokes view layer and data event callbacks. The reason that is delayed is to allow the view layer
     // to play an animation
-    function performFailureCheck(updateDelayMilliseconds) {
+    function performFailureCheck(updateDelayMilliseconds, additionalCallback = null) {
         window.setTimeout(() => {
             logicLayerFailureChecker.FailTasks().forEach(task => {
+                if (additionalCallback !== null) additionalCallback(task.id);
                 DataEventCallbackHandlers.taskFailedHandlers.forEach(callback => callback(task, ActiveTaskDataObj));
             });
             ViewLayerCallbacks.forEach(callback => callback());

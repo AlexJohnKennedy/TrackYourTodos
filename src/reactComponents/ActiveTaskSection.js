@@ -33,7 +33,13 @@ export class ActiveTaskSection extends Component {
         // all of the data views down to the child components.
         this.activeTaskListAPI = RegisterToActiveTaskListAPI(this.handleChange);     // We must make sure the callback is bound to this class.
 
-        window.setTimeout(() => console.log(this.activeTaskListAPI.PerformFailureCheck(2500)), 5000);
+        // Setup timing callbacks for task-failure checks.
+        const checkAction = () => {
+            let ids = this.activeTaskListAPI.PerformFailureCheck(800, id => this.unregisterForAnimation(id, false));
+            console.log(ids);
+            ids.forEach(id => this.registerForAnimation(id, false));
+        };
+        window.setTimeout(checkAction, 5000);
 
         // Initialise state of this component
         this.handleChange();
