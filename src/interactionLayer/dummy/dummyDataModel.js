@@ -11,8 +11,6 @@ export function GetActiveTaskObject() {
     SetIdStartVal(RebuildState(dummyEventLog, tasklist) + 1);
     SetIdStartVal(RebuildState(dummyEventLog2, tasklist) + 1);
 
-    console.log(tasklist.GetCompletedTasks());
-
     return tasklist;
 }
 

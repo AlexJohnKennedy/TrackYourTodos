@@ -77,8 +77,25 @@ export function RegisterToActiveTaskListAPI(viewLayerCallbackFunc) {
         // Return a big list of TaskView objects from the current Active Task List!
         return ActiveTaskDataObj.GetActiveTasks().map((task) => BuildNewTaskView(task, ActiveTaskDataObj, ViewLayerCallbacks, DataEventCallbackHandlers));
     }
-    const getCompletedTasks = () => ActiveTaskDataObj.GetCompletedTasks().map((task) => BuildNewInactiveTaskView(task, ActiveTaskDataObj, ViewLayerCallbacks, DataEventCallbackHandlers));
-    const getFailedTasks = () => ActiveTaskDataObj.GetFailedTasks().map((task) => BuildNewInactiveTaskView(task, ActiveTaskDataObj, ViewLayerCallbacks, DataEventCallbackHandlers));
+    function getCompletedTasks() {
+        let ret = [];
+        ActiveTaskDataObj.GetCompletedTasks().forEach(group => {
+            ret = ret.concat(group.tasks.map((task) => {
+                return BuildNewInactiveTaskView(task, ActiveTaskDataObj, ViewLayerCallbacks, DataEventCallbackHandlers);
+            }));
+        });
+        return ret;
+    }
+    function getFailedTasks() { 
+        let ret = [];
+        ActiveTaskDataObj.GetFailedTasks().forEach(group => {
+            ret = ret.concat(group.tasks.map((task) => {
+                return BuildNewInactiveTaskView(task, ActiveTaskDataObj, ViewLayerCallbacks, DataEventCallbackHandlers);
+            }));
+        });
+        return ret;
+    }
+
 
     function getCreationFunction(categoryVal, colourIdGetterFunc) {
         return function(name) {
