@@ -44,6 +44,12 @@ import { StatisticsModel } from '../logicLayer/statisticsModel';
 // the logic layer, and which interaction layer objects (such as code in this file) access into.
 const ActiveTaskDataObj = GetActiveTaskObject();
 const StatisticsModelObj = new StatisticsModel(ActiveTaskDataObj);     // Create a statistics data model
+console.log(StatisticsModelObj.GetStatistics({
+    days: 5,
+    weeks : 4,
+    months: 10,
+    years: 3
+}));
 
 // Store a global list of viewLayerCallbacks.
 const ViewLayerCallbacks = [];

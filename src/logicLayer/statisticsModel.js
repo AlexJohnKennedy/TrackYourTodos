@@ -68,14 +68,22 @@ export class StatisticsModel {
             }
         };
         
-        let dayStats = this.calcStats(optionsObj.days, this.dayGroupsCompleted, this.dayGroupsFailed, cmpFunc, date => date.setHours(0, 0, 0, 0), date => date.setDate(date.getDate() - 1));
+        console.log("Calculating day stats:");
+        let dayStats = this.calcStats(optionsObj.days, this.dayGroupsCompleted, this.dayGroupsFailed, cmpFunc, date => new Date(date.setHours(0, 0, 0, 0)), date => new Date(date.setDate(date.getDate() - 1)));
+        
+        console.log("Calculating week stats:");
         let weekStats = this.calcStats(optionsObj.weeks, this.weekGroupsCompleted, this.weekGroupsFailed, cmpFunc, date => {
-            date.setDate(date.getDate() - date.getDay() + 1);
+            date.setDate(date.getDate() - date.getDay());
             date.setHours(0, 0, 0, 0);
             return date;
-        }, date => date.setDate(date.getDate() - 2));
-        let monthStats = this.calcStats(optionsObj.months, this.monthGroupsCompleted, this.monthGroupsFailed, cmpFunc, date => new Date(date.getFullYear(), date.getMonth()), date => date.setDate(date.getDate() - 1));
-        let yearStats = this.calcYearStats(optionsObj.years, this.yearGroupsCompleted, this.yearGroupsFailed, cmpFunc, date => new Date(date.getFullYear(), 0), date => date.setDate(date.getDate() - 5));
+        }, date => new Date(date.setDate(date.getDate() - 2)));
+
+        console.log("Calculating month stats:");
+        let monthStats = this.calcStats(optionsObj.months, this.monthGroupsCompleted, this.monthGroupsFailed, cmpFunc, date => new Date(date.getFullYear(), date.getMonth()), date => new Date(date.setDate(date.getDate() - 1)));
+
+        console.log("Calculating year stats:");
+        let yearStats = this.calcStats(optionsObj.years, this.yearGroupsCompleted, this.yearGroupsFailed, cmpFunc, date => new Date(date.getFullYear(), 0), date => new Date(date.setDate(date.getDate() - 5)));
+
         let alltimeStats = optionsObj.alltime ? this.calcAlltimeStats() : null;
 
         return {
@@ -87,6 +95,13 @@ export class StatisticsModel {
         };
     }
     
+    calcAlltimeStats() {
+        return {
+            completedAggregate: this.allCompleted.length,
+            failedAggregate: this.allFailed.length
+        };
+    }
+
     calcStats(numToGoBack, completedGroups, failedGroups, cmpFunc, floorDateToKeyDateFunc, cycleBackFunc) {
         if (numToGoBack <= 0) return null;
         
@@ -98,6 +113,8 @@ export class StatisticsModel {
         let currDate = floorDateToKeyDateFunc(new Date(Date.now()));
 
         for (let i=0; i < numToGoBack; i++) {
+            console.log(currDate);
+            
             let completedSearchResult = binarySearch(completedGroups, currDate, cmpFunc);
             if (completedSearchResult < 0) {
                 completedArray.push(0);  // No completed tasks for this day

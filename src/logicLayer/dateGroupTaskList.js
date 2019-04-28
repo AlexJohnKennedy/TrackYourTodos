@@ -24,7 +24,7 @@ export function BuildNewTimeGroupedTaskList(groupingType, sortByActivationTime =
     else if (groupingType === TimeGroupTypes.WEEK) {
         return new GroupedTaskList(timeKeyFunc, TimeGroupTypes.WEEK, (timestamp) => {
             let timestampDate = new Date(timestamp);
-            timestampDate.setDate(timestampDate.getDate() - timestampDate.getDay() + 1);
+            timestampDate.setDate(timestampDate.getDate() - timestampDate.getDay());
             timestampDate.setHours(0, 0, 0, 0);
             return timestampDate;
         });
