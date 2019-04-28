@@ -27,6 +27,8 @@ export class ActiveTaskSection extends Component {
         this.unregisterForHighlights = this.unregisterForHighlights.bind(this);
         this.registerForAnimation = this.registerForAnimation.bind(this);
         this.unregisterForAnimation = this.unregisterForAnimation.bind(this);
+        this.initialCheck = null;
+        this.intervalCheck = null;
     }
     componentDidMount() {
         // This is the 'root' component which receives callbacks from the interaction layer, and passes down
@@ -39,7 +41,7 @@ export class ActiveTaskSection extends Component {
             ids.forEach(id => this.registerForAnimation(id, false));
         };
         this.initialCheck = window.setTimeout(checkAction, 2000);   // Wait 2 seconds before 'melting' the failed tasks
-        this.intervalCheck = window.setInterval(checkAction, 3_600_00);  // Re-check for failures every hour.
+        this.intervalCheck = window.setInterval(checkAction, 3600000);  // Re-check for failures every hour.
 
         // Initialise state of this component
         this.handleChange();
