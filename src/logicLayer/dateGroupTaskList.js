@@ -77,7 +77,7 @@ class MonthGroupedTaskList {
                 this.groups[searchResult].tasks.splice((-innerSearchResult-1), 0, task);
             }
             else {
-                this.groups[searchResult].tasks.splice(innerSearchResult, 0, task);
+                this.groups[searchResult].tasks.splice(innerSearchResult + 1, 0, task);
             }
         }
     }
