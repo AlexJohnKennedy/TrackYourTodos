@@ -15,39 +15,61 @@ export function BuildNewTimeGroupedTaskList(groupingType, sortByActivationTime =
     let timeKeyFunc = sortByActivationTime ? t => t.eventTimestamps.timeActivated : t => t.eventTimestamps.timeClosed;
 
     if (groupingType === TimeGroupTypes.DAY) {
-        throw new Error("Sorry, daily time grouping isn't implemented yet! I'm bad :(");
+        return new GroupedTaskList(timeKeyFunc, (timestamp) => {
+            let timestampDate = new Date(timestamp);
+            timestampDate.setHours(0, 0, 0, 0);
+            return timestampDate;
+        });
+    }
+    else if (groupingType === TimeGroupTypes.WEEK) {
+        return new GroupedTaskList(timeKeyFunc, (timestamp) => {
+            let timestampDate = new Date(timestamp);
+            timestampDate.setDay(timestampDate.getDate() - timestampDate.getDay() + 1);
+            timestampDate.setHours(0, 0, 0, 0);
+            return timestampDate;
+        });
     }
     else if (groupingType === TimeGroupTypes.MONTH) {
-        return new MonthGroupedTaskList(timeKeyFunc);
+        return new GroupedTaskList(timeKeyFunc, (timestamp) => {
+            let timestampDate = new Date(timestamp);
+            return new Date(timestampDate.getFullYear(), timestampDate.getMonth());
+        });
     }
     else if (groupingType === TimeGroupTypes.YEAR) {
-        throw new Error("Sorry, yearly time grouping isn't implemented yet! I'm bad :(");
+        return new GroupedTaskList(timeKeyFunc, (timestamp) => {
+            let timestampDate = new Date(timestamp);
+            return new Date(timestampDate.getFullYear());
+        });
     }
     else {
         throw new Error("Illegal grouping type passed to BuildNewTimeGroupedTaskList: " + groupingType);
     }
 }
 
-class MonthGroupedTaskList {
-    constructor(taskTimeKeyFunction) {
+class GroupedTaskList {
+    constructor(taskTimeKeyFunction, dateConversionFunction, groupingType) {
         this.groups = [];
         this.taskTimeKeyFunction = taskTimeKeyFunction;
+        this.dateConversionFunction = dateConversionFunction;
+        this.groupingType = groupingType;
+    }
+
+    GetGroupingType() {
+        return this.groupingType;
     }
 
     AddTask(task) {
         let timeStamp = this.taskTimeKeyFunction(task);
         if (timeStamp === null || timeStamp === undefined) { throw new Error('error is time key func. Returned undefined!'); }
 
-        // Create a date which represents the exact starting moment (local time) of the month of this task's timestamp!
-        let timestampDate = new Date(timeStamp);
-        let monthDate = new Date(timestampDate.getFullYear(), timestampDate.getMonth());
+        let date = this.dateConversionFunction(timeStamp);
 
         // Okay. We know the groups array is sorted by months, so just cycle that list until we find the correct 'insertion point'.
-        let searchResult = binarySearch(this.groups, monthDate, (monthDate, groupElem) => {
-            if (monthDate.valueOf() > groupElem.time.valueOf()) {
+        let searchResult = binarySearch(this.groups, date, (date, groupElem) => {
+            if (date.valueOf() > groupElem.time.valueOf()) {
                 return -1;  // Go before (in the array) if our time is more recent, i.e., value is larger
             }
-            else if (monthDate.valueOf() < groupElem.time.valueOf()) {
+            else if (date.valueOf() < groupElem.time.valueOf()) {
                 return 1;   // Go after (in the array) if our time is less recent, i.e., value is smaller
             }
             else {
@@ -57,7 +79,7 @@ class MonthGroupedTaskList {
         if (searchResult < 0) {
             // No match was found, thus, we need to add a new 'group' at position (-searchResult - 1)
             this.groups.splice((-searchResult-1), 0, {
-                time: monthDate,
+                time: date,
                 tasks: [task]
             });
         }
@@ -78,6 +100,15 @@ class MonthGroupedTaskList {
 
     GetAllGroupedTasks() {
         return this.groups.slice(0);    // Shallow copy.
+    }
+
+    GetLimitedGroupedTasks(numGroupsBackToGo) {
+        if (this.groups.length <= numGroupsBackToGo) {
+            return this.GetAllGroupedTasks();
+        }
+        else {
+            return this.groups.slice(0, numGroupsBackToGo);
+        }
     }
 }
 
