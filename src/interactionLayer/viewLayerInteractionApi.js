@@ -80,6 +80,7 @@ export function RegisterToActiveTaskListAPI(viewLayerCallbackFunc) {
     function getCompletedTasks() {
         let ret = [];
         ActiveTaskDataObj.GetCompletedTasks().forEach(group => {
+            ret.push({ isSpacer: true, time: group.time });
             ret = ret.concat(group.tasks.map((task) => {
                 return BuildNewInactiveTaskView(task, ActiveTaskDataObj, ViewLayerCallbacks, DataEventCallbackHandlers);
             }));
@@ -89,6 +90,7 @@ export function RegisterToActiveTaskListAPI(viewLayerCallbackFunc) {
     function getFailedTasks() { 
         let ret = [];
         ActiveTaskDataObj.GetFailedTasks().forEach(group => {
+            ret.push({ isSpacer: true, time: group.time });
             ret = ret.concat(group.tasks.map((task) => {
                 return BuildNewInactiveTaskView(task, ActiveTaskDataObj, ViewLayerCallbacks, DataEventCallbackHandlers);
             }));
