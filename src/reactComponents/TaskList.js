@@ -11,6 +11,9 @@ export class TaskList extends Component {
                 taskView={taskView} 
                 highlights={this.props.highlights} 
                 hightlightEventCallbacks={this.props.hightlightEventCallbacks}
+                completionAnimIds={this.props.completionAnimIds}
+                failureAnimIds={this.props.failureAnimIds}
+                animTriggerCallbacks={this.props.animTriggerCallbacks}
                 formStateManager={this.props.formStateManager}/>
         );
 

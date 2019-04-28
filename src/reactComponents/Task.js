@@ -55,17 +55,17 @@ export class Task extends Component {
     }
 
     // Private method which 'processes' a colour based on attributes of this task. e.g. desaturate grave-tasks.
-    processColour(hslacol) {
-        if (this.props.taskView.category === Category.Deferred) {
-            // Deferred tasks should be slightly desaturated, and slightly transparent!
-            return new HSLAColour(hslacol.hue, hslacol.sat * 0.025, hslacol.light * 0.5, 100);
-        }
-        else if (this.props.taskView.progressStatus === ProgressStatus.Completed) {
+    processColour(hslacol, completionOverride, failureOverride) {
+        if (completionOverride || this.props.taskView.progressStatus === ProgressStatus.Completed) {
             //return new HSLAColour(hslacol.hue, hslacol.sat, hslacol.light * 0.75, 100);
             return new HSLAColour(122, 75, 35, 100);
         }
-        else if (this.props.taskView.progressStatus >= ProgressStatus.Failed) {
+        else if (failureOverride || this.props.taskView.progressStatus >= ProgressStatus.Failed) {
             return new HSLAColour(hslacol.hue, hslacol.sat * 0.025, hslacol.light * 0.4, 100);
+        }
+        else if (this.props.taskView.category === Category.Deferred) {
+            // Deferred tasks should be slightly desaturated, and slightly transparent!
+            return new HSLAColour(hslacol.hue, hslacol.sat * 0.025, hslacol.light * 0.5, 100);
         }
         else {
             // Lets just darken all colours a tad..
@@ -75,8 +75,23 @@ export class Task extends Component {
 
     // For now, just represent a task as a div with text in it!
     render() {
+        // Determine if this task should be highlighted, by determining if our id is in the highlight list.
+        let highlight = this.props.highlights.filter((id) => id === this.props.taskView.id);
+
+        // Determine if we need to apply an animation class name.
+        let completion = this.props.completionAnimIds.filter(id => id === this.props.taskView.id);
+        let failure = this.props.failureAnimIds.filter(id => id === this.props.taskView.id);
+        let animClassname = null;
+        if (completion.length > 0) {
+            animClassname = " completionAnim";
+        }
+        else if (failure.length > 0) {
+            animClassname = " failureAnim";
+        }
+        let classstring = "task" + (highlight.length === 0 ? "" : " highlighted") + (animClassname === null ? " entranceAnim" : animClassname);
+        
         // Attain background colour programmatically, and apply side padding iff the checkbox is present.
-        let processedColour = this.processColour(GetColourMapping(this.context.themeId).get(this.props.taskView.colourid));
+        let processedColour = this.processColour(GetColourMapping(this.context.themeId).get(this.props.taskView.colourid), completion.length > 0, failure.length > 0);
         const style = {
             backgroundColor: processedColour.toString(),
         };
@@ -84,8 +99,6 @@ export class Task extends Component {
             style.paddingLeft = "2rem";
             style.paddingRight = "2rem";
         }
-        let highlight = this.props.highlights.filter((id) => id === this.props.taskView.id);
-        let classstring = "task" + (highlight.length === 0 ? "" : " highlighted");
 
         return (
             <div className={classstring} style={style} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
@@ -116,8 +129,15 @@ export class Task extends Component {
                 }
                 { this.props.taskView.category <= Category.Daily && this.props.taskView.progressStatus <= ProgressStatus.Started &&
                     <CheckBox 
+                        currClicks={this.props.taskView.progressStatus}
                         firstClickAction={() => this.props.taskView.StartTask()}
-                        secondClickAction={() => this.props.taskView.CompleteTask()}
+                        secondClickAction={() => {
+                            this.props.animTriggerCallbacks.register(this.props.taskView.id, true);
+                            window.setTimeout(() => {
+                                this.props.animTriggerCallbacks.unregister(this.props.taskView.id, true);
+                                this.props.taskView.CompleteTask();
+                            }, 699);
+                        }}
                     />
                 }
                 { this.props.taskView.category === Category.Deferred &&

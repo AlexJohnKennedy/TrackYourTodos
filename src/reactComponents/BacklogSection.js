@@ -96,6 +96,12 @@ export class BacklogSection extends Component {
                                 register : (id) => id,
                                 unregister : (id) => id
                             }}
+                            completionAnimIds={[]}
+                            failureAnimIds={[]}
+                            animTriggerCallbacks={{
+                                register : id => id,
+                                unregister : id => id
+                            }}
                             formStateManager={ null }
                         />
                     }
@@ -107,6 +113,12 @@ export class BacklogSection extends Component {
                                 register : (id) => id,
                                 unregister : (id) => id
                             }}
+                            completionAnimIds={[]}
+                            failureAnimIds={[]}
+                            animTriggerCallbacks={{
+                                register : id => id,
+                                unregister : id => id
+                            }}
                             formStateManager={ null }
                         />
                     }
@@ -117,6 +129,12 @@ export class BacklogSection extends Component {
                             hightlightEventCallbacks={{ 
                                 register : (id) => id,
                                 unregister : (id) => id
+                            }}
+                            completionAnimIds={[]}
+                            failureAnimIds={[]}
+                            animTriggerCallbacks={{
+                                register : id => id,
+                                unregister : id => id
                             }}
                             formStateManager={ null }
                         />

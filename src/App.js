@@ -7,7 +7,7 @@ import { TemporaryStateManager } from './viewLogic/temporaryStateManager';
 import { ShortCutManager } from './viewLogic/keyboardShortcutHandler';
 import { ThemeId, currThemeId } from './viewLogic/colourSetManager';
 import { Footer } from './reactComponents/Footer';
-import { DataEventHandlers, DataEventSerialisationHandlers } from './interactionLayer/dataEventLogger';
+import { DataEventSerialisationHandlers } from './interactionLayer/dataEventLogger';
 import { RegisterForDataEvents } from './interactionLayer/viewLayerInteractionApi';
 
 class App extends Component {
