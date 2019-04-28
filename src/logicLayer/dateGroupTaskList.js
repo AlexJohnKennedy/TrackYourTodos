@@ -15,30 +15,30 @@ export function BuildNewTimeGroupedTaskList(groupingType, sortByActivationTime =
     let timeKeyFunc = sortByActivationTime ? t => t.eventTimestamps.timeActivated : t => t.eventTimestamps.timeClosed;
 
     if (groupingType === TimeGroupTypes.DAY) {
-        return new GroupedTaskList(timeKeyFunc, (timestamp) => {
+        return new GroupedTaskList(timeKeyFunc, TimeGroupTypes.DAY, (timestamp) => {
             let timestampDate = new Date(timestamp);
             timestampDate.setHours(0, 0, 0, 0);
             return timestampDate;
         });
     }
     else if (groupingType === TimeGroupTypes.WEEK) {
-        return new GroupedTaskList(timeKeyFunc, (timestamp) => {
+        return new GroupedTaskList(timeKeyFunc, TimeGroupTypes.WEEK, (timestamp) => {
             let timestampDate = new Date(timestamp);
-            timestampDate.setDay(timestampDate.getDate() - timestampDate.getDay() + 1);
+            timestampDate.setDate(timestampDate.getDate() - timestampDate.getDay() + 1);
             timestampDate.setHours(0, 0, 0, 0);
             return timestampDate;
         });
     }
     else if (groupingType === TimeGroupTypes.MONTH) {
-        return new GroupedTaskList(timeKeyFunc, (timestamp) => {
+        return new GroupedTaskList(timeKeyFunc, TimeGroupTypes.MONTH, (timestamp) => {
             let timestampDate = new Date(timestamp);
             return new Date(timestampDate.getFullYear(), timestampDate.getMonth());
         });
     }
     else if (groupingType === TimeGroupTypes.YEAR) {
-        return new GroupedTaskList(timeKeyFunc, (timestamp) => {
+        return new GroupedTaskList(timeKeyFunc, TimeGroupTypes.YEAR, (timestamp) => {
             let timestampDate = new Date(timestamp);
-            return new Date(timestampDate.getFullYear());
+            return new Date(timestampDate.getFullYear(), 0);    // 0'th month to indicate start of year
         });
     }
     else {
@@ -47,7 +47,7 @@ export function BuildNewTimeGroupedTaskList(groupingType, sortByActivationTime =
 }
 
 class GroupedTaskList {
-    constructor(taskTimeKeyFunction, dateConversionFunction, groupingType) {
+    constructor(taskTimeKeyFunction, groupingType, dateConversionFunction) {
         this.groups = [];
         this.taskTimeKeyFunction = taskTimeKeyFunction;
         this.dateConversionFunction = dateConversionFunction;

@@ -38,10 +38,12 @@
 import { GetActiveTaskObject } from './dummy/dummyDataModel';
 import { Category, ProgressStatus } from '../logicLayer/Task';
 import { RegisterForFailureChecking } from '../logicLayer/checkForFailure';
+import { StatisticsModel } from '../logicLayer/statisticsModel';
 
 // Gain access as a global singleton to the DataModel object. TODO: Move this into a separate 'data model' scope, which sits in
 // the logic layer, and which interaction layer objects (such as code in this file) access into.
 const ActiveTaskDataObj = GetActiveTaskObject();
+const StatisticsModelObj = new StatisticsModel(ActiveTaskDataObj);     // Create a statistics data model
 
 // Store a global list of viewLayerCallbacks.
 const ViewLayerCallbacks = [];
@@ -57,6 +59,10 @@ const DataEventCallbackHandlers = {
     taskActivatedHandlers : [],
     taskStartedHandlers : []
 };
+
+// Setup inter-datamodel event callbacks here, since they both exist in the global interaction layer scope.
+DataEventCallbackHandlers.taskCompletedHandlers.push((task, tasklist) => StatisticsModelObj.AddCompletedTask(task));
+DataEventCallbackHandlers.taskFailedHandlers.push((task, tasklist) => StatisticsModelObj.AddFailedTask(task));
 
 export function RegisterForDataEvents(dataEventhandlers) {
     DataEventCallbackHandlers.taskAddedHandlers.push(dataEventhandlers.taskAddedHandler);
