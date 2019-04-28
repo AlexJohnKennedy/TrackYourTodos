@@ -56,22 +56,14 @@ export class StatisticsModel {
     //      alltime: bool <-- Whether or not to calculate all time stats   
     // }
     GetStatistics(optionsObj) {
-        console.log("Calculating day stats:");
         let dayStats = this.calcStats(optionsObj.days, this.dayGroupsCompleted.GetAllGroupedTasks(), this.dayGroupsFailed.GetAllGroupedTasks(), date => new Date(date.setHours(0, 0, 0, 0)), date => new Date(date.setDate(date.getDate() - 1)));
-        
-        console.log("Calculating week stats:");
         let weekStats = this.calcStats(optionsObj.weeks, this.weekGroupsCompleted.GetAllGroupedTasks(), this.weekGroupsFailed.GetAllGroupedTasks(), date => {
             date.setDate(date.getDate() - date.getDay());
             date.setHours(0, 0, 0, 0);
             return date;
         }, date => new Date(date.setDate(date.getDate() - 2)));
-
-        console.log("Calculating month stats:");
         let monthStats = this.calcStats(optionsObj.months, this.monthGroupsCompleted.GetAllGroupedTasks(), this.monthGroupsFailed.GetAllGroupedTasks(), date => new Date(date.getFullYear(), date.getMonth()), date => new Date(date.setDate(date.getDate() - 1)));
-
-        console.log("Calculating year stats:");
         let yearStats = this.calcStats(optionsObj.years, this.yearGroupsCompleted.GetAllGroupedTasks(), this.yearGroupsFailed.GetAllGroupedTasks(), date => new Date(date.getFullYear(), 0), date => new Date(date.setDate(date.getDate() - 5)));
-
         let alltimeStats = optionsObj.alltime ? this.calcAlltimeStats() : null;
 
         return {
@@ -113,10 +105,7 @@ export class StatisticsModel {
         let currDate = floorDateToKeyDateFunc(new Date(Date.now()));
 
         for (let i=0; i < numToGoBack; i++) {
-            console.log(currDate);
-            
             let completedSearchResult = binarySearch(completedGroups, currDate, cmpFunc);
-            console.log(completedSearchResult);
             if (completedSearchResult < 0) {
                 completedArray.push(0);  // No completed tasks for this day
             }
