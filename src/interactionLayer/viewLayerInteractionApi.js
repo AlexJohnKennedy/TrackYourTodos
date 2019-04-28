@@ -48,7 +48,8 @@ console.log(StatisticsModelObj.GetStatistics({
     days: 5,
     weeks : 4,
     months: 10,
-    years: 3
+    years: 3,
+    alltime: true
 }));
 
 // Store a global list of viewLayerCallbacks.

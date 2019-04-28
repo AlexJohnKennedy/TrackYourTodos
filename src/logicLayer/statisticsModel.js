@@ -56,33 +56,21 @@ export class StatisticsModel {
     //      alltime: bool <-- Whether or not to calculate all time stats   
     // }
     GetStatistics(optionsObj) {
-        const cmpFunc = (date, groupElem) => {
-            if (date.valueOf() > groupElem.time.valueOf()) {
-                return -1;  // Go before (in the array) if our time is more recent, i.e., value is larger
-            }
-            else if (date.valueOf() < groupElem.time.valueOf()) {
-                return 1;   // Go after (in the array) if our time is less recent, i.e., value is smaller
-            }
-            else {
-                return 0;
-            }
-        };
-        
         console.log("Calculating day stats:");
-        let dayStats = this.calcStats(optionsObj.days, this.dayGroupsCompleted, this.dayGroupsFailed, cmpFunc, date => new Date(date.setHours(0, 0, 0, 0)), date => new Date(date.setDate(date.getDate() - 1)));
+        let dayStats = this.calcStats(optionsObj.days, this.dayGroupsCompleted.GetAllGroupedTasks(), this.dayGroupsFailed.GetAllGroupedTasks(), date => new Date(date.setHours(0, 0, 0, 0)), date => new Date(date.setDate(date.getDate() - 1)));
         
         console.log("Calculating week stats:");
-        let weekStats = this.calcStats(optionsObj.weeks, this.weekGroupsCompleted, this.weekGroupsFailed, cmpFunc, date => {
+        let weekStats = this.calcStats(optionsObj.weeks, this.weekGroupsCompleted.GetAllGroupedTasks(), this.weekGroupsFailed.GetAllGroupedTasks(), date => {
             date.setDate(date.getDate() - date.getDay());
             date.setHours(0, 0, 0, 0);
             return date;
         }, date => new Date(date.setDate(date.getDate() - 2)));
 
         console.log("Calculating month stats:");
-        let monthStats = this.calcStats(optionsObj.months, this.monthGroupsCompleted, this.monthGroupsFailed, cmpFunc, date => new Date(date.getFullYear(), date.getMonth()), date => new Date(date.setDate(date.getDate() - 1)));
+        let monthStats = this.calcStats(optionsObj.months, this.monthGroupsCompleted.GetAllGroupedTasks(), this.monthGroupsFailed.GetAllGroupedTasks(), date => new Date(date.getFullYear(), date.getMonth()), date => new Date(date.setDate(date.getDate() - 1)));
 
         console.log("Calculating year stats:");
-        let yearStats = this.calcStats(optionsObj.years, this.yearGroupsCompleted, this.yearGroupsFailed, cmpFunc, date => new Date(date.getFullYear(), 0), date => new Date(date.setDate(date.getDate() - 5)));
+        let yearStats = this.calcStats(optionsObj.years, this.yearGroupsCompleted.GetAllGroupedTasks(), this.yearGroupsFailed.GetAllGroupedTasks(), date => new Date(date.getFullYear(), 0), date => new Date(date.setDate(date.getDate() - 5)));
 
         let alltimeStats = optionsObj.alltime ? this.calcAlltimeStats() : null;
 
@@ -102,7 +90,19 @@ export class StatisticsModel {
         };
     }
 
-    calcStats(numToGoBack, completedGroups, failedGroups, cmpFunc, floorDateToKeyDateFunc, cycleBackFunc) {
+    calcStats(numToGoBack, completedGroups, failedGroups, floorDateToKeyDateFunc, cycleBackFunc) {
+        function cmpFunc(date, groupElem) {
+            if (date.valueOf() > groupElem.time.valueOf()) {
+                return -1;  // Go before (in the array) if our time is more recent, i.e., value is larger
+            }
+            else if (date.valueOf() < groupElem.time.valueOf()) {
+                return 1;   // Go after (in the array) if our time is less recent, i.e., value is smaller
+            }
+            else {
+                return 0;
+            }
+        };
+        
         if (numToGoBack <= 0) return null;
         
         let completedArray = [];
@@ -116,6 +116,7 @@ export class StatisticsModel {
             console.log(currDate);
             
             let completedSearchResult = binarySearch(completedGroups, currDate, cmpFunc);
+            console.log(completedSearchResult);
             if (completedSearchResult < 0) {
                 completedArray.push(0);  // No completed tasks for this day
             }
