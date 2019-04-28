@@ -36,13 +36,17 @@ export class ActiveTaskSection extends Component {
         // Setup timing callbacks for task-failure checks.
         const checkAction = () => {
             let ids = this.activeTaskListAPI.PerformFailureCheck(800, id => this.unregisterForAnimation(id, false));
-            console.log(ids);
             ids.forEach(id => this.registerForAnimation(id, false));
         };
-        window.setTimeout(checkAction, 5000);
+        this.initialCheck = window.setTimeout(checkAction, 2000);   // Wait 2 seconds before 'melting' the failed tasks
+        this.intervalCheck = window.setInterval(checkAction, 3_600_00);  // Re-check for failures every hour.
 
         // Initialise state of this component
         this.handleChange();
+    }
+    componentWillUnmount() {
+        window.clearInterval(this.intervalCheck);
+        window.clearTimeout(this.initialCheck);
     }
 
     // Callback for when tasks are hovered over and we need to highlight them, and all their relatives.
