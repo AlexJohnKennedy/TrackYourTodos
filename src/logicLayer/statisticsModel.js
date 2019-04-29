@@ -56,6 +56,9 @@ export class StatisticsModel {
     //      alltime: bool <-- Whether or not to calculate all time stats   
     // }
     GetStatistics(optionsObj) {
+        // WARNING: The date conversion lambda functions ('floor date to key date' parameter) defined here are bound to the date conversion functions
+        // used in the dateGroupTaskList code! If they are not in-sync, this won't work!!
+        // TODO: Directly import these functions from the dateGroupTaskList file instead, to remove this buggy desync point. 
         let dayStats = this.calcStats(optionsObj.days, this.dayGroupsCompleted.GetAllGroupedTasks(), this.dayGroupsFailed.GetAllGroupedTasks(), date => new Date(date.setHours(0, 0, 0, 0)), date => new Date(date.setDate(date.getDate() - 1)));
         let weekStats = this.calcStats(optionsObj.weeks, this.weekGroupsCompleted.GetAllGroupedTasks(), this.weekGroupsFailed.GetAllGroupedTasks(), date => {
             //date.setDate(date.getDate() - date.getDay());
