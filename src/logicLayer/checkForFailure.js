@@ -58,7 +58,7 @@ export function RegisterForFailureChecking(tasklist) {
 
         // If the task was activated on friday, saturday or sunday, roll it over to the next week before failing it.
         let activationDate = new Date(task.eventTimestamps.timeActivated);
-        if (activationDate.getDate() === 5 || activationDate.getDate() === 6 || activationDate.getDate() === 0) {
+        if (activationDate.getDate() === 5 || activationDate.getDate() === 0) {
             activationDate.setDate(activationDate.getDate() + 7);   // Increments the date to the next week.
         }
 

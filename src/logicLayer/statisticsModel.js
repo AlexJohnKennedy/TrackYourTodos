@@ -3,13 +3,13 @@ import { TimeGroupTypes, BuildNewTimeGroupedTaskList } from './dateGroupTaskList
 export class StatisticsModel {
     constructor(tasklist) {
         this.yearGroupsCompleted = BuildNewTimeGroupedTaskList(TimeGroupTypes.YEAR, false);
-        this.yearGroupsFailed = BuildNewTimeGroupedTaskList(TimeGroupTypes.YEAR, false);
+        this.yearGroupsFailed = BuildNewTimeGroupedTaskList(TimeGroupTypes.YEAR, true);
         this.monthGroupsCompleted = BuildNewTimeGroupedTaskList(TimeGroupTypes.MONTH, false);
-        this.monthGroupsFailed = BuildNewTimeGroupedTaskList(TimeGroupTypes.MONTH, false);
+        this.monthGroupsFailed = BuildNewTimeGroupedTaskList(TimeGroupTypes.MONTH, true);
         this.weekGroupsCompleted = BuildNewTimeGroupedTaskList(TimeGroupTypes.WEEK, false);
-        this.weekGroupsFailed = BuildNewTimeGroupedTaskList(TimeGroupTypes.WEEK, false);
+        this.weekGroupsFailed = BuildNewTimeGroupedTaskList(TimeGroupTypes.WEEK, true);
         this.dayGroupsCompleted = BuildNewTimeGroupedTaskList(TimeGroupTypes.DAY, false);
-        this.dayGroupsFailed = BuildNewTimeGroupedTaskList(TimeGroupTypes.DAY, false);
+        this.dayGroupsFailed = BuildNewTimeGroupedTaskList(TimeGroupTypes.DAY, true);
         this.allCompleted = [];
         this.allFailed = [];
 
@@ -58,7 +58,8 @@ export class StatisticsModel {
     GetStatistics(optionsObj) {
         let dayStats = this.calcStats(optionsObj.days, this.dayGroupsCompleted.GetAllGroupedTasks(), this.dayGroupsFailed.GetAllGroupedTasks(), date => new Date(date.setHours(0, 0, 0, 0)), date => new Date(date.setDate(date.getDate() - 1)));
         let weekStats = this.calcStats(optionsObj.weeks, this.weekGroupsCompleted.GetAllGroupedTasks(), this.weekGroupsFailed.GetAllGroupedTasks(), date => {
-            date.setDate(date.getDate() - date.getDay());
+            //date.setDate(date.getDate() - date.getDay());
+            date.setDate(date.getDate() - (date.getDay()-1)%7);
             date.setHours(0, 0, 0, 0);
             return date;
         }, date => new Date(date.setDate(date.getDate() - 2)));

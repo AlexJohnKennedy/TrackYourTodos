@@ -51,6 +51,13 @@ console.log(StatisticsModelObj.GetStatistics({
     years: 3,
     alltime: true
 }));
+window.setTimeout(() => console.log(StatisticsModelObj.GetStatistics({
+    days: 5,
+    weeks : 4,
+    months: 10,
+    years: 3,
+    alltime: true
+})), 6000);
 
 // Store a global list of viewLayerCallbacks.
 const ViewLayerCallbacks = [];
