@@ -1,14 +1,21 @@
 .TaskStatisticsSection {
     background-color: var(--editor-background-colour);
-
-    padding-top: var(--top-padding-amount);
-    padding-bottom: var(--top-padding-amount);
-    padding-left: var(--board-spacing-amount);
-    padding-right: var(--board-spacing-amount);
 }
 
-.TaskStatisticsSection .placeholder {
-    background-color: rgb(0,0,0,0);
-    border-radius: var(--border-radius);
-    flex-grow: 1;
+.summaryBlockFlexContainer {
+    display: inline-flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.summaryBlockFlexContainer .chartWrapper {
+    height: 17.5rem;
+    width: 17.5rem;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.summaryBlockFlexContainer .statNums {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
 }

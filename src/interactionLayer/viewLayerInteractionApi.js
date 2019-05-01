@@ -279,7 +279,10 @@ function BuildNewInactiveTaskView(domainTaskObj, tasklistobj, viewLayerCallbackL
 
 // Interaction API object for the Statistics Model. For now, it simply wraps the statistics model and hides the
 // internal data structures.
-export function RegisterForStatisticsModel() {
+export function RegisterForStatisticsModel(completedCallback, failedCallback) {
+    DataEventCallbackHandlers.taskCompletedHandlers.push(completedCallback);
+    DataEventCallbackHandlers.taskFailedHandlers.push(failedCallback);
+
     function GetStatistics(options) {
         return StatisticsModelObj.GetStatistics(options);
     }
