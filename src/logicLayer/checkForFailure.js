@@ -12,6 +12,7 @@ export function RegisterForFailureChecking(tasklist) {
     // Returns a list of all the task which were failed in this check. It also actively performs the fail update in the
     // domain layer!
     function FailTasks() {
+        console.log(" CHECKING ");
         // Create a collection of objects of failed tasks, and their corresponding timestamp.
         let failureCheckResults = tasklist.GetActiveTasks().map(expirationCheck).filter(resObj => resObj.failureDate !== null);
 
@@ -58,18 +59,23 @@ export function RegisterForFailureChecking(tasklist) {
 
         // If the task was activated on friday, saturday or sunday, roll it over to the next week before failing it.
         let activationDate = new Date(task.eventTimestamps.timeActivated);
+
+        console.log("===================================================");
+        console.log("WEEK FAIL CHECK: Activation date = " + activationDate);
+
         if (activationDate.getDate() === 5 || activationDate.getDate() === 0) {
             activationDate.setDate(activationDate.getDate() + 7);   // Increments the date to the next week.
         }
 
+        console.log("WEEK FAIL CHECK: Activation date after potential week update = " + activationDate);
+
         // Calculate the exact moment the task becomes failed. It will be at 1am of the first day of the next week.
-        let failureDate = new Date();
+        let failureDate = new Date(activationDate.valueOf());
         failureDate.setDate(activationDate.getDate() - activationDate.getDay() + 8);
         failureDate.setHours(1, 0, 0, 0);
 
-        //console.log("Checking Weekly:");
-        //console.log("Time now:  " + new Date(Date.now()));
-        //console.log("Fail time: " + failureDate);
+        console.log("WEEK FAIL CHECK: Failure date = " + failureDate);
+        console.log("===================================================");
 
         return Date.now() >= failureDate.valueOf() ? failureDate : null;
     }
@@ -79,18 +85,23 @@ export function RegisterForFailureChecking(tasklist) {
 
         // If the task was activated after 5pm, roll it over to the next day before failing it.
         let activationDate = new Date(task.eventTimestamps.timeActivated);
+
+        console.log("===================================================");
+        console.log("DAY FAIL CHECK: Activation date = " + activationDate);
+
         if (activationDate.getHours() >= 17) {
             activationDate.setDate(activationDate.getDate() + 1);   // Increments the date to the next day.
         }
 
+        console.log("DAY FAIL CHECK: Activation date after potential week update = " + activationDate);
+
         // Calculate the exact moment the task becomes failed. It will be at 1am the next day.
-        let failureDate = new Date();
+        let failureDate = new Date(activationDate.valueOf());
         failureDate.setDate(activationDate.getDate() + 1);
         failureDate.setHours(1, 0, 0, 0);
 
-        //console.log("Checking Daily:");
-        //console.log("Time now:  " + new Date(Date.now()));
-        //console.log("Fail time: " + failureDate);
+        console.log("DAY FAIL CHECK: Failure date = " + failureDate);
+        console.log("===================================================");
 
         return Date.now() >= failureDate.valueOf() ? failureDate : null;
     }

@@ -20,7 +20,7 @@
     #root {
         display: grid;
         grid-template-columns: 1fr auto var(--divider-column-width) minmax(var(--backlog-tasks-total-width-squashed), var(--backlog-tasks-total-width)) 1fr;
-        grid-template-rows: auto 45rem auto;
+        grid-template-rows: auto auto auto;
     }
     
     .ActiveTaskSection {
@@ -63,9 +63,15 @@
         grid-row-start: 2;
         grid-row-end: 3;
 
-        display: inline-flex;
-
         border-top: 1px solid var(--divider-colour);
+
+        display: inline-grid;
+
+        /* 3 evenly spaced columns to define the summary blocks, which contain the radial graphs */
+        grid-template-columns: 1fr 1fr 1fr;
+        
+        /* Top row for the summary blocks, the next three rows for the timeline graphs. Hardcoded heights :) */
+        grid-template-rows: 18rem 12rem 12rem 12rem;
     }
     .Footer {
         grid-column-start: 2;
