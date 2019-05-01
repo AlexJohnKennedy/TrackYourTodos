@@ -276,3 +276,15 @@ function BuildNewInactiveTaskView(domainTaskObj, tasklistobj, viewLayerCallbackL
         ReviveTask : reviveTask
     });
 }
+
+// Interaction API object for the Statistics Model. For now, it simply wraps the statistics model and hides the
+// internal data structures.
+export function RegisterForStatisticsModel() {
+    function GetStatistics(options) {
+        return StatisticsModelObj.GetStatistics(options);
+    }
+
+    return Object.freeze({
+        GetStatistics: GetStatistics
+    });
+}
