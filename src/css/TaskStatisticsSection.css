@@ -1,11 +1,18 @@
 .TaskStatisticsSection {
     background-color: var(--editor-background-colour);
 }
+.TaskStatisticsSection .titleBlock {
+    font-size: 1.8rem;
+    padding-top: 0.6rem;
+    padding-bottom: 0.8rem;
+}
 
 .summaryBlockFlexContainer {
     display: inline-flex;
     flex-direction: row;
     justify-content: center;
+    width: 100%;
+    margin: auto;
 }
 
 .summaryBlockFlexContainer .chartWrapper {
@@ -16,6 +23,11 @@
 }
 
 .summaryBlockFlexContainer .statNums {
+    text-align: left;
     padding-top: 2rem;
     padding-bottom: 2rem;
+}
+
+.summaryBlockFlexContainer .statNums div {
+    padding-bottom: 0.05rem;
 }

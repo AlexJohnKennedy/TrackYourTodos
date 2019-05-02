@@ -23,26 +23,30 @@ export class RadialSummaryBlock extends Component {
         ];
 
         return (
-            <div className="summaryBlockFlexContainer">
-                <StatNums
-                    titleText={this.props.titleText}
-                    completed={this.props.completed}
-                    failed={this.props.failed}
-                />
-                <div className="chartWrapper">
-                    <FlexibleXYPlot 
-                        margin={{left: 0, right: 0, top: 0, bottom: 0}} 
-                        xDomain={[-87.5, 87.5]} 
-                        yDomain={[-87.5, 87.5]}
-                        colorDomain={[0, 2*Math.PI]}
-                        color="#169c1b">
-                    <ArcSeries
-                        animation
-                        radiusType={'literal'}
-                        center={{x: 0, y: 0}}
-                        data={data}
-                        colorType={'literal'}/>
-                    </FlexibleXYPlot>
+            <div className="RadialSummaryBlock">
+                <div className="titleBlock">
+                    {this.props.titleText}
+                </div>
+                <div className="summaryBlockFlexContainer">
+                    <StatNums
+                        completed={this.props.completed}
+                        failed={this.props.failed}
+                    />
+                    <div className="chartWrapper">
+                        <FlexibleXYPlot 
+                            margin={{left: 0, right: 0, top: 0, bottom: 0}} 
+                            xDomain={[-87.5, 87.5]} 
+                            yDomain={[-87.5, 87.5]}
+                            colorDomain={[0, 2*Math.PI]}
+                            color="#169c1b">
+                        <ArcSeries
+                            animation
+                            radiusType={'literal'}
+                            center={{x: 0, y: 0}}
+                            data={data}
+                            colorType={'literal'}/>
+                        </FlexibleXYPlot>
+                    </div>
                 </div>
             </div>
         );
@@ -58,13 +62,10 @@ export class StatNums extends Component {
         return (
             <div className="statNums">
                 <div>
-                    {this.props.titleText}
-                </div>
-                <div>
                     {percentage}%
                 </div>
                 <div>
-                    {this.props.completed}/{this.props.failed}
+                    {this.props.completed}/{this.props.completed + this.props.failed}
                 </div>
             </div>
         );

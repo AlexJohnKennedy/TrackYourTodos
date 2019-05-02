@@ -73,6 +73,20 @@
         /* Top row for the summary blocks, the next three rows for the timeline graphs. Hardcoded heights :) */
         grid-template-rows: 22rem 20rem;
     }
+    .TaskStatisticsSection .RadialSummaryBlock {
+        grid-column-start: 1;
+        grid-column-end: 2;
+        grid-row-start: 1;
+        grid-row-end: 2;
+    }
+    .TaskStatisticsSection .RadialSummaryBlock ~ .RadialSummaryBlock {
+        grid-column-start: 2;
+        grid-column-end: 3;
+    }
+    .TaskStatisticsSection .RadialSummaryBlock ~ .RadialSummaryBlock ~ .RadialSummaryBlock {
+        grid-column-start: 3;
+        grid-column-end: 4;
+    }
     .Footer {
         grid-column-start: 2;
         grid-column-end: 5;
@@ -125,6 +139,20 @@
         
         /* Top row for the summary blocks, the next three rows for the timeline graphs. Hardcoded heights :) */
         grid-template-rows: 22rem 20rem;
+    }
+    .TaskStatisticsSection .RadialSummaryBlock {
+        grid-column-start: 1;
+        grid-column-end: 2;
+        grid-row-start: 1;
+        grid-row-end: 2;
+    }
+    .TaskStatisticsSection .RadialSummaryBlock ~ .RadialSummaryBlock {
+        grid-column-start: 2;
+        grid-column-end: 3;
+    }
+    .TaskStatisticsSection .RadialSummaryBlock ~ .RadialSummaryBlock ~ .RadialSummaryBlock {
+        grid-column-start: 3;
+        grid-column-end: 4;
     }
     .Footer {
         grid-column-start: 2;
@@ -184,10 +212,41 @@
         /* Top row for the summary blocks, the next three rows for the timeline graphs. Hardcoded heights :) */
         grid-template-rows: 22rem 20rem;
     }
+    .TaskStatisticsSection .RadialSummaryBlock {
+        grid-column-start: 1;
+        grid-column-end: 2;
+        grid-row-start: 1;
+        grid-row-end: 2;
+    }
+    .TaskStatisticsSection .RadialSummaryBlock ~ .RadialSummaryBlock {
+        display: none;
+    }
+    .TaskStatisticsSection .RadialSummaryBlock ~ .RadialSummaryBlock ~ .RadialSummaryBlock {
+        display: block;
+        grid-column-start: 2;
+        grid-column-end: 3;
+    }
     .Footer {
         grid-column-start: 2;
         grid-column-end: 3;
         grid-row-start: 3;
         grid-row-end: 4;
+    }
+}
+@media (max-width: 450px) {
+    .TaskStatisticsSection .RadialSummaryBlock {
+        grid-column-start: 1;
+        grid-column-end: 3;
+        grid-row-start: 1;
+        grid-row-end: 2;
+    }
+    .TaskStatisticsSection .RadialSummaryBlock .summaryBlockFlexContainer {
+        justify-content: space-evenly;
+    }
+    .TaskStatisticsSection .RadialSummaryBlock ~ .RadialSummaryBlock {
+        display: none;
+    }
+    .TaskStatisticsSection .RadialSummaryBlock ~ .RadialSummaryBlock ~ .RadialSummaryBlock {
+        display: none;
     }
 }
