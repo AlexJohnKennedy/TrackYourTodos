@@ -5,7 +5,7 @@
 .summaryBlockFlexContainer {
     display: inline-flex;
     flex-direction: row;
-    justify-content: space-evenly;
+    justify-content: center;
 }
 
 .summaryBlockFlexContainer .chartWrapper {

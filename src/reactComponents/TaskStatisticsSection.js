@@ -76,9 +76,9 @@ export class TaskStatisticsSection extends Component {
 
         return(
             <div className="TaskStatisticsSection">
-                <RadialSummaryBlock completed={dayCompleted} failed={dayFailed}/>
-                <RadialSummaryBlock completed={monthCompleted} failed={monthFailed}/>
-                <RadialSummaryBlock completed={alltimeCompleted} failed={alltimeFailed}/>
+                <RadialSummaryBlock titleText="Last 7 days" completed={dayCompleted} failed={dayFailed}/>
+                <RadialSummaryBlock titleText="Last 30 days" completed={monthCompleted} failed={monthFailed}/>
+                <RadialSummaryBlock titleText="All time"  completed={alltimeCompleted} failed={alltimeFailed}/>
             </div>
         );
     }
