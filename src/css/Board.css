@@ -34,6 +34,13 @@
 .task-list-container::-webkit-scrollbar {
     width: 0rem;        /* MAKE THE SCROLLBAR INVISIBLE LIKE A SEXY MOFO */
 }
+.task-list-container .dateSpacer {
+    padding-top: 0.4rem;
+    padding-bottom: 0.9rem;
+    padding-left: 1.2rem;
+    text-align: left;
+}
+
 .board-title-container button {
     position: absolute;
     right: 0.4rem;

@@ -38,10 +38,19 @@
 import { GetActiveTaskObject } from './dummy/dummyDataModel';
 import { Category, ProgressStatus } from '../logicLayer/Task';
 import { RegisterForFailureChecking } from '../logicLayer/checkForFailure';
+import { StatisticsModel } from '../logicLayer/statisticsModel';
 
 // Gain access as a global singleton to the DataModel object. TODO: Move this into a separate 'data model' scope, which sits in
 // the logic layer, and which interaction layer objects (such as code in this file) access into.
 const ActiveTaskDataObj = GetActiveTaskObject();
+const StatisticsModelObj = new StatisticsModel(ActiveTaskDataObj);     // Create a statistics data model
+console.log(StatisticsModelObj.GetStatistics({
+    days: 5,
+    weeks : 4,
+    months: 10,
+    years: 3,
+    alltime: true
+}));
 
 // Store a global list of viewLayerCallbacks.
 const ViewLayerCallbacks = [];
@@ -57,6 +66,10 @@ const DataEventCallbackHandlers = {
     taskActivatedHandlers : [],
     taskStartedHandlers : []
 };
+
+// Setup inter-datamodel event callbacks here, since they both exist in the global interaction layer scope.
+DataEventCallbackHandlers.taskCompletedHandlers.push((task, tasklist) => StatisticsModelObj.AddCompletedTask(task));
+DataEventCallbackHandlers.taskFailedHandlers.push((task, tasklist) => StatisticsModelObj.AddFailedTask(task));
 
 export function RegisterForDataEvents(dataEventhandlers) {
     DataEventCallbackHandlers.taskAddedHandlers.push(dataEventhandlers.taskAddedHandler);
@@ -77,8 +90,27 @@ export function RegisterToActiveTaskListAPI(viewLayerCallbackFunc) {
         // Return a big list of TaskView objects from the current Active Task List!
         return ActiveTaskDataObj.GetActiveTasks().map((task) => BuildNewTaskView(task, ActiveTaskDataObj, ViewLayerCallbacks, DataEventCallbackHandlers));
     }
-    const getCompletedTasks = () => ActiveTaskDataObj.GetCompletedTasks().map((task) => BuildNewInactiveTaskView(task, ActiveTaskDataObj, ViewLayerCallbacks, DataEventCallbackHandlers));
-    const getFailedTasks = () => ActiveTaskDataObj.GetFailedTasks().map((task) => BuildNewInactiveTaskView(task, ActiveTaskDataObj, ViewLayerCallbacks, DataEventCallbackHandlers));
+    function getCompletedTasks() {
+        let ret = [];
+        ActiveTaskDataObj.GetCompletedTasks().forEach(group => {
+            ret.push({ isSpacer: true, time: group.time });
+            ret = ret.concat(group.tasks.map((task) => {
+                return BuildNewInactiveTaskView(task, ActiveTaskDataObj, ViewLayerCallbacks, DataEventCallbackHandlers);
+            }));
+        });
+        return ret;
+    }
+    function getFailedTasks() { 
+        let ret = [];
+        ActiveTaskDataObj.GetFailedTasks().forEach(group => {
+            ret.push({ isSpacer: true, time: group.time });
+            ret = ret.concat(group.tasks.map((task) => {
+                return BuildNewInactiveTaskView(task, ActiveTaskDataObj, ViewLayerCallbacks, DataEventCallbackHandlers);
+            }));
+        });
+        return ret;
+    }
+
 
     function getCreationFunction(categoryVal, colourIdGetterFunc) {
         return function(name) {
@@ -242,5 +274,20 @@ function BuildNewInactiveTaskView(domainTaskObj, tasklistobj, viewLayerCallbackL
 
         // Revive method, to create a new clone who is not inactive
         ReviveTask : reviveTask
+    });
+}
+
+// Interaction API object for the Statistics Model. For now, it simply wraps the statistics model and hides the
+// internal data structures.
+export function RegisterForStatisticsModel(completedCallback, failedCallback) {
+    DataEventCallbackHandlers.taskCompletedHandlers.push(completedCallback);
+    DataEventCallbackHandlers.taskFailedHandlers.push(failedCallback);
+
+    function GetStatistics(options) {
+        return StatisticsModelObj.GetStatistics(options);
+    }
+
+    return Object.freeze({
+        GetStatistics: GetStatistics
     });
 }

@@ -2,7 +2,6 @@
 import { Category, TaskObjects, SetIdStartVal } from '../../logicLayer/Task';
 import { ColourIdTracker } from '../../viewLogic/colourSetManager';
 import { RebuildState } from '../../logicLayer/StateRebuilder';
-import { RegisterForFailureChecking } from '../../logicLayer/checkForFailure';
 
 // Dummy data log
 import { dummyEventLog, dummyEventLog2 } from './dummyEventlogDataModel';
@@ -12,9 +11,7 @@ export function GetActiveTaskObject() {
     SetIdStartVal(RebuildState(dummyEventLog, tasklist) + 1);
     SetIdStartVal(RebuildState(dummyEventLog2, tasklist) + 1);
 
-    // DEBUG:
-    let failureChecker = RegisterForFailureChecking(tasklist);
-    console.log(failureChecker.PeekTasksToFail());
+    console.log(tasklist.GetCompletedTasks());
 
     return tasklist;
 }

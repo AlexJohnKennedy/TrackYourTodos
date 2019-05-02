@@ -1,17 +1,6 @@
 // This file defines the basic object-prototype for any item on any list.
 // We will call these items a 'Task', and they will self contain all their state data.
-
-// They will also form a Bi-directional tree, where each Task will reference any children,
-// and their parent. When any operation is performed, we will simply update the tree structure.
-
-// Completed, Deferred, or Failed tasks will enter a separate collection, where they will be tracked independently.
-// When a task is placed into 'Completed' or 'Failed', they will lose all connections to parents and children, and
-// simply be recorded in isolation.
-
-// Question: Event source our history? Might allow us to completely track/audit all of our productivity over any
-// arbitrary period of time be replaying all events; i.e. completions, failures, task creations, and journal logs!
-
-// ---------------------------------------------------------------------------------------------------------------
+import { TimeGroupTypes, BuildNewTimeGroupedTaskList } from './dateGroupTaskList';
 
 /* Global settings */
 
@@ -57,8 +46,8 @@ export function SetIdStartVal(newStartVal) {
 export class TaskObjects {
     constructor() {
         this.tasks = [];
-        this.failedTasks = [];
-        this.completedTasks = [];
+        this.failedTasks = BuildNewTimeGroupedTaskList(TimeGroupTypes.MONTH, false);
+        this.completedTasks = BuildNewTimeGroupedTaskList(TimeGroupTypes.MONTH, false);
     }
 
     // Get tasks. WARNING, the Task objects returned will be exposed! Do not send beyond the interaction layer!!
@@ -73,19 +62,19 @@ export class TaskObjects {
 
     GetCompletedTasks(filterFunc = null) {
         if (filterFunc == null) {
-            return this.completedTasks.slice(0);                         // Shallow copy
+            return this.completedTasks.GetAllGroupedTasks();             // Shallow copy
         }
         else {
-            return this.completedTasks.slice(0).filter(filterFunc);      // Filtered shallow copy
+            return this.completedTasks.GetAllGroupedTasks().filter(filterFunc);
         }
     }
 
     GetFailedTasks(filterFunc = null) {
         if (filterFunc == null) {
-            return this.failedTasks.slice(0);                         // Shallow copy
+            return this.failedTasks.GetAllGroupedTasks();             // Shallow copy
         }
         else {
-            return this.failedTasks.slice(0).filter(filterFunc);      // Filtered shallow copy
+            return this.failedTasks.GetAllGroupedTasks().filter(filterFunc);
         }
     }
 
@@ -153,7 +142,7 @@ export class TaskObjects {
             
             curr.children.forEach((curr) => close(curr));
 
-            list.unshift(curr);
+            list.AddTask(curr);
             return true;
         }
         

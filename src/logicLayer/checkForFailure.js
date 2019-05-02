@@ -58,18 +58,15 @@ export function RegisterForFailureChecking(tasklist) {
 
         // If the task was activated on friday, saturday or sunday, roll it over to the next week before failing it.
         let activationDate = new Date(task.eventTimestamps.timeActivated);
-        if (activationDate.getDate() === 5 || activationDate.getDate() === 6 || activationDate.getDate() === 0) {
+
+        if (activationDate.getDate() === 5 || activationDate.getDate() === 0) {
             activationDate.setDate(activationDate.getDate() + 7);   // Increments the date to the next week.
         }
 
         // Calculate the exact moment the task becomes failed. It will be at 1am of the first day of the next week.
-        let failureDate = new Date();
+        let failureDate = new Date(activationDate.valueOf());
         failureDate.setDate(activationDate.getDate() - activationDate.getDay() + 8);
         failureDate.setHours(1, 0, 0, 0);
-
-        //console.log("Checking Weekly:");
-        //console.log("Time now:  " + new Date(Date.now()));
-        //console.log("Fail time: " + failureDate);
 
         return Date.now() >= failureDate.valueOf() ? failureDate : null;
     }
@@ -79,18 +76,15 @@ export function RegisterForFailureChecking(tasklist) {
 
         // If the task was activated after 5pm, roll it over to the next day before failing it.
         let activationDate = new Date(task.eventTimestamps.timeActivated);
+
         if (activationDate.getHours() >= 17) {
             activationDate.setDate(activationDate.getDate() + 1);   // Increments the date to the next day.
         }
 
         // Calculate the exact moment the task becomes failed. It will be at 1am the next day.
-        let failureDate = new Date();
+        let failureDate = new Date(activationDate.valueOf());
         failureDate.setDate(activationDate.getDate() + 1);
         failureDate.setHours(1, 0, 0, 0);
-
-        //console.log("Checking Daily:");
-        //console.log("Time now:  " + new Date(Date.now()));
-        //console.log("Fail time: " + failureDate);
 
         return Date.now() >= failureDate.valueOf() ? failureDate : null;
     }

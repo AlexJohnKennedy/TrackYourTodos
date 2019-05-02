@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './css/App.css';
+import '../node_modules/react-vis/dist/style.css';
 import { ActiveTaskSection } from './reactComponents/ActiveTaskSection';
 import { TaskStatisticsSection } from './reactComponents/TaskStatisticsSection';
 import { BacklogSection } from './reactComponents/BacklogSection';

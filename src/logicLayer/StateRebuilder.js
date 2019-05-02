@@ -38,8 +38,8 @@ export function RebuildState(eventLogAsJsonArray, tasklist) {
 function createTaskMap(tasklist) {
     let map = new Map();
     tasklist.GetActiveTasks().forEach(task => map.set(task.id, task));
-    tasklist.GetCompletedTasks().forEach(task => map.set(task.id, task));
-    tasklist.GetFailedTasks().forEach(task => map.set(task.id, task));
+    tasklist.GetCompletedTasks().forEach(group => group.tasks.forEach(task => map.set(task.id, task)));
+    tasklist.GetFailedTasks().forEach(group => group.tasks.forEach(task => map.set(task.id, task)));
     return map;
 }
 
