@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import {RadialSummaryBlock } from './RadialSummaryBlock';
+import { RadialSummaryBlock } from './RadialSummaryBlock';
+import { SelectableChildrenWithController } from './SelectableChildrenWithController';
+import { ScrollableBarChart } from './ScrollableBarChart';
 import { RegisterForStatisticsModel } from '../interactionLayer/viewLayerInteractionApi';
 
 
@@ -79,7 +81,21 @@ export class TaskStatisticsSection extends Component {
                 <RadialSummaryBlock titleText="Last 7 days" completed={dayCompleted} failed={dayFailed}/>
                 <RadialSummaryBlock titleText="Last 30 days" completed={monthCompleted} failed={monthFailed}/>
                 <RadialSummaryBlock titleText="All time"  completed={alltimeCompleted} failed={alltimeFailed}/>
+                <div className="historyBarChartWrapper">
+                <SelectableChildrenWithController defaultIndex={0}>
+                    <SelectionController key={0}/>
+                    <ScrollableBarChart key={1} groupingTypeText="Daily"/>
+                    <ScrollableBarChart key={2} groupingTypeText="Weekly"/>
+                    <ScrollableBarChart key={3} groupingTypeText="Monthly"/>
+                </SelectableChildrenWithController>
+                </div>
             </div>
         );
+    }
+}
+
+class SelectionController extends Component {
+    render() {
+        return <div> MEME </div>;
     }
 }

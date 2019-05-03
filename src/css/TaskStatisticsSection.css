@@ -29,5 +29,6 @@
 }
 
 .summaryBlockFlexContainer .statNums div {
-    padding-bottom: 0.05rem;
+    padding-bottom: 0rem;
+    font-size: 2rem;
 }
