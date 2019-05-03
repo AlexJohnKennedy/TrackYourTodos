@@ -32,3 +32,17 @@
     padding-bottom: 0rem;
     font-size: 2rem;
 }
+
+.TaskStatisticsSection .historyBarChartWrapper {
+    display: inline-flex;
+    flex-direction: row;
+    justify-content: start;
+}
+
+.TaskStatisticsSection .historyBarChartWrapper .controllerBlock {
+    width: 16rem;
+}
+
+.TaskStatisticsSection .historyBarChartWrapper .barChartWrapper {
+    flex-grow: 1;
+}

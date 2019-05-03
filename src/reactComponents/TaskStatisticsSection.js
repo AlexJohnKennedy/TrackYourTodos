@@ -96,6 +96,12 @@ export class TaskStatisticsSection extends Component {
 
 class SelectionController extends Component {
     render() {
-        return <div> MEME </div>;
+        return (
+            <div className="controllerBlock">
+                <button onClick={() => this.props.indexToggleFunc(0)}> Daily </button>
+                <button onClick={() => this.props.indexToggleFunc(1)}> Weekly </button>
+                <button onClick={() => this.props.indexToggleFunc(2)}> Monthly </button>                
+            </div>
+        );
     }
 }
