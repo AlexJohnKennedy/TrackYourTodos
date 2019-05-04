@@ -3,6 +3,7 @@ import { RadialSummaryBlock } from './RadialSummaryBlock';
 import { SelectableChildrenWithController } from './SelectableChildrenWithController';
 import { ScrollableBarChart } from './ScrollableBarChart';
 import { RegisterForStatisticsModel } from '../interactionLayer/viewLayerInteractionApi';
+import { FlexibleXYPlot, YAxis } from 'react-vis/dist';
 
 
 export class TaskStatisticsSection extends Component {
@@ -82,11 +83,12 @@ export class TaskStatisticsSection extends Component {
                 <RadialSummaryBlock titleText="Last 30 days" completed={monthCompleted} failed={monthFailed}/>
                 <RadialSummaryBlock titleText="All time"  completed={alltimeCompleted} failed={alltimeFailed}/>
                 <div className="historyBarChartWrapper">
-                <SelectableChildrenWithController defaultIndex={0}>
+                <SelectableChildrenWithController defaultIndex={0} numControllerComponents={2}>
                     <SelectionController key={0}/>
-                    <ScrollableBarChart key={1} groupingTypeText="Daily"/>
-                    <ScrollableBarChart key={2} groupingTypeText="Weekly"/>
-                    <ScrollableBarChart key={3} groupingTypeText="Monthly"/>
+                    <AxisContainer key={1}/>
+                    <ScrollableBarChart key={2} groupingTypeText="Daily"/>
+                    <ScrollableBarChart key={3} groupingTypeText="Weekly"/>
+                    <ScrollableBarChart key={4} groupingTypeText="Monthly"/>
                 </SelectableChildrenWithController>
                 </div>
             </div>
@@ -101,6 +103,18 @@ class SelectionController extends Component {
                 <button onClick={() => this.props.indexToggleFunc(0)}> Daily </button>
                 <button onClick={() => this.props.indexToggleFunc(1)}> Weekly </button>
                 <button onClick={() => this.props.indexToggleFunc(2)}> Monthly </button>                
+            </div>
+        );
+    }
+}
+
+class AxisContainer extends Component {
+    render() {
+        return (
+            <div className="axisContainer">
+                <FlexibleXYPlot margin={{left:0, right:0, top:5, bottom:5}}>
+                    <YAxis tickValues={[0, 1, 3, 4, 5]}/>
+                </FlexibleXYPlot>
             </div>
         );
     }
