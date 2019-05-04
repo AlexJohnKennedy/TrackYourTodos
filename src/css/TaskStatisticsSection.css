@@ -41,8 +41,20 @@
 
 .TaskStatisticsSection .historyBarChartWrapper .controllerBlock {
     width: 16rem;
+    flex-grow: 0;
+    flex-shrink: 0;
 }
 
 .TaskStatisticsSection .historyBarChartWrapper .barChartWrapper {
     flex-grow: 1;
+    overflow-x: scroll;
+}
+.TaskStatisticsSection .historyBarChartWrapper .barChartWrapper::-webkit-scrollbar {
+    width: 0rem;
+    height: 0rem;
+}
+
+.TaskStatisticsSection .historyBarChartWrapper .barChartWrapper .subChartContainer {
+    height: 50%;
+    width: 100rem;
 }
