@@ -20,7 +20,7 @@ export class SelectableChildrenWithController extends Component {
 
     // Method which children and/or control block can use to toggle the currently selected child elem.
     setIndex(index) {
-        if (index < 0 || index >= this.props.children.length - 1) throw new Error("Invalid index set!");
+        if (index < 0 || index >= this.props.children.length - this.props.numControllerComponents) throw new Error("Invalid index set!");
         this.setState({
             selectedIndex: index
         });
@@ -28,18 +28,20 @@ export class SelectableChildrenWithController extends Component {
 
     render() {
         // The first child is the 'controller' component, which should always render.
-        const controllerComponent = React.cloneElement(this.props.children[0], {
-            indexToggleFunc: this.setIndex  // Additional prop is being cloned into the controller component
-        });
-
+        const controllerComponents = [];
+        for (let i=0; i < this.props.numControllerComponents; i++) {
+            controllerComponents.push(React.cloneElement(this.props.children[i], {
+                indexToggleFunc: this.setIndex  // Additional prop is being cloned into the controller component
+            }));
+        }
         // The rest of the children should only render if their index is selected
-        const renderedChild = React.cloneElement(this.props.children[this.state.selectedIndex + 1], {
+        const renderedChild = React.cloneElement(this.props.children[this.state.selectedIndex + this.props.numControllerComponents], {
             indexToggleFunc: this.setIndex
         });
         
         return (
             <>
-                { [controllerComponent, renderedChild] }
+                { [...controllerComponents, renderedChild] }
             </>
         );
     }

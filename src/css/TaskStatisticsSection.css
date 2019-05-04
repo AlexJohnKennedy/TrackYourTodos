@@ -44,6 +44,11 @@
     flex-grow: 0;
     flex-shrink: 0;
 }
+.TaskStatisticsSection .historyBarChartWrapper .axisContainer {
+    flex-grow: 0;
+    flex-shrink: 0;
+    width: 0rem;
+}
 
 .TaskStatisticsSection .historyBarChartWrapper .barChartWrapper {
     flex-grow: 1;
