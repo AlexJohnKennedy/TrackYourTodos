@@ -1,20 +1,26 @@
 import React, { Component } from 'react';
-import { XYPlot, FlexibleXYPlot, VerticalGridLines, HorizontalGridLines, XAxis, YAxis, VerticalRectSeries, VerticalBarSeries } from 'react-vis';
+import { FlexibleXYPlot, VerticalBarSeries } from 'react-vis';
 
 export class ScrollableBarChart extends Component {
     render() {
+        let max = 0;
         let i=0;
-        const completedData = this.props.stats.numCompletedArray.map(c => ({x: i++, y: c}));
+        const completedData = this.props.stats.numCompletedArray.map(c => {
+            if (c > max) max = c;
+            return {x: i++, y: c};
+        });
         i=0;
-        const failedData = this.props.stats.numFailedArray.map(f => ({x: i++, y: f}));
-        
-        console.log(completedData);
-        console.log(failedData);
+        const failedData = this.props.stats.numFailedArray.map(f => {
+            if (f > max) max = f;
+            return {x: i++, y: f}
+        });
+
+        if (max < 5) max = 5;   // Don't ever have a range less than five
 
         return ( 
             <div className="barChartWrapper">
                 <div className="subChartContainer" style={{width: this.props.barWidth * this.props.numBars}}>
-                <FlexibleXYPlot margin={{left: 0, right: 0, top: 5, bottom: 2}} xDomain={[0, this.props.numBars-1]} yDomain={[0, 10]}>
+                <FlexibleXYPlot margin={{left: 0, right: 0, top: 5, bottom: 2}} xDomain={[0, this.props.numBars-1]} yDomain={[0, max]}>
                     <VerticalBarSeries
                         yRange={[93, 0]}
                         color='green'
@@ -24,7 +30,7 @@ export class ScrollableBarChart extends Component {
                 </FlexibleXYPlot>
                 </div>
                 <div className="subChartContainer" style={{width: this.props.barWidth * this.props.numBars}}>
-                <FlexibleXYPlot margin={{left: 0, right: 0, top: 2, bottom: 5}} xDomain={[0, this.props.numBars-1]} yDomain={[0, 10]}>
+                <FlexibleXYPlot margin={{left: 0, right: 0, top: 2, bottom: 5}} xDomain={[0, this.props.numBars-1]} yDomain={[0, max]}>
                     <VerticalBarSeries
                         yRange={[0, 93]}
                         color='red'

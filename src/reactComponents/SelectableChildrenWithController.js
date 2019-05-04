@@ -27,11 +27,12 @@ export class SelectableChildrenWithController extends Component {
     }
 
     render() {
-        // The first child is the 'controller' component, which should always render.
+        // The first childs are the 'controller' components, which should always render.
         const controllerComponents = [];
         for (let i=0; i < this.props.numControllerComponents; i++) {
             controllerComponents.push(React.cloneElement(this.props.children[i], {
-                indexToggleFunc: this.setIndex  // Additional prop is being cloned into the controller component
+                indexToggleFunc: this.setIndex,  // Additional prop is being cloned into the controller component
+                currentIndex: this.state.selectedIndex
             }));
         }
         // The rest of the children should only render if their index is selected
