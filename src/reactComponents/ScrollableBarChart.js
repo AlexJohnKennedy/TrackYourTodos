@@ -6,7 +6,7 @@ export class ScrollableBarChart extends Component {
         return ( 
             <div className="barChartWrapper">
                 <div className="subChartContainer">
-                <FlexibleXYPlot margin={{left: 5, right: 5, top: 5, bottom: 2}} xDomain={[0, 5]} yDomain={[0, 10]}>
+                <FlexibleXYPlot margin={{left: 0, right: 0, top: 5, bottom: 2}} xDomain={[0, 10]} yDomain={[0, 10]}>
                     <VerticalBarSeries
                         yRange={[93, 0]}
                         color='green'
@@ -28,7 +28,7 @@ export class ScrollableBarChart extends Component {
                 </FlexibleXYPlot>
                 </div>
                 <div className="subChartContainer">
-                <FlexibleXYPlot margin={{left: 5, right: 5, top: 2, bottom: 5}} xDomain={[0, 5]} yDomain={[0, 10]}>
+                <FlexibleXYPlot margin={{left: 0, right: 0, top: 2, bottom: 5}} xDomain={[0, 10]} yDomain={[0, 10]}>
                     <VerticalBarSeries
                         yRange={[0, 93]}
                         color='red'

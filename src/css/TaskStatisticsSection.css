@@ -56,5 +56,5 @@
 
 .TaskStatisticsSection .historyBarChartWrapper .barChartWrapper .subChartContainer {
     height: 50%;
-    width: 100rem;
+    /*width: 300rem; OVERRIDEN IN CODE */
 }
