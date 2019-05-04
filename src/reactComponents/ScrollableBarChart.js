@@ -3,6 +3,14 @@ import { XYPlot, FlexibleXYPlot, VerticalGridLines, HorizontalGridLines, XAxis, 
 
 export class ScrollableBarChart extends Component {
     render() {
+        let i=0;
+        const completedData = this.props.stats.numCompletedArray.map(c => ({x: i++, y: c}));
+        i=0;
+        const failedData = this.props.stats.numFailedArray.map(f => ({x: i++, y: f}));
+        
+        console.log(completedData);
+        console.log(failedData);
+
         return ( 
             <div className="barChartWrapper">
                 <div className="subChartContainer" style={{width: this.props.barWidth * this.props.numBars}}>
@@ -10,20 +18,8 @@ export class ScrollableBarChart extends Component {
                     <VerticalBarSeries
                         yRange={[93, 0]}
                         color='green'
-                        data={[
-                            {x: 0, y: 10},
-                            {x: 1, y: 3},
-                            {x: 2, y: 5},
-                            {x: 3, y: 0},
-                            {x: 4, y: 6},
-                            {x: 5, y: 6},
-                            {x: 6, y: 2},
-                            {x: 7, y: 9},
-                            {x: 8, y: 1},
-                            {x: 9, y: 6},
-                            {x: 10, y: 10},
-                        ]}
-                        barWidth={0.975}
+                        data={completedData}
+                        barWidth={0.95}
                     />
                 </FlexibleXYPlot>
                 </div>
@@ -32,20 +28,8 @@ export class ScrollableBarChart extends Component {
                     <VerticalBarSeries
                         yRange={[0, 93]}
                         color='red'
-                        data={[
-                            {x: 0, y: 4},
-                            {x: 1, y: 2},
-                            {x: 2, y: 8},
-                            {x: 3, y: 5},
-                            {x: 4, y: 0},
-                            {x: 5, y: 1},
-                            {x: 6, y: 2},
-                            {x: 7, y: 2},
-                            {x: 8, y: 7},
-                            {x: 9, y: 3},
-                            {x: 10, y: 5},
-                        ]}
-                        barWidth={0.975}
+                        data={failedData}
+                        barWidth={0.95}
                     />
                 </FlexibleXYPlot>
                 </div>

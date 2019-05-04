@@ -3,50 +3,55 @@ import { RadialSummaryBlock } from './RadialSummaryBlock';
 import { SelectableChildrenWithController } from './SelectableChildrenWithController';
 import { ScrollableBarChart } from './ScrollableBarChart';
 import { RegisterForStatisticsModel } from '../interactionLayer/viewLayerInteractionApi';
-import { FlexibleXYPlot, YAxis } from 'react-vis/dist';
+import { FlexibleXYPlot, YAxis, VerticalBarSeries } from 'react-vis/dist';
 
 
 export class TaskStatisticsSection extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            statsObject: {
-                dayStats: {
-                    numCompletedArray: [],
-                    numFailedArray: [],
-                    totalCompleted: 0,
-                    totalFailed: 0
-                },
-                monthStats: {
-                    numCompletedArray: [],
-                    numFailedArray: [],
-                    totalCompleted: 0,
-                    totalFailed: 0
-                },
-                weekStats: {
-                    numCompletedArray: [],
-                    numFailedArray: [],
-                    totalCompleted: 0,
-                    totalFailed: 0
-                },
-                yearStats: {
-                    numCompletedArray: [],
-                    numFailedArray: [],
-                    totalCompleted: 0,
-                    totalFailed: 0
-                },
-                alltimeStats: {
-                    completedAggregate: 0,
-                    failedAggregate: 0
-                }
+        const emptyStatsObj = {
+            dayStats: {
+                numCompletedArray: [],
+                numFailedArray: [],
+                totalCompleted: 0,
+                totalFailed: 0
+            },
+            monthStats: {
+                numCompletedArray: [],
+                numFailedArray: [],
+                totalCompleted: 0,
+                totalFailed: 0
+            },
+            weekStats: {
+                numCompletedArray: [],
+                numFailedArray: [],
+                totalCompleted: 0,
+                totalFailed: 0
+            },
+            yearStats: {
+                numCompletedArray: [],
+                numFailedArray: [],
+                totalCompleted: 0,
+                totalFailed: 0
+            },
+            alltimeStats: {
+                completedAggregate: 0,
+                failedAggregate: 0
             }
+        };
+
+        this.state = {
+            statsObject: emptyStatsObj,
+            historyStats: emptyStatsObj,
+            numBars: 11
         };
 
         this.handleChange = this.handleChange.bind(this);
     }
     componentDidMount() {
         this.statisticsModelApi = RegisterForStatisticsModel(this.handleChange, this.handleChange);
+        //this.statisticsModelApi = this.statisticsModelApi.bind(this);
         this.handleChange(null, null);
     }
     handleChange(task, tasklist) {
@@ -58,9 +63,17 @@ export class TaskStatisticsSection extends Component {
             years: 1,
             alltime: true
         });
+        const historyStats = this.statisticsModelApi.GetStatistics({
+            days: this.state.numBars,
+            weeks: this.state.numBars,
+            months: this.state.numBars,
+            years: 0,
+            alltime: false
+        });
 
         this.setState({
-            statsObject: stats
+            statsObject: stats,
+            historyStats: historyStats
         });
     }
     
@@ -85,10 +98,13 @@ export class TaskStatisticsSection extends Component {
                 <div className="historyBarChartWrapper">
                 <SelectableChildrenWithController defaultIndex={0} numControllerComponents={2}>
                     <SelectionController key={0}/>
-                    <AxisContainer key={1}/>
-                    <ScrollableBarChart key={2} groupingTypeText="Daily" numBars={11} barWidth={100}/>
-                    <ScrollableBarChart key={3} groupingTypeText="Weekly" numBars={11} barWidth={200}/>
-                    <ScrollableBarChart key={4} groupingTypeText="Monthly" numBars={11} barWidth={50}/>
+                    <AxisContainer key={1} range={10}/>
+                    <ScrollableBarChart key={2} groupingTypeText="Daily" numBars={this.state.numBars} barWidth={100} 
+                        stats={this.state.historyStats.dayStats}/>
+                    <ScrollableBarChart key={3} groupingTypeText="Weekly" numBars={this.state.numBars} barWidth={100}
+                        stats={this.state.historyStats.weekStats}/>
+                    <ScrollableBarChart key={4} groupingTypeText="Monthly" numBars={this.state.numBars} barWidth={100}
+                        stats={this.state.historyStats.monthStats}/>
                 </SelectableChildrenWithController>
                 </div>
             </div>
@@ -110,10 +126,17 @@ class SelectionController extends Component {
 
 class AxisContainer extends Component {
     render() {
+        // Spread tick values over the [-range, range]
+        const tickVals = [];
+        for (let i=-this.props.range; i <= this.props.range; i++) {
+            tickVals.push(i);
+        }
+
         return (
             <div className="axisContainer">
                 <FlexibleXYPlot margin={{left:0, right:0, top:5, bottom:5}}>
-                    <YAxis tickValues={[0, 1, 3, 4, 5]}/>
+                    <YAxis orientation="right" tickValues={tickVals}/>
+                    <VerticalBarSeries opacity={0} data={[{x:0, y:this.props.range}]}/>
                 </FlexibleXYPlot>
             </div>
         );

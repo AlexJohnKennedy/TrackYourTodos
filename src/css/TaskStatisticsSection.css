@@ -34,20 +34,21 @@
 }
 
 .TaskStatisticsSection .historyBarChartWrapper {
+    padding-right: 0.8rem;
     display: inline-flex;
     flex-direction: row;
     justify-content: start;
 }
 
 .TaskStatisticsSection .historyBarChartWrapper .controllerBlock {
-    width: 16rem;
+    width: 14rem;
     flex-grow: 0;
     flex-shrink: 0;
 }
 .TaskStatisticsSection .historyBarChartWrapper .axisContainer {
     flex-grow: 0;
     flex-shrink: 0;
-    width: 0rem;
+    width: 2rem;
 }
 
 .TaskStatisticsSection .historyBarChartWrapper .barChartWrapper {
