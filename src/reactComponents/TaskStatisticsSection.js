@@ -86,9 +86,9 @@ export class TaskStatisticsSection extends Component {
                 <SelectableChildrenWithController defaultIndex={0} numControllerComponents={2}>
                     <SelectionController key={0}/>
                     <AxisContainer key={1}/>
-                    <ScrollableBarChart key={2} groupingTypeText="Daily"/>
-                    <ScrollableBarChart key={3} groupingTypeText="Weekly"/>
-                    <ScrollableBarChart key={4} groupingTypeText="Monthly"/>
+                    <ScrollableBarChart key={2} groupingTypeText="Daily" numBars={11} barWidth={100}/>
+                    <ScrollableBarChart key={3} groupingTypeText="Weekly" numBars={11} barWidth={200}/>
+                    <ScrollableBarChart key={4} groupingTypeText="Monthly" numBars={11} barWidth={50}/>
                 </SelectableChildrenWithController>
                 </div>
             </div>
