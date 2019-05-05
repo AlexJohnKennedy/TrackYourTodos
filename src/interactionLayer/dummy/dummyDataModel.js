@@ -11,8 +11,19 @@ export function GetActiveTaskObject() {
     SetIdStartVal(RebuildState(dummyEventLog, tasklist) + 1);
     SetIdStartVal(RebuildState(dummyEventLog2, tasklist) + 1);
 
-    console.log(tasklist.GetCompletedTasks());
-
+    //console.log(tasklist.GetCompletedTasks());
+    
+    /*
+    for (let i=0; i < 1000; i++) {
+        let task = tasklist.CreateNewIndependentTask(i, Category.Daily, Date.now(), ColourIdTracker.useNextColour());
+        if (i % 2 === 0) {
+            tasklist.CompleteTask(task, Date.now());
+        }
+        else {
+            tasklist.FailTask(task, Date.now());
+        }
+    }
+    */
     return tasklist;
 }
 

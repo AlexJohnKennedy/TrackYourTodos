@@ -135,8 +135,8 @@ class AxisContainer extends Component {
         return (
             <div className="axisContainer">
                 <FlexibleXYPlot margin={{left:0, right:0, top:5, bottom:13}}>
-                    <YAxis orientation="right" tickValues={tickVals}/>
                     <VerticalBarSeries opacity={0} data={[{x:0, y:this.props.range}]}/>
+                    <YAxis orientation="right" tickValues={tickVals} tickFormat={v => "a"}/>
                 </FlexibleXYPlot>
             </div>
         );

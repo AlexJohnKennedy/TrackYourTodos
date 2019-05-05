@@ -38,7 +38,7 @@
     padding-bottom: 0.2rem;
     display: inline-flex;
     flex-direction: row;
-    justify-content: start;
+    justify-content: flex-start;
 }
 
 .TaskStatisticsSection .historyBarChartWrapper .controllerBlock {

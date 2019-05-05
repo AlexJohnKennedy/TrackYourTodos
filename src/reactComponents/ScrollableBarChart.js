@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FlexibleXYPlot, VerticalBarSeries } from 'react-vis';
+import { FlexibleXYPlot, VerticalBarSeries, XAxis } from 'react-vis';
 
 export class ScrollableBarChart extends Component {
     render() {
@@ -17,6 +17,9 @@ export class ScrollableBarChart extends Component {
 
         if (max < 5) max = 5;   // Don't ever have a range less than five
 
+        const tickVals = [];
+        for (let j=0; j<this.props.numBars; j++) tickVals.push(j+0.5);
+
         return ( 
             <div className="barChartWrapper">
                 <div className="subChartContainer" style={{width: this.props.barWidth * this.props.numBars}}>
@@ -27,6 +30,7 @@ export class ScrollableBarChart extends Component {
                         data={completedData}
                         barWidth={0.95}
                     />
+                    <XAxis hideLine orientation="bottom" tickSize={3} tickValues={tickVals}/>
                 </FlexibleXYPlot>
                 </div>
                 <div className="subChartContainer" style={{width: this.props.barWidth * this.props.numBars}}>
@@ -37,6 +41,7 @@ export class ScrollableBarChart extends Component {
                         data={failedData}
                         barWidth={0.95}
                     />
+                    <XAxis hideLine orientation="top" tickSize={3} tickValues={tickVals}/>
                 </FlexibleXYPlot>
                 </div>
             </div>
