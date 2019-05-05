@@ -133,10 +133,16 @@ class AxisContainer extends Component {
         }
 
         return (
+            // This is a hacky div containing only axes. The 'right' oriented axis is used to make the line and ticks appear
+            // on the far right of the container, and the 'left' oriented axis has invisible lines, but makes the labels
+            // appear with the correct label orientation. The negative padding is to move the labels over to the right, becuase the
+            // axis they are attached to appear on the left of the box, and the labels (by default) on the left of that.. since it is
+            // a 'left' orientated axis!
             <div className="axisContainer">
                 <FlexibleXYPlot margin={{left:0, right:0, top:5, bottom:13}}>
-                    <VerticalBarSeries opacity={0} data={[{x:0, y:this.props.range}]}/>
-                    <YAxis orientation="right" tickValues={tickVals} tickFormat={v => "a"}/>
+                    <VerticalBarSeries opacity={0} data={[{x: 0, y: this.props.range}]}/>
+                    <YAxis orientation="right" tickValues={tickVals} tickFormat={v => tickVals[v]}/>
+                    <YAxis orientation="left" tickValues={tickVals} tickFormat={v => tickVals[v]} tickPadding={-20} hideLine tickSize={0}/>
                 </FlexibleXYPlot>
             </div>
         );

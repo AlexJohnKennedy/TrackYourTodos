@@ -17,8 +17,16 @@ export class ScrollableBarChart extends Component {
 
         if (max < 5) max = 5;   // Don't ever have a range less than five
 
-        const tickVals = [];
-        for (let j=0; j<this.props.numBars; j++) tickVals.push(j+0.5);
+        // Define an array for all of the points which should have a little 'tick' in the center.
+        const centralTickVals = [];
+        for (let j=0; j<this.props.numBars; j++) centralTickVals.push(j+0.5);
+
+        function tickFormatter(index) {
+            
+            if (Math.floor(index) !== index) return "";
+            // else return the result of a passed-in formatting func, which ofc creates little date strings depending on which type of grouping
+            else return ":)";
+        }
 
         return ( 
             <div className="barChartWrapper">
@@ -30,7 +38,7 @@ export class ScrollableBarChart extends Component {
                         data={completedData}
                         barWidth={0.95}
                     />
-                    <XAxis hideLine orientation="bottom" tickSize={3} tickValues={tickVals}/>
+                    <XAxis hideLine orientation="bottom" tickSize={3} tickValues={centralTickVals}/>
                 </FlexibleXYPlot>
                 </div>
                 <div className="subChartContainer" style={{width: this.props.barWidth * this.props.numBars}}>
@@ -41,7 +49,8 @@ export class ScrollableBarChart extends Component {
                         data={failedData}
                         barWidth={0.95}
                     />
-                    <XAxis hideLine orientation="top" tickSize={3} tickValues={tickVals}/>
+                    <XAxis hideLine orientation="top" tickSize={3} tickValues={centralTickVals}/>
+                    <XAxis hideLine tickSize={0} tickPadding={-10} tickFormat={tickFormatter}/>
                 </FlexibleXYPlot>
                 </div>
             </div>
