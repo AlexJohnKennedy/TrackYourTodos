@@ -76,36 +76,35 @@ export class TaskStatisticsSection extends Component {
             historyStats: historyStats
         });
     }
-    
+
     render() {
         // One summary block for the last week, one for last month, and one for all time. (subject to change).
         let dayCompleted = 0;
         let dayFailed = 0;
-        for (let i=0; i < 7; i++) {
+        for (let i = 0; i < 7; i++) {
             dayCompleted += this.state.statsObject.dayStats.numCompletedArray[i];
             dayFailed += this.state.statsObject.dayStats.numFailedArray[i];
         }
         const monthCompleted = this.state.statsObject.dayStats.totalCompleted;
-        const monthFailed    = this.state.statsObject.dayStats.totalFailed;
+        const monthFailed = this.state.statsObject.dayStats.totalFailed;
         const alltimeCompleted = this.state.statsObject.alltimeStats.completedAggregate;
         const alltimeFailed = this.state.statsObject.alltimeStats.failedAggregate;
 
-        return(
+        return (
             <div className="TaskStatisticsSection">
-                <RadialSummaryBlock titleText="Last 7 days" completed={dayCompleted} failed={dayFailed}/>
-                <RadialSummaryBlock titleText="Last 30 days" completed={monthCompleted} failed={monthFailed}/>
-                <RadialSummaryBlock titleText="All time"  completed={alltimeCompleted} failed={alltimeFailed}/>
+                <RadialSummaryBlock titleText="Last 7 days" completed={dayCompleted} failed={dayFailed} />
+                <RadialSummaryBlock titleText="Last 30 days" completed={monthCompleted} failed={monthFailed} />
+                <RadialSummaryBlock titleText="All time" completed={alltimeCompleted} failed={alltimeFailed} />
                 <div className="historyBarChartWrapper">
-                <SelectableChildrenWithController defaultIndex={0} numControllerComponents={2}>
-                    <SelectionController key={0}/>
-                    <AxisContainer key={1} range={10}/>
-                    <ScrollableBarChart key={2} groupingTypeText="Daily" numBars={this.state.numBars} barWidth={100} 
-                        stats={this.state.historyStats.dayStats} tickFormatFunc={dayTickFormatter}/>
-                    <ScrollableBarChart key={3} groupingTypeText="Weekly" numBars={this.state.numBars} barWidth={100}
-                        stats={this.state.historyStats.weekStats} tickFormatFunc={weekTickFormatter}/>
-                    <ScrollableBarChart key={4} groupingTypeText="Monthly" numBars={this.state.numBars} barWidth={100}
-                        stats={this.state.historyStats.monthStats} tickFormatFunc={monthTickFormatter}/>
-                </SelectableChildrenWithController>
+                    <SelectableChildrenWithController defaultIndex={0} numControllerComponents={1}>
+                        <SelectionController key={0} />
+                        <ScrollableBarChart key={1} groupingTypeText="Daily" numBars={this.state.numBars} barWidth={100}
+                            stats={this.state.historyStats.dayStats} tickFormatFunc={dayTickFormatter} />
+                        <ScrollableBarChart key={2} groupingTypeText="Weekly" numBars={this.state.numBars} barWidth={100}
+                            stats={this.state.historyStats.weekStats} tickFormatFunc={weekTickFormatter} />
+                        <ScrollableBarChart key={3} groupingTypeText="Monthly" numBars={this.state.numBars} barWidth={100}
+                            stats={this.state.historyStats.monthStats} tickFormatFunc={monthTickFormatter} />
+                    </SelectableChildrenWithController>
                 </div>
             </div>
         );
@@ -142,12 +141,12 @@ function dayTickFormatter(index, barWidth) {
     function small(index) {
         let now = new Date(Date.now());
         now.setDate(now.getDate() - index);
-        return now.toLocaleDateString("en-GB", { weekday: 'short'});
+        return now.toLocaleDateString("en-GB", { weekday: 'short' });
     }
     function verySmall(index) {
         let now = new Date(Date.now());
         now.setDate(now.getDate() - index);
-        return now.toLocaleDateString("en-GB", { weekday: 'narrow'});
+        return now.toLocaleDateString("en-GB", { weekday: 'narrow' });
     }
 
     // Determine which size label to use, based on barWidth
@@ -178,8 +177,8 @@ function weekTickFormatter(index, barWidth) {
         else {
             // Go back 'index' weeks from now, and generate a date string that just has 'day month', for the monday of that week
             let now = new Date(Date.now());
-            now.setDate(now.getDate() - (index*7));
-            now.setDate(now.getDate() - (now.getDay()-1)%7);
+            now.setDate(now.getDate() - (index * 7));
+            now.setDate(now.getDate() - (now.getDay() - 1) % 7);
             return "Week of " + now.toLocaleDateString("en-GB", { day: 'numeric', month: 'short' });
         }
     }
@@ -192,22 +191,22 @@ function weekTickFormatter(index, barWidth) {
         }
         else {
             let now = new Date(Date.now());
-            now.setDate(now.getDate() - (index*7));
-            now.setDate(now.getDate() - (now.getDay()-1)%7);
+            now.setDate(now.getDate() - (index * 7));
+            now.setDate(now.getDate() - (now.getDay() - 1) % 7);
             return now.toLocaleDateString("en-GB", { day: 'numeric', month: 'short' });
         }
     }
     function small(index) {
         let now = new Date(Date.now());
-        now.setDate(now.getDate() - (index*7));
-        now.setDate(now.getDate() - (now.getDay()-1)%7);
+        now.setDate(now.getDate() - (index * 7));
+        now.setDate(now.getDate() - (now.getDay() - 1) % 7);
         return now.toLocaleDateString("en-GB", { day: 'numeric', month: 'short' });
     }
     function verySmall(index) {
         let now = new Date(Date.now());
-        now.setDate(now.getDate() - (index*7));
-        now.setDate(now.getDate() - (now.getDay()-1)%7);
-        return now.toLocaleDateString("en-GB", { day: 'numeric', month: 'numeric'});
+        now.setDate(now.getDate() - (index * 7));
+        now.setDate(now.getDate() - (now.getDay() - 1) % 7);
+        return now.toLocaleDateString("en-GB", { day: 'numeric', month: 'numeric' });
     }
 
     // Determine which size label to use, based on barWidth
@@ -267,40 +266,13 @@ function monthTickFormatter(index, barWidth) {
     }
 }
 
-
-
 class SelectionController extends Component {
     render() {
         return (
             <div className="controllerBlock">
                 <button onClick={() => this.props.indexToggleFunc(0)}> Daily </button>
                 <button onClick={() => this.props.indexToggleFunc(1)}> Weekly </button>
-                <button onClick={() => this.props.indexToggleFunc(2)}> Monthly </button>                
-            </div>
-        );
-    }
-}
-
-class AxisContainer extends Component {
-    render() {
-        // Spread tick values over the [-range, range]
-        const tickVals = [];
-        for (let i=-this.props.range; i <= this.props.range; i++) {
-            tickVals.push(i);
-        }
-
-        return (
-            // This is a hacky div containing only axes. The 'right' oriented axis is used to make the line and ticks appear
-            // on the far right of the container, and the 'left' oriented axis has invisible lines, but makes the labels
-            // appear with the correct label orientation. The negative padding is to move the labels over to the right, becuase the
-            // axis they are attached to appear on the left of the box, and the labels (by default) on the left of that.. since it is
-            // a 'left' orientated axis!
-            <div className="axisContainer">
-                <FlexibleXYPlot margin={{left:0, right:0, top:5, bottom:13}}>
-                    <VerticalBarSeries opacity={0} data={[{x: 0, y: this.props.range}]}/>
-                    <YAxis orientation="right" tickValues={tickVals} tickFormat={v => tickVals[v]}/>
-                    <YAxis orientation="left" tickValues={tickVals} tickFormat={v => tickVals[v]} tickPadding={-20} hideLine tickSize={0}/>
-                </FlexibleXYPlot>
+                <button onClick={() => this.props.indexToggleFunc(2)}> Monthly </button>
             </div>
         );
     }

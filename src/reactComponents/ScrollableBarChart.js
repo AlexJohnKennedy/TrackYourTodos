@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FlexibleXYPlot, VerticalBarSeries, XAxis } from 'react-vis';
+import { FlexibleXYPlot, VerticalBarSeries, XAxis, YAxis } from 'react-vis';
 
 export class ScrollableBarChart extends Component {
     render() {
@@ -28,7 +28,9 @@ export class ScrollableBarChart extends Component {
             else return formatFunc(index, barWidth);
         }
 
-        return ( 
+        return (
+            <>
+            <AxisContainer range={max}/>
             <div className="barChartWrapper">
                 <div className="subChartContainer" style={{width: this.props.barWidth * this.props.numBars}}>
                 <FlexibleXYPlot margin={{left: 0, right: 0, top: 5, bottom: 2}} xDomain={[0, this.props.numBars-1]} yDomain={[0, max]}>
@@ -53,6 +55,34 @@ export class ScrollableBarChart extends Component {
                     <XAxis hideLine tickSize={0} tickPadding={-10} tickFormat={(index) => tickFormatter(index, this.props.tickFormatFunc, this.props.barWidth)}/>
                 </FlexibleXYPlot>
                 </div>
+            </div>
+            </>
+        );
+    }
+}
+
+class AxisContainer extends Component {
+    render() {
+        // Spread tick values over the [-range, range]
+        const tickVals = [];
+        for (let i = -this.props.range; i <= this.props.range; i++) {
+            tickVals.push(i);
+        }
+
+        console.log(tickVals);
+
+        return (
+            // This is a hacky div containing only axes. The 'right' oriented axis is used to make the line and ticks appear
+            // on the far right of the container, and the 'left' oriented axis has invisible lines, but makes the labels
+            // appear with the correct label orientation. The negative padding is to move the labels over to the right, becuase the
+            // axis they are attached to appear on the left of the box, and the labels (by default) on the left of that.. since it is
+            // a 'left' orientated axis!
+            <div className="axisContainer">
+                <FlexibleXYPlot margin={{ left: 0, right: 0, top: 5, bottom: 13 }}>
+                    <VerticalBarSeries opacity={0} data={[{ x: 0, y: this.props.range }]} />
+                    <YAxis orientation="right" tickValues={tickVals} tickFormat={v => tickVals[v]} />
+                    <YAxis orientation="left" tickValues={tickVals} tickFormat={v => tickVals[v]} tickPadding={-20} hideLine tickSize={0} />
+                </FlexibleXYPlot>
             </div>
         );
     }
