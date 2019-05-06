@@ -100,17 +100,31 @@ export class TaskStatisticsSection extends Component {
                     <SelectionController key={0}/>
                     <AxisContainer key={1} range={10}/>
                     <ScrollableBarChart key={2} groupingTypeText="Daily" numBars={this.state.numBars} barWidth={100} 
-                        stats={this.state.historyStats.dayStats}/>
+                        stats={this.state.historyStats.dayStats} tickFormatFunc={dayTickFormatter}/>
                     <ScrollableBarChart key={3} groupingTypeText="Weekly" numBars={this.state.numBars} barWidth={100}
-                        stats={this.state.historyStats.weekStats}/>
+                        stats={this.state.historyStats.weekStats} tickFormatFunc={weekTickFormatter}/>
                     <ScrollableBarChart key={4} groupingTypeText="Monthly" numBars={this.state.numBars} barWidth={100}
-                        stats={this.state.historyStats.monthStats}/>
+                        stats={this.state.historyStats.monthStats} tickFormatFunc={monthTickFormatter}/>
                 </SelectableChildrenWithController>
                 </div>
             </div>
         );
     }
 }
+
+// Some functions which build tick labels based on 'how far back' from today a label refers to, depending on bar width.
+// These will be passed into the ScrollableBarCharts, which will use them to gneerate the ticks on their charts.
+function dayTickFormatter(index, barWidth) {
+    return "day";
+}
+function weekTickFormatter(index, barWidth) {
+    return "week";
+}
+function monthTickFormatter(index, barWidth) {
+    return "month";
+}
+
+
 
 class SelectionController extends Component {
     render() {

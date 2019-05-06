@@ -21,11 +21,11 @@ export class ScrollableBarChart extends Component {
         const centralTickVals = [];
         for (let j=0; j<this.props.numBars; j++) centralTickVals.push(j+0.5);
 
-        function tickFormatter(index) {
-            
+        function tickFormatter(index, formatFunc, barWidth) {
+            // Hide ticks for indexes which are not whole numbers.
             if (Math.floor(index) !== index) return "";
             // else return the result of a passed-in formatting func, which ofc creates little date strings depending on which type of grouping
-            else return ":)";
+            else return formatFunc(index, barWidth);
         }
 
         return ( 
@@ -50,7 +50,7 @@ export class ScrollableBarChart extends Component {
                         barWidth={0.95}
                     />
                     <XAxis hideLine orientation="top" tickSize={3} tickValues={centralTickVals}/>
-                    <XAxis hideLine tickSize={0} tickPadding={-10} tickFormat={tickFormatter}/>
+                    <XAxis hideLine tickSize={0} tickPadding={-10} tickFormat={(index) => tickFormatter(index, this.props.tickFormatFunc, this.props.barWidth)}/>
                 </FlexibleXYPlot>
                 </div>
             </div>
