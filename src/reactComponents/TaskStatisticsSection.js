@@ -304,8 +304,10 @@ class SelectionController extends Component {
                 <button onClick={() => this.props.indexToggleFunc(0)}> Day </button>
                 <button onClick={() => this.props.indexToggleFunc(1)}> Week </button>
                 <button onClick={() => this.props.indexToggleFunc(2)}> Month </button>
-                <RangeSelectionBlock value={this.props.startIndex} increment={this.props.startincrement} decrement={this.props.startdecrement}/>
-                <RangeSelectionBlock value={this.props.stopIndex} increment={this.props.stopincrement} decrement={this.props.stopdecrement}/>
+                <div className="rangeSelectors">
+                    <RangeSelectionBlock text="Start" value={this.props.startIndex} increment={this.props.startincrement} decrement={this.props.startdecrement}/>
+                    <RangeSelectionBlock text="End" value={this.props.stopIndex} increment={this.props.stopincrement} decrement={this.props.stopdecrement}/>
+                </div>
             </div>
         );
     }
@@ -315,10 +317,11 @@ class RangeSelectionBlock extends Component {
     render() {
         return (
             // TODO: Make the button look less shit, and implement a 'hold down' rapid increment and decrement ability
-            <div className="rangeSelector">
+            <div>
                 <button onClick={this.props.increment}> + </button>
                 <div> {this.props.value} </div>
                 <button onClick={this.props.decrement}> - </button>
+                <div> {this.props.text} </div>
             </div>
         );
     }

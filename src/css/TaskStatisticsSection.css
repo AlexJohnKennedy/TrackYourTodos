@@ -56,6 +56,13 @@
     width: 3.4rem;
     margin-left: 0.1rem;
 }
+.TaskStatisticsSection .historyBarChartWrapper .groupingControllerBlock .rangeSelectors {
+    margin-top: 1rem;
+    width: 100%;
+    display: inline-flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
 
 .TaskStatisticsSection .historyBarChartWrapper .axisContainer {
     flex-grow: 0;
