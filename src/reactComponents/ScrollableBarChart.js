@@ -62,6 +62,23 @@ export class ScrollableBarChart extends Component {
 }
 
 class AxisContainer extends Component {
+
+    tickFormatter(index, range, tickValArray) {
+        if (range <= 6) {
+            // Return a label for every value
+            return tickValArray[index + range];
+        }
+        else {
+            // Will be too cramped if we label every value. So, only label every second value! Let's make sure the outer most tick is always shown, though.
+            if ((range % 2 === 0 && index % 2 === 0) || (range % 2 !== 0 && index % 2 !== 0)) {
+                return tickValArray[index + range];
+            }
+            else {
+                return "";
+            }
+        }
+    }
+
     render() {
         // Spread tick values over the [-range, range]
         const tickVals = [];
@@ -79,9 +96,9 @@ class AxisContainer extends Component {
             // a 'left' orientated axis!
             <div className="axisContainer">
                 <FlexibleXYPlot margin={{ left: 0, right: 0, top: 5, bottom: 13 }}>
-                    <VerticalBarSeries opacity={0} data={[{ x: 0, y: this.props.range }]} />
+                    <VerticalBarSeries opacity={0} data={[{ x: 0, y: this.props.range }, { x: 1, y: -this.props.range}]} />
                     <YAxis orientation="right" tickValues={tickVals} tickFormat={v => tickVals[v]} />
-                    <YAxis orientation="left" tickValues={tickVals} tickFormat={v => tickVals[v]} tickPadding={-20} hideLine tickSize={0} />
+                    <YAxis orientation="left" tickValues={tickVals} tickFormat={v => this.tickFormatter(v, this.props.range, tickVals)} tickPadding={-20} hideLine tickSize={0} />
                 </FlexibleXYPlot>
             </div>
         );
