@@ -126,7 +126,7 @@ function dayTickFormatter(index, barWidth) {
             // Go back 'index' days from now, and generate a date string that just has 'day month'
             let now = new Date(Date.now());
             now.setDate(now.getDate() - index);
-            return now.toLocaleDateString("en-US", { weekday: 'short', day: 'numeric', month: 'short' });
+            return now.toLocaleDateString("en-GB", { weekday: 'short', day: 'numeric', month: 'short' });
         }
     }
     function medium(index) {
@@ -136,18 +136,18 @@ function dayTickFormatter(index, barWidth) {
         else {
             let now = new Date(Date.now());
             now.setDate(now.getDate() - index);
-            return now.toLocaleDateString("en-US", { weekday: 'short', day: 'numeric' });
+            return now.toLocaleDateString("en-GB", { weekday: 'short', day: 'numeric' });
         }
     }
     function small(index) {
         let now = new Date(Date.now());
         now.setDate(now.getDate() - index);
-        return now.toLocaleDateString("en-US", { weekday: 'short'});
+        return now.toLocaleDateString("en-GB", { weekday: 'short'});
     }
     function verySmall(index) {
         let now = new Date(Date.now());
         now.setDate(now.getDate() - index);
-        return now.toLocaleDateString("en-US", { weekday: 'narrow'});
+        return now.toLocaleDateString("en-GB", { weekday: 'narrow'});
     }
 
     // Determine which size label to use, based on barWidth
@@ -168,10 +168,103 @@ function dayTickFormatter(index, barWidth) {
     }
 }
 function weekTickFormatter(index, barWidth) {
-    return "week";
+    function large(index) {
+        if (index === 0) {
+            return "This week";
+        }
+        else if (index === 1) {
+            return "Last week";
+        }
+        else {
+            // Go back 'index' weeks from now, and generate a date string that just has 'day month', for the monday of that week
+            let now = new Date(Date.now());
+            now.setDate(now.getDate() - (index*7));
+            now.setDate(now.getDate() - (now.getDay()-1)%7);
+            return "Week of " + now.toLocaleDateString("en-GB", { day: 'numeric', month: 'short' });
+        }
+    }
+    function medium(index) {
+        if (index === 0) {
+            return "This week";
+        }
+        else if (index === 1) {
+            return "Last week";
+        }
+        else {
+            let now = new Date(Date.now());
+            now.setDate(now.getDate() - (index*7));
+            now.setDate(now.getDate() - (now.getDay()-1)%7);
+            return now.toLocaleDateString("en-GB", { day: 'numeric', month: 'short' });
+        }
+    }
+    function small(index) {
+        let now = new Date(Date.now());
+        now.setDate(now.getDate() - (index*7));
+        now.setDate(now.getDate() - (now.getDay()-1)%7);
+        return now.toLocaleDateString("en-GB", { day: 'numeric', month: 'short' });
+    }
+    function verySmall(index) {
+        let now = new Date(Date.now());
+        now.setDate(now.getDate() - (index*7));
+        now.setDate(now.getDate() - (now.getDay()-1)%7);
+        return now.toLocaleDateString("en-GB", { day: 'numeric', month: 'numeric'});
+    }
+
+    // Determine which size label to use, based on barWidth
+    if (barWidth >= 90) {
+        return large(index);
+    }
+    else if (barWidth >= 60) {
+        return medium(index);
+    }
+    else if (barWidth >= 42) {
+        return small(index);
+    }
+    else if (barWidth >= 35) {
+        return verySmall(index);
+    }
+    else {
+        return "";  // Bars are so narrow, there is no point trying to label anything anyway!
+    }
 }
 function monthTickFormatter(index, barWidth) {
-    return "month";
+    function large(index) {
+        if (index === 0) {
+            return "This month";
+        }
+        else {
+            // Go back 'index' weeks from now, and generate a date string that just has 'day month', for the monday of that week
+            let now = new Date(Date.now());
+            now.setMonth(now.getMonth() - index);
+            return now.toLocaleDateString("en-GB", { month: 'long' });
+        }
+    }
+    function medium(index) {
+        // Go back 'index' weeks from now, and generate a date string that just has 'day month', for the monday of that week
+        let now = new Date(Date.now());
+        now.setMonth(now.getMonth() - index);
+        return now.toLocaleDateString("en-GB", { month: 'short' });
+    }
+    function small(index) {
+        // Go back 'index' weeks from now, and generate a date string that just has 'day month', for the monday of that week
+        let now = new Date(Date.now());
+        now.setMonth(now.getMonth() - index);
+        return now.toLocaleDateString("en-GB", { month: 'narrow' });
+    }
+
+    // Determine which size label to use, based on barWidth
+    if (barWidth >= 70) {
+        return large(index);
+    }
+    else if (barWidth >= 30) {
+        return medium(index);
+    }
+    else if (barWidth >= 20) {
+        return small(index);
+    }
+    else {
+        return "";  // Bars are so narrow, there is no point trying to label anything anyway!
+    }
 }
 
 
