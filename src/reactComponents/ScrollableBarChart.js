@@ -6,13 +6,15 @@ export class ScrollableBarChart extends Component {
         const numBars = this.props.stopIndex - this.props.startIndex;
 
         let max = 0;
+        let j=0;
         let i=0;
-        const completedData = this.props.stats.numCompletedArray.map(c => {
+        const completedData = this.props.stats.numCompletedArray.filter(c => j++ >= this.props.startIndex).map(c => {
             if (c > max) max = c;
             return {x: i++, y: c};
         });
+        j=0;
         i=0;
-        const failedData = this.props.stats.numFailedArray.map(f => {
+        const failedData = this.props.stats.numFailedArray.filter(f => j++ >= this.props.startIndex).map(f => {
             if (f > max) max = f;
             return {x: i++, y: f}
         });
@@ -54,7 +56,7 @@ export class ScrollableBarChart extends Component {
                         barWidth={0.95}
                     />
                     <XAxis hideLine orientation="top" tickSize={3} tickValues={centralTickVals}/>
-                    <XAxis hideLine tickSize={0} tickPadding={-10} tickFormat={(index) => tickFormatter(index, this.props.tickFormatFunc, this.props.barWidth)}/>
+                    <XAxis hideLine tickSize={0} tickPadding={-10} tickFormat={(index) => tickFormatter(this.props.startIndex + index, this.props.tickFormatFunc, this.props.barWidth)}/>
                 </FlexibleHeightXYPlot>
                 </div>
             </div>

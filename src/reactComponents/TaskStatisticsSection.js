@@ -66,9 +66,9 @@ export class TaskStatisticsSection extends Component {
             alltime: true
         });
         const historyStats = this.statisticsModelApi.GetStatistics({
-            days: this.state.stopIndex - this.state.startIndex,
-            weeks: this.state.stopIndex - this.state.startIndex,
-            months: this.state.stopIndex - this.state.startIndex,
+            days: this.state.stopIndex,
+            weeks: this.state.stopIndex,
+            months: this.state.stopIndex,
             years: 0,
             alltime: false
         });
