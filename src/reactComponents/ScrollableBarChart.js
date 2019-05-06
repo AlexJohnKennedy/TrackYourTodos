@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import { FlexibleXYPlot, VerticalBarSeries, XAxis, YAxis } from 'react-vis';
+import { FlexibleXYPlot, FlexibleHeightXYPlot, VerticalBarSeries, XAxis, YAxis } from 'react-vis';
 
 export class ScrollableBarChart extends Component {
     render() {
+        const numBars = this.props.stopIndex - this.props.startIndex;
+
         let max = 0;
         let i=0;
         const completedData = this.props.stats.numCompletedArray.map(c => {
@@ -19,7 +21,7 @@ export class ScrollableBarChart extends Component {
 
         // Define an array for all of the points which should have a little 'tick' in the center.
         const centralTickVals = [];
-        for (let j=0; j<this.props.numBars; j++) centralTickVals.push(j+0.5);
+        for (let j=0; j < numBars; j++) centralTickVals.push(j+0.5);
 
         function tickFormatter(index, formatFunc, barWidth) {
             // Hide ticks for indexes which are not whole numbers.
@@ -32,8 +34,8 @@ export class ScrollableBarChart extends Component {
             <>
             <AxisContainer range={max}/>
             <div className="barChartWrapper">
-                <div className="subChartContainer" style={{width: this.props.barWidth * this.props.numBars}}>
-                <FlexibleXYPlot margin={{left: 0, right: 0, top: 5, bottom: 2}} xDomain={[0, this.props.numBars-1]} yDomain={[0, max]}>
+                <div className="subChartContainer" style={{width: this.props.barWidth * numBars}}>
+                <FlexibleHeightXYPlot width={this.props.barWidth * numBars} margin={{left: 0, right: 0, top: 5, bottom: 2}} xDomain={[0, numBars-1]} yDomain={[0, max]}>
                     <VerticalBarSeries
                         yRange={[93, 0]}
                         color='green'
@@ -41,10 +43,10 @@ export class ScrollableBarChart extends Component {
                         barWidth={0.95}
                     />
                     <XAxis hideLine orientation="bottom" tickSize={3} tickValues={centralTickVals}/>
-                </FlexibleXYPlot>
+                </FlexibleHeightXYPlot>
                 </div>
-                <div className="subChartContainer" style={{width: this.props.barWidth * this.props.numBars}}>
-                <FlexibleXYPlot margin={{left: 0, right: 0, top: 2, bottom: 5}} xDomain={[0, this.props.numBars-1]} yDomain={[0, max]}>
+                <div className="subChartContainer" style={{width: this.props.barWidth * numBars}}>
+                <FlexibleHeightXYPlot width={this.props.barWidth * numBars} margin={{left: 0, right: 0, top: 2, bottom: 5}} xDomain={[0, numBars-1]} yDomain={[0, max]}>
                     <VerticalBarSeries
                         yRange={[0, 93]}
                         color='red'
@@ -53,7 +55,7 @@ export class ScrollableBarChart extends Component {
                     />
                     <XAxis hideLine orientation="top" tickSize={3} tickValues={centralTickVals}/>
                     <XAxis hideLine tickSize={0} tickPadding={-10} tickFormat={(index) => tickFormatter(index, this.props.tickFormatFunc, this.props.barWidth)}/>
-                </FlexibleXYPlot>
+                </FlexibleHeightXYPlot>
                 </div>
             </div>
             </>

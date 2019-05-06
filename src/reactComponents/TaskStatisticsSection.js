@@ -128,11 +128,11 @@ export class TaskStatisticsSection extends Component {
                         <SelectionController key={0} startIndex={this.state.startIndex} stopIndex={this.state.stopIndex}
                             startincrement={() => this.adjustRange(true, true)} stopincrement={() => this.adjustRange(true, false)}
                             startdecrement={() => this.adjustRange(false, true)} stopdecrement={() => this.adjustRange(false, false)}/>
-                        <ScrollableBarChart key={1} groupingTypeText="Daily" numBars={this.state.stopIndex - this.state.startIndex} barWidth={100}
+                        <ScrollableBarChart key={1} groupingTypeText="Daily" stopIndex={this.state.stopIndex} startIndex={this.state.startIndex} barWidth={100}
                             stats={this.state.historyStats.dayStats} tickFormatFunc={dayTickFormatter} />
-                        <ScrollableBarChart key={2} groupingTypeText="Weekly" numBars={this.state.stopIndex - this.state.startIndex} barWidth={100}
+                        <ScrollableBarChart key={2} groupingTypeText="Weekly" stopIndex={this.state.stopIndex} startIndex={this.state.startIndex} barWidth={100}
                             stats={this.state.historyStats.weekStats} tickFormatFunc={weekTickFormatter} />
-                        <ScrollableBarChart key={3} groupingTypeText="Monthly" numBars={this.state.stopIndex - this.state.startIndex} barWidth={100}
+                        <ScrollableBarChart key={3} groupingTypeText="Monthly" stopIndex={this.state.stopIndex} startIndex={this.state.startIndex} barWidth={100}
                             stats={this.state.historyStats.monthStats} tickFormatFunc={monthTickFormatter} />
                     </SelectableChildrenWithController>
                 </div>
