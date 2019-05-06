@@ -44,10 +44,12 @@ export class TaskStatisticsSection extends Component {
         this.state = {
             statsObject: emptyStatsObj,
             historyStats: emptyStatsObj,
-            numBars: 11
+            startIndex: 0,
+            stopIndex: 11
         };
 
         this.handleChange = this.handleChange.bind(this);
+        this.adjustRange = this.adjustRange.bind(this);
     }
     componentDidMount() {
         this.statisticsModelApi = RegisterForStatisticsModel(this.handleChange, this.handleChange);
@@ -64,9 +66,9 @@ export class TaskStatisticsSection extends Component {
             alltime: true
         });
         const historyStats = this.statisticsModelApi.GetStatistics({
-            days: this.state.numBars,
-            weeks: this.state.numBars,
-            months: this.state.numBars,
+            days: this.state.stopIndex - this.state.startIndex,
+            weeks: this.state.stopIndex - this.state.startIndex,
+            months: this.state.stopIndex - this.state.startIndex,
             years: 0,
             alltime: false
         });
@@ -75,6 +77,32 @@ export class TaskStatisticsSection extends Component {
             statsObject: stats,
             historyStats: historyStats
         });
+    }
+    adjustRange(inc, start) {
+        if (inc) {
+            if (start && this.state.stopIndex > this.state.startIndex + 5) {
+                this.setState({
+                    startIndex: this.state.startIndex + 1
+                });
+            }
+            else if (!start) {
+                this.setState({
+                    stopIndex: this.state.stopIndex + 1
+                });
+            }
+        }
+        else {
+            if (start && this.state.startIndex > 0) {
+                this.setState({
+                    startIndex: this.state.startIndex - 1
+                });
+            }
+            else if (!start && this.state.stopIndex > this.state.startIndex + 5) {
+                this.setState({
+                    stopIndex: this.state.stopIndex - 1
+                });
+            }
+        }
     }
 
     render() {
@@ -97,12 +125,14 @@ export class TaskStatisticsSection extends Component {
                 <RadialSummaryBlock titleText="All time" completed={alltimeCompleted} failed={alltimeFailed} />
                 <div className="historyBarChartWrapper">
                     <SelectableChildrenWithController defaultIndex={0} numControllerComponents={1}>
-                        <SelectionController key={0} />
-                        <ScrollableBarChart key={1} groupingTypeText="Daily" numBars={this.state.numBars} barWidth={100}
+                        <SelectionController key={0} startIndex={this.state.startIndex} stopIndex={this.state.stopIndex}
+                            startincrement={() => this.adjustRange(true, true)} stopincrement={() => this.adjustRange(true, false)}
+                            startdecrement={() => this.adjustRange(false, true)} stopdecrement={() => this.adjustRange(false, false)}/>
+                        <ScrollableBarChart key={1} groupingTypeText="Daily" numBars={this.state.stopIndex - this.state.startIndex} barWidth={100}
                             stats={this.state.historyStats.dayStats} tickFormatFunc={dayTickFormatter} />
-                        <ScrollableBarChart key={2} groupingTypeText="Weekly" numBars={this.state.numBars} barWidth={100}
+                        <ScrollableBarChart key={2} groupingTypeText="Weekly" numBars={this.state.stopIndex - this.state.startIndex} barWidth={100}
                             stats={this.state.historyStats.weekStats} tickFormatFunc={weekTickFormatter} />
-                        <ScrollableBarChart key={3} groupingTypeText="Monthly" numBars={this.state.numBars} barWidth={100}
+                        <ScrollableBarChart key={3} groupingTypeText="Monthly" numBars={this.state.stopIndex - this.state.startIndex} barWidth={100}
                             stats={this.state.historyStats.monthStats} tickFormatFunc={monthTickFormatter} />
                     </SelectableChildrenWithController>
                 </div>
@@ -269,10 +299,26 @@ function monthTickFormatter(index, barWidth) {
 class SelectionController extends Component {
     render() {
         return (
-            <div className="controllerBlock">
-                <button onClick={() => this.props.indexToggleFunc(0)}> Daily </button>
-                <button onClick={() => this.props.indexToggleFunc(1)}> Weekly </button>
-                <button onClick={() => this.props.indexToggleFunc(2)}> Monthly </button>
+            <div className="groupingControllerBlock">
+                <div className="title"> Group by: </div>
+                <button onClick={() => this.props.indexToggleFunc(0)}> Day </button>
+                <button onClick={() => this.props.indexToggleFunc(1)}> Week </button>
+                <button onClick={() => this.props.indexToggleFunc(2)}> Month </button>
+                <RangeSelectionBlock value={this.props.startIndex} increment={this.props.startincrement} decrement={this.props.startdecrement}/>
+                <RangeSelectionBlock value={this.props.stopIndex} increment={this.props.stopincrement} decrement={this.props.stopdecrement}/>
+            </div>
+        );
+    }
+}
+
+class RangeSelectionBlock extends Component {
+    render() {
+        return (
+            // TODO: Make the button look less shit, and implement a 'hold down' rapid increment and decrement ability
+            <div className="rangeSelector">
+                <button onClick={this.props.increment}> + </button>
+                <div> {this.props.value} </div>
+                <button onClick={this.props.decrement}> - </button>
             </div>
         );
     }

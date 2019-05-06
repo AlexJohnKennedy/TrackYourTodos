@@ -41,11 +41,22 @@
     justify-content: flex-start;
 }
 
-.TaskStatisticsSection .historyBarChartWrapper .controllerBlock {
-    width: 12rem;
+.TaskStatisticsSection .historyBarChartWrapper .groupingControllerBlock {
+    width: 14rem;
+    padding-left: 0.1rem;
+    padding-right: 0rem;
     flex-grow: 0;
     flex-shrink: 0;
 }
+.TaskStatisticsSection .historyBarChartWrapper .groupingControllerBlock .title {
+    padding-top: 0.1rem;
+    padding-bottom: 0.5rem;
+}
+.TaskStatisticsSection .historyBarChartWrapper .groupingControllerBlock button {
+    width: 3.4rem;
+    margin-left: 0.1rem;
+}
+
 .TaskStatisticsSection .historyBarChartWrapper .axisContainer {
     flex-grow: 0;
     flex-shrink: 0;
