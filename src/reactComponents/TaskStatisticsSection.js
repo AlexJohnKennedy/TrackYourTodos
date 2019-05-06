@@ -115,7 +115,57 @@ export class TaskStatisticsSection extends Component {
 // Some functions which build tick labels based on 'how far back' from today a label refers to, depending on bar width.
 // These will be passed into the ScrollableBarCharts, which will use them to gneerate the ticks on their charts.
 function dayTickFormatter(index, barWidth) {
-    return "day";
+    function large(index) {
+        if (index === 0) {
+            return "Today";
+        }
+        else if (index === 1) {
+            return "Yesterday";
+        }
+        else {
+            // Go back 'index' days from now, and generate a date string that just has 'day month'
+            let now = new Date(Date.now());
+            now.setDate(now.getDate() - index);
+            return now.toLocaleDateString("en-US", { weekday: 'short', day: 'numeric', month: 'short' });
+        }
+    }
+    function medium(index) {
+        if (index === 0) {
+            return "Today";
+        }
+        else {
+            let now = new Date(Date.now());
+            now.setDate(now.getDate() - index);
+            return now.toLocaleDateString("en-US", { weekday: 'short', day: 'numeric' });
+        }
+    }
+    function small(index) {
+        let now = new Date(Date.now());
+        now.setDate(now.getDate() - index);
+        return now.toLocaleDateString("en-US", { weekday: 'short'});
+    }
+    function verySmall(index) {
+        let now = new Date(Date.now());
+        now.setDate(now.getDate() - index);
+        return now.toLocaleDateString("en-US", { weekday: 'narrow'});
+    }
+
+    // Determine which size label to use, based on barWidth
+    if (barWidth >= 60) {
+        return large(index);
+    }
+    else if (barWidth >= 45) {
+        return medium(index);
+    }
+    else if (barWidth >= 30) {
+        return small(index);
+    }
+    else if (barWidth >= 20) {
+        return verySmall(index);
+    }
+    else {
+        return "";  // Bars are so narrow, there is no point trying to label anything anyway!
+    }
 }
 function weekTickFormatter(index, barWidth) {
     return "week";
