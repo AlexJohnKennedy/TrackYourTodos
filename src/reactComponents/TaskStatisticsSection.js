@@ -87,9 +87,25 @@ export class TaskStatisticsSection extends Component {
                 });
             }
             else if (!start) {
-                this.setState({
-                    stopIndex: this.state.stopIndex + 1
-                });
+                // There is the potential for the history stats to need a re-read. Lets check!
+                if (this.state.stopIndex + 1 > this.state.historyStats.dayStats.numCompletedArray.length) {
+                    const historyStats = this.statisticsModelApi.GetStatistics({
+                        days: this.state.stopIndex + 1,
+                        weeks: this.state.stopIndex + 1,
+                        months: this.state.stopIndex + 1,
+                        years: 0,
+                        alltime: false
+                    });
+                    this.setState({
+                        stopIndex: this.state.stopIndex + 1,
+                        historyStats: historyStats
+                    });
+                }
+                else {
+                    this.setState({
+                        stopIndex: this.state.stopIndex + 1
+                    });
+                }
             }
         }
         else {
