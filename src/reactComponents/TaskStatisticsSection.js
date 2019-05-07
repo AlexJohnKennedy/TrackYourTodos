@@ -3,7 +3,6 @@ import { RadialSummaryBlock } from './RadialSummaryBlock';
 import { SelectableChildrenWithController } from './SelectableChildrenWithController';
 import { ScrollableBarChart } from './ScrollableBarChart';
 import { RegisterForStatisticsModel } from '../interactionLayer/viewLayerInteractionApi';
-import { FlexibleXYPlot, YAxis, VerticalBarSeries } from 'react-vis/dist';
 
 
 export class TaskStatisticsSection extends Component {
