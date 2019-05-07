@@ -44,11 +44,13 @@ export class TaskStatisticsSection extends Component {
             statsObject: emptyStatsObj,
             historyStats: emptyStatsObj,
             startIndex: 0,
-            stopIndex: 11
+            stopIndex: 11,
+            barWidth: 100
         };
 
         this.handleChange = this.handleChange.bind(this);
         this.adjustRange = this.adjustRange.bind(this);
+        this.adjustBarWidth = this.adjustBarWidth.bind(this);
     }
     componentDidMount() {
         this.statisticsModelApi = RegisterForStatisticsModel(this.handleChange, this.handleChange);
@@ -103,6 +105,12 @@ export class TaskStatisticsSection extends Component {
             }
         }
     }
+    adjustBarWidth(event) {
+        if (event.target.value === null || event.target.value === this.state.barWidth) {
+            return;
+        }
+        this.setState({barWidth: event.target.value});
+    }
 
     render() {
         // One summary block for the last week, one for last month, and one for all time. (subject to change).
@@ -126,12 +134,13 @@ export class TaskStatisticsSection extends Component {
                     <SelectableChildrenWithController defaultIndex={0} numControllerComponents={1}>
                         <SelectionController key={0} startIndex={this.state.startIndex} stopIndex={this.state.stopIndex}
                             startincrement={() => this.adjustRange(true, true)} stopincrement={() => this.adjustRange(true, false)}
-                            startdecrement={() => this.adjustRange(false, true)} stopdecrement={() => this.adjustRange(false, false)}/>
-                        <ScrollableBarChart key={1} groupingTypeText="Daily" stopIndex={this.state.stopIndex} startIndex={this.state.startIndex} barWidth={100}
+                            startdecrement={() => this.adjustRange(false, true)} stopdecrement={() => this.adjustRange(false, false)}
+                            minBarWidth={20} maxBarWidth={150} handleBarWidthChange={this.adjustBarWidth} barWidth={this.state.barWidth}/>
+                        <ScrollableBarChart key={1} groupingTypeText="Daily" stopIndex={this.state.stopIndex} startIndex={this.state.startIndex} barWidth={this.state.barWidth}
                             stats={this.state.historyStats.dayStats} tickFormatFunc={dayTickFormatter} />
-                        <ScrollableBarChart key={2} groupingTypeText="Weekly" stopIndex={this.state.stopIndex} startIndex={this.state.startIndex} barWidth={100}
+                        <ScrollableBarChart key={2} groupingTypeText="Weekly" stopIndex={this.state.stopIndex} startIndex={this.state.startIndex} barWidth={this.state.barWidth}
                             stats={this.state.historyStats.weekStats} tickFormatFunc={weekTickFormatter} />
-                        <ScrollableBarChart key={3} groupingTypeText="Monthly" stopIndex={this.state.stopIndex} startIndex={this.state.startIndex} barWidth={100}
+                        <ScrollableBarChart key={3} groupingTypeText="Monthly" stopIndex={this.state.stopIndex} startIndex={this.state.startIndex} barWidth={this.state.barWidth}
                             stats={this.state.historyStats.monthStats} tickFormatFunc={monthTickFormatter} />
                     </SelectableChildrenWithController>
                 </div>
@@ -322,6 +331,7 @@ class SelectionController extends Component {
                     <RangeSelectionBlock text={startText} value={this.props.startIndex} increment={this.props.startincrement} decrement={this.props.startdecrement}/>
                     <RangeSelectionBlock text={endText} value={this.props.stopIndex} increment={this.props.stopincrement} decrement={this.props.stopdecrement}/>
                 </div>
+                <Slider min={this.props.minBarWidth} max={this.props.maxBarWidth} value={this.props.barWidth} step={1} onChange={this.props.handleBarWidthChange} text="Zoom"/>
             </div>
         );
     }
@@ -335,6 +345,17 @@ class RangeSelectionBlock extends Component {
                 <button onClick={this.props.increment}> + </button>
                 <div> {this.props.value} </div>
                 <button onClick={this.props.decrement}> - </button>
+                <div className="text"> {this.props.text} </div>
+            </div>
+        );
+    }
+}
+
+class Slider extends Component {
+    render() {
+        return (
+            <div className="slider">
+                <input type="range" min={this.props.min} max={this.props.max} value={this.props.value} step={this.props.step} onChange={this.props.onChange}/>
                 <div className="text"> {this.props.text} </div>
             </div>
         );

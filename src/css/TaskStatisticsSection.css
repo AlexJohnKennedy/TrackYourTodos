@@ -62,8 +62,9 @@
     display: inline-flex;
     flex-direction: row;
     justify-content: space-evenly;
+    padding-bottom: 1rem;
 }
-.TaskStatisticsSection .historyBarChartWrapper .groupingControllerBlock .rangeSelectors .text {
+.TaskStatisticsSection .historyBarChartWrapper .groupingControllerBlock .text {
     font-size: 1rem;
 }
 
