@@ -29,5 +29,69 @@
 }
 
 .summaryBlockFlexContainer .statNums div {
-    padding-bottom: 0.05rem;
+    padding-bottom: 0rem;
+    font-size: 2rem;
+}
+
+.TaskStatisticsSection .historyBarChartWrapper {
+    padding-right: 0.8rem;
+    padding-bottom: 0.2rem;
+    display: inline-flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.TaskStatisticsSection .historyBarChartWrapper .groupingControllerBlock {
+    width: 14rem;
+    padding-left: 0.1rem;
+    padding-right: 0rem;
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+.TaskStatisticsSection .historyBarChartWrapper .groupingControllerBlock .title {
+    padding-top: 0.1rem;
+    padding-bottom: 0.5rem;
+}
+.TaskStatisticsSection .historyBarChartWrapper .groupingControllerBlock button {
+    width: 3.4rem;
+    margin-left: 0.1rem;
+}
+.TaskStatisticsSection .historyBarChartWrapper .groupingControllerBlock .rangeSelectors {
+    margin-top: 1rem;
+    width: 100%;
+    display: inline-flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    padding-bottom: 1rem;
+}
+.TaskStatisticsSection .historyBarChartWrapper .groupingControllerBlock .text {
+    font-size: 1rem;
+}
+
+.TaskStatisticsSection .historyBarChartWrapper .axisContainer {
+    flex-grow: 0;
+    flex-shrink: 0;
+    width: 3rem;
+}
+
+.TaskStatisticsSection .historyBarChartWrapper .barChartWrapper {
+    flex-grow: 1;
+    overflow-x: scroll;
+    overflow-y: hidden;
+}
+.TaskStatisticsSection .historyBarChartWrapper .barChartWrapper::-webkit-scrollbar {
+    width: 0rem;  /* Width of vertical scrollbars */
+    height: 0.8rem; /* Height of horizontal scrollbars */
+    color: 'red';
+    background-color: var(--editor-background-colour); 
+    opacity: 1;
+}
+.TaskStatisticsSection .historyBarChartWrapper .barChartWrapper::-webkit-scrollbar-thumb {
+    background-color: var(--sidebar-background-colour);
+    opacity: 0.5;
+}
+
+.TaskStatisticsSection .historyBarChartWrapper .barChartWrapper .subChartContainer {
+    height: 50%;
+    /*width: 300rem; OVERRIDEN IN CODE */
 }

@@ -19,7 +19,7 @@
 @media (min-width: 1270px) {
     #root {
         display: grid;
-        grid-template-columns: 1fr auto var(--divider-column-width) minmax(var(--backlog-tasks-total-width-squashed), var(--backlog-tasks-total-width)) 1fr;
+        grid-template-columns: 1fr minmax(auto, 115rem) var(--divider-column-width) minmax(var(--backlog-tasks-total-width-squashed), var(--backlog-tasks-total-width)) 1fr;
         grid-template-rows: auto auto auto;
     }
     
@@ -87,6 +87,12 @@
         grid-column-start: 3;
         grid-column-end: 4;
     }
+    .TaskStatisticsSection .historyBarChartWrapper {
+        grid-column-start: 1;
+        grid-column-end: 4;
+        grid-row-start: 2;
+        grid-row-end: 3;
+    }
     .Footer {
         grid-column-start: 2;
         grid-column-end: 5;
@@ -101,7 +107,7 @@
 @media (max-width: 1270px) {
     #root {
         display: grid;
-        grid-template-columns: 1fr minmax(var(--active-tasks-min-total-width-when-squashed), var(--active-tasks-min-total-width)) 1fr;
+        grid-template-columns: 1fr minmax(auto, 115rem) 1fr;
         grid-template-rows: auto auto auto;
     }
     
@@ -153,6 +159,12 @@
     .TaskStatisticsSection .RadialSummaryBlock ~ .RadialSummaryBlock ~ .RadialSummaryBlock {
         grid-column-start: 3;
         grid-column-end: 4;
+    }
+    .TaskStatisticsSection .historyBarChartWrapper {
+        grid-column-start: 1;
+        grid-column-end: 4;
+        grid-row-start: 2;
+        grid-row-end: 3;
     }
     .Footer {
         grid-column-start: 2;
@@ -225,6 +237,12 @@
         display: block;
         grid-column-start: 2;
         grid-column-end: 3;
+    }
+    .TaskStatisticsSection .historyBarChartWrapper {
+        grid-column-start: 1;
+        grid-column-end: 3;
+        grid-row-start: 2;
+        grid-row-end: 3;
     }
     .Footer {
         grid-column-start: 2;
