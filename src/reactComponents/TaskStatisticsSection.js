@@ -298,6 +298,21 @@ function monthTickFormatter(index, barWidth) {
 
 class SelectionController extends Component {
     render() {
+        let startText;
+        let endText;
+        if (this.props.currentIndex === 0) {
+            startText = "Start day";
+            endText = "End day"
+        }
+        else if (this.props.currentIndex === 1) {
+            startText = "Start week";
+            endText = "End week";
+        }
+        else {
+            startText = "Start month";
+            endText = "End month";
+        }
+
         return (
             <div className="groupingControllerBlock">
                 <div className="title"> Group by: </div>
@@ -305,8 +320,8 @@ class SelectionController extends Component {
                 <button onClick={() => this.props.indexToggleFunc(1)}> Week </button>
                 <button onClick={() => this.props.indexToggleFunc(2)}> Month </button>
                 <div className="rangeSelectors">
-                    <RangeSelectionBlock text="Start" value={this.props.startIndex} increment={this.props.startincrement} decrement={this.props.startdecrement}/>
-                    <RangeSelectionBlock text="End" value={this.props.stopIndex} increment={this.props.stopincrement} decrement={this.props.stopdecrement}/>
+                    <RangeSelectionBlock text={startText} value={this.props.startIndex} increment={this.props.startincrement} decrement={this.props.startdecrement}/>
+                    <RangeSelectionBlock text={endText} value={this.props.stopIndex} increment={this.props.stopincrement} decrement={this.props.stopdecrement}/>
                 </div>
             </div>
         );
@@ -321,7 +336,7 @@ class RangeSelectionBlock extends Component {
                 <button onClick={this.props.increment}> + </button>
                 <div> {this.props.value} </div>
                 <button onClick={this.props.decrement}> - </button>
-                <div> {this.props.text} </div>
+                <div className="text"> {this.props.text} </div>
             </div>
         );
     }
