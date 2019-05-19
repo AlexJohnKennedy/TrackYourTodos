@@ -6,39 +6,33 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace todo_app.Controllers
 {
-    [Route("api/[controller]")]
-    public class SampleDataController : Controller
-    {
-        private static string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
+    // This class will act as the main API controller. It will essentially be responsible for receiving and handling
+    // any incoming HTTP request which is related to saving and loading 'todo events'; which encompass any action
+    // taken by the client. Consequently, until more complex server-side features are developed, this will be the only
+    // controller on the server.
+    // The only two API endpoints we currently offer are essentially one get, and one post.
+    //
+    // The client may request all of their saved events of all time, in a giant data log, as an array of events.
+    // --- Later, we may implement a feature which 'snapshots' a given todo state to improve performance, instead of having
+    // --- to load events for all time, which might start getting costly if the number of Todo events grows.
+    // The client may send a POST request which essentially posts one or more todo events, with client-side generated UUIDs,
+    // in order for them to be saved into the database. Later, the Server will perform validation operations against the
+    // incoming events, and ensure that duplicates are correctly handled, etc.
+    [ApiController]
+    public class TodoEventController : ControllerBase {
 
-        [HttpGet("[action]")]
-        public IEnumerable<WeatherForecast> WeatherForecasts()
-        {
-            var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                DateFormatted = DateTime.Now.AddDays(index).ToString("d"),
-                TemperatureC = rng.Next(-20, 55),
-                Summary = Summaries[rng.Next(Summaries.Length)]
-            });
+        // A GET request to the todoevent endpoint will automatically fetch all of a user's events.
+        [HttpGet("/todoevents")]
+        public IActionResult FetchEntireEventLog(Guid userId) {
+            // NOTE: Will have to determine how a 'user' is stored before I can properly define what params to bind to here...
+            
         }
 
-        public class WeatherForecast
-        {
-            public string DateFormatted { get; set; }
-            public int TemperatureC { get; set; }
-            public string Summary { get; set; }
-
-            public int TemperatureF
-            {
-                get
-                {
-                    return 32 + (int)(TemperatureC / 0.5556);
-                }
-            }
+        // A POST request to the todoevent endpoint will pass in a log of new events to use. Most often, this will just be
+        // a single event, but the API will support an array of events, such that clients can implement batch-sending if needed.
+        [HttpPost("/todoevents")]
+        public IActionResult PostNewEvents([FromBody] IList<TodoEvent> newEvents) {
+            
         }
     }
 }
