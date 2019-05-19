@@ -25,7 +25,7 @@ namespace todo_app.Controllers
         [HttpGet("/todoevents")]
         public IActionResult FetchEntireEventLog(Guid userId) {
             // NOTE: Will have to determine how a 'user' is stored before I can properly define what params to bind to here...
-            
+            return Ok("Memes!");
         }
 
         // A POST request to the todoevent endpoint will pass in a log of new events to use. Most often, this will just be
