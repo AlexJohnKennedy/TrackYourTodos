@@ -19,14 +19,14 @@ namespace todo_app.DataTransferLayer {
 
     // WARNING: THESE EVENT TYPE STRING MUST MATCH THOSE THAT ARE SENT AND RECEIVED BY THE CLIENT!
     public static class EventTypes {
-        const string TaskAdded = "taskCreated";
-        const string ChildTaskAdded = "subtaskCreated";
-        const string TaskRevived = "taskRevived";
-        const string TaskDeleted = "taskDeleted";
-        const string TaskCompleted = "taskCompleted";
-        const string TaskFailed = "taskFailed";
-        const string TaskActivated = "taskActivated";
-        const string TaskStarted = "taskStarted";
+        public const string TaskAdded = "taskCreated";
+        public const string ChildTaskAdded = "subtaskCreated";
+        public const string TaskRevived = "taskRevived";
+        public const string TaskDeleted = "taskDeleted";
+        public const string TaskCompleted = "taskCompleted";
+        public const string TaskFailed = "taskFailed";
+        public const string TaskActivated = "taskActivated";
+        public const string TaskStarted = "taskStarted";
     }
 
     // Define a Model-bindable entity object; this must have public getters and setters for their properties.
@@ -47,7 +47,9 @@ namespace todo_app.DataTransferLayer {
         public int? Original { get; set; }      // Nullable, since some event types do not support this.
     }
     
-    // Below are event-specific entity types which might be useful, might now.
+    // Below are event-specific entity types which might be useful. They are able to be cast to, from the generic type.
+    // The casts must be explicit, since if a GenericTodoEvent is representing the wrong event, we want to throw an exception.
+    // These specific-event types are also castable directly into domain-layer logic objects, in case we need that later on.
     public class TaskCreatedEvent {
         public string EventType { get; set; }
         public long Timestamp { get; set; }
@@ -56,7 +58,25 @@ namespace todo_app.DataTransferLayer {
         public int Category { get; set; }
         public int ProgressStatus { get; set; }
         public int ColourId { get; set; }
-        public int Parent { get; set; }
+
+        // Support explicit casting from a GenericTodoEvent object into this type.
+        public static explicit operator TaskCreatedEvent(GenericTodoEvent genericEvent) {
+            if (genericEvent.EventType != EventTypes.TaskAdded 
+            || (genericEvent.Children != null && genericEvent.Children.Length > 0)
+            || genericEvent.Parent != null) {
+                throw new InvalidCastException("Cannot cast a GenericTodoEvent representing a " + genericEvent.EventType + " to a TaskCreatedEvent");
+            }
+            TaskCreatedEvent e = new TaskCreatedEvent();
+            e.EventType = genericEvent.EventType;
+            e.Timestamp = genericEvent.Timestamp;
+            e.Id = genericEvent.Id;
+            e.Name = genericEvent.Name;
+            e.Category = genericEvent.Category;
+            e.ProgressStatus = genericEvent.ProgressStatus;
+            e.ColourId = genericEvent.ColourId;
+            
+            return e;
+        }
     }
 
     public class ChildTaskAddedEvent {
@@ -68,6 +88,25 @@ namespace todo_app.DataTransferLayer {
         public int ProgressStatus { get; set; }
         public int ColourId { get; set; }
         public int Parent { get; set; }
+
+        // Support explicit casting from a GenericTodoEvent object into this type.
+        public static explicit operator ChildTaskAddedEvent(GenericTodoEvent genericEvent) {
+            if (genericEvent.EventType != EventTypes.ChildTaskAdded
+            || (genericEvent.Children != null && genericEvent.Children.Length > 0)) {
+                throw new InvalidCastException("Cannot cast a GenericTodoEvent representing a " + genericEvent.EventType + " to a ChildTaskAddedEvent");
+            }
+            ChildTaskAddedEvent e = new ChildTaskAddedEvent();
+            e.EventType = genericEvent.EventType;
+            e.Timestamp = genericEvent.Timestamp;
+            e.Id = genericEvent.Id;
+            e.Name = genericEvent.Name;
+            e.Category = genericEvent.Category;
+            e.ProgressStatus = genericEvent.ProgressStatus;
+            e.ColourId = genericEvent.ColourId;
+            e.Parent = genericEvent.Parent.Value;
+            
+            return e;
+        }
     }
 
     public class TaskRevivedEvent {
@@ -79,6 +118,24 @@ namespace todo_app.DataTransferLayer {
         public int Category { get; set; }
         public int ProgressStatus { get; set; }
         public int ColourId { get; set; }
+
+        // Support explicit casting from a GenericTodoEvent object into this type.
+        public static explicit operator TaskRevivedEvent(GenericTodoEvent genericEvent) {
+            if (genericEvent.EventType != EventTypes.TaskRevived || genericEvent.Original == null) {
+                throw new InvalidCastException("Cannot cast a GenericTodoEvent representing a " + genericEvent.EventType + " to a TaskRevivedEvent");
+            }
+            TaskRevivedEvent e = new TaskRevivedEvent();
+            e.EventType = genericEvent.EventType;
+            e.Timestamp = genericEvent.Timestamp;
+            e.Id = genericEvent.Id;
+            e.Name = genericEvent.Name;
+            e.Category = genericEvent.Category;
+            e.ProgressStatus = genericEvent.ProgressStatus;
+            e.ColourId = genericEvent.ColourId;
+            e.Original = genericEvent.Original.Value;
+            
+            return e;
+        }
     }
 
     public class TaskActivatedEvent {
@@ -91,6 +148,24 @@ namespace todo_app.DataTransferLayer {
         public int ColourId { get; set; }
         public int Parent { get; set; }
         public int[] Children { get; set; }
+
+        public static explicit operator TaskActivatedEvent(GenericTodoEvent genericEvent) {
+            if (genericEvent.EventType != EventTypes.TaskActivated) {
+                throw new InvalidCastException("Cannot cast a GenericTodoEvent representing a " + genericEvent.EventType + " to a TaskActivatedEvent");
+            }
+            TaskActivatedEvent e = new TaskActivatedEvent();
+            e.EventType = genericEvent.EventType;
+            e.Timestamp = genericEvent.Timestamp;
+            e.Id = genericEvent.Id;
+            e.Name = genericEvent.Name;
+            e.Category = genericEvent.Category;
+            e.ProgressStatus = genericEvent.ProgressStatus;
+            e.ColourId = genericEvent.ColourId;
+            e.Parent = genericEvent.Parent.Value;
+            e.Children = genericEvent.Children;
+
+            return e;
+        }
     }
 
     public class TaskDeletedEvent {
@@ -103,6 +178,24 @@ namespace todo_app.DataTransferLayer {
         public int ColourId { get; set; }
         public int Parent { get; set; }
         public int[] Children { get; set; }
+
+        public static explicit operator TaskDeletedEvent(GenericTodoEvent genericEvent) {
+            if (genericEvent.EventType != EventTypes.TaskDeleted) {
+                throw new InvalidCastException("Cannot cast a GenericTodoEvent representing a " + genericEvent.EventType + " to a TaskDeletedEvent");
+            }
+            TaskDeletedEvent e = new TaskDeletedEvent();
+            e.EventType = genericEvent.EventType;
+            e.Timestamp = genericEvent.Timestamp;
+            e.Id = genericEvent.Id;
+            e.Name = genericEvent.Name;
+            e.Category = genericEvent.Category;
+            e.ProgressStatus = genericEvent.ProgressStatus;
+            e.ColourId = genericEvent.ColourId;
+            e.Parent = genericEvent.Parent.Value;
+            e.Children = genericEvent.Children;
+
+            return e;
+        }
     }
 
     public class TaskStartedEvent {
@@ -115,6 +208,24 @@ namespace todo_app.DataTransferLayer {
         public int ColourId { get; set; }
         public int Parent { get; set; }
         public int[] Children { get; set; }
+
+        public static explicit operator TaskStartedEvent(GenericTodoEvent genericEvent) {
+            if (genericEvent.EventType != EventTypes.TaskStarted) {
+                throw new InvalidCastException("Cannot cast a GenericTodoEvent representing a " + genericEvent.EventType + " to a TaskStartedEvent");
+            }
+            TaskStartedEvent e = new TaskStartedEvent();
+            e.EventType = genericEvent.EventType;
+            e.Timestamp = genericEvent.Timestamp;
+            e.Id = genericEvent.Id;
+            e.Name = genericEvent.Name;
+            e.Category = genericEvent.Category;
+            e.ProgressStatus = genericEvent.ProgressStatus;
+            e.ColourId = genericEvent.ColourId;
+            e.Parent = genericEvent.Parent.Value;
+            e.Children = genericEvent.Children;
+
+            return e;
+        }
     }
 
     public class TaskCompletedEvent {
@@ -127,6 +238,24 @@ namespace todo_app.DataTransferLayer {
         public int ColourId { get; set; }
         public int Parent { get; set; }
         public int[] Children { get; set; }
+
+        public static explicit operator TaskCompletedEvent(GenericTodoEvent genericEvent) {
+            if (genericEvent.EventType != EventTypes.TaskCompleted) {
+                throw new InvalidCastException("Cannot cast a GenericTodoEvent representing a " + genericEvent.EventType + " to a TaskCompletedEvent");
+            }
+            TaskCompletedEvent e = new TaskCompletedEvent();
+            e.EventType = genericEvent.EventType;
+            e.Timestamp = genericEvent.Timestamp;
+            e.Id = genericEvent.Id;
+            e.Name = genericEvent.Name;
+            e.Category = genericEvent.Category;
+            e.ProgressStatus = genericEvent.ProgressStatus;
+            e.ColourId = genericEvent.ColourId;
+            e.Parent = genericEvent.Parent.Value;
+            e.Children = genericEvent.Children;
+
+            return e;
+        }
     }
 
     public class TaskFailedEvent {
@@ -139,5 +268,23 @@ namespace todo_app.DataTransferLayer {
         public int ColourId { get; set; }
         public int Parent { get; set; }
         public int[] Children { get; set; }
+
+        public static explicit operator TaskFailedEvent(GenericTodoEvent genericEvent) {
+            if (genericEvent.EventType != EventTypes.TaskFailed) {
+                throw new InvalidCastException("Cannot cast a GenericTodoEvent representing a " + genericEvent.EventType + " to a TaskFailedEvent");
+            }
+            TaskFailedEvent e = new TaskFailedEvent();
+            e.EventType = genericEvent.EventType;
+            e.Timestamp = genericEvent.Timestamp;
+            e.Id = genericEvent.Id;
+            e.Name = genericEvent.Name;
+            e.Category = genericEvent.Category;
+            e.ProgressStatus = genericEvent.ProgressStatus;
+            e.ColourId = genericEvent.ColourId;
+            e.Parent = genericEvent.Parent.Value;
+            e.Children = genericEvent.Children;
+
+            return e;
+        }
     }
 }
