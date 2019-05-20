@@ -3,7 +3,7 @@ import { EventTypes } from '../logicLayer/dataEventJsonSchema';
 export const DataEventSerialisationFuncs = BuildDataEventSerialisationFuncs();
 
 function BuildDataEventSerialisationFuncs() {
-
+    // These functions define the JSON Schema for event types
     function childTaskAddedEvent(parent, child, tasklist) {
         return JSON.stringify({
             eventType: EventTypes.childTaskAdded,

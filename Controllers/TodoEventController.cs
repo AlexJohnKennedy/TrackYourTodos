@@ -31,9 +31,9 @@ namespace todo_app.Controllers
 
         // A POST request to the todoevent endpoint will pass in a log of new events to use. Most often, this will just be
         // a single event, but the API will support an array of events, such that clients can implement batch-sending if needed.
-        [HttpPost("/todoevents")]
-        public IActionResult PostNewEvents([FromBody] IList<TodoEvent> newEvents) {
-            
-        }
+        //[HttpPost("/todoevents")]
+        //public IActionResult PostNewEvents([FromBody] IList<TodoEvent> newEvents) {
+        //    
+        //}
     }
 }
