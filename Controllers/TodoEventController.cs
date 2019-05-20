@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using todo_app.DomainLayer.Events;
+using todo_app.DataTransferLayer;
 
 namespace todo_app.Controllers
 {
@@ -26,14 +26,14 @@ namespace todo_app.Controllers
         [HttpGet("/todoevents")]
         public IActionResult FetchEntireEventLog(Guid userId) {
             // NOTE: Will have to determine how a 'user' is stored before I can properly define what params to bind to here...
-            return Ok("Memes!");
+            return Ok("Different memes :O");
         }
 
         // A POST request to the todoevent endpoint will pass in a log of new events to use. Most often, this will just be
         // a single event, but the API will support an array of events, such that clients can implement batch-sending if needed.
-        //[HttpPost("/todoevents")]
-        //public IActionResult PostNewEvents([FromBody] IList<TodoEvent> newEvents) {
-        //    
-        //}
+        [HttpPost("/todoevents")]
+        public IActionResult PostNewEvents([FromBody] IList<GenericTodoEvent> newEvents) {
+            return Ok(newEvents);
+        }
     }
 }
