@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using todo_app.DomainLayer.Events;
 
 // Classes in this namespace are inherently coupled to BOTH the Database ORM model, and 
 // the JSON Schema which is used to communicate with the client application. In other
@@ -80,6 +81,11 @@ namespace todo_app.DataTransferLayer {
             
             return e;
         }
+
+        // Support implicit casting TO domain layer objects.
+        public static implicit operator DomainLayer.Events.TaskCreatedEvent(TaskCreatedEvent e) {
+            return new DomainLayer.Events.TaskCreatedEvent(e.EventId, e.Timestamp, e.Id, e.Name, e.Category, e.ProgressStatus, e.ColourId);
+        }
     }
 
     public class ChildTaskAddedEvent {
@@ -93,7 +99,6 @@ namespace todo_app.DataTransferLayer {
         public int ColourId { get; set; }
         public int Parent { get; set; }
 
-        // Support explicit casting from a GenericTodoEvent object into this type.
         public static explicit operator ChildTaskAddedEvent(GenericTodoEvent genericEvent) {
             if (genericEvent.EventType != EventTypes.ChildTaskAdded
             || (genericEvent.Children != null && genericEvent.Children.Length > 0)) {
@@ -112,6 +117,10 @@ namespace todo_app.DataTransferLayer {
             
             return e;
         }
+
+        public static implicit operator DomainLayer.Events.ChildTaskAddedEvent(ChildTaskAddedEvent e) {
+            return new DomainLayer.Events.ChildTaskAddedEvent(e.EventId, e.Timestamp, e.Id, e.Parent, e.Name, e.Category, e.ProgressStatus, e.ColourId);
+        }
     }
 
     public class TaskRevivedEvent {
@@ -125,7 +134,6 @@ namespace todo_app.DataTransferLayer {
         public int ProgressStatus { get; set; }
         public int ColourId { get; set; }
 
-        // Support explicit casting from a GenericTodoEvent object into this type.
         public static explicit operator TaskRevivedEvent(GenericTodoEvent genericEvent) {
             if (genericEvent.EventType != EventTypes.TaskRevived || genericEvent.Original == null) {
                 throw new InvalidCastException("Cannot cast a GenericTodoEvent representing a " + genericEvent.EventType + " to a TaskRevivedEvent");
@@ -142,6 +150,10 @@ namespace todo_app.DataTransferLayer {
             e.Original = genericEvent.Original.Value;
             
             return e;
+        }
+
+        public static implicit operator DomainLayer.Events.TaskRevivedEvent(TaskRevivedEvent e) {
+            return new DomainLayer.Events.TaskRevivedEvent(e.EventId, e.Timestamp, e.Original, e.Id, e.Name, e.Category, e.ProgressStatus, e.ColourId);
         }
     }
 
@@ -175,6 +187,10 @@ namespace todo_app.DataTransferLayer {
 
             return e;
         }
+
+        public static implicit operator DomainLayer.Events.TaskActivatedEvent(TaskActivatedEvent e) {
+            return new DomainLayer.Events.TaskActivatedEvent(e.EventId, e.Timestamp, e.Id, e.Name, e.Category, e.ProgressStatus, e.ColourId, e.Parent, e.Children);
+        }
     }
 
     public class TaskDeletedEvent {
@@ -206,6 +222,10 @@ namespace todo_app.DataTransferLayer {
             e.Children = genericEvent.Children;
 
             return e;
+        }
+
+        public static implicit operator DomainLayer.Events.TaskDeletedEvent(TaskDeletedEvent e) {
+            return new DomainLayer.Events.TaskDeletedEvent(e.EventId, e.Timestamp, e.Id, e.Name, e.Category, e.ProgressStatus, e.ColourId, e.Parent, e.Children);
         }
     }
 
@@ -239,6 +259,10 @@ namespace todo_app.DataTransferLayer {
 
             return e;
         }
+
+        public static implicit operator DomainLayer.Events.TaskStartedEvent(TaskStartedEvent e) {
+            return new DomainLayer.Events.TaskStartedEvent(e.EventId, e.Timestamp, e.Id, e.Name, e.Category, e.ColourId, e.Parent, e.Children);
+        }
     }
 
     public class TaskCompletedEvent {
@@ -271,6 +295,10 @@ namespace todo_app.DataTransferLayer {
 
             return e;
         }
+
+        public static implicit operator DomainLayer.Events.TaskCompletedEvent(TaskCompletedEvent e) {
+            return new DomainLayer.Events.TaskCompletedEvent(e.EventId, e.Timestamp, e.Id, e.Name, e.Category, e.ColourId, e.Parent, e.Children);
+        }
     }
 
     public class TaskFailedEvent {
@@ -302,6 +330,10 @@ namespace todo_app.DataTransferLayer {
             e.Children = genericEvent.Children;
 
             return e;
+        }
+
+        public static implicit operator DomainLayer.Events.TaskFailedEvent(TaskFailedEvent e) {
+            return new DomainLayer.Events.TaskFailedEvent(e.EventId, e.Timestamp, e.Id, e.Name, e.Category, e.ColourId, e.Parent, e.Children);
         }
     }
 }
