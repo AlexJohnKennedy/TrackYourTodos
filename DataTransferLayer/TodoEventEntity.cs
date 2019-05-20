@@ -29,9 +29,11 @@ namespace todo_app.DataTransferLayer {
         const string TaskStarted = "taskStarted";
     }
 
-    // Define Model-blindable entity object; this must have public getters and setters for their properties.
+    // Define a Model-bindable entity object; this must have public getters and setters for their properties.
     // The Generic event entity defines a type capable of being bound to ANY possible types. When we are sending
-    // our responses, we will reply with a particular type.
+    // our responses, we will reply with a particular type. The Generic type contains properties for each of the
+    // possible event types, and thus, can represent any one of them. Additionally, there are explicit conversion
+    // operators defined, allowing us to easily CAST to one of the specific-event entity types.
     public class GenericTodoEvent {
         public string EventType { get; set; }
         public long Timestamp { get; set; }
@@ -40,9 +42,9 @@ namespace todo_app.DataTransferLayer {
         public int Category { get; set; }
         public int ProgressStatus { get; set; }
         public int ColourId { get; set; }
-        public int Parent { get; set; }
+        public int? Parent { get; set; }        // Nullable, since some event types do not support this.
         public int[] Children { get; set; }
-        public int Original { get; set; }
+        public int? Original { get; set; }      // Nullable, since some event types do not support this.
     }
     
     // Below are event-specific entity types which might be useful, might now.
