@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using todo_app.DataTransferLayer.Entities;
+using todo_app.DataTransferLayer.DatabaseContext;
 
 namespace todo_app.Controllers
 {
@@ -24,9 +25,12 @@ namespace todo_app.Controllers
 
         // A GET request to the todoevent endpoint will automatically fetch all of a user's events.
         [HttpGet("/todoevents")]
-        public IActionResult FetchEntireEventLog(Guid userId) {
+        public IActionResult FetchEntireEventLog(Guid userId, TodoEventContext injectedContext) {
             // NOTE: Will have to determine how a 'user' is stored before I can properly define what params to bind to here...
-            return Ok("Different memes :O");
+            
+            return Ok(injectedContext.TodoEvents.Where(e => true).OrderBy(e => e.Timestamp).ToList());
+            
+            //return Ok("Different memes :O");
         }
 
         // A POST request to the todoevent endpoint will pass in a log of new events to use. Most often, this will just be

@@ -49,7 +49,8 @@ namespace todo_app {
         private static void SaveHardcodedEventLogToDatabase(TodoEventContext context) {
             List<GenericTodoEvent> hardCodedEventLog = GetHardCodedEventLog();
 
-            // TODO
+            context.TodoEvents.AddRange(hardCodedEventLog);
+            context.SaveChanges();
         }
 
 
@@ -64,7 +65,7 @@ namespace todo_app {
             e.Parent = parent;
             e.ColourId = colourid;
             e.Original = original;
-            e.Children = children.ToArray();
+            e.Children = children == null ? null : children.ToArray();
             e.Timestamp = time;
             
             return e;
