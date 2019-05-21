@@ -20,7 +20,7 @@ function BuildDataEventSerialisationFuncs() {
     function taskRevivedEvent(oldtask, newtask, tasklist) {
         return JSON.stringify({
             eventType: EventTypes.taskRevived,
-            timestamp: newtask.eventTimestamps.timeRevived,
+            timestamp: oldtask.eventTimestamps.timeRevived,
             original: oldtask.id,
             id: newtask.id,
             name: newtask.name,

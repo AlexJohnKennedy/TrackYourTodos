@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { RegisterToActiveTaskListAPI } from '../interactionLayer/viewLayerInteractionApi';
+import { RegisterToActiveTaskListAPI, RegisterForOnDataLoadCallback } from '../interactionLayer/viewLayerInteractionApi';
 import { Category } from '../logicLayer/Task';
 import { GoalBoard, WeeklyBoard, DailyBoard } from './Board';
 import { ColourIdTracker } from '../viewLogic/colourSetManager';
@@ -40,8 +40,12 @@ export class ActiveTaskSection extends Component {
             let ids = this.activeTaskListAPI.PerformFailureCheck(800, id => this.unregisterForAnimation(id, false));
             ids.forEach(id => this.registerForAnimation(id, false));
         };
-        this.initialCheck = window.setTimeout(checkAction, 2500);   // Wait 2 seconds before 'melting' the failed tasks
-        this.intervalCheck = window.setInterval(checkAction, 3600000);  // Re-check for failures every hour.
+
+        RegisterForOnDataLoadCallback(() => {
+            this.initialCheck = window.setTimeout(checkAction, 2000);   // Wait 2 seconds before 'melting' the failed tasks
+            this.intervalCheck = window.setInterval(checkAction, 3600000);  // Re-check for failures every hour.
+            this.handleChange();
+        });
 
         // Initialise state of this component
         this.handleChange();
