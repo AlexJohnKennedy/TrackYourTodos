@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using todo_app.DataTransferLayer.DatabaseContext;
+using Microsoft.EntityFrameworkCore;
 
 namespace todo_app {
 
@@ -18,6 +20,11 @@ namespace todo_app {
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
             
+            // Register our EFCore database context with DI, and configure it to be backed by an in-memory database provider.
+            // Later, we can replace this with a PostGres provider and hopefully not have to change much/any logic.
+            services.AddDbContext<TodoEventContext>(optionsObj => {
+                optionsObj.UseInMemoryDatabase("TestTodoEventStorage");
+            });
             
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
