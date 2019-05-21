@@ -16,7 +16,7 @@ using todo_app.DomainLayer.Events;
 // These classes are NOT framework independent, and will WRAP the domain layer objects if 
 // need be! (For now, the domain layer objects are somewhat useless, since there is no real
 // business logic ocurring inside the server itself.. But there might be later!)
-namespace todo_app.DataTransferLayer {
+namespace todo_app.DataTransferLayer.Entities {
 
     // WARNING: THESE EVENT TYPE STRINGS MUST MATCH THOSE THAT ARE SENT AND RECEIVED BY THE CLIENT!
     public static class EventTypes {
