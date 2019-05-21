@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { RadialSummaryBlock } from './RadialSummaryBlock';
 import { SelectableChildrenWithController } from './SelectableChildrenWithController';
 import { ScrollableBarChart } from './ScrollableBarChart';
-import { RegisterForStatisticsModel } from '../interactionLayer/viewLayerInteractionApi';
+import { RegisterForStatisticsModel, RegisterForOnDataLoadCallback } from '../interactionLayer/viewLayerInteractionApi';
 
 
 export class TaskStatisticsSection extends Component {
@@ -54,6 +54,8 @@ export class TaskStatisticsSection extends Component {
     }
     componentDidMount() {
         this.statisticsModelApi = RegisterForStatisticsModel(this.handleChange, this.handleChange);
+        RegisterForOnDataLoadCallback(() => this.handleChange(null, null));
+        
         //this.statisticsModelApi = this.statisticsModelApi.bind(this);
         this.handleChange(null, null);
     }

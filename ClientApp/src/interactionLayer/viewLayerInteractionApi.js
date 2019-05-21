@@ -36,7 +36,7 @@
 // --- GetActiveTasks().
 // --------------------------------------------------------------------------------
 import { GetActiveTaskObject } from './ajaxDataModel/ajaxDataModel.js';
-import {  TaskObjects, Category, ProgressStatus } from '../logicLayer/Task';
+import { TaskObjects, Category, ProgressStatus } from '../logicLayer/Task';
 import { RegisterForFailureChecking } from '../logicLayer/checkForFailure';
 import { StatisticsModel } from '../logicLayer/statisticsModel';
 
@@ -55,15 +55,17 @@ const DataEventCallbackHandlers = {
     taskStartedHandlers : []
 };
 
+// Store a list of callbacks which are only to be used for onDataLoadedFromServer
+const DataLoadedFromServerCallbacks = [];
+
 // Gain access as a global singleton to the DataModel object. TODO: Move this into a separate 'data model' scope, which sits in
 // the logic layer, and which interaction layer objects (such as code in this file) access into.
 let StatisticsModelObj = new StatisticsModel(new TaskObjects());    // Create an empty statistics model upon page load. This will be replaced once data has loaded from AJAX
 const ActiveTaskDataObj = GetActiveTaskObject(() => {
     StatisticsModelObj = new StatisticsModel(ActiveTaskDataObj);    // Create a new statistics data model once the data has loaded    
-    ViewLayerCallbacks.forEach(cb => {
+    DataLoadedFromServerCallbacks.forEach(cb => {
         cb();
     });
-
 });
 
 // Setup inter-datamodel event callbacks here, since they both exist in the global interaction layer scope.
@@ -289,4 +291,8 @@ export function RegisterForStatisticsModel(completedCallback, failedCallback) {
     return Object.freeze({
         GetStatistics: GetStatistics
     });
+}
+
+export function RegisterForOnDataLoadCallback(callback) {
+    DataLoadedFromServerCallbacks.push(callback);
 }
