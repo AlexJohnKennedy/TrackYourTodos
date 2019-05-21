@@ -49,14 +49,19 @@ namespace todo_app.Controllers {
             var compositeKeyset = newEvents.Select(e => new { e.Id, e.Timestamp, e.EventType }).ToHashSet();
             List<GenericTodoEvent> duplicates = await dbContext.TodoEvents.Where(e => compositeKeyset.Contains(new { e.Id, e.Timestamp, e.EventType })).ToListAsync();
 
-            // If there are not duplicates, do a save
+            // If there are not duplicates, do a save. We are assuming that they are not causing an invalid state. Later on, I will
+            // simulate the state
             if (duplicates.Count == 0) {
                 dbContext.TodoEvents.AddRange(newEvents);
                 await dbContext.SaveChangesAsync();
                 return Ok(newEvents);
             }
             else {
-                return this.Conflict("Oh no! Looks like you have posted a duplicate event!");
+                var duplicateSet = duplicates.Select(e => new { e.Id, e.Timestamp, e.EventType }).ToHashSet();
+                var nonDups = newEvents.Where(e => !duplicateSet.Contains(new { e.Id, e.Timestamp, e.EventType }));
+                dbContext.TodoEvents.AddRange(nonDups);
+                await dbContext.SaveChangesAsync();
+                return Ok(nonDups);
             }
         }
     }
