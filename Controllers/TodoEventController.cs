@@ -7,8 +7,8 @@ using todo_app.DataTransferLayer.Entities;
 using todo_app.DataTransferLayer.DatabaseContext;
 using Microsoft.Extensions.Logging;
 
-namespace todo_app.Controllers
-{
+namespace todo_app.Controllers {
+    
     // This class will act as the main API controller. It will essentially be responsible for receiving and handling
     // any incoming HTTP request which is related to saving and loading 'todo events'; which encompass any action
     // taken by the client. Consequently, until more complex server-side features are developed, this will be the only

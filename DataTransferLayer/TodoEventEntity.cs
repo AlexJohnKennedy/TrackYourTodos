@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using todo_app.DomainLayer.Events;
@@ -36,7 +37,10 @@ namespace todo_app.DataTransferLayer.Entities {
     // possible event types, and thus, can represent any one of them. Additionally, there are explicit conversion
     // operators defined, allowing us to easily CAST to one of the specific-event entity types.
     public class GenericTodoEvent {
+        // Informs the ORM that this should be the Primary Key for this Entity
+        [Key]
         public Guid EventId { get; set; }
+
         public string EventType { get; set; }
         public long Timestamp { get; set; }
         public int Id { get; set; }
@@ -53,7 +57,9 @@ namespace todo_app.DataTransferLayer.Entities {
     // The casts must be explicit, since if a GenericTodoEvent is representing the wrong event, we want to throw an exception.
     // These specific-event types are also castable directly into domain-layer logic objects, in case we need that later on.
     public class TaskCreatedEvent {
+        [Key]
         public Guid EventId { get; set; }
+
         public string EventType { get; set; }
         public long Timestamp { get; set; }
         public int Id { get; set; }
@@ -89,7 +95,9 @@ namespace todo_app.DataTransferLayer.Entities {
     }
 
     public class ChildTaskAddedEvent {
+        [Key]
         public Guid EventId { get; set; }
+
         public string EventType { get; set; }
         public long Timestamp { get; set; }
         public int Id { get; set; }
@@ -124,7 +132,9 @@ namespace todo_app.DataTransferLayer.Entities {
     }
 
     public class TaskRevivedEvent {
+        [Key]
         public Guid EventId { get; set; }
+
         public string EventType { get; set; }
         public long Timestamp { get; set; }
         public int Original { get; set; }
@@ -158,7 +168,9 @@ namespace todo_app.DataTransferLayer.Entities {
     }
 
     public class TaskActivatedEvent {
+        [Key]
         public Guid EventId { get; set; }
+        
         public string EventType { get; set; }
         public long Timestamp { get; set; }
         public int Id { get; set; }
@@ -194,7 +206,9 @@ namespace todo_app.DataTransferLayer.Entities {
     }
 
     public class TaskDeletedEvent {
+        [Key]
         public Guid EventId { get; set; }
+
         public string EventType { get; set; }
         public long Timestamp { get; set; }
         public int Id { get; set; }
@@ -230,7 +244,9 @@ namespace todo_app.DataTransferLayer.Entities {
     }
 
     public class TaskStartedEvent {
+        [Key]
         public Guid EventId { get; set; }
+
         public string EventType { get; set; }
         public long Timestamp { get; set; }
         public int Id { get; set; }
@@ -266,7 +282,9 @@ namespace todo_app.DataTransferLayer.Entities {
     }
 
     public class TaskCompletedEvent {
+        [Key]
         public Guid EventId { get; set; }
+
         public string EventType { get; set; }
         public long Timestamp { get; set; }
         public int Id { get; set; }
@@ -302,7 +320,9 @@ namespace todo_app.DataTransferLayer.Entities {
     }
 
     public class TaskFailedEvent {
+        [Key]
         public Guid EventId { get; set; }
+        
         public string EventType { get; set; }
         public long Timestamp { get; set; }
         public int Id { get; set; }
