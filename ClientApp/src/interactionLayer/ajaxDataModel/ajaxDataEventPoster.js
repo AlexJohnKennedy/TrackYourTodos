@@ -1,4 +1,4 @@
-import { DataEventSerialisationFuncs } from './dataEventSerialiser';
+import { DataEventSerialisationFuncs } from '../dataEventSerialiser';
 
 export const DataEventHttpPostHandlers = {
     taskAddedHandler: (task, list) => postEvent(DataEventSerialisationFuncs.taskAddedEvent(task, list), 2),
@@ -43,5 +43,5 @@ function postEvent(eventText, retryCount) {
     };
     
     // Send the request, with the serialised event text as the message body.
-    httpRequest.send(eventText);
+    httpRequest.send('['+eventText+']');
 }
