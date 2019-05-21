@@ -45,9 +45,19 @@ namespace todo_app.Controllers {
         // a single event, but the API will support an array of events, such that clients can implement batch-sending if needed.
         [HttpPost("/todoevents")]
         public async Task<IActionResult> PostNewEvents([FromBody] IList<GenericTodoEvent> newEvents) {
-            dbContext.TodoEvents.AddRange(newEvents);
-            await dbContext.SaveChangesAsync();
-            return Ok(newEvents);
+            // Detect duplicate events, and notify the client of duplicates by returning a different status code.
+            var compositeKeyset = newEvents.Select(e => new { e.Id, e.Timestamp, e.EventType }).ToHashSet();
+            List<GenericTodoEvent> duplicates = await dbContext.TodoEvents.Where(e => compositeKeyset.Contains(new { e.Id, e.Timestamp, e.EventType })).ToListAsync();
+
+            // If there are not duplicates, do a save
+            if (duplicates.Count == 0) {
+                dbContext.TodoEvents.AddRange(newEvents);
+                await dbContext.SaveChangesAsync();
+                return Ok(newEvents);
+            }
+            else {
+                return this.Conflict("Oh no! Looks like you have posted a duplicate event!");
+            }
         }
     }
 }

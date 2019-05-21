@@ -23,11 +23,11 @@ namespace todo_app.DomainLayer.Events {
     // The reason for this base type is to facilitate easier listing and collection
     // of the events by listing them as a single base type.
     public abstract class TodoEvent {
-        public Guid EventId { get; }
+        public int EventId { get; }
         public TodoEventType EventType { get; }
         public long Timestamp { get; }
 
-        protected TodoEvent(Guid eventId, TodoEventType type, long timestamp) {
+        protected TodoEvent(int eventId, TodoEventType type, long timestamp) {
             this.EventId = eventId;
             this.EventType = type;
             this.Timestamp = timestamp;
@@ -41,7 +41,7 @@ namespace todo_app.DomainLayer.Events {
         public int ProgressStatus { get; }
         public int ColourId { get; }
 
-        public TaskCreatedEvent(Guid eventId, long timestamp, int taskId, string taskname, int category, int progress, int colourid) : base(eventId, TodoEventType.TASK_CREATED, timestamp) {
+        public TaskCreatedEvent(int eventId, long timestamp, int taskId, string taskname, int category, int progress, int colourid) : base(eventId, TodoEventType.TASK_CREATED, timestamp) {
             this.TaskId = taskId;
             this.TaskName = taskname;
             this.Category = category;
@@ -58,7 +58,7 @@ namespace todo_app.DomainLayer.Events {
         public int ChildProgressStatus { get; }
         public int ChildColourId { get; }
 
-        public ChildTaskAddedEvent(Guid eventId, long timestamp, int childtaskid, int parenttaskid, string childName, int childCategory, int childProgress, int childColourId) : base(eventId, TodoEventType.CHILD_TASK_CREATED, timestamp) {
+        public ChildTaskAddedEvent(int eventId, long timestamp, int childtaskid, int parenttaskid, string childName, int childCategory, int childProgress, int childColourId) : base(eventId, TodoEventType.CHILD_TASK_CREATED, timestamp) {
             this.ChildCategory = childCategory;
             this.ChildTaskId = childtaskid;
             this.ParentTaskId = parenttaskid;
@@ -76,7 +76,7 @@ namespace todo_app.DomainLayer.Events {
         public int NewTaskProgressStatus { get; }
         public int NewTaskColourId { get; }
         
-        public TaskRevivedEvent(Guid eventId, long timestamp, int originalTaskId, int newTaskId, string newTaskName, int newTaskCategory, int newTaskProgressStatus, int newTaskColourId) : base(eventId, TodoEventType.TASK_REVIVED, timestamp) {
+        public TaskRevivedEvent(int eventId, long timestamp, int originalTaskId, int newTaskId, string newTaskName, int newTaskCategory, int newTaskProgressStatus, int newTaskColourId) : base(eventId, TodoEventType.TASK_REVIVED, timestamp) {
             OriginalTaskId = originalTaskId;
             NewTaskId = newTaskId;
             NewTaskName = newTaskName;
@@ -95,7 +95,7 @@ namespace todo_app.DomainLayer.Events {
         public int ParentTaskId { get; }
         public IEnumerable<int> ChildTaskIds { get; }
 
-        public TaskActivatedEvent(Guid eventId, long timestamp, int taskId, string taskName, int category, int progressStatus, int colourId, int parentTaskId, IEnumerable<int> childTaskIds) : base(eventId, TodoEventType.TASK_ACTIVATED, timestamp) {
+        public TaskActivatedEvent(int eventId, long timestamp, int taskId, string taskName, int category, int progressStatus, int colourId, int parentTaskId, IEnumerable<int> childTaskIds) : base(eventId, TodoEventType.TASK_ACTIVATED, timestamp) {
             TaskId = taskId;
             TaskName = taskName;
             Category = category;
@@ -115,7 +115,7 @@ namespace todo_app.DomainLayer.Events {
         public int ParentTaskId { get; }
         public IEnumerable<int> ChildTaskIds { get; }
 
-        public TaskDeletedEvent(Guid eventId, long timestamp, int taskId, string taskName, int category, int progressStatus, int colourId, int parentTaskId, IEnumerable<int> childTaskIds) : base(eventId, TodoEventType.TASK_DELETED, timestamp) {
+        public TaskDeletedEvent(int eventId, long timestamp, int taskId, string taskName, int category, int progressStatus, int colourId, int parentTaskId, IEnumerable<int> childTaskIds) : base(eventId, TodoEventType.TASK_DELETED, timestamp) {
             TaskId = taskId;
             TaskName = taskName;
             Category = category;
@@ -134,7 +134,7 @@ namespace todo_app.DomainLayer.Events {
         public int ParentTaskId { get; }
         public IEnumerable<int> ChildTaskIds { get; }
 
-        public TaskStartedEvent(Guid eventId, long timestamp, int taskId, string taskName, int category, int colourId, int parentTaskId, IEnumerable<int> childTaskIds) : base(eventId, TodoEventType.TASK_STARTED, timestamp) {
+        public TaskStartedEvent(int eventId, long timestamp, int taskId, string taskName, int category, int colourId, int parentTaskId, IEnumerable<int> childTaskIds) : base(eventId, TodoEventType.TASK_STARTED, timestamp) {
             TaskId = taskId;
             TaskName = taskName;
             Category = category;
@@ -152,7 +152,7 @@ namespace todo_app.DomainLayer.Events {
         public int ParentTaskId { get; }
         public IEnumerable<int> ChildTaskIds { get; }
 
-        public TaskCompletedEvent(Guid eventId, long timestamp, int taskId, string taskName, int category, int colourId, int parentTaskId, IEnumerable<int> childTaskIds) : base(eventId, TodoEventType.TASK_COMPLETED, timestamp) {
+        public TaskCompletedEvent(int eventId, long timestamp, int taskId, string taskName, int category, int colourId, int parentTaskId, IEnumerable<int> childTaskIds) : base(eventId, TodoEventType.TASK_COMPLETED, timestamp) {
             TaskId = taskId;
             TaskName = taskName;
             Category = category;
@@ -170,7 +170,7 @@ namespace todo_app.DomainLayer.Events {
         public int ParentTaskId { get; }
         public IEnumerable<int> ChildTaskIds { get; }
 
-        public TaskFailedEvent(Guid eventId, long timestamp, int taskId, string taskName, int category, int colourId, int parentTaskId, IEnumerable<int> childTaskIds) : base(eventId, TodoEventType.TASK_FAILED, timestamp) {
+        public TaskFailedEvent(int eventId, long timestamp, int taskId, string taskName, int category, int colourId, int parentTaskId, IEnumerable<int> childTaskIds) : base(eventId, TodoEventType.TASK_FAILED, timestamp) {
             TaskId = taskId;
             TaskName = taskName;
             Category = category;

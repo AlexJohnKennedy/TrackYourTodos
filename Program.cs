@@ -53,10 +53,8 @@ namespace todo_app {
             context.SaveChanges();
         }
 
-
         private static GenericTodoEvent BuildEvent(string type, long time, int id, string name, int category, int progressStatus, int? parent, int colourid, int? original, List<int> children) {
             GenericTodoEvent e = new GenericTodoEvent();
-            e.EventId = Guid.NewGuid();
             e.Id = id;
             e.EventType = type;
             e.Name = name;
