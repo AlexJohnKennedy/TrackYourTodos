@@ -8,7 +8,7 @@ using todo_app.DataTransferLayer.DatabaseContext;
 using Microsoft.Extensions.Logging;
 
 namespace todo_app.Controllers {
-    
+
     // This class will act as the main API controller. It will essentially be responsible for receiving and handling
     // any incoming HTTP request which is related to saving and loading 'todo events'; which encompass any action
     // taken by the client. Consequently, until more complex server-side features are developed, this will be the only
@@ -36,16 +36,15 @@ namespace todo_app.Controllers {
         // A GET request to the todoevent endpoint will automatically fetch all of a user's events.
         [HttpGet("/todoevents")]
         public IActionResult FetchEntireEventLog() {
-            logger.LogInformation("Entering 'FetchEntireEventLog' action handler!");
-            
-            //return Ok(injectedContext.TodoEvents.Where(e => true).OrderBy(e => e.Timestamp).ToList());
-            return Ok("memes :O");
+            return Ok(dbContext.TodoEvents.Where(e => true).OrderBy(e => e.Timestamp).ToList());
         }
 
         // A POST request to the todoevent endpoint will pass in a log of new events to use. Most often, this will just be
         // a single event, but the API will support an array of events, such that clients can implement batch-sending if needed.
         [HttpPost("/todoevents")]
         public IActionResult PostNewEvents([FromBody] IList<GenericTodoEvent> newEvents) {
+            dbContext.TodoEvents.AddRange(newEvents);
+            dbContext.SaveChanges();
             return Ok(newEvents);
         }
     }
