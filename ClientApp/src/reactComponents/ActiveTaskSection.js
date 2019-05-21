@@ -40,7 +40,7 @@ export class ActiveTaskSection extends Component {
             let ids = this.activeTaskListAPI.PerformFailureCheck(800, id => this.unregisterForAnimation(id, false));
             ids.forEach(id => this.registerForAnimation(id, false));
         };
-        this.initialCheck = window.setTimeout(checkAction, 2000);   // Wait 2 seconds before 'melting' the failed tasks
+        this.initialCheck = window.setTimeout(checkAction, 2500);   // Wait 2 seconds before 'melting' the failed tasks
         this.intervalCheck = window.setInterval(checkAction, 3600000);  // Re-check for failures every hour.
 
         // Initialise state of this component
