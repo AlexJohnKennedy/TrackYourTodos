@@ -12,7 +12,7 @@ function BuildDataEventSerialisationFuncs() {
             name: child.name,
             category: child.category,
             progressStatus: child.progressStatus,
-            colourid: child.colourid,
+            colourId: child.colourid,
             parent: child.parent.id
         });
     }
@@ -26,7 +26,7 @@ function BuildDataEventSerialisationFuncs() {
             name: newtask.name,
             category: newtask.category,
             progressStatus: newtask.progressStatus,
-            colourid: newtask.colourid,
+            colourId: newtask.colourid,
             parent: null
         });
     }
@@ -39,7 +39,7 @@ function BuildDataEventSerialisationFuncs() {
             name: task.name,
             category: task.category,
             progressStatus: task.progressStatus,
-            colourid: task.colourid,
+            colourId: task.colourid,
             parent: null
         });
     }
@@ -52,7 +52,7 @@ function BuildDataEventSerialisationFuncs() {
             name: task.name,
             category: task.category,
             progressStatus: task.progressStatus,
-            colourid: task.colourid,
+            colourId: task.colourid,
             parent: task.parent === null ? null : task.parent.id,
             children: task.children.map(child => child.id)
         });
@@ -66,7 +66,7 @@ function BuildDataEventSerialisationFuncs() {
             name: task.name,
             category: task.category,
             progressStatus: task.progressStatus,
-            colourid: task.colourid,
+            colourId: task.colourid,
             parent: task.parent === null ? null : task.parent.id,
             children: task.children.map(child => child.id)
         });
@@ -80,7 +80,7 @@ function BuildDataEventSerialisationFuncs() {
             name: task.name,
             category: task.category,
             progressStatus: task.progressStatus,
-            colourid: task.colourid,
+            colourId: task.colourid,
             parent: task.parent === null ? null : task.parent.id,
             children: task.children.map(child => child.id)
         });
@@ -94,7 +94,7 @@ function BuildDataEventSerialisationFuncs() {
             name: task.name,
             category: task.category,
             progressStatus: task.progressStatus,
-            colourid: task.colourid,
+            colourId: task.colourid,
             parent: task.parent === null ? null : task.parent.id,
             children: task.children.map(child => child.id)
         });
@@ -108,7 +108,7 @@ function BuildDataEventSerialisationFuncs() {
             name: task.name,
             category: task.category,
             progressStatus: task.progressStatus,
-            colourid: task.colourid,
+            colourId: task.colourid,
             parent: task.parent === null ? null : task.parent.id,
             children: task.children.map(child => child.id)
         });
