@@ -11,6 +11,12 @@ using Microsoft.EntityFrameworkCore;
 namespace todo_app {
 
     public class Startup {
+
+        // Keeping Google OAuth Client credentials here temporarily while I figure this shit out.
+        // If you're seeing this on a public github, don't worry, these creds aren't used for anything real.
+        private const string ClientSecret = "vy17V2EITVOXnTtryQHzgAEI";
+        private const string ClientId = "918054703402-ro3vekrnadnoc4e00timiuei0bk44lcq.apps.googleusercontent.com";
+
         public Startup(IConfiguration configuration) {
             Configuration = configuration;
         }
@@ -20,6 +26,27 @@ namespace todo_app {
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
             
+            // Register an OpenIdConnect authentication service, configured to use Google as the authentication server.
+            // By default, this will use the implicit flow, and thus we do not need the client secret token in our options.
+            services.AddAuthentication(
+                options => {
+                    options.DefaultScheme = "Cookies";
+                    options.DefaultChallengeScheme = "GoogleOpenIdConnect";
+                }
+            )
+            .AddCookie("Cookies")
+            .AddOpenIdConnect(
+                authenticationScheme: "GoogleOpenIdConnect",
+                displayName: "GoogleOpenIdConnect",
+                options => {
+                    options.Authority = "https://accounts.google.com/";
+                    options.ClientId = ClientId;
+                    options.CallbackPath = "/memes";
+                    options.Scope.Add("email");     // Ask Google for email address of the user
+                    options.SignedOutCallbackPath = "/";
+                }
+            );
+
             // Register our EFCore database context with DI, and configure it to be backed by an in-memory database provider.
             // Later, we can replace this with a PostGres provider and hopefully not have to change much/any logic.
             services.AddDbContext<TodoEventContext>(optionsObj => {
@@ -49,10 +76,12 @@ namespace todo_app {
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
 
+            app.UseAuthentication();
             app.UseMvc();
 
             app.UseSpa(spa => {
                 spa.Options.SourcePath = "ClientApp";
+                spa.Options.DefaultPage = "/app";
 
                 if (env.IsDevelopment())
                 {
