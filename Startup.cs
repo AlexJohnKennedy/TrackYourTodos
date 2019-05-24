@@ -1,14 +1,13 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using todo_app.DataTransferLayer.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 
-namespace todo_app {
+namespace todo_app
+{
 
     public class Startup {
 
@@ -74,20 +73,9 @@ namespace todo_app {
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseSpaStaticFiles();
 
             app.UseAuthentication();
             app.UseMvc();
-
-            app.UseSpa(spa => {
-                spa.Options.SourcePath = "ClientApp";
-                spa.Options.DefaultPage = "/app";
-
-                if (env.IsDevelopment())
-                {
-                    spa.UseReactDevelopmentServer(npmScript: "start");
-                }
-            });
         }
     }
 }

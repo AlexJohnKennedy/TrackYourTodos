@@ -34,16 +34,10 @@ namespace todo_app.Controllers {
             this.dbContext = injectedContext;
         }
 
-        [Authorize]
-        [HttpGet("/memes")]
-        public IActionResult Poo() {
-            return Ok("The secret meme sauce");
-        }
-
         // A GET request to the todoevent endpoint will automatically fetch all of a user's events.
         [Authorize]
         [HttpGet("/todoevents")]
-        public async Task<IActionResult> FetchEntireEventLog() {
+        public async Task<IActionResult> FetchEntireEventLog() {            
             IEnumerable<GenericTodoEvent> eventLog = await dbContext.TodoEvents.Where(e => true).OrderBy(e => e.Timestamp).ToListAsync();
             return Ok(eventLog);
         }
