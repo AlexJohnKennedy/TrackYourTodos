@@ -6,6 +6,7 @@
 @import "./Task.css";
 @import "./Board.css";
 @import "./Footer.css";
+@import "./Header.css";
 
 /* Define some global variables to define VSCode colour scheme colours! */
 :root {

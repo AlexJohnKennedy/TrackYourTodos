@@ -8,6 +8,7 @@ import { TemporaryStateManager } from './viewLogic/temporaryStateManager';
 import { ShortCutManager } from './viewLogic/keyboardShortcutHandler';
 import { ThemeId, currThemeId } from './viewLogic/colourSetManager';
 import { Footer } from './reactComponents/Footer';
+import { Header } from './reactComponents/Header';
 import { DataEventHttpPostHandlers } from './interactionLayer/ajaxDataModel/ajaxDataEventPoster';
 import { RegisterForDataEvents } from './interactionLayer/viewLayerInteractionApi';
 
@@ -34,6 +35,7 @@ class App extends Component {
     return (
       // Return each 'section' of the app as siblings, so that the root div can arrange them using CSS Grid!
       <ThemeId.Provider value={{ themeId: currThemeId }}>
+        <Header/>
         <BacklogSection formStateManager={this.formStateManager}/>
         <ActiveTaskSection formStateManager={this.formStateManager}/>
         <TaskStatisticsSection formStateManager={this.formStateManager}/>
