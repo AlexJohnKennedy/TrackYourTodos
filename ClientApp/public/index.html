@@ -23,6 +23,17 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>Track your TODOs</title>
+
+    <!-- Here I am importing the Google APIs client library, for implementing Google sign in. I am also
+      -- specifying an HTML meta 'variable' which holds my Application's Google Id. Note that the google id is 
+      -- NOT a secret/private value, so it's fine to dump it here in the served HTML.
+    -->
+    <meta
+      name="google-signin-client_id"
+      content="your-client-ID.apps.googleusercontent.com"
+    />
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
