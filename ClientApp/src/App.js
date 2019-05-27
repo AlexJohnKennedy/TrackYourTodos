@@ -11,7 +11,6 @@ import { Footer } from './reactComponents/Footer';
 import { Header } from './reactComponents/Header';
 import { DataEventHttpPostHandlers } from './interactionLayer/ajaxDataModel/ajaxDataEventPoster';
 import { RegisterForDataEvents } from './interactionLayer/viewLayerInteractionApi';
-import { loadscript } from './asyncScriptLoader';
 
 class App extends Component {
   constructor(props) {
@@ -28,19 +27,36 @@ class App extends Component {
       googleAuthApiLoaded: false,
       googleUserIsLoggedIn: false
     }
+
+    this.respondToGapiLoad = this.respondToGapiLoad.bind(this);
   }
 
   componentDidMount() {
     console.log("Application is mounting!");
+
+    // Register to receive a callback when google auth loads up. Doing this before polling the load, so that weird races don't happen.
+    window.registerForGapiLoadedCallback(this.respondToGapiLoad);
     
     // Check if the Google authentication API is loaded yet. If it isn't, trigger a load.
-    if (!window.gapi) {
+    if (!window.isGoogleAuthReady) {
       console.log("Google authentication api is not loaded! Routing to the loading page, and waiting for load");
-      this.loadGoogleApiScriptThenLoadAuthThenInitAuth();
     }
-    window.BOOP();
+    else {
+      console.log("Google auth api was already loaded and setup by the time we mounted :O");
+      this.setState({
+        googleAuthApiLoaded: true
+      });
+    }
   }
   
+  respondToGapiLoad() {
+    if (this.state.googleAuthApiLoaded) return;
+    console.log("I am the App component, and I was just told via a callback that the google Authentication api is ready! I will now route to either the sign in or the app page");
+    this.setState({
+      googleAuthApiLoaded: true
+    });
+  }
+
   render() {
     return (
       // For now, no routing is actually occuring
