@@ -28,8 +28,40 @@
       -- specifying an HTML meta 'variable' which holds my Application's Google Id. Note that the google id is 
       -- NOT a secret/private value, so it's fine to dump it here in the served HTML.
     -->
-    <meta name="google-signin-client_id" content="918054703402-2u53f3l62mpekrao3jkqd6geg3mjvtjq.apps.googleusercontent.com" />
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <meta name="google-signin-client_id" content="918054703402-2u53f3l62mpekrao3jkqd6geg3mjvtjq.apps.googleusercontent.com"/>
+    <script src="https://apis.google.com/js/platform.js?onload=initGoogle" async defer></script>
+    <script>
+      console.log("Hello! I am a script tag in the <head> of index.html! :)");
+      // Load up the authentication logic and everything!
+      const gapiLoadedCallbacks = [];
+      function BOOP() { console.log("BOOP!"); }
+      function registerForGapiLoadedCallback(callback) {
+        console.log("Someone registered to recieve a callback when the google auth api loads");
+        gapiLoadedCallbacks.push(callback);
+      }
+      function initGoogle() {
+        console.log("Google API ('window.gapi') just loaded from an external script! I am now going to call window.gapi.load('auth2') to setup the authentication system");
+        window.gapi.load('auth2', function() {
+          console.log("The auth2 module or whatever just loaded! I am now calling window.gapi.auth2.init({ clientid: xxx }) to get the last step ready!");
+          window.gapi.auth2.init({
+            client_id: "918054703402-2u53f3l62mpekrao3jkqd6geg3mjvtjq.apps.googleusercontent.com"
+          }).then(
+            // This anon-func is 'onInit()', i.e. called when the auth2 system successuly initialises. In our case, we will just call the 'callback'
+            authObject => {
+              console.log("Google authentication system has finished initialising! We can now access the GoogleAuth library to monitor session state, and so forth! Calling our callbacks!");
+              gapiLoadedCallbacks.forEach(callback => callback())
+            },
+            
+            // This anon-func is 'onError()'. Called if the google library fails to load. Oh dear.
+            errorObj => {
+              console.log("ERROR: Google auth failed to init! :O");
+              console.log(errorObj);
+              throw new Error("GOOGLE AUTH FAILED TO INITIALISE!");
+            }
+          );
+        });
+      }
+    </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
