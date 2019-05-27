@@ -46,7 +46,8 @@
         window.gapi.load('auth2', function() {
           console.log("The auth2 module or whatever just loaded! I am now calling window.gapi.auth2.init({ clientid: xxx }) to get the last step ready!");
           window.gapi.auth2.init({
-            client_id: "918054703402-2u53f3l62mpekrao3jkqd6geg3mjvtjq.apps.googleusercontent.com"
+            client_id: "918054703402-2u53f3l62mpekrao3jkqd6geg3mjvtjq.apps.googleusercontent.com",
+            cookie_policy: "none"   // No cookie saving. We will manually store JWT tokens in local storage.
           }).then(
             // This anon-func is 'onInit()', i.e. called when the auth2 system successuly initialises. In our case, we will just call the 'callback'
             authObject => {

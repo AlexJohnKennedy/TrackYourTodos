@@ -7,20 +7,16 @@ export class GoogleSignInButton extends Component {
         window.gapi.signin2.render(
             GOOGLE_BUTTON_ID,
             {
-                width: 200,
-                height: 50,
-                onsuccess: this.onSuccess,
-                onfailure: this.onFailure
+                width: this.props.width,
+                height: this.props.height,
+                onsuccess: this.props.onSuccess,
+                onfailure: this.props.onFailure,
+                scope: 'profile email openid',
+                longtitle: this.props.useLongTitle
             },
         );
     }
-    onSuccess(googleUser) {
-        const profile = googleUser.getBasicProfile();
-        console.log("Name: " + profile.getName());
-    }
-    onFailure() {
-        console.log("Oops! Something failed :(");
-    }
+    
     render() {
         return (
             <div id={GOOGLE_BUTTON_ID}/>

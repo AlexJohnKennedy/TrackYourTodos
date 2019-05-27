@@ -1,16 +1,11 @@
 import React, { Component } from 'react';
 import './css/App.css';
 import '../node_modules/react-vis/dist/style.css';
-import { ActiveTaskSection } from './reactComponents/ActiveTaskSection';
-import { TaskStatisticsSection } from './reactComponents/TaskStatisticsSection';
-import { BacklogSection } from './reactComponents/BacklogSection';
-import { TemporaryStateManager } from './viewLogic/temporaryStateManager';
-import { ShortCutManager } from './viewLogic/keyboardShortcutHandler';
-import { ThemeId, currThemeId } from './viewLogic/colourSetManager';
-import { Footer } from './reactComponents/Footer';
-import { Header } from './reactComponents/Header';
 import { DataEventHttpPostHandlers } from './interactionLayer/ajaxDataModel/ajaxDataEventPoster';
 import { RegisterForDataEvents } from './interactionLayer/viewLayerInteractionApi';
+import { AppPage } from './AppPage';
+import { LoadingPage } from './LoadingPage';
+import { LoginPage, FailurePage } from './LoginPage';
 
 class App extends Component {
   constructor(props) {
@@ -25,10 +20,14 @@ class App extends Component {
     // Finally, if the user IS logged in, then we will route to the actual application page, until they press logout.
     this.state = {
       googleAuthApiLoaded: false,
-      googleUserIsLoggedIn: false
+      googleUserIsLoggedIn: false,
+      googleLoginFailed: false
     }
 
     this.respondToGapiLoad = this.respondToGapiLoad.bind(this);
+    this.setGoogleSignedIn = this.setGoogleSignedIn.bind(this);
+    this.setGoogleSignedOut = this.setGoogleSignedOut.bind(this);
+    this.setLoginFailureFlag = this.setLoginFailureFlag.bind(this);
   }
 
   componentDidMount() {
@@ -36,7 +35,7 @@ class App extends Component {
 
     // Register to receive a callback when google auth loads up. Doing this before polling the load, so that weird races don't happen.
     window.registerForGapiLoadedCallback(this.respondToGapiLoad);
-    
+
     // Check if the Google authentication API is loaded yet. If it isn't, trigger a load.
     if (!window.isGoogleAuthReady) {
       console.log("Google authentication api is not loaded! Routing to the loading page, and waiting for load");
@@ -48,7 +47,7 @@ class App extends Component {
       });
     }
   }
-  
+
   respondToGapiLoad() {
     if (this.state.googleAuthApiLoaded) return;
     console.log("I am the App component, and I was just told via a callback that the google Authentication api is ready! I will now route to either the sign in or the app page");
@@ -57,45 +56,45 @@ class App extends Component {
     });
   }
 
+  // These callbacks will be passed down to child elements so that they can trigger a re-render of a different page
+  // if a user signs in or out; for example if they sign in on the sign in page.
+  setGoogleSignedIn() {
+    this.setState({
+      googleAuthApiLoaded: true,
+      googleUserIsLoggedIn: true
+    });
+  }
+  setGoogleSignedOut() {
+    this.setState({
+      googleUserIsLoggedIn: false
+    });
+  }
+  setLoginFailureFlag() {
+    this.setState({
+      googleLoginFailed: true
+    });
+  }
+
   render() {
+    let PageToRender;
+    
+    if (this.state.googleLoginFailed) {
+      PageToRender = <FailurePage/>
+    }
+    else if (!this.state.googleAuthApiLoaded) {
+      PageToRender = <LoadingPage/>;
+    }
+    else if (!this.state.googleUserIsLoggedIn) {
+      PageToRender = <LoginPage onGoogleLoginSuccess={this.setGoogleSignedIn} onGoogleLoginFailure={this.setLoginFailureFlag}/>;
+    }
+    else {
+      PageToRender = <AppPage onSignOut={this.setGoogleSignedOut}/>;
+    }
+    
     return (
-      // For now, no routing is actually occuring
-      <AppPage/>
+      { PageToRender }
     );
   }
 }
 
 export default App;
-
-// A wrapper for the application 'page' itself, which will be rendered by react-router
-class AppPage extends Component {
-  componentDidMount() {
-    // Create a temporary state context for creation forms
-    this.formStateManager = TemporaryStateManager();
-    this.cleanUpFormStates = this.cleanUpFormStates.bind(this);
-
-    // Access the global keyboard shortcut manager, and register the form cleanup function as 'esc' key.
-    ShortCutManager.registerShortcut('Escape', this.cleanUpFormStates);
-  }
-  componentWillUnmount() {
-    // Short cuts should only be active while the application page is mounted/rendered.
-    ShortCutManager.clearAllShortcuts();
-  }
-
-  cleanUpFormStates() {
-    this.formStateManager.triggerCleanup();
-  }
-
-  render() {
-    return (
-      // Return each 'section' of the app as siblings, so that the root div can arrange them using CSS Grid!
-      <ThemeId.Provider value={{ themeId: currThemeId }}>
-        <Header/>
-        <BacklogSection formStateManager={this.formStateManager}/>
-        <ActiveTaskSection formStateManager={this.formStateManager}/>
-        <TaskStatisticsSection formStateManager={this.formStateManager}/>
-        <Footer/>
-      </ThemeId.Provider>
-    );
-  }
-}
