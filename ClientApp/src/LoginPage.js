@@ -10,8 +10,8 @@ export class LoginPage extends Component {
                     {this.props.titleText}
                 </div>
                 <GoogleSignInButton
-                    width={400}
-                    height={100}
+                    width={325}
+                    height={60}
                     useLongTitle={true}
                     onSuccess={this.props.onGoogleLoginSuccess}
                     onFailure={this.props.onGoogleLoginFailure}
