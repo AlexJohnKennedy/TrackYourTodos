@@ -11,33 +11,41 @@ import { Header } from './reactComponents/Header';
 // A wrapper for the application 'page' itself, which will be rendered by react-router.
 // This basically acts as the subtree-root for the actual todo-app page.
 export class AppPage extends Component {
-  componentDidMount() {
-    // Create a temporary state context for creation forms
-    this.formStateManager = TemporaryStateManager();
-    this.cleanUpFormStates = this.cleanUpFormStates.bind(this);
+    constructor(props) {
+        super(props);
 
-    // Access the global keyboard shortcut manager, and register the form cleanup function as 'esc' key.
-    ShortCutManager.registerShortcut('Escape', this.cleanUpFormStates);
-  }
-  componentWillUnmount() {
-    // Short cuts should only be active while the application page is mounted/rendered.
-    ShortCutManager.clearAllShortcuts();
-  }
+        console.debug("AppPage is being constructed");
+        
+        // Create a temporary state context for creation forms
+        this.formStateManager = TemporaryStateManager();
+        console.log(this.formStateManager);
+        // Access the global keyboard shortcut manager, and register the form cleanup function as 'esc' key.
+        ShortCutManager.registerShortcut('Escape', this.cleanUpFormStates);
 
-  cleanUpFormStates() {
-    this.formStateManager.triggerCleanup();
-  }
+        this.cleanUpFormStates = this.cleanUpFormStates.bind(this);
+    }
+    componentDidMount() {
+        console.debug("AppPage is being Mounted");
+    }
+    componentWillUnmount() {
+        // Short cuts should only be active while the application page is mounted/rendered.
+        ShortCutManager.clearAllShortcuts();
+    }
 
-  render() {
-    return (
-      // Return each 'section' of the app as siblings, so that the root div can arrange them using CSS Grid!
-      <ThemeId.Provider value={{ themeId: currThemeId }}>
-        <Header />
-        <BacklogSection formStateManager={this.formStateManager} />
-        <ActiveTaskSection formStateManager={this.formStateManager} />
-        <TaskStatisticsSection formStateManager={this.formStateManager} />
-        <Footer />
-      </ThemeId.Provider>
-    );
-  }
+    cleanUpFormStates() {
+        this.formStateManager.triggerCleanup();
+    }
+
+    render() {
+        return (
+            // Return each 'section' of the app as siblings, so that the root div can arrange them using CSS Grid!
+            <ThemeId.Provider value={{ themeId: currThemeId }}>
+                <Header />
+                <BacklogSection formStateManager={this.formStateManager} />
+                <ActiveTaskSection formStateManager={this.formStateManager} />
+                <TaskStatisticsSection formStateManager={this.formStateManager} />
+                <Footer />
+            </ThemeId.Provider>
+        );
+    }
 }
