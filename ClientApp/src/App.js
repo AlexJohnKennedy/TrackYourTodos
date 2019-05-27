@@ -65,6 +65,8 @@ class App extends Component {
     });
   }
   setGoogleSignedOut() {
+    console.debug("Signed out!");
+    console.debug(window.gapi.auth2.getAuthInstance().isSignedIn.get());
     this.setState({
       googleUserIsLoggedIn: false
     });

@@ -39,7 +39,7 @@ export class AppPage extends Component {
         return (
             // Return each 'section' of the app as siblings, so that the root div can arrange them using CSS Grid!
             <ThemeId.Provider value={{ themeId: currThemeId }}>
-                <Header />
+                <Header onSignOut={this.props.onSignOut}/>
                 <BacklogSection formStateManager={this.formStateManager} />
                 <ActiveTaskSection formStateManager={this.formStateManager} />
                 <TaskStatisticsSection formStateManager={this.formStateManager} />
