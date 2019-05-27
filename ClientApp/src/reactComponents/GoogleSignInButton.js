@@ -10,6 +10,7 @@ export class GoogleSignInButton extends Component {
                 width: 200,
                 height: 50,
                 onsuccess: this.onSuccess,
+                onfailure: this.onFailure
             },
         );
     }

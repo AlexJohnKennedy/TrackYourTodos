@@ -35,7 +35,8 @@ namespace todo_app
             // only allow the appropriate origins for each particular API end-point.
             services.AddCors(corsOptions => {
                 corsOptions.AddPolicy("UserFacingApplications", builder => {    // TODO: Move CORS policy names to a Configurations Service binding.
-                    builder.WithOrigins("https://localhost:3000").AllowAnyHeader().AllowAnyMethod();
+                    // TODO: For production, we should NOT allow CORS requests from HTTP, only HTTPS!
+                    builder.WithOrigins("https://localhost:3000", "http://localhost:3000").AllowAnyHeader().AllowAnyMethod();
                 });
                 corsOptions.AddPolicy("AdminApplications", builder => {
                     builder.WithOrigins("https://some-admin-domain.com").AllowAnyHeader().AllowAnyMethod();

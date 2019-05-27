@@ -6,7 +6,7 @@ export class Header extends Component {
         return (
             <div className="Header">
                 <h1> Track Your TODOs </h1>
-                <GoogleSignInButton/>
+                <div> Sign out button here.. </div>
             </div>
         );
     }
