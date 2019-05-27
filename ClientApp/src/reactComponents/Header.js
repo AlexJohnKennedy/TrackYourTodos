@@ -25,10 +25,10 @@ export class Header extends Component {
 
         return (
             <div className="Header">
-                <div> Hi, {basicProfile.getGivenName()} </div>
+                <div className="greetingText"> Hi, {basicProfile.getGivenName()} </div>
                 <div className="signOutButton" onClick={this.signOut}>
                     <div> Sign out </div>
-                    <img src={basicProfile.getGivenName()} alt="Google account profile pic"/>
+                    <img src={basicProfile.getImageUrl()} alt="Google account profile pic"/>
                 </div>
             </div>
         );

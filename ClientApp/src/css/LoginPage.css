@@ -1,0 +1,13 @@
+.loginBox {
+    width: 100%;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 4rem;
+}
+.loginBox .loginTitleText {
+    font-size: 2.2rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    padding-bottom: 2rem;
+}

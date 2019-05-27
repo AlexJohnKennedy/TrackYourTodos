@@ -87,7 +87,7 @@ class App extends Component {
       PageToRender = <LoadingPage/>;
     }
     else if (!this.state.googleUserIsLoggedIn) {
-      PageToRender = <LoginPage onGoogleLoginSuccess={this.setGoogleSignedIn} onGoogleLoginFailure={this.setLoginFailureFlag}/>;
+      PageToRender = <LoginPage titleText="Sign in to start holding yourself accountable to your inevitable failures and laziness!" onGoogleLoginSuccess={this.setGoogleSignedIn} onGoogleLoginFailure={this.setLoginFailureFlag}/>;
     }
     else {
       PageToRender = <AppPage onSignOut={this.setGoogleSignedOut}/>;

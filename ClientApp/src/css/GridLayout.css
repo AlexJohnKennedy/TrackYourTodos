@@ -1,5 +1,5 @@
 /* 'global' variables for spacings, colours, etc. */
-#root {
+#appPageRoot {
     --top-padding-amount: 0.4rem;
     --board-spacing-amount: 0.6rem;
 
@@ -17,7 +17,7 @@
 /* NOTE: NEED TO USE A SASS PREPROCESSOR TO DO VARIABLE BASED CALCULATION FOR MEDIA QUERIES!
  * CSS DOES NOT SUPPORT VARIABLES IN MEDIA QUERIES NATIVELY! */
 @media (min-width: 1270px) {
-    #root {
+    #appPageRoot {
         display: grid;
         grid-template-columns: 1fr minmax(auto, 115rem) var(--divider-column-width) minmax(var(--backlog-tasks-total-width-squashed), var(--backlog-tasks-total-width)) 1fr;
         grid-template-rows: 4rem auto auto auto;
@@ -110,7 +110,7 @@
     }
 }
 @media (max-width: 1270px) {
-    #root {
+    #appPageRoot {
         display: grid;
         grid-template-columns: 1fr minmax(auto, 115rem) 1fr;
         grid-template-rows: 4rem auto auto auto;
@@ -188,7 +188,7 @@
     }
 }
 @media (max-width: 800px) {
-    #root {
+    #appPageRoot {
         display: grid;
         grid-template-columns: 1fr minmax(var(--active-tasks-single-board-min-width), var(--active-tasks-single-board-max-width)) 1fr;
         grid-template-rows: 4rem auto auto auto;
