@@ -13,19 +13,18 @@ import { Header } from './reactComponents/Header';
 export class AppPage extends Component {
     constructor(props) {
         super(props);
-
-        console.debug("AppPage is being constructed");
         
+        // bind this method before we instantiate the FormState manager, so that it is in scope        
+        this.cleanUpFormStates = this.cleanUpFormStates.bind(this);
+
         // Create a temporary state context for creation forms
         this.formStateManager = TemporaryStateManager();
-        console.log(this.formStateManager);
+
         // Access the global keyboard shortcut manager, and register the form cleanup function as 'esc' key.
         ShortCutManager.registerShortcut('Escape', this.cleanUpFormStates);
-
-        this.cleanUpFormStates = this.cleanUpFormStates.bind(this);
     }
     componentDidMount() {
-        console.debug("AppPage is being Mounted");
+        // TODO: Trigger data-model instantiation HERE, and only here!
     }
     componentWillUnmount() {
         // Short cuts should only be active while the application page is mounted/rendered.
