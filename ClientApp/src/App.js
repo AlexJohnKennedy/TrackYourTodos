@@ -4,8 +4,8 @@ import '../node_modules/react-vis/dist/style.css';
 import { DataEventHttpPostHandlers } from './interactionLayer/ajaxDataModel/ajaxDataEventPoster';
 import { RegisterForDataEvents } from './interactionLayer/viewLayerInteractionApi';
 import { AppPage } from './AppPage';
-import { LoadingPage } from './LoadingPage';
-import { LoginPage, FailurePage } from './LoginPage';
+import { LoadingPage, FailurePage } from './LoadingPage';
+import { LoginPage } from './LoginPage';
 
 class App extends Component {
   constructor(props) {
@@ -90,9 +90,9 @@ class App extends Component {
     else {
       PageToRender = <AppPage onSignOut={this.setGoogleSignedOut}/>;
     }
-    
+
     return (
-      { PageToRender }
+      <> {PageToRender} </>
     );
   }
 }
