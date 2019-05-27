@@ -9,6 +9,11 @@ function BuildShortCutManager() {
     let handlers = new Map();
     let shiftHandlers = new Map();
 
+    function clearAllShortcuts() {
+        handlers = new Map();
+        shiftHandlers = new Map();
+    }
+
     function register(key, handlerFunc, map) {
         if (map.has(key)) {
             map.get(key).push(handlerFunc);
@@ -44,6 +49,7 @@ function BuildShortCutManager() {
     }
 
     return Object.freeze({
+        clearAllShortcuts : clearAllShortcuts,
         registerShortcut : registerShortcut,
         registerShiftShortcut : registerShiftShortcut,
         globalHandler : globalHandler

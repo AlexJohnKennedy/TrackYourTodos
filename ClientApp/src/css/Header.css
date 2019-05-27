@@ -1,0 +1,25 @@
+.Header {
+    display: inline-flex;
+    justify-content: space-between;
+    padding-left: 0.6rem;
+    padding-right: 0.6rem;
+}
+
+.greetingText {
+    font-size: 2rem;
+    margin-top: 0.15rem;
+}
+
+.signOutButton {
+    display: inline-flex;
+    cursor: pointer;
+}
+.signOutButton img {
+    border-radius: 50%;
+    width: 3rem;
+    height: 3rem;
+    margin-left: 1rem;
+}
+.signOutButton div {
+    margin-top: 0.3rem;
+}

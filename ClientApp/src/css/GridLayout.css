@@ -1,5 +1,5 @@
 /* 'global' variables for spacings, colours, etc. */
-#root {
+#appPageRoot {
     --top-padding-amount: 0.4rem;
     --board-spacing-amount: 0.6rem;
 
@@ -17,17 +17,22 @@
 /* NOTE: NEED TO USE A SASS PREPROCESSOR TO DO VARIABLE BASED CALCULATION FOR MEDIA QUERIES!
  * CSS DOES NOT SUPPORT VARIABLES IN MEDIA QUERIES NATIVELY! */
 @media (min-width: 1270px) {
-    #root {
+    #appPageRoot {
         display: grid;
         grid-template-columns: 1fr minmax(auto, 115rem) var(--divider-column-width) minmax(var(--backlog-tasks-total-width-squashed), var(--backlog-tasks-total-width)) 1fr;
-        grid-template-rows: auto auto auto;
+        grid-template-rows: 4rem auto auto auto;
     }
-    
+    .Header {
+        grid-column-start: 2;
+        grid-column-end: 5;
+        grid-row-start: 1;
+        grid-row-end: 2;
+    }
     .ActiveTaskSection {
         grid-column-start: 2;
         grid-column-end: 3;
-        grid-row-start: 1;
-        grid-row-end: 2;
+        grid-row-start: 2;
+        grid-row-end: 3;
 
         min-height: 35rem;
         max-height: 50rem;
@@ -43,8 +48,8 @@
     .BacklogSection {
         grid-column-start: 4;
         grid-column-end: 5;
-        grid-row-start: 1;
-        grid-row-end: 3;
+        grid-row-start: 2;
+        grid-row-end: 4;
 
         box-sizing: border-box;
         width: 100%;
@@ -60,8 +65,8 @@
     .TaskStatisticsSection {
         grid-column-start: 2;
         grid-column-end: 3;
-        grid-row-start: 2;
-        grid-row-end: 3;
+        grid-row-start: 3;
+        grid-row-end: 4;
 
         border-top: 1px solid var(--divider-colour);
 
@@ -96,8 +101,8 @@
     .Footer {
         grid-column-start: 2;
         grid-column-end: 5;
-        grid-row-start: 3;
-        grid-row-end: 4;
+        grid-row-start: 4;
+        grid-row-end: 5;
     }
     .board {
         padding: 0.6rem;
@@ -105,17 +110,22 @@
     }
 }
 @media (max-width: 1270px) {
-    #root {
+    #appPageRoot {
         display: grid;
         grid-template-columns: 1fr minmax(auto, 115rem) 1fr;
-        grid-template-rows: auto auto auto;
+        grid-template-rows: 4rem auto auto auto;
     }
-    
-    .ActiveTaskSection {
+    .Header {
         grid-column-start: 2;
         grid-column-end: 3;
         grid-row-start: 1;
         grid-row-end: 2;
+    }
+    .ActiveTaskSection {
+        grid-column-start: 2;
+        grid-column-end: 3;
+        grid-row-start: 2;
+        grid-row-end: 3;
 
         min-height: 35rem;
         max-height: 50rem;
@@ -133,8 +143,8 @@
     .TaskStatisticsSection {
         grid-column-start: 2;
         grid-column-end: 3;
-        grid-row-start: 2;
-        grid-row-end: 3;
+        grid-row-start: 3;
+        grid-row-end: 4;
 
         border-top: 1px solid var(--divider-colour);
 
@@ -169,8 +179,8 @@
     .Footer {
         grid-column-start: 2;
         grid-column-end: 3;
-        grid-row-start: 3;
-        grid-row-end: 4;
+        grid-row-start: 4;
+        grid-row-end: 5;
     }
     .board {
         padding: 0.6rem;
@@ -178,16 +188,22 @@
     }
 }
 @media (max-width: 800px) {
-    #root {
+    #appPageRoot {
         display: grid;
         grid-template-columns: 1fr minmax(var(--active-tasks-single-board-min-width), var(--active-tasks-single-board-max-width)) 1fr;
-        grid-template-rows: auto auto auto;
+        grid-template-rows: 4rem auto auto auto;
     }
-    .ActiveTaskSection {
+    .Header {
         grid-column-start: 2;
         grid-column-end: 3;
         grid-row-start: 1;
         grid-row-end: 2;
+    }
+    .ActiveTaskSection {
+        grid-column-start: 2;
+        grid-column-end: 3;
+        grid-row-start: 2;
+        grid-row-end: 3;
 
         min-height: 0rem;
         max-height: 1000rem;
@@ -211,8 +227,8 @@
     .TaskStatisticsSection {
         grid-column-start: 2;
         grid-column-end: 3;
-        grid-row-start: 2;
-        grid-row-end: 3;
+        grid-row-start: 3;
+        grid-row-end: 4;
 
         border-top: none;
 
@@ -247,8 +263,8 @@
     .Footer {
         grid-column-start: 2;
         grid-column-end: 3;
-        grid-row-start: 3;
-        grid-row-end: 4;
+        grid-row-start: 4;
+        grid-row-end: 5;
     }
 }
 @media (max-width: 450px) {

@@ -7,6 +7,8 @@ using todo_app.DataTransferLayer.Entities;
 using todo_app.DataTransferLayer.DatabaseContext;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 
 namespace todo_app.Controllers {
 
@@ -33,8 +35,9 @@ namespace todo_app.Controllers {
             this.dbContext = injectedContext;
         }
 
-
         // A GET request to the todoevent endpoint will automatically fetch all of a user's events.
+        //[Authorize]
+        [EnableCors("UserFacingApplications")]
         [HttpGet("/todoevents")]
         public async Task<IActionResult> FetchEntireEventLog() {
             IEnumerable<GenericTodoEvent> eventLog = await dbContext.TodoEvents.Where(e => true).OrderBy(e => e.Timestamp).ToListAsync();
@@ -43,6 +46,8 @@ namespace todo_app.Controllers {
 
         // A POST request to the todoevent endpoint will pass in a log of new events to use. Most often, this will just be
         // a single event, but the API will support an array of events, such that clients can implement batch-sending if needed.
+        //[Authorize]
+        [EnableCors("UserFacingApplications")]
         [HttpPost("/todoevents")]
         public async Task<IActionResult> PostNewEvents([FromBody] IList<GenericTodoEvent> newEvents) {
             // Detect duplicate events, and notify the client of duplicates by returning a different status code.

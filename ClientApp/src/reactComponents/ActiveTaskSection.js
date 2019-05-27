@@ -7,6 +7,9 @@ import { ColourIdTracker } from '../viewLogic/colourSetManager';
 export class ActiveTaskSection extends Component {
     constructor(props) {
         super(props);
+
+        console.debug("ActiveTakeSection is being constructed");
+
         this.taskMap = null;    // This will be a map of taskViews based on id.
         this.state = {
             goalTaskViews : [],
@@ -31,6 +34,8 @@ export class ActiveTaskSection extends Component {
         this.intervalCheck = null;
     }
     componentDidMount() {
+        console.debug("ActiveTaskSection mounted");
+
         // This is the 'root' component which receives callbacks from the interaction layer, and passes down
         // all of the data views down to the child components.
         this.activeTaskListAPI = RegisterToActiveTaskListAPI(this.handleChange);     // We must make sure the callback is bound to this class.

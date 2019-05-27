@@ -6,6 +6,8 @@
 @import "./Task.css";
 @import "./Board.css";
 @import "./Footer.css";
+@import "./Header.css";
+@import "./LoginPage.css";
 
 /* Define some global variables to define VSCode colour scheme colours! */
 :root {
@@ -60,7 +62,4 @@ h1 {
 }
 h2 {
   font-size: 2rem;
-}
-span {
-  background: #fd0;
 }
