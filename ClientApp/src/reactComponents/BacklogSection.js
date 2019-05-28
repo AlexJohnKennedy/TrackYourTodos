@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { NavigationStateWrapper } from './NavigationTabs';
-import { RegisterToActiveTaskListAPI, RegisterForOnDataLoadCallback } from '../interactionLayer/viewLayerInteractionApi';
-import { ColourIdTracker } from '../viewLogic/colourSetManager';
 import { Category } from '../logicLayer/Task';
 import { TaskList } from './TaskList';
-import { ShortCutManager } from '../viewLogic/keyboardShortcutHandler';
 import { CreationForm } from './CreationForm';
+
+import { ShortCutManager } from '../viewLogic/keyboardShortcutHandler';
+import { ColourIdTracker } from '../viewLogic/colourSetManager';
+
 
 export class BacklogSection extends Component {
     constructor(props) {
@@ -27,14 +28,19 @@ export class BacklogSection extends Component {
         this.toggleFormOff = this.toggleFormOff.bind(this);
     }
     componentDidMount() {
-        this.activeTaskListAPI = RegisterToActiveTaskListAPI(this.handleActiveChange);
-        RegisterForOnDataLoadCallback(this.handleActiveChange);
+        // Register to access and recieve updates from the ActiveTaskList from the Data-model instance handed to us.
+        this.activeTaskListAPI = this.props.dataModelScope.RegisterToActiveTaskListAPI(this.handleActiveChange);
+        this.props.dataModelScope.RegisterForOnDataLoadCallback(this.handleActiveChange);
+
+        ShortCutManager.registerShiftShortcut("Digit4", this.toggleFormOn);
 
         // Initialise state of this component.
         this.handleActiveChange();
-
-        ShortCutManager.registerShiftShortcut("Digit4", this.toggleFormOn);
     }
+    componentWillUnmount() {
+        // TODO: IMPLEMENT DE-REGISTER CAPABILITY, AND PERFORM IT HERE!
+    }
+
     toggleFormOn() {
         this.props.formStateManager.triggerCleanup();
         this.toggleTab(0);

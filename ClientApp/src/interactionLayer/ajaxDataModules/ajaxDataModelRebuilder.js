@@ -1,17 +1,12 @@
-import { TaskObjects, SetIdStartVal } from '../../logicLayer/Task';
+import { SetIdStartVal } from '../../logicLayer/Task';
 import { RebuildState } from '../../logicLayer/StateRebuilder';
 
-// When this function is called, we will supply the caller with "the" data model object; I.e. an instantiated TaskList object.
-// We will also send an HTTP Get request to our server, and populate the data-model once it responds with the event log.
-export function GetActiveTaskObject(onLoadFunc) {
-    console.log("AJAX Datamodel initiated");
-    let tasklist = new TaskObjects();
-    ScheduleEventLogUpdate(tasklist, onLoadFunc);
-    return tasklist;
-}
-
 // This function sends an HTTP request to fetch the latest data-log, and applies the returned logs onto the state object.
-// For now, we are just going to blindly apply the returned logs to the state!
+// For now, we are just going to blindly apply the returned logs to the state! This means that calling this twice on the
+// same data object will double-apply the data events... this is not ideal, but it is working for the current design since
+// we are confident that this is only called once per data-model-instance.
+// TODO: Make this idempotent for the same returned log of events. I.e., do a pass through to detect duplicate events.
+// (This might mean we have to store the log in memory.. ? and have the caller pass in all previous logs.. ?)
 export function ScheduleEventLogUpdate(tasklist, onLoadFunc) {
     console.log("Ajax Get request scheduled!");
     // Setup a request 
@@ -26,7 +21,7 @@ export function ScheduleEventLogUpdate(tasklist, onLoadFunc) {
             console.log(httpRequest.responseText);
 
             SetIdStartVal(RebuildState(httpRequest.responseText, tasklist) + 1);
-            onLoadFunc();
+            onLoadFunc(tasklist);
         }
     };
     

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { RegisterToActiveTaskListAPI, RegisterForOnDataLoadCallback } from '../interactionLayer/viewLayerInteractionApi';
 import { Category } from '../logicLayer/Task';
 import { GoalBoard, WeeklyBoard, DailyBoard } from './Board';
 import { ColourIdTracker } from '../viewLogic/colourSetManager';
@@ -7,8 +6,6 @@ import { ColourIdTracker } from '../viewLogic/colourSetManager';
 export class ActiveTaskSection extends Component {
     constructor(props) {
         super(props);
-
-        console.debug("ActiveTakeSection is being constructed");
 
         this.taskMap = null;    // This will be a map of taskViews based on id.
         this.state = {
@@ -34,19 +31,17 @@ export class ActiveTaskSection extends Component {
         this.intervalCheck = null;
     }
     componentDidMount() {
-        console.debug("ActiveTaskSection mounted");
+        // Register to access, and recieve updates from, the active take list in the data-model instance handed to us.
+        this.activeTaskListAPI = this.props.dataModelScope.RegisterToActiveTaskListAPI(this.handleChange);
 
-        // This is the 'root' component which receives callbacks from the interaction layer, and passes down
-        // all of the data views down to the child components.
-        this.activeTaskListAPI = RegisterToActiveTaskListAPI(this.handleChange);     // We must make sure the callback is bound to this class.
-
-        // Setup timing callbacks for task-failure checks.
+        // Setup timing callbacks for task-failure checks. This will the be the callback we register for OnDataLoad callbacks.
         const checkAction = () => {
             let ids = this.activeTaskListAPI.PerformFailureCheck(800, id => this.unregisterForAnimation(id, false));
             ids.forEach(id => this.registerForAnimation(id, false));
         };
 
-        RegisterForOnDataLoadCallback(() => {
+        // Register for a 'failure check' and a state-query when the Server data loads, via the Data-model scope.
+        this.props.dataModelScope.RegisterForOnDataLoadCallback(() => {
             this.initialCheck = window.setTimeout(checkAction, 2000);   // Wait 2 seconds before 'melting' the failed tasks
             this.intervalCheck = window.setInterval(checkAction, 3600000);  // Re-check for failures every hour.
             this.handleChange();
@@ -58,8 +53,10 @@ export class ActiveTaskSection extends Component {
     componentWillUnmount() {
         window.clearInterval(this.intervalCheck);
         window.clearTimeout(this.initialCheck);
-    }
 
+        // TODO: IMPLEMENT DE-REGISTER CAPABILITY, AND PERFORM IT HERE!
+    }
+    
     // Callback for when tasks are hovered over and we need to highlight them, and all their relatives.
     registerForHighlights(id) {
         let map = this.taskMap;
