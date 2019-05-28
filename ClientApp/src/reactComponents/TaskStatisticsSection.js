@@ -6,7 +6,7 @@ import { RegisterForStatisticsModel, RegisterForOnDataLoadCallback } from '../in
 
 
 export class TaskStatisticsSection extends Component {
-    constructor(props) {        
+    constructor(props) {
         super(props);
         console.debug("TaskStatisticsSection is being constructed");
 
@@ -58,7 +58,7 @@ export class TaskStatisticsSection extends Component {
 
         this.statisticsModelApi = RegisterForStatisticsModel(this.handleChange, this.handleChange);
         RegisterForOnDataLoadCallback(() => this.handleChange(null, null));
-        
+
         //this.statisticsModelApi = this.statisticsModelApi.bind(this);
         this.handleChange(null, null);
     }
@@ -136,16 +136,18 @@ export class TaskStatisticsSection extends Component {
         if (event.target.value === null || event.target.value === this.state.barWidth) {
             return;
         }
-        this.setState({barWidth: event.target.value});
+        this.setState({ barWidth: event.target.value });
     }
 
     render() {
         // One summary block for the last week, one for last month, and one for all time. (subject to change).
         let dayCompleted = 0;
         let dayFailed = 0;
-        for (let i = 0; i < 7; i++) {
-            dayCompleted += this.state.statsObject.dayStats.numCompletedArray[i];
-            dayFailed += this.state.statsObject.dayStats.numFailedArray[i];
+        if (this.state.statsObject.dayStats.numCompletedArray.length >= 7 && this.state.statsObject.dayStats.numFailedArray.length <= 7) {
+            for (let i = 0; i < 7; i++) {
+                dayCompleted += this.state.statsObject.dayStats.numCompletedArray[i];
+                dayFailed += this.state.statsObject.dayStats.numFailedArray[i];
+            }
         }
         const monthCompleted = this.state.statsObject.dayStats.totalCompleted;
         const monthFailed = this.state.statsObject.dayStats.totalFailed;
@@ -162,7 +164,7 @@ export class TaskStatisticsSection extends Component {
                         <SelectionController key={0} startIndex={this.state.startIndex} stopIndex={this.state.stopIndex}
                             startincrement={() => this.adjustRange(true, true)} stopincrement={() => this.adjustRange(true, false)}
                             startdecrement={() => this.adjustRange(false, true)} stopdecrement={() => this.adjustRange(false, false)}
-                            minBarWidth={20} maxBarWidth={150} handleBarWidthChange={this.adjustBarWidth} barWidth={this.state.barWidth}/>
+                            minBarWidth={20} maxBarWidth={150} handleBarWidthChange={this.adjustBarWidth} barWidth={this.state.barWidth} />
                         <ScrollableBarChart key={1} groupingTypeText="Daily" stopIndex={this.state.stopIndex} startIndex={this.state.startIndex} barWidth={this.state.barWidth}
                             stats={this.state.historyStats.dayStats} tickFormatFunc={dayTickFormatter} />
                         <ScrollableBarChart key={2} groupingTypeText="Weekly" stopIndex={this.state.stopIndex} startIndex={this.state.startIndex} barWidth={this.state.barWidth}
@@ -355,10 +357,10 @@ class SelectionController extends Component {
                 <button onClick={() => this.props.indexToggleFunc(1)}> Week </button>
                 <button onClick={() => this.props.indexToggleFunc(2)}> Month </button>
                 <div className="rangeSelectors">
-                    <RangeSelectionBlock text={startText} value={this.props.startIndex} increment={this.props.startincrement} decrement={this.props.startdecrement}/>
-                    <RangeSelectionBlock text={endText} value={this.props.stopIndex} increment={this.props.stopincrement} decrement={this.props.stopdecrement}/>
+                    <RangeSelectionBlock text={startText} value={this.props.startIndex} increment={this.props.startincrement} decrement={this.props.startdecrement} />
+                    <RangeSelectionBlock text={endText} value={this.props.stopIndex} increment={this.props.stopincrement} decrement={this.props.stopdecrement} />
                 </div>
-                <Slider min={this.props.minBarWidth} max={this.props.maxBarWidth} value={this.props.barWidth} step={1} onChange={this.props.handleBarWidthChange} text="Zoom"/>
+                <Slider min={this.props.minBarWidth} max={this.props.maxBarWidth} value={this.props.barWidth} step={1} onChange={this.props.handleBarWidthChange} text="Zoom" />
             </div>
         );
     }
@@ -382,7 +384,7 @@ class Slider extends Component {
     render() {
         return (
             <div className="slider">
-                <input type="range" min={this.props.min} max={this.props.max} value={this.props.value} step={this.props.step} onChange={this.props.onChange}/>
+                <input type="range" min={this.props.min} max={this.props.max} value={this.props.value} step={this.props.step} onChange={this.props.onChange} />
                 <div className="text"> {this.props.text} </div>
             </div>
         );
