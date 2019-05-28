@@ -19,8 +19,6 @@ export class AppPage extends Component {
     constructor(props) {
         super(props);
         
-        console.debug("App page construction. I am now instantiating a NEW DataModelScope, and TemporaryStateManager");
-
         // Whenever this page is constructed, we will re-instantiate a fresh scope and data model instance to pass to our children.
         this.dataModelScope = InstantiateNewDataModelScope();
 
@@ -30,8 +28,6 @@ export class AppPage extends Component {
         this.cleanUpFormStates = this.cleanUpFormStates.bind(this);
     }
     componentDidMount() {
-        console.debug("App page mounted. I am now registering the AJAX Post-event handlers, then triggering a data load.");
-
         // Access the global keyboard shortcut manager, and register the form cleanup function as 'esc' key.
         ShortCutManager.registerShortcut('Escape', this.cleanUpFormStates);
 
@@ -41,8 +37,6 @@ export class AppPage extends Component {
         this.dataModelScope.TriggerEventLogDataFetch();
     }
     componentWillUnmount() {
-        console.debug("App page unmounting");
-
         // Short cuts should only be active while the application page is mounted/rendered.
         ShortCutManager.clearAllShortcuts();
 
@@ -53,9 +47,6 @@ export class AppPage extends Component {
         // WARNING: No other component except the 'data model owner' (root component who passes the instance down) should do this.
         this.dataModelScope.ClearAllRegisteredCallbacks();
         this.dataModelScope = null;
-    }
-    componentDidUpdate() {
-        console.debug("App page updated!");
     }
 
     cleanUpFormStates() {

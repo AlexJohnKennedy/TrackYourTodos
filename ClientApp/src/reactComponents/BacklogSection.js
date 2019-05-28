@@ -11,8 +11,6 @@ import { ColourIdTracker } from '../viewLogic/colourSetManager';
 export class BacklogSection extends Component {
     constructor(props) {
         super(props);
-        
-        console.debug("Back log section is being constructed");
 
         this.state = {
             showingBacklog: true,
@@ -30,25 +28,19 @@ export class BacklogSection extends Component {
         this.toggleFormOff = this.toggleFormOff.bind(this);
     }
     componentDidMount() {
-        console.debug("Back log section mounted");
-
         // Register to access and recieve updates from the ActiveTaskList from the Data-model instance handed to us.
         this.activeTaskListAPI = this.props.dataModelScope.RegisterToActiveTaskListAPI(this.handleActiveChange);
         this.props.dataModelScope.RegisterForOnDataLoadCallback(this.handleActiveChange);
 
         ShortCutManager.registerShiftShortcut("Digit4", this.toggleFormOn);
-        
+
         // Initialise state of this component.
         this.handleActiveChange();
     }
     componentWillUnmount() {
-        console.debug("Back log section is unmounting");
-
         // TODO: IMPLEMENT DE-REGISTER CAPABILITY, AND PERFORM IT HERE!
     }
-    componentDidUpdate() {
-        console.debug("Backlog section updated!");
-    }
+
     toggleFormOn() {
         this.props.formStateManager.triggerCleanup();
         this.toggleTab(0);

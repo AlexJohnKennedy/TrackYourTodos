@@ -28,8 +28,6 @@ export class StatisticsModel {
             this.dayGroupsFailed.AddTask(task);
             this.allFailed.push(task);
         }));
-
-        console.log(this);
     }
 
     AddCompletedTask(task) {

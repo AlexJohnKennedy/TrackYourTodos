@@ -6,8 +6,6 @@ import { ScrollableBarChart } from './ScrollableBarChart';
 export class TaskStatisticsSection extends Component {
     constructor(props) {
         super(props);
-        
-        console.debug("TaskStatisticsSection is being constructed");
 
         const emptyStatsObj = {
             dayStats: {
@@ -53,8 +51,6 @@ export class TaskStatisticsSection extends Component {
         this.adjustBarWidth = this.adjustBarWidth.bind(this);
     }
     componentDidMount() {
-        console.debug("TaskStatisticsSection mounted");
-
         // Register to access and receive updates from the statistics model in the Data-model scope handed to us from our parent.
         this.statisticsModelApi = this.props.dataModelScope.RegisterForStatisticsModel(this.handleChange, this.handleChange);
         this.props.dataModelScope.RegisterForOnDataLoadCallback(() => this.handleChange(null, null));
@@ -63,13 +59,9 @@ export class TaskStatisticsSection extends Component {
         this.handleChange(null, null);
     }
     componentWillUnmount() {
-        console.debug("TaskStatisticsSection is unmounting");
-
         // TODO: IMPLEMENT DE-REGISTER CAPABILITY, AND PERFORM IT HERE!
     }
-    componentDidUpdate() {
-        console.debug("TaskStatisticsSection updated");
-    }
+
     handleChange(task, tasklist) {
         // Ignore the paramters from the callback. Whenever this is called, we should simply refresh our stats.
         const stats = this.statisticsModelApi.GetStatistics({

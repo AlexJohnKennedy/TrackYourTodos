@@ -7,8 +7,6 @@ export class ActiveTaskSection extends Component {
     constructor(props) {
         super(props);
 
-        console.debug("ActiveTakeSection is being constructed");
-
         this.taskMap = null;    // This will be a map of taskViews based on id.
         this.state = {
             goalTaskViews : [],
@@ -33,14 +31,11 @@ export class ActiveTaskSection extends Component {
         this.intervalCheck = null;
     }
     componentDidMount() {
-        console.debug("ActiveTaskSection mounted! We are now registering to ActiveTaskListAPI in the data model scope");
-
         // Register to access, and recieve updates from, the active take list in the data-model instance handed to us.
         this.activeTaskListAPI = this.props.dataModelScope.RegisterToActiveTaskListAPI(this.handleChange);
 
         // Setup timing callbacks for task-failure checks. This will the be the callback we register for OnDataLoad callbacks.
         const checkAction = () => {
-            console.log("CHECKING CHECKING CHECKING!")
             let ids = this.activeTaskListAPI.PerformFailureCheck(800, id => this.unregisterForAnimation(id, false));
             ids.forEach(id => this.registerForAnimation(id, false));
         };
@@ -56,16 +51,12 @@ export class ActiveTaskSection extends Component {
         this.handleChange();
     }
     componentWillUnmount() {
-        console.debug("ActiveTaskSection is unmounting");
         window.clearInterval(this.intervalCheck);
         window.clearTimeout(this.initialCheck);
 
         // TODO: IMPLEMENT DE-REGISTER CAPABILITY, AND PERFORM IT HERE!
     }
-    componentDidUpdate() {
-        console.debug("ActiveTaskSection updated!");
-    }
-
+    
     // Callback for when tasks are hovered over and we need to highlight them, and all their relatives.
     registerForHighlights(id) {
         let map = this.taskMap;

@@ -24,20 +24,8 @@ export class NavigationTabs extends Component {
 
 export class NavigationStateWrapper extends Component {
     constructor(props) {
-        console.debug("NavStateWrapper is being constructed");
-
         super(props);
         this.toggleTab = this.toggleTab.bind(this);
-    }
-
-    componentDidMount() {
-        console.debug("NavStateWrapper mounted");
-    }
-    componentWillUnmount() {
-        console.debug("NavStateWrapper is unmounting");
-    }
-    componentDidUpdate() {
-        console.debug("NavStateWrapper updated");
     }
 
     toggleTab(tabId) {

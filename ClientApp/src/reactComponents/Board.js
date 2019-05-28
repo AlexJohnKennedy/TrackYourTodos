@@ -8,7 +8,6 @@ import { TaskList } from './TaskList';
 // E.g., each of the three main 'lists' are Board components!
 export class Board extends Component {
     constructor(props) {
-        console.debug("Board is being constructed");
         super(props);
 
         // Setup state. The only state this component requires is whether we are currently rendering the creation form.
@@ -20,14 +19,7 @@ export class Board extends Component {
         this.toggleFormOff = this.toggleFormOff.bind(this);
     }
     componentDidMount() {
-        console.debug("BOARD is mounting, and registering for toggleFormOn shortcut!");
         ShortCutManager.registerShiftShortcut(this.props.shortcutkey, this.toggleFormOn);
-    }
-    componentWillUnmount() {
-        console.debug("Board is unmounting");
-    }
-    componentDidUpdate() {
-        console.debug("Board updated");
     }
     
     toggleFormOn() {
