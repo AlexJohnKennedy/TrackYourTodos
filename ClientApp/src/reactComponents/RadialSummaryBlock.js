@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { XYPlot, FlexibleXYPlot, VerticalGridLines, HorizontalGridLines, XAxis, YAxis, LineSeries, ArcSeries } from 'react-vis';
+import { FlexibleXYPlot, ArcSeries } from 'react-vis';
 
 // This component is the building block for the 'summary' statistics section, which shows a
 // radial graph and some numbers.

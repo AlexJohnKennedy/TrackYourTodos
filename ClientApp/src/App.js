@@ -20,6 +20,7 @@ class App extends Component {
     // Finally, if the user IS logged in, then we will route to the actual application page, until they press logout.
     this.state = {
       googleAuthApiLoaded: false,
+      googleAuthApiCrashed: false,
       googleUserIsLoggedIn: false,
       googleLoginFailed: false
     }
@@ -37,23 +38,41 @@ class App extends Component {
     window.registerForGapiLoadedCallback(this.respondToGapiLoad);
 
     // Check if the Google authentication API is loaded yet. If it isn't, trigger a load.
-    if (!window.isGoogleAuthReady) {
+    if (!window.isGoogleAuthReady && !window.isGoogleAuthCrashed) {
       console.log("Google authentication api is not loaded! Routing to the loading page, and waiting for load");
     }
-    else {
+    else if (window.isGoogleAuthReady) {
       console.log("Google auth api was already loaded and setup by the time we mounted :O");
       this.setState({
-        googleAuthApiLoaded: true
+        googleAuthApiLoaded: true,
+        googleAuthApiCrashed: false
+      });
+    }
+    else {
+      console.log("Google auth api had already crashed before the app mounted");
+      this.setState({
+        googleAuthApiLoaded: false,
+        googleAuthApiCrashed: true
       });
     }
   }
 
   respondToGapiLoad() {
-    if (this.state.googleAuthApiLoaded) return;
-    console.log("I am the App component, and I was just told via a callback that the google Authentication api is ready! I will now route to either the sign in or the app page");
-    this.setState({
-      googleAuthApiLoaded: true
-    });
+    if (this.state.googleAuthApiLoaded || this.state.googleAuthApiCrashed) return;
+    
+    if (window.isGoogleAuthReady) {
+      console.log("I am the App component, and I was just told via a callback that the google Authentication api is ready! I will now route to either the sign in or the app page");
+      this.setState({
+        googleAuthApiLoaded: true,
+        googleAuthApiCrashed: false
+      });
+    }
+    else if (window.isGoogleAuthCrashed) {
+      this.setState({
+        googleAuthApiLoaded: false,
+        googleAuthApiCrashed: true
+      });
+    }
   }
 
   // These callbacks will be passed down to child elements so that they can trigger a re-render of a different page
@@ -79,18 +98,18 @@ class App extends Component {
 
   render() {
     let PageToRender;
-    
+
     if (this.state.googleLoginFailed) {
-      PageToRender = <FailurePage/>
+      PageToRender = <FailurePage />
     }
     else if (!this.state.googleAuthApiLoaded) {
-      PageToRender = <LoadingPage/>;
+      PageToRender = <LoadingPage />;
     }
     else if (!this.state.googleUserIsLoggedIn) {
-      PageToRender = <LoginPage titleText="Sign in to start holding yourself accountable to your inevitable failures and laziness!" onGoogleLoginSuccess={this.setGoogleSignedIn} onGoogleLoginFailure={this.setLoginFailureFlag}/>;
+      PageToRender = <LoginPage titleText="Sign in to start holding yourself accountable to your inevitable failures and laziness!" onGoogleLoginSuccess={this.setGoogleSignedIn} onGoogleLoginFailure={this.setLoginFailureFlag} />;
     }
     else {
-      PageToRender = <AppPage onSignOut={this.setGoogleSignedOut}/>;
+      PageToRender = <AppPage onSignOut={this.setGoogleSignedOut} />;
     }
 
     return (
