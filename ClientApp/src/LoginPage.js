@@ -9,13 +9,20 @@ export class LoginPage extends Component {
                 <div className="loginTitleText">
                     {this.props.titleText}
                 </div>
-                <GoogleSignInButton
-                    width={325}
-                    height={60}
-                    useLongTitle={true}
-                    onSuccess={this.props.onGoogleLoginSuccess}
-                    onFailure={this.props.onGoogleLoginFailure}
-                />
+                { this.props.googlePromptText !== null && this.props.googlePromptText !== undefined &&
+                    <div className="googlePromptText">
+                        {this.props.googlePromptText}
+                    </div>
+                }
+                { this.props.useGoogleSignIn &&
+                    <GoogleSignInButton
+                        width={325}
+                        height={60}
+                        useLongTitle={true}
+                        onSuccess={this.props.onGoogleLoginSuccess}
+                        onFailure={this.props.onGoogleLoginFailure}
+                    />
+                }
             </div>
         );
     }

@@ -4,7 +4,7 @@ import '../node_modules/react-vis/dist/style.css';
 import { DataEventHttpPostHandlers } from './interactionLayer/ajaxDataModel/ajaxDataEventPoster';
 import { RegisterForDataEvents } from './interactionLayer/viewLayerInteractionApi';
 import { AppPage } from './AppPage';
-import { LoadingPage, FailurePage } from './LoadingPage';
+import { LoadingPage } from './LoadingPage';
 import { LoginPage } from './LoginPage';
 
 class App extends Component {
@@ -12,6 +12,7 @@ class App extends Component {
     super(props);
 
     // Register to POST our data events to the server
+    // TODO: MOVE THIS TO APP-PAGE ON-MOUNT!
     RegisterForDataEvents(DataEventHttpPostHandlers);
 
     // Setup state which we will use for session-based routing.
@@ -21,14 +22,13 @@ class App extends Component {
     this.state = {
       googleAuthApiLoaded: false,
       googleAuthApiCrashed: false,
-      googleUserIsLoggedIn: false,
-      googleLoginFailed: false
+      googleUserIsLoggedIn: false
     }
 
     this.respondToGapiLoad = this.respondToGapiLoad.bind(this);
     this.setGoogleSignedIn = this.setGoogleSignedIn.bind(this);
     this.setGoogleSignedOut = this.setGoogleSignedOut.bind(this);
-    this.setLoginFailureFlag = this.setLoginFailureFlag.bind(this);
+    this.handleGoogleLoginFailure = this.handleGoogleLoginFailure.bind(this);
   }
 
   componentDidMount() {
@@ -57,17 +57,17 @@ class App extends Component {
     }
   }
 
-  respondToGapiLoad() {
+  respondToGapiLoad(successful) {
     if (this.state.googleAuthApiLoaded || this.state.googleAuthApiCrashed) return;
-    
-    if (window.isGoogleAuthReady) {
+
+    if (successful) {
       console.log("I am the App component, and I was just told via a callback that the google Authentication api is ready! I will now route to either the sign in or the app page");
       this.setState({
         googleAuthApiLoaded: true,
         googleAuthApiCrashed: false
       });
     }
-    else if (window.isGoogleAuthCrashed) {
+    else {
       this.setState({
         googleAuthApiLoaded: false,
         googleAuthApiCrashed: true
@@ -90,23 +90,28 @@ class App extends Component {
       googleUserIsLoggedIn: false
     });
   }
-  setLoginFailureFlag() {
-    this.setState({
-      googleLoginFailed: true
-    });
+  handleGoogleLoginFailure() {
+    // For now, we will just log the error for dev purposes and do nothing.
+    console.log("A google sign-in attempt failed! This typically means the user closed the popup or denied the permissions.");
   }
 
   render() {
     let PageToRender;
 
-    if (this.state.googleLoginFailed) {
-      PageToRender = <FailurePage />
-    }
-    else if (!this.state.googleAuthApiLoaded) {
+    if (!this.state.googleAuthApiLoaded && !this.state.googleAuthApiCrashed) {
       PageToRender = <LoadingPage />;
     }
+    else if (this.state.googleAuthApiCrashed) {
+      PageToRender = <LoginPage
+        titleText="Sign in to start holding yourself accountable to your inevitable failures and laziness!" onGoogleLoginSuccess={() => {}} onGoogleLoginFailure={() => {}}
+        useGoogleSignIn={false} googlePromptText={"Google sign in couldn't load. Make sure you have 3rd party cookies enabled in your browser!"}
+      />;
+    }
     else if (!this.state.googleUserIsLoggedIn) {
-      PageToRender = <LoginPage titleText="Sign in to start holding yourself accountable to your inevitable failures and laziness!" onGoogleLoginSuccess={this.setGoogleSignedIn} onGoogleLoginFailure={this.setLoginFailureFlag} />;
+      PageToRender = <LoginPage 
+        titleText="Sign in to start holding yourself accountable to your inevitable failures and laziness!" onGoogleLoginSuccess={this.setGoogleSignedIn} onGoogleLoginFailure={this.handleGoogleLoginFailure} 
+        useGoogleSignIn={true} googlePromptText={null}
+      />;
     }
     else {
       PageToRender = <AppPage onSignOut={this.setGoogleSignedOut} />;
