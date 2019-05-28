@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { RegisterToActiveTaskListAPI, RegisterForOnDataLoadCallback } from '../interactionLayer/viewLayerInteractionApi';
 import { Category } from '../logicLayer/Task';
 import { GoalBoard, WeeklyBoard, DailyBoard } from './Board';
 import { ColourIdTracker } from '../viewLogic/colourSetManager';
@@ -34,20 +33,20 @@ export class ActiveTaskSection extends Component {
         this.intervalCheck = null;
     }
     componentDidMount() {
-        console.debug("ActiveTaskSection mounted");
+        console.debug("ActiveTaskSection mounted! We are now registering to ActiveTaskListAPI in the data model scope");
 
-        // This is the 'root' component which receives callbacks from the interaction layer, and passes down
-        // all of the data views down to the child components.
-        this.activeTaskListAPI = RegisterToActiveTaskListAPI(this.handleChange);     // We must make sure the callback is bound to this class.
+        // Register to access, and recieve updates from, the active take list in the data-model instance handed to us.
+        this.activeTaskListAPI = this.props.dataModelScope.RegisterToActiveTaskListAPI(this.handleChange);
 
-        // Setup timing callbacks for task-failure checks.
+        // Setup timing callbacks for task-failure checks. This will the be the callback we register for OnDataLoad callbacks.
         const checkAction = () => {
             console.log("CHECKING CHECKING CHECKING!")
             let ids = this.activeTaskListAPI.PerformFailureCheck(800, id => this.unregisterForAnimation(id, false));
             ids.forEach(id => this.registerForAnimation(id, false));
         };
 
-        RegisterForOnDataLoadCallback(() => {
+        // Register for a 'failure check' and a state-query when the Server data loads, via the Data-model scope.
+        this.props.dataModelScope.RegisterForOnDataLoadCallback(() => {
             this.initialCheck = window.setTimeout(checkAction, 2000);   // Wait 2 seconds before 'melting' the failed tasks
             this.intervalCheck = window.setInterval(checkAction, 3600000);  // Re-check for failures every hour.
             this.handleChange();
@@ -60,6 +59,8 @@ export class ActiveTaskSection extends Component {
         console.debug("ActiveTaskSection is unmounting");
         window.clearInterval(this.intervalCheck);
         window.clearTimeout(this.initialCheck);
+
+        // TODO: IMPLEMENT DE-REGISTER CAPABILITY, AND PERFORM IT HERE!
     }
     componentDidUpdate() {
         console.debug("ActiveTaskSection updated!");

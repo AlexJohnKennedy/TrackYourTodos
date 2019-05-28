@@ -68,9 +68,9 @@ export class AppPage extends Component {
             <ThemeId.Provider value={{ themeId: currThemeId }}>
                 <div id="appPageRoot">
                     <Header onSignOut={this.props.onSignOut}/>
-                    <BacklogSection formStateManager={this.formStateManager} />
-                    <ActiveTaskSection formStateManager={this.formStateManager} />
-                    <TaskStatisticsSection formStateManager={this.formStateManager} />
+                    <BacklogSection dataModelScope={this.dataModelScope} formStateManager={this.formStateManager} />
+                    <ActiveTaskSection dataModelScope={this.dataModelScope} formStateManager={this.formStateManager} />
+                    <TaskStatisticsSection dataModelScope={this.dataModelScope} formStateManager={this.formStateManager} />
                     <Footer />
                 </div>
             </ThemeId.Provider>

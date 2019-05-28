@@ -2,12 +2,11 @@ import React, { Component } from 'react';
 import { RadialSummaryBlock } from './RadialSummaryBlock';
 import { SelectableChildrenWithController } from './SelectableChildrenWithController';
 import { ScrollableBarChart } from './ScrollableBarChart';
-import { RegisterForStatisticsModel, RegisterForOnDataLoadCallback } from '../interactionLayer/viewLayerInteractionApi';
-
 
 export class TaskStatisticsSection extends Component {
     constructor(props) {
         super(props);
+        
         console.debug("TaskStatisticsSection is being constructed");
 
         const emptyStatsObj = {
@@ -56,14 +55,17 @@ export class TaskStatisticsSection extends Component {
     componentDidMount() {
         console.debug("TaskStatisticsSection mounted");
 
-        this.statisticsModelApi = RegisterForStatisticsModel(this.handleChange, this.handleChange);
-        RegisterForOnDataLoadCallback(() => this.handleChange(null, null));
+        // Register to access and receive updates from the statistics model in the Data-model scope handed to us from our parent.
+        this.statisticsModelApi = this.props.dataModelScope.RegisterForStatisticsModel(this.handleChange, this.handleChange);
+        this.props.dataModelScope.RegisterForOnDataLoadCallback(() => this.handleChange(null, null));
 
         //this.statisticsModelApi = this.statisticsModelApi.bind(this);
         this.handleChange(null, null);
     }
     componentWillUnmount() {
         console.debug("TaskStatisticsSection is unmounting");
+
+        // TODO: IMPLEMENT DE-REGISTER CAPABILITY, AND PERFORM IT HERE!
     }
     componentDidUpdate() {
         console.debug("TaskStatisticsSection updated");
