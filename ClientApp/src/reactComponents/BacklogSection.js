@@ -9,6 +9,7 @@ import { CreationForm } from './CreationForm';
 
 export class BacklogSection extends Component {
     constructor(props) {
+        console.debug("Back log section is being constructed");
         super(props);
 
         this.state = {
@@ -27,6 +28,8 @@ export class BacklogSection extends Component {
         this.toggleFormOff = this.toggleFormOff.bind(this);
     }
     componentDidMount() {
+        console.debug("Back log section mounted");
+
         this.activeTaskListAPI = RegisterToActiveTaskListAPI(this.handleActiveChange);
         RegisterForOnDataLoadCallback(this.handleActiveChange);
 
@@ -34,6 +37,12 @@ export class BacklogSection extends Component {
         this.handleActiveChange();
 
         ShortCutManager.registerShiftShortcut("Digit4", this.toggleFormOn);
+    }
+    componentWillUnmount() {
+        console.debug("Back log section is unmounting");
+    }
+    componentDidUpdate() {
+        console.debug("Backlog section updated!");
     }
     toggleFormOn() {
         this.props.formStateManager.triggerCleanup();

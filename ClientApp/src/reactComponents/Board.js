@@ -23,6 +23,12 @@ export class Board extends Component {
         console.debug("BOARD is mounting, and registering for toggleFormOn shortcut!");
         ShortCutManager.registerShiftShortcut(this.props.shortcutkey, this.toggleFormOn);
     }
+    componentWillUnmount() {
+        console.debug("Board is unmounting");
+    }
+    componentDidUpdate() {
+        console.debug("Board updated");
+    }
     
     toggleFormOn() {
         this.props.formStateManager.triggerCleanup();

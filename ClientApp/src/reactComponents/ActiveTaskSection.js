@@ -57,8 +57,12 @@ export class ActiveTaskSection extends Component {
         this.handleChange();
     }
     componentWillUnmount() {
+        console.debug("ActiveTaskSection is unmounting");
         window.clearInterval(this.intervalCheck);
         window.clearTimeout(this.initialCheck);
+    }
+    componentDidUpdate() {
+        console.debug("ActiveTaskSection updated!");
     }
 
     // Callback for when tasks are hovered over and we need to highlight them, and all their relatives.

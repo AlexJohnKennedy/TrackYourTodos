@@ -6,8 +6,9 @@ import { RegisterForStatisticsModel, RegisterForOnDataLoadCallback } from '../in
 
 
 export class TaskStatisticsSection extends Component {
-    constructor(props) {
+    constructor(props) {        
         super(props);
+        console.debug("TaskStatisticsSection is being constructed");
 
         const emptyStatsObj = {
             dayStats: {
@@ -53,11 +54,19 @@ export class TaskStatisticsSection extends Component {
         this.adjustBarWidth = this.adjustBarWidth.bind(this);
     }
     componentDidMount() {
+        console.debug("TaskStatisticsSection mounted");
+
         this.statisticsModelApi = RegisterForStatisticsModel(this.handleChange, this.handleChange);
         RegisterForOnDataLoadCallback(() => this.handleChange(null, null));
         
         //this.statisticsModelApi = this.statisticsModelApi.bind(this);
         this.handleChange(null, null);
+    }
+    componentWillUnmount() {
+        console.debug("TaskStatisticsSection is unmounting");
+    }
+    componentDidUpdate() {
+        console.debug("TaskStatisticsSection updated");
     }
     handleChange(task, tasklist) {
         // Ignore the paramters from the callback. Whenever this is called, we should simply refresh our stats.

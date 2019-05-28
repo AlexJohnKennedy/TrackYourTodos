@@ -14,6 +14,8 @@ export class AppPage extends Component {
     constructor(props) {
         super(props);
         
+        console.debug("App page construction");
+
         // bind this method before we instantiate the FormState manager, so that it is in scope        
         this.cleanUpFormStates = this.cleanUpFormStates.bind(this);
 
@@ -24,11 +26,15 @@ export class AppPage extends Component {
         ShortCutManager.registerShortcut('Escape', this.cleanUpFormStates);
     }
     componentDidMount() {
-        // TODO: Trigger data-model instantiation HERE, and only here!
+        console.debug("App page mounted");
     }
     componentWillUnmount() {
         // Short cuts should only be active while the application page is mounted/rendered.
         ShortCutManager.clearAllShortcuts();
+        console.debug("App page unmounting");
+    }
+    componentDidUpdate() {
+        console.debug("App page updated!");
     }
 
     cleanUpFormStates() {

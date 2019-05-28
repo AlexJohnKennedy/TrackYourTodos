@@ -85,6 +85,7 @@ export function RegisterForDataEvents(dataEventhandlers) {
 }
 
 export function RegisterToActiveTaskListAPI(viewLayerCallbackFunc) {
+
     const logicLayerFailureChecker = RegisterForFailureChecking(ActiveTaskDataObj);
     ViewLayerCallbacks.push(viewLayerCallbackFunc);
 
