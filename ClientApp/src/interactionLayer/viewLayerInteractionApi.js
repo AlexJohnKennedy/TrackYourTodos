@@ -35,7 +35,7 @@
 // --- update in the domain model, thus, will usually be followed by calling
 // --- GetActiveTasks().
 // --------------------------------------------------------------------------------
-import { ScheduleEventLogUpdate } from './ajaxDataModel/ajaxDataModel.js';
+import { ScheduleEventLogUpdate } from './ajaxDataModules/ajaxDataModelRebuilder.js';
 import { TaskObjects, Category, ProgressStatus } from '../logicLayer/Task';
 import { RegisterForFailureChecking } from '../logicLayer/checkForFailure';
 import { StatisticsModel } from '../logicLayer/statisticsModel';
@@ -48,7 +48,6 @@ import { StatisticsModel } from '../logicLayer/statisticsModel';
 // the data-model data.
 // When the AppPage root component mounts, which will be after the children finish mounting, it will trigger an AJAX load to the backend.
 // Upon un-mounting, the components must de-register.
-
 export function InstantiateNewDataModelScope() {
     
     // Instantiate the data model objects. This will serve as the domain-layer data for all users of the returned scope.
@@ -76,6 +75,21 @@ export function InstantiateNewDataModelScope() {
     // Setup inter-datamodel event callbacks here, since they both exist in the global interaction layer scope.
     DataEventCallbackHandlers.taskCompletedHandlers.push((task, tasklist) => StatisticsModelObj.AddCompletedTask(task));
     DataEventCallbackHandlers.taskFailedHandlers.push((task, tasklist) => StatisticsModelObj.AddFailedTask(task));
+
+    // Exported inner function: Tells the interaction layer to explicitly CLEAR all the registers callbacks. This should only be done
+    // by the 'data model instance owner', i.e. the component which acts as the root for the data-model instace.
+    function ClearAllRegisteredCallbacks() {
+        ViewLayerCallbacks.length = 0;  // This works in JS, lol
+        DataEventCallbackHandlers.taskActivatedHandlers.length = 0;
+        DataEventCallbackHandlers.childTaskAddedHandlers.length = 0;
+        DataEventCallbackHandlers.taskRevivedHandlers.length = 0;
+        DataEventCallbackHandlers.taskDeletedHandlers.length = 0;
+        DataEventCallbackHandlers.taskCompletedHandlers.length = 0;
+        DataEventCallbackHandlers.taskFailedHandlers.length = 0;
+        DataEventCallbackHandlers.taskActivatedHandlers.length = 0;
+        DataEventCallbackHandlers.taskStartedHandlers.length = 0;
+        DataLoadedFromServerCallbacks.length = 0;
+    }
 
     // Exported inner function: Tells the interaction layer to fetch the latest event log from the backend, and apply it to datamodel
     // upon completion. Upon completion, we will trigger the stashed DataLoadedFromServer callbacks. Thus, it is expected that any
@@ -197,7 +211,8 @@ export function InstantiateNewDataModelScope() {
         RegisterForDataEvents : RegisterForDataEvents,
         RegisterForOnDataLoadCallback : RegisterForOnDataLoadCallback,
         RegisterToActiveTaskListAPI : RegisterToActiveTaskListAPI,
-        RegisterForStatisticsModel : RegisterForStatisticsModel
+        RegisterForStatisticsModel : RegisterForStatisticsModel,
+        ClearAllRegisteredCallbacks : ClearAllRegisteredCallbacks
     });
 }
 

@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import './css/App.css';
 import '../node_modules/react-vis/dist/style.css';
-import { DataEventHttpPostHandlers } from './interactionLayer/ajaxDataModel/ajaxDataEventPoster';
-import { RegisterForDataEvents } from './interactionLayer/viewLayerInteractionApi';
 import { AppPage } from './AppPage';
 import { LoadingPage } from './LoadingPage';
 import { LoginPage } from './LoginPage';
@@ -10,10 +8,6 @@ import { LoginPage } from './LoginPage';
 class App extends Component {
   constructor(props) {
     super(props);
-
-    // Register to POST our data events to the server
-    // TODO: MOVE THIS TO APP-PAGE ON-MOUNT!
-    RegisterForDataEvents(DataEventHttpPostHandlers);
 
     // Setup state which we will use for session-based routing.
     // If the google authentication library is not loaded yet, we will route to a 'loading' screen with some animation or something.

@@ -28,7 +28,7 @@ function postEvent(eventText, retryCount) {
         }
         else if (httpRequest.readyState === 4 && httpRequest.status === 500) {
             if (retryCount > 0) {
-                console.log("SERVER ERROR ON POST! Retrying...");
+                console.warn("SERVER ERROR ON POST! Retrying...");
                 postEvent(eventText, retryCount-1);
             }
             else {
