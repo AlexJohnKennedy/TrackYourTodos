@@ -104,13 +104,13 @@ class App extends Component {
     else if (this.state.googleAuthApiCrashed) {
       PageToRender = <LoginPage
         titleText="Sign in to start holding yourself accountable to your inevitable failures and laziness!" onGoogleLoginSuccess={() => {}} onGoogleLoginFailure={() => {}}
-        useGoogleSignIn={false} googlePromptText={"Google sign in couldn't load. Make sure you have 3rd party cookies enabled in your browser!"}
+        useGoogleSignIn={false} googlePromptTextLarge={"Oops!"} googlePromptTextSmall={"Google sign in couldn't load. Make sure you have 3rd party cookies enabled in your browser, and give it another shot."}
       />;
     }
     else if (!this.state.googleUserIsLoggedIn) {
       PageToRender = <LoginPage 
         titleText="Sign in to start holding yourself accountable to your inevitable failures and laziness!" onGoogleLoginSuccess={this.setGoogleSignedIn} onGoogleLoginFailure={this.handleGoogleLoginFailure} 
-        useGoogleSignIn={true} googlePromptText={null}
+        useGoogleSignIn={true} googlePromptTextLarge={null} googlePromptTextSmall={null}
       />;
     }
     else {

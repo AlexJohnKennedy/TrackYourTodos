@@ -11,7 +11,12 @@
     padding-right: 2rem;
     padding-bottom: 2rem;
 }
-.loginBox .googlePromptText {
-    padding-top: 5rem;
+.loginBox .googlePromptTextLarge {
+    font-size: 5rem;
+    padding-top: 1.8rem;
+    padding-bottom: 0.4rem;
+}
+.loginBox .googlePromptTextSmall {
+    padding-top: 0.4rem;
     font-size: 1.8rem;
 }

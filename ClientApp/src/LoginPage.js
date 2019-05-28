@@ -9,9 +9,14 @@ export class LoginPage extends Component {
                 <div className="loginTitleText">
                     {this.props.titleText}
                 </div>
-                { this.props.googlePromptText !== null && this.props.googlePromptText !== undefined &&
-                    <div className="googlePromptText">
-                        {this.props.googlePromptText}
+                { this.props.googlePromptTextLarge !== null && this.props.googlePromptTextLarge !== undefined &&
+                    <div className="googlePromptTextLarge">
+                        {this.props.googlePromptTextLarge}
+                    </div>
+                }
+                { this.props.googlePromptTextSmall !== null && this.props.googlePromptTextSmall !== undefined &&
+                    <div className="googlePromptTextSmall">
+                        {this.props.googlePromptTextSmall}
                     </div>
                 }
                 { this.props.useGoogleSignIn &&
