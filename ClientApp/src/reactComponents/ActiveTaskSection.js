@@ -42,6 +42,7 @@ export class ActiveTaskSection extends Component {
 
         // Setup timing callbacks for task-failure checks.
         const checkAction = () => {
+            console.log("CHECKING CHECKING CHECKING!")
             let ids = this.activeTaskListAPI.PerformFailureCheck(800, id => this.unregisterForAnimation(id, false));
             ids.forEach(id => this.registerForAnimation(id, false));
         };
