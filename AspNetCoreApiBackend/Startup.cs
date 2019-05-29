@@ -85,7 +85,11 @@ namespace todo_app
                         logger.LogCritical(kidString);
                         logger.LogCritical(securityTokenObj.ToString());
                         logger.LogInformation("==========================================================================================================================");
-                        return null;
+                        string jwkJson = "{\"kid\":\"07a082839f2e71a9bf6c596996b94739785afdc3\",\"e\":\"AQAB\",\"kty\":\"RSA\",\"alg\":\"RS256\",\"n\":\"9Y5kfSJyw-GyM4lSXNCVaMKmDdOkYdu5ZhQ7E-8nfae-CPPsx3IZjdUrrv_AoKhM3vsZW_Z3Vucou53YZQuHFpnAa6YxiG9ntpScviU1dhMd4YyUtNYWVBxgNemT9dhhj2i32ez0tOj7o0tGh2Yoo2LiSXRDT-m2zwBImYkBksws4qq_X3jZhlfYkznrCJGjVhKEHzlQy5BBqtQtN5dXFVi-zRZ0-m7oiNW_2wivjw_99li087PNFSeyHpgxjbg30K2qnm1T8gVhnzqf8xnPW9vZFyc_8-3qmbQeDedB8YWyzojM3hDLsHqypP84MSOmejmi0c2b836oc-pI8seXwQ\",\"use\":\"sig\"}";
+                        JsonWebKey key = new JsonWebKey(jwkJson);
+                        List<SecurityKey> l = new List<SecurityKey>();
+                        l.Add(key);
+                        return l;
                     },
                     /* Assign a delegate (of type 'AudienceValidator') which determines if the audience field in the JWT token is correct. It SHOULD be the google-client-id we got from them */
                     AudienceValidator = (audienceStrings, securityTokenObj, validationParamsObj) => {
