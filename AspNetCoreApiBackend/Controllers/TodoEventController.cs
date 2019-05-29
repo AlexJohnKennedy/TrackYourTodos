@@ -36,7 +36,7 @@ namespace todo_app.Controllers {
         }
 
         // A GET request to the todoevent endpoint will automatically fetch all of a user's events.
-        //[Authorize]
+        [Authorize]
         [EnableCors("UserFacingApplications")]
         [HttpGet("/todoevents")]
         public async Task<IActionResult> FetchEntireEventLog() {
@@ -46,7 +46,7 @@ namespace todo_app.Controllers {
 
         // A POST request to the todoevent endpoint will pass in a log of new events to use. Most often, this will just be
         // a single event, but the API will support an array of events, such that clients can implement batch-sending if needed.
-        //[Authorize]
+        [Authorize]
         [EnableCors("UserFacingApplications")]
         [HttpPost("/todoevents")]
         public async Task<IActionResult> PostNewEvents([FromBody] IList<GenericTodoEvent> newEvents) {

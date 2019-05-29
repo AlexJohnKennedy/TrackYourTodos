@@ -27,7 +27,7 @@ namespace todo_app {
                 // Try and gain access to our TodoEvent database context
                 try {
                     TodoEventContext dbContext = serviceScope.ServiceProvider.GetRequiredService<TodoEventContext>();
-                    SaveHardcodedEventLogToDatabase(dbContext);
+                    //SaveHardcodedEventLogToDatabase(dbContext);
                 }
                 catch (Exception ex) {
                     var logger = serviceScope.ServiceProvider.GetRequiredService<ILogger<Program>>();

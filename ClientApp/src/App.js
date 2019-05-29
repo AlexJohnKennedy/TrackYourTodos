@@ -74,6 +74,9 @@ class App extends Component {
   setGoogleSignedIn(GoogleUserObj) {
     const googleIdToken = GoogleUserObj.getAuthResponse().id_token;   // This should be sent with AJAX as a header, (HTTPS only!!)
 
+    console.log(GoogleUserObj.getBasicProfile());
+    console.log(GoogleUserObj.getBasicProfile().getId());
+
     // Store the token in local storage, so it can be accessed later.
     window.localStorage.setItem("googleIdToken", googleIdToken);
 

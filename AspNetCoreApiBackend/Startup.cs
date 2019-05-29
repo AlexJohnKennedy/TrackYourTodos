@@ -3,8 +3,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using todo_app.DataTransferLayer.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+
+using todo_app.DataTransferLayer.DatabaseContext;
 
 namespace todo_app
 {
@@ -43,7 +46,33 @@ namespace todo_app
                 });
             });
 
-            // TODO: ADD JWT AUTHENTICATION HERE, WHICH VALIDATES TOKENS SIGNED BY GOOGLE
+            services.AddAuthentication(authOptions => {
+                // Tell ASP's authentication service to authenticate using JWT Bearer flows, by setting it as our 'scheme(s)'.
+                authOptions.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                authOptions.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                authOptions.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(jwtOptions => {
+                // PUTTING THE AUDIENCE AND ISSUER DETAILS IN THE TOKEN VALIDATION PARAMETERS INSTEAD!
+                jwtOptions.Authority = "accounts.google.com";   // The server which is the authority which issues and signs the tokens. In our case, google accounts.
+                jwtOptions.Audience = "918054703402-2u53f3l62mpekrao3jkqd6geg3mjvtjq.apps.googleusercontent.com";   // The 'audience' is the client app (us), identified by the google-issued client id.
+                jwtOptions.RequireHttpsMetadata = false;    // DEVELOPMENT ONLY
+                jwtOptions.MetadataAddress = "https://www.googleapis.com/oauth2/v3/certs";
+
+                // Specify the token validation paramters; I.e., what steps should be taken in order to fully verify the validity of an incoming token.
+                // (e.g., check it is signed by google, by using Google's public key, check expiry time, etc.)
+                //jwtOptions.TokenValidationParameters = new TokenValidationParameters {
+                //    ValidateAudience = true,
+                //    ValidAudience = "918054703402-2u53f3l62mpekrao3jkqd6geg3mjvtjq.apps.googleusercontent.com",
+                //
+                //    ValidateIssuer = true,
+                //    ValidIssuer = "accounts.google.com",
+                //
+                //    ValidateLifetime = true,
+                //
+                //    ValidateIssuerSigningKey = true,
+                //    IssuerSigningKeyResolver = /* Put a delegate here which fetches/returns google's current public key! */
+                //};
+            });
 
             // Register our EFCore database context with DI, and configure it to be backed by an in-memory database provider.
             // Later, we can replace this with a PostGres provider and hopefully not have to change much/any logic.
@@ -70,7 +99,7 @@ namespace todo_app
             // the user endpoints, but NOT allow requests from our SPA domain to any 'admin only' end-points, for example!
 
             app.UseHttpsRedirection();
-            //app.UseAuthentication();
+            app.UseAuthentication();
             app.UseMvc();
         }
     }
