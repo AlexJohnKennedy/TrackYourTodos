@@ -1,8 +1,12 @@
+using System.Collections.Generic;
+using System.Linq;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -13,12 +17,14 @@ namespace todo_app
 {
 
     public class Startup {
-
-        public Startup(IConfiguration configuration) {
-            Configuration = configuration;
-        }
-
+        
         public IConfiguration Configuration { get; }
+        private ILogger logger;
+
+        public Startup(IConfiguration configuration, ILoggerFactory loggerFactory) {
+            Configuration = configuration;
+            this.logger = loggerFactory.CreateLogger<Startup>();
+        }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
@@ -53,25 +59,53 @@ namespace todo_app
                 authOptions.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(jwtOptions => {
                 // PUTTING THE AUDIENCE AND ISSUER DETAILS IN THE TOKEN VALIDATION PARAMETERS INSTEAD!
-                jwtOptions.Authority = "accounts.google.com";   // The server which is the authority which issues and signs the tokens. In our case, google accounts.
-                jwtOptions.Audience = "918054703402-2u53f3l62mpekrao3jkqd6geg3mjvtjq.apps.googleusercontent.com";   // The 'audience' is the client app (us), identified by the google-issued client id.
-                jwtOptions.RequireHttpsMetadata = false;    // DEVELOPMENT ONLY
-                jwtOptions.MetadataAddress = "https://www.googleapis.com/oauth2/v3/certs";
+                // ===================================================================================
+                //jwtOptions.Authority = "accounts.google.com";   // The server which is the authority which issues and signs the tokens. In our case, google accounts.
+                //jwtOptions.Audience = "918054703402-2u53f3l62mpekrao3jkqd6geg3mjvtjq.apps.googleusercontent.com";   // The 'audience' is the client app (us), identified by the google-issued client id.
+                //jwtOptions.RequireHttpsMetadata = false;    // DEVELOPMENT ONLY
+                //jwtOptions.MetadataAddress = "https://www.googleapis.com/oauth2/v3/certs";
 
                 // Specify the token validation paramters; I.e., what steps should be taken in order to fully verify the validity of an incoming token.
                 // (e.g., check it is signed by google, by using Google's public key, check expiry time, etc.)
-                //jwtOptions.TokenValidationParameters = new TokenValidationParameters {
-                //    ValidateAudience = true,
-                //    ValidAudience = "918054703402-2u53f3l62mpekrao3jkqd6geg3mjvtjq.apps.googleusercontent.com",
-                //
-                //    ValidateIssuer = true,
-                //    ValidIssuer = "accounts.google.com",
-                //
-                //    ValidateLifetime = true,
-                //
-                //    ValidateIssuerSigningKey = true,
-                //    IssuerSigningKeyResolver = /* Put a delegate here which fetches/returns google's current public key! */
-                //};
+                jwtOptions.TokenValidationParameters = new TokenValidationParameters {
+                    ValidateAudience = true,
+                    ValidAudience = "918054703402-2u53f3l62mpekrao3jkqd6geg3mjvtjq.apps.googleusercontent.com",
+                
+                    ValidateIssuer = true,
+                    ValidIssuer = "accounts.google.com",
+                
+                    ValidateLifetime = true,
+                
+                    //ValidateIssuerSigningKey = true,
+                    
+                    /* Assign a delegate (of type 'IssuerSigningKeyResolver') which fetches/returns google's current public key! */
+                    IssuerSigningKeyResolver = (tokenString, securityTokenObj, kidString, validationParamsObj) => {
+                        logger.LogInformation("====================================== Entering IssuerSigningKeyResolver =================================================");
+                        logger.LogCritical(tokenString);
+                        logger.LogCritical(kidString);
+                        logger.LogCritical(securityTokenObj.ToString());
+                        logger.LogInformation("==========================================================================================================================");
+                        return null;
+                    },
+                    /* Assign a delegate (of type 'AudienceValidator') which determines if the audience field in the JWT token is correct. It SHOULD be the google-client-id we got from them */
+                    AudienceValidator = (audienceStrings, securityTokenObj, validationParamsObj) => {
+                        logger.LogInformation("====================================== Entering Audience Validator =======================================================");
+                        logger.LogCritical(securityTokenObj.ToString());
+                        foreach (string audience in audienceStrings) {
+                            logger.LogCritical(audience);
+                        }
+                        logger.LogInformation("==========================================================================================================================");
+                        return audienceStrings.Contains("918054703402-2u53f3l62mpekrao3jkqd6geg3mjvtjq.apps.googleusercontent.com");
+                    },
+                    /* Assign a delegate (of type 'IssuerValidator') which does some shit */
+                    IssuerValidator = (issuer, tokenObj, validationParams) => { 
+                        logger.LogInformation("====================================== Entering Issuer Validator =======================================================");
+                        logger.LogCritical(issuer);
+                        logger.LogCritical(tokenObj.ToString());
+                        logger.LogInformation("==========================================================================================================================");
+                        return issuer;
+                    }
+                };
             });
 
             // Register our EFCore database context with DI, and configure it to be backed by an in-memory database provider.
