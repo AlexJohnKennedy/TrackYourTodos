@@ -1,14 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Mvc;
-using todo_app.DataTransferLayer.Entities;
-using todo_app.DataTransferLayer.DatabaseContext;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
+
+using todo_app.DataTransferLayer.Entities;
+using todo_app.DataTransferLayer.DatabaseContext;
+
 
 namespace todo_app.Controllers {
 
@@ -40,6 +44,8 @@ namespace todo_app.Controllers {
         [EnableCors("UserFacingApplications")]
         [HttpGet("/todoevents")]
         public async Task<IActionResult> FetchEntireEventLog() {
+            PrintClaimsPrincipal(User);
+
             IEnumerable<GenericTodoEvent> eventLog = await dbContext.TodoEvents.Where(e => true).OrderBy(e => e.Timestamp).ToListAsync();
             return Ok(eventLog);
         }
@@ -67,6 +73,13 @@ namespace todo_app.Controllers {
                 dbContext.TodoEvents.AddRange(nonDups);
                 await dbContext.SaveChangesAsync();
                 return Ok(nonDups);
+            }
+        }
+
+        private void PrintClaimsPrincipal(ClaimsPrincipal userDetails) {
+            logger.LogDebug(" ---> Logging User details <--- ");
+            foreach (var claim in userDetails.Claims) {
+                logger.LogDebug($"Claim from User.Claims collection: '{claim.Type}, {claim.Value}'");
             }
         }
     }
