@@ -6,6 +6,7 @@ using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 
@@ -91,6 +92,13 @@ namespace todo_app.JwtAuthenticationHelperMiddlewares {
                 + "before this is called, and that fetching is handled by the static helper available on the middleware.");
             }
             return (IEnumerable<SecurityKey>)keys;
+        }
+    }
+
+    // Setup an extension method to allow clearer middleware pipeline construction.
+    public static class JwtAuthenticationHelperMiddlewareExtensions {
+        public static IApplicationBuilder UsePublicKeyFetchingMiddleware(this IApplicationBuilder builder) {
+            return builder.UseMiddleware<PublicKeyFetchingMiddleware>();
         }
     }
 }

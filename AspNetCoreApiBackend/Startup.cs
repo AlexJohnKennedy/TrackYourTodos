@@ -23,9 +23,9 @@ using Newtonsoft.Json.Linq;
 using todo_app.DataTransferLayer.DatabaseContext;
 using todo_app.JwtTestCode;
 using todo_app.JwtAuthenticationHelperMiddlewares;
+using todo_app.Services.AuthenticationHelpers;
 
-namespace todo_app
-{
+namespace todo_app {
 
     public class Startup {
         
@@ -63,6 +63,10 @@ namespace todo_app
                 });
             });
 
+            // Register our singleton 'public key provider' service which will be used by our middleware to supply google PK's.
+            services.AddSingleton<IRemotePublicKeyProvider, HardCodedGooglePublicKeyProvider>();    // Using the hardcoded one for testing purposes at the moment!
+
+            // Configure Authentication. TODO: Move the jwtOptions logic into options classes for hot swapping and cleaner startup class.
             services.AddAuthentication(authOptions => {
                 // Tell ASP's authentication service to authenticate using JWT Bearer flows, by setting it as our 'scheme(s)'.
                 authOptions.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -125,6 +129,10 @@ namespace todo_app
             // the user endpoints, but NOT allow requests from our SPA domain to any 'admin only' end-points, for example!
 
             app.UseHttpsRedirection();
+
+            // Custom middleware to fetch public keys for auth.
+            app.UsePublicKeyFetchingMiddleware();
+            
             app.UseAuthentication();
             app.UseMvc();
         }
