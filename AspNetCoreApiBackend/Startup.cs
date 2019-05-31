@@ -64,7 +64,8 @@ namespace todo_app {
             });
 
             // Register our singleton 'public key provider' service which will be used by our middleware to supply google PK's.
-            services.AddSingleton<IRemotePublicKeyProvider, HardCodedGooglePublicKeyProvider>();    // Using the hardcoded one for testing purposes at the moment!
+            services.AddHttpClient();
+            services.AddSingleton<IRemotePublicKeyProvider, GooglePublicKeyProviderRefetchForEveryRequest>();    // Using the hardcoded one for testing purposes at the moment!
 
             // Configure Authentication. TODO: Move the jwtOptions logic into options classes for hot swapping and cleaner startup class.
             services.AddAuthentication(authOptions => {
@@ -132,7 +133,7 @@ namespace todo_app {
 
             // Custom middleware to fetch public keys for auth.
             app.UsePublicKeyFetchingMiddleware();
-            
+
             app.UseAuthentication();
             app.UseMvc();
         }

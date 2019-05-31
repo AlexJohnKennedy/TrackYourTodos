@@ -1,10 +1,11 @@
+using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
-using System;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -35,4 +36,30 @@ namespace todo_app.Services.AuthenticationHelpers {
         }
     }
 
+    // Halfway solution; works technically but requires redundent calls most of the time since it will re-fetch the public keys for every call
+    // The final solution will use caching.
+    public class GooglePublicKeyProviderRefetchForEveryRequest : IRemotePublicKeyProvider {
+        private IHttpClientFactory httpClientFactory;
+        private ILogger logger;
+
+        public GooglePublicKeyProviderRefetchForEveryRequest(IHttpClientFactory httpClientFactory, ILogger<GooglePublicKeyProviderRefetchForEveryRequest> logger) {
+            this.httpClientFactory = httpClientFactory;
+            this.logger = logger;
+        }
+
+        public async Task<string> FetchJsonWebKeysAsJsonString() {
+            logger.LogDebug("Requesting googles public keys!");
+
+            HttpClient client = httpClientFactory.CreateClient();
+            HttpResponseMessage response = await client.GetAsync("https://www.googleapis.com/oauth2/v3/certs");
+            
+            if (response.IsSuccessStatusCode) {
+                string responseText = await response.Content.ReadAsStringAsync();
+                return responseText;
+            }
+            else {
+                throw new IOException("Http request to get public keys failed :( Status code: " + response.StatusCode);
+            }
+        }
+    }
 }
