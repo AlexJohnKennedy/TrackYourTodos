@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
+using System;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -67,13 +68,13 @@ namespace todo_app
                 authOptions.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 authOptions.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(jwtOptions => {
-
                 // Construct some Token validation params which contain hard-coded Google Public Keys, for testing purposes
                 jwtOptions.TokenValidationParameters = new TokenValidationParameters {
+                    ClockSkew = TimeSpan.FromMinutes(5),    // Allow for 5 minutes of de-sync between token-issuing server and our server. (This is alot)
                     ValidateAudience = true,
                     ValidAudience = "918054703402-2u53f3l62mpekrao3jkqd6geg3mjvtjq.apps.googleusercontent.com",
                     ValidateIssuer = true,
-                    ValidIssuer = "accounts.google.com",
+                    ValidIssuers = new List<string> { "accounts.google.com", "https://accounts.google.com" },
                     ValidateLifetime = true,
                     IssuerSigningKeyResolver = (tokenString, securityTokenObj, kidString, validationParamsObj) => {
                         // TODO: Replace the key insertion by either HttpContext.Items (from a custom, earlier middleware), or just delegate validation entirely.

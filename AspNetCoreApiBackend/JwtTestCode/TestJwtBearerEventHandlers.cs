@@ -68,7 +68,7 @@ namespace todo_app.JwtTestCode {
         // Copied from JwtBearerHandler source code. Assumes the Bearer token is actually present under the Authorization header
         private string parseBearerTokenStringFromHttpHeaders(HttpContext httpContext) {
             string authorizationHeader = httpContext.Request.Headers["Authorization"];
-
+            
             if (!string.IsNullOrEmpty(authorizationHeader) && authorizationHeader.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase)) {
                 return authorizationHeader.Substring("Bearer ".Length).Trim();
             }
