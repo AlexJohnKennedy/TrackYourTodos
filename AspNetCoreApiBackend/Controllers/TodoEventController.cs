@@ -31,6 +31,8 @@ namespace todo_app.Controllers {
     [ApiController]
     public class TodoEventController : ControllerBase {
 
+        private const string googleSubjectClaimType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier";
+
         private ILogger logger;
         private TodoEventContext dbContext;
 
@@ -44,9 +46,9 @@ namespace todo_app.Controllers {
         [EnableCors("UserFacingApplications")]
         [HttpGet("/todoevents")]
         public async Task<IActionResult> FetchEntireEventLog() {
-            PrintClaimsPrincipal(User);
+            HashSet<string> userIdStrings = User.FindAll(googleSubjectClaimType).Select(claim => claim.Value.Trim()).ToHashSet();
 
-            IEnumerable<GenericTodoEvent> eventLog = await dbContext.TodoEvents.Where(e => true).OrderBy(e => e.Timestamp).ToListAsync();
+            IEnumerable<GenericTodoEvent> eventLog = await dbContext.TodoEvents.Where(e => userIdStrings.Contains(e.UserId.Trim())).OrderBy(e => e.Timestamp).ToListAsync();
             return Ok(eventLog);
         }
 
@@ -56,9 +58,15 @@ namespace todo_app.Controllers {
         [EnableCors("UserFacingApplications")]
         [HttpPost("/todoevents")]
         public async Task<IActionResult> PostNewEvents([FromBody] IList<GenericTodoEvent> newEvents) {
-            // Detect duplicate events, and notify the client of duplicates by returning a different status code.
+            // Populate the newEvents with the user's id string field. TODO: Make model binding do this automatically.
+            string userId = User.FindFirst(googleSubjectClaimType).Value.Trim();
+            foreach (GenericTodoEvent e in newEvents) {
+                e.UserId = userId;
+            }
+
+            // Detect duplicate events.
             var compositeKeyset = newEvents.Select(e => new { e.Id, e.Timestamp, e.EventType }).ToHashSet();
-            List<GenericTodoEvent> duplicates = await dbContext.TodoEvents.Where(e => compositeKeyset.Contains(new { e.Id, e.Timestamp, e.EventType })).ToListAsync();
+            List<GenericTodoEvent> duplicates = await dbContext.TodoEvents.Where(e => e.UserId.Equals(userId) && compositeKeyset.Contains(new { e.Id, e.Timestamp, e.EventType })).ToListAsync();
 
             // If there are not duplicates, do a save. We are assuming that they are not causing an invalid state. Later on, I will
             // simulate the state

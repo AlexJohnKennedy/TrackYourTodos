@@ -40,6 +40,8 @@ namespace todo_app.DataTransferLayer.Entities {
         [Key]
         public int EventId { get; set; }
 
+        public string UserId { get; set; }
+
         public string EventType { get; set; }
         public long Timestamp { get; set; }
         public int Id { get; set; }
