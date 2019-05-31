@@ -49,12 +49,8 @@ namespace todo_app.JwtAuthenticationHelperMiddlewares {
         // This is called by the preceeding middleware, and serves as the entry point this middleware for each incoming request!
         // In our case, we delegate all of this responsibility to our provider service, and simply attach the results to the HttpContext.
         public async Task InvokeAsync(HttpContext httpContext) {
-            string jsonWebKeyString = await publicKeyProvider.FetchJsonWebKeysAsJsonString();
-
-            // Parse the JSON string into Security key objects, stored in an enumerable list, and attach it to the HttpContext object.
-            var keys = parseJsonIntoKeys(jsonWebKeyString);
-
-            // Stash them in the HttpContext so later middleware can access them.
+            // Stash the keys in the HttpContext so later middleware can access them.
+            var keys = await publicKeyProvider.FetchSecurityKeys();
             JWKRetriever.PlaceKeysIntoHttpContext(httpContext, keys);
 
             // Continue the pipeline by invoking the next middleware.
@@ -63,16 +59,6 @@ namespace todo_app.JwtAuthenticationHelperMiddlewares {
 
         public static IEnumerable<SecurityKey> RetrieveSecurityKeys(HttpContext context) {
             return JWKRetriever.GetKeysFromHttpContext(context);
-        }
-
-        private IEnumerable<SecurityKey> parseJsonIntoKeys(string json) {
-            JObject rootJsonObj = JObject.Parse(json);
-            JArray keysArray = JArray.Parse(rootJsonObj["keys"].ToString());
-            List<SecurityKey> l = new List<SecurityKey>();
-            foreach (JToken item in keysArray) {
-                l.Add(new JsonWebKey(item.ToString()));
-            }
-            return l;
         }
     }
 
