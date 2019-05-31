@@ -15,7 +15,7 @@ using Newtonsoft.Json.Linq;
 using todo_app.Services.AuthenticationHelpers;
 
 
-namespace todo_app.GoogleAuthenticationMiddlewares {
+namespace todo_app.JwtAuthenticationHelperMiddlewares {
 
     // This is a custom middleware which is responsible for acquiring latest public keys from a publicly available source,
     // and attaching it to the HttpContext object so that it is available for use in Authentication by the Authentication middleware.

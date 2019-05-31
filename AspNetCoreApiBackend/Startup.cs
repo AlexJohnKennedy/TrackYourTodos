@@ -22,6 +22,7 @@ using Newtonsoft.Json.Linq;
 
 using todo_app.DataTransferLayer.DatabaseContext;
 using todo_app.JwtTestCode;
+using todo_app.JwtAuthenticationHelperMiddlewares;
 
 namespace todo_app
 {
@@ -68,7 +69,7 @@ namespace todo_app
                 authOptions.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 authOptions.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(jwtOptions => {
-                // Construct some Token validation params which contain hard-coded Google Public Keys, for testing purposes
+                // Construct some Token validation params which contain Google Authority and Audience.
                 jwtOptions.TokenValidationParameters = new TokenValidationParameters {
                     ClockSkew = TimeSpan.FromMinutes(5),    // Allow for 5 minutes of de-sync between token-issuing server and our server. (This is alot)
                     ValidateAudience = true,
@@ -76,26 +77,27 @@ namespace todo_app
                     ValidateIssuer = true,
                     ValidIssuers = new List<string> { "accounts.google.com", "https://accounts.google.com" },
                     ValidateLifetime = true,
-                    IssuerSigningKeyResolver = (tokenString, securityTokenObj, kidString, validationParamsObj) => {
-                        // TODO: Replace the key insertion by either HttpContext.Items (from a custom, earlier middleware), or just delegate validation entirely.
-                        string jwkResult = "{\"keys\":[{\"kid\":\"07a082839f2e71a9bf6c596996b94739785afdc3\",\"e\":\"AQAB\",\"kty\":\"RSA\",\"alg\":\"RS256\",\"n\":\"9Y5kfSJyw-GyM4lSXNCVaMKmDdOkYdu5ZhQ7E-8nfae-CPPsx3IZjdUrrv_AoKhM3vsZW_Z3Vucou53YZQuHFpnAa6YxiG9ntpScviU1dhMd4YyUtNYWVBxgNemT9dhhj2i32ez0tOj7o0tGh2Yoo2LiSXRDT-m2zwBImYkBksws4qq_X3jZhlfYkznrCJGjVhKEHzlQy5BBqtQtN5dXFVi-zRZ0-m7oiNW_2wivjw_99li087PNFSeyHpgxjbg30K2qnm1T8gVhnzqf8xnPW9vZFyc_8-3qmbQeDedB8YWyzojM3hDLsHqypP84MSOmejmi0c2b836oc-pI8seXwQ\",\"use\":\"sig\"},{\"e\":\"AQAB\",\"kty\":\"RSA\",\"alg\":\"RS256\",\"n\":\"uNgHfkBGmFZbxa7E0tnsRzarMiE26hnGfwf6PPIbMClW_-VqwwTPXftsnrPbQg93XAKS-r1jQZL54vpVbKJjT7V0TwGpEHplIlLQdSiHLvcUTKPi8ZdG2Promst8khxHTbNDvBhtJwsYXUwLJ3fDF-6v2kTZCHnggQF-tPo4Jumb0WoZYXN74VxmcBU52ypEAlGCxECwpVYOQlrJUzRl7BXvP1EI24D_ZLPLLZd1oP0zz4bFTXeHYm1Q79y8UVBH6o-7nrw9MC1150lSCXX-tXnVJ53f1U2V8PhyDNVy9feTBMO06mvyhl5b3E0aHptgTBUeSFcCIGMvjMgVAO2brw\",\"use\":\"sig\",\"kid\":\"c7f522d032284d252bee4fd80560cefa0fb60c39\"}]}";
-                        JObject rootJsonObj = JObject.Parse(jwkResult);
-                        JArray keysArray = JArray.Parse(rootJsonObj["keys"].ToString());
-                        List<SecurityKey> l = new List<SecurityKey>();
-                        foreach (JToken item in keysArray) {
-                            l.Add(new JsonWebKey(item.ToString()));
-                        }
-                        return l;
-                    }
                 };
 
-                // DEBUG: Attach an event handler which the JwtBearerHandler calls when it is first asked to Authenticate a message. Here i'm just injecting a thing which logs stuff,
-                // DEBUG: however this could be used to intercept the message and attach the up-to-date Google public-key string into the TokenValidationParameters, via the HttpContext.Items property,
-                // passed from previous custom-middleware which fetches the latest google key!!
-                //TestJwtBearerEventHandlers debuggingHandlers = new TestJwtBearerEventHandlers(logger);
-                //jwtOptions.Events = new JwtBearerEvents() {
-                //    OnMessageReceived = debuggingHandlers.MessageRecievedHandler
-                //};
+                // Attach an event handler which will extract the Google public keys from the HttpContext, which should have been placed there
+                // by previous custom middleware.
+                // WARNING: I'm not sure if mutating the jwtOptions object mid-request handling is thread safe, if another concurrent request is simulataneously running here. This could potentially be an issue!!
+                // WARNING: If it is, we will have to instead completely take over the validation in this event; i.e. instantiate fresh validationParams, and a fresh JwtSecurityTokenHandler, extract the token, validate it directly,
+                // WARNING: instnatiate a TokenValidationContext containing the Claims principal and populate Security Token, and then attach the TokenValidationContext.Result to the messageContext.Result.
+                // WARNING: In essence, this would be copying the behaviour of the existing validation process, except it would explicitly ensure that this request is handled with isolated instances which won't change from other
+                // WARNING: threads! 
+                // WARNING: SEE: https://github.com/aspnet/Security/blob/master/src/Microsoft.AspNetCore.Authentication.JwtBearer/JwtBearerHandler.cs for the built-in logic we would have to emulate.
+                // WARNING: SEE: https://gist.github.com/twaldecker/da0594baeef0e15466c68112ae375988 for example of how to use the built-in JwtSecurityTokenHandler to manually validate.
+                jwtOptions.Events = new JwtBearerEvents() {
+                    OnMessageReceived = messageContext => {
+                        IEnumerable<SecurityKey> keysFromPreviousMiddleware = PublicKeyFetchingMiddleware.RetrieveSecurityKeys(messageContext.HttpContext);
+                        messageContext.Options.TokenValidationParameters.IssuerSigningKeys = keysFromPreviousMiddleware;
+                        messageContext.Options.TokenValidationParameters.IssuerSigningKeyResolver = (tokenString, securityTokenObj, kidString, validationParamsObj) => {
+                            return keysFromPreviousMiddleware.Where(key => key.KeyId.ToUpper() == kidString.ToUpper());
+                        };
+                        return Task.CompletedTask;
+                    }
+                };
             });
 
             // Register our EFCore database context with DI, and configure it to be backed by an in-memory database provider.
