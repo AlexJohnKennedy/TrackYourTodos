@@ -48,7 +48,7 @@ namespace todo_app.JwtAuthenticationHelperMiddlewares {
 
         // This is called by the preceeding middleware, and serves as the entry point this middleware for each incoming request!
         // In our case, we delegate all of this responsibility to our provider service, and simply attach the results to the HttpContext.
-        public async Task InvokeAsyc(HttpContext httpContext) {
+        public async Task InvokeAsync(HttpContext httpContext) {
             string jsonWebKeyString = await publicKeyProvider.FetchJsonWebKeysAsJsonString();
 
             // Parse the JSON string into Security key objects, stored in an enumerable list, and attach it to the HttpContext object.
