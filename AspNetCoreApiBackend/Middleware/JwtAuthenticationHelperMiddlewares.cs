@@ -60,6 +60,10 @@ namespace todo_app.GoogleAuthenticationMiddlewares {
             await next(httpContext);
         }
 
+        public static IEnumerable<SecurityKey> RetrieveSecurityKeys(HttpContext context) {
+            return JWKRetriever.GetKeysFromHttpContext(context);
+        }
+
         private IEnumerable<SecurityKey> parseJsonIntoKeys(string json) {
             JObject rootJsonObj = JObject.Parse(json);
             JArray keysArray = JArray.Parse(rootJsonObj["keys"].ToString());
