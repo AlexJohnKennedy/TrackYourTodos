@@ -1,0 +1,690 @@
+[
+   {
+      "eventType":"taskCreated",
+      "timestamp":1558991351915,
+      "id":31,
+      "name":"Meet Joe Chan for lunhc",
+      "category":2,
+      "progressStatus":0,
+      "colourId":0,
+      "parent":null,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1558991378887,
+      "id":32,
+      "name":"Get JWT authentication working on the API",
+      "category":1,
+      "progressStatus":0,
+      "colourId":1,
+      "parent":null,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"subtaskCreated",
+      "timestamp":1558991425388,
+      "id":33,
+      "name":"Fetch the ID token from Google API",
+      "category":2,
+      "progressStatus":0,
+      "colourId":1,
+      "parent":32,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"subtaskCreated",
+      "timestamp":1558991458694,
+      "id":34,
+      "name":"Have AJAX attach the token to outgoing req's",
+      "category":2,
+      "progressStatus":0,
+      "colourId":1,
+      "parent":32,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"subtaskCreated",
+      "timestamp":1558991500939,
+      "id":35,
+      "name":"Configure 'addJwtBearer' middleware to ASP",
+      "category":2,
+      "progressStatus":0,
+      "colourId":1,
+      "parent":32,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1558991664419,
+      "id":36,
+      "name":"Deploy TYTodos on Azure/AWS (with Docker)",
+      "category":0,
+      "progressStatus":0,
+      "colourId":2,
+      "parent":null,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1558991701746,
+      "id":37,
+      "name":"Replace in-memory DB with PostGres",
+      "category":3,
+      "progressStatus":0,
+      "colourId":3,
+      "parent":null,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1558991792915,
+      "id":38,
+      "name":"Load user-specific event logs from API",
+      "category":1,
+      "progressStatus":0,
+      "colourId":0,
+      "parent":null,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1558991859465,
+      "id":39,
+      "name":"Init datamodel & register handlers onMount",
+      "category":2,
+      "progressStatus":0,
+      "colourId":1,
+      "parent":null,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1558991894989,
+      "id":40,
+      "name":"Start completing Docker/Kubernetes course",
+      "category":3,
+      "progressStatus":0,
+      "colourId":2,
+      "parent":null,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1558991924392,
+      "id":41,
+      "name":"Set up CI pipeline w/ Travis or CircleCI",
+      "category":3,
+      "progressStatus":0,
+      "colourId":3,
+      "parent":null,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1558991940496,
+      "id":42,
+      "name":"Start Stanford Machine Learning course",
+      "category":3,
+      "progressStatus":0,
+      "colourId":0,
+      "parent":null,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1558991956797,
+      "id":43,
+      "name":"Bookmark ML course",
+      "category":2,
+      "progressStatus":0,
+      "colourId":1,
+      "parent":null,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1558992017133,
+      "id":44,
+      "name":"Implement time-restricted 'undo' operation",
+      "category":3,
+      "progressStatus":0,
+      "colourId":2,
+      "parent":null,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1558992065976,
+      "id":45,
+      "name":"Chat the Alecks about SPA architecture",
+      "category":1,
+      "progressStatus":0,
+      "colourId":3,
+      "parent":null,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1558992077011,
+      "id":46,
+      "name":"Increase Character limit for tasks",
+      "category":1,
+      "progressStatus":0,
+      "colourId":0,
+      "parent":null,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1558992142282,
+      "id":47,
+      "name":"Sent in Atlassian Application",
+      "category":1,
+      "progressStatus":0,
+      "colourId":1,
+      "parent":null,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1558992203945,
+      "id":48,
+      "name":"Have API verify validity of events",
+      "category":3,
+      "progressStatus":0,
+      "colourId":2,
+      "parent":null,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1558992219924,
+      "id":49,
+      "name":"Setup Failure-hooks to init on backend",
+      "category":3,
+      "progressStatus":0,
+      "colourId":3,
+      "parent":null,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1558992286228,
+      "id":50,
+      "name":"Add ability to edit task text",
+      "category":3,
+      "progressStatus":0,
+      "colourId":0,
+      "parent":null,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1558992314827,
+      "id":51,
+      "name":"Add 'Context switching' mechanism to app",
+      "category":0,
+      "progressStatus":0,
+      "colourId":1,
+      "parent":null,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1558992470663,
+      "id":52,
+      "name":"Finish System-design Course",
+      "category":0,
+      "progressStatus":0,
+      "colourId":2,
+      "parent":null,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskStarted",
+      "timestamp":1558992570368,
+      "id":43,
+      "name":"Bookmark ML course",
+      "category":2,
+      "progressStatus":1,
+      "colourId":1,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCompleted",
+      "timestamp":1558992680494,
+      "id":43,
+      "name":"Bookmark ML course",
+      "category":2,
+      "progressStatus":2,
+      "colourId":1,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskStarted",
+      "timestamp":1559024730773,
+      "id":31,
+      "name":"Meet Joe Chan for lunhc",
+      "category":2,
+      "progressStatus":1,
+      "colourId":0,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCompleted",
+      "timestamp":1559024731906,
+      "id":31,
+      "name":"Meet Joe Chan for lunhc",
+      "category":2,
+      "progressStatus":2,
+      "colourId":0,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskStarted",
+      "timestamp":1559031852598,
+      "id":52,
+      "name":"Finish System-design Course",
+      "category":0,
+      "progressStatus":1,
+      "colourId":2,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCompleted",
+      "timestamp":1559031854536,
+      "id":52,
+      "name":"Finish System-design Course",
+      "category":0,
+      "progressStatus":2,
+      "colourId":2,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskStarted",
+      "timestamp":1559031856210,
+      "id":51,
+      "name":"Add 'Context switching' mechanism to app",
+      "category":0,
+      "progressStatus":1,
+      "colourId":1,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCompleted",
+      "timestamp":1559031857100,
+      "id":51,
+      "name":"Add 'Context switching' mechanism to app",
+      "category":0,
+      "progressStatus":2,
+      "colourId":1,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskStarted",
+      "timestamp":1559031860987,
+      "id":36,
+      "name":"Deploy TYTodos on Azure/AWS (with Docker)",
+      "category":0,
+      "progressStatus":1,
+      "colourId":2,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCompleted",
+      "timestamp":1559031861959,
+      "id":36,
+      "name":"Deploy TYTodos on Azure/AWS (with Docker)",
+      "category":0,
+      "progressStatus":2,
+      "colourId":2,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskStarted",
+      "timestamp":1559034155708,
+      "id":39,
+      "name":"Init datamodel & register handlers onMount",
+      "category":2,
+      "progressStatus":1,
+      "colourId":1,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCompleted",
+      "timestamp":1559043445099,
+      "id":39,
+      "name":"Init datamodel & register handlers onMount",
+      "category":2,
+      "progressStatus":2,
+      "colourId":1,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskStarted",
+      "timestamp":1559044059728,
+      "id":46,
+      "name":"Increase Character limit for tasks",
+      "category":1,
+      "progressStatus":1,
+      "colourId":0,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCompleted",
+      "timestamp":1559044060743,
+      "id":46,
+      "name":"Increase Character limit for tasks",
+      "category":1,
+      "progressStatus":2,
+      "colourId":0,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1559044310963,
+      "id":53,
+      "name":"Deploy TYTodos on Azure/AWS (with Docker)",
+      "category":0,
+      "progressStatus":0,
+      "colourId":0,
+      "parent":null,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1559044323112,
+      "id":54,
+      "name":"Add 'Context switching' mechanism to app",
+      "category":0,
+      "progressStatus":0,
+      "colourId":1,
+      "parent":null,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1559044331443,
+      "id":55,
+      "name":"Finish System-design Course",
+      "category":0,
+      "progressStatus":0,
+      "colourId":2,
+      "parent":null,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskStarted",
+      "timestamp":1559044429859,
+      "id":33,
+      "name":"Fetch the ID token from Google API",
+      "category":2,
+      "progressStatus":1,
+      "colourId":1,
+      "parent":32,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1559044473022,
+      "id":56,
+      "name":"Implement list drag-and-drop from Atlassian Library in bookmarks",
+      "category":3,
+      "progressStatus":0,
+      "colourId":3,
+      "parent":null,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1559044522841,
+      "id":57,
+      "name":"Do washing of T-shirts",
+      "category":2,
+      "progressStatus":0,
+      "colourId":0,
+      "parent":null,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1559044541388,
+      "id":58,
+      "name":"Pull ups and hanging rows",
+      "category":2,
+      "progressStatus":0,
+      "colourId":1,
+      "parent":null,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1559044570111,
+      "id":59,
+      "name":"Fix colour id settings not distributing colours in a satisfying way",
+      "category":3,
+      "progressStatus":0,
+      "colourId":2,
+      "parent":null,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskStarted",
+      "timestamp":1559047401336,
+      "id":34,
+      "name":"Have AJAX attach the token to outgoing req's",
+      "category":2,
+      "progressStatus":1,
+      "colourId":1,
+      "parent":32,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCompleted",
+      "timestamp":1559047405486,
+      "id":33,
+      "name":"Fetch the ID token from Google API",
+      "category":2,
+      "progressStatus":2,
+      "colourId":1,
+      "parent":32,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCompleted",
+      "timestamp":1559047467560,
+      "id":34,
+      "name":"Have AJAX attach the token to outgoing req's",
+      "category":2,
+      "progressStatus":2,
+      "colourId":1,
+      "parent":32,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1559047732750,
+      "id":60,
+      "name":"Add an automatically scheduled 'refresh token' action every 50 mins",
+      "category":1,
+      "progressStatus":0,
+      "colourId":0,
+      "parent":null,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskFailed",
+      "timestamp":1559055600000,
+      "id":35,
+      "name":"Configure 'addJwtBearer' middleware to ASP",
+      "category":2,
+      "progressStatus":4,
+      "colourId":1,
+      "parent":32,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskRevived",
+      "timestamp":1559080013987,
+      "id":61,
+      "name":"Configure 'addJwtBearer' middleware to ASP",
+      "category":2,
+      "progressStatus":0,
+      "colourId":1,
+      "parent":null,
+      "children":null,
+      "original":35
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1559080088316,
+      "id":62,
+      "name":"Implement an AJAX timeout & handler for IO suspend cases",
+      "category":2,
+      "progressStatus":0,
+      "colourId":0,
+      "parent":null,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1559080132952,
+      "id":63,
+      "name":"Ensure all failed POSTs add their unsent events to an in-mem queue",
+      "category":2,
+      "progressStatus":0,
+      "colourId":1,
+      "parent":null,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1559080167099,
+      "id":64,
+      "name":"When the 'unsent' queue is not empty, subsequent POSTs must send all",
+      "category":2,
+      "progressStatus":0,
+      "colourId":2,
+      "parent":null,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskStarted",
+      "timestamp":1559112367842,
+      "id":61,
+      "name":"Configure 'addJwtBearer' middleware to ASP",
+      "category":2,
+      "progressStatus":1,
+      "colourId":1,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   }
+]

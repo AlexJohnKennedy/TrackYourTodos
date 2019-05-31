@@ -7,7 +7,7 @@ import { TimeGroupTypes, BuildNewTimeGroupedTaskList } from './dateGroupTaskList
 export const PUT_NEW_TASKS_AT_TOP_OF_LIST = false;
 
 // Character limit for text fields of an item.
-export const MAX_TASK_NAME_LEN = 45;
+export const MAX_TASK_NAME_LEN = 70;
 
 // Enumeration object, specifying the possible categories for an item. These will basically dictate where an item
 // appears on the UI, under which board. (PSST): 'Boards' themselves are just a UI-layer concept, so they will not

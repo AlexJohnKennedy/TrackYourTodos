@@ -1,14 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Mvc;
-using todo_app.DataTransferLayer.Entities;
-using todo_app.DataTransferLayer.DatabaseContext;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
+
+using todo_app.DataTransferLayer.Entities;
+using todo_app.DataTransferLayer.DatabaseContext;
+
 
 namespace todo_app.Controllers {
 
@@ -27,6 +31,8 @@ namespace todo_app.Controllers {
     [ApiController]
     public class TodoEventController : ControllerBase {
 
+        private const string googleSubjectClaimType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier";
+
         private ILogger logger;
         private TodoEventContext dbContext;
 
@@ -36,23 +42,31 @@ namespace todo_app.Controllers {
         }
 
         // A GET request to the todoevent endpoint will automatically fetch all of a user's events.
-        //[Authorize]
+        [Authorize]
         [EnableCors("UserFacingApplications")]
         [HttpGet("/todoevents")]
         public async Task<IActionResult> FetchEntireEventLog() {
-            IEnumerable<GenericTodoEvent> eventLog = await dbContext.TodoEvents.Where(e => true).OrderBy(e => e.Timestamp).ToListAsync();
+            HashSet<string> userIdStrings = User.FindAll(googleSubjectClaimType).Select(claim => claim.Value.Trim()).ToHashSet();
+
+            IEnumerable<GenericTodoEvent> eventLog = await dbContext.TodoEvents.Where(e => userIdStrings.Contains(e.UserId.Trim())).OrderBy(e => e.Timestamp).ToListAsync();
             return Ok(eventLog);
         }
 
         // A POST request to the todoevent endpoint will pass in a log of new events to use. Most often, this will just be
         // a single event, but the API will support an array of events, such that clients can implement batch-sending if needed.
-        //[Authorize]
+        [Authorize]
         [EnableCors("UserFacingApplications")]
         [HttpPost("/todoevents")]
         public async Task<IActionResult> PostNewEvents([FromBody] IList<GenericTodoEvent> newEvents) {
-            // Detect duplicate events, and notify the client of duplicates by returning a different status code.
+            // Populate the newEvents with the user's id string field. TODO: Make model binding do this automatically.
+            string userId = User.FindFirst(googleSubjectClaimType).Value.Trim();
+            foreach (GenericTodoEvent e in newEvents) {
+                e.UserId = userId;
+            }
+
+            // Detect duplicate events.
             var compositeKeyset = newEvents.Select(e => new { e.Id, e.Timestamp, e.EventType }).ToHashSet();
-            List<GenericTodoEvent> duplicates = await dbContext.TodoEvents.Where(e => compositeKeyset.Contains(new { e.Id, e.Timestamp, e.EventType })).ToListAsync();
+            List<GenericTodoEvent> duplicates = await dbContext.TodoEvents.Where(e => e.UserId.Equals(userId) && compositeKeyset.Contains(new { e.Id, e.Timestamp, e.EventType })).ToListAsync();
 
             // If there are not duplicates, do a save. We are assuming that they are not causing an invalid state. Later on, I will
             // simulate the state
@@ -67,6 +81,13 @@ namespace todo_app.Controllers {
                 dbContext.TodoEvents.AddRange(nonDups);
                 await dbContext.SaveChangesAsync();
                 return Ok(nonDups);
+            }
+        }
+
+        private void PrintClaimsPrincipal(ClaimsPrincipal userDetails) {
+            logger.LogDebug(" ---> Logging User details <--- ");
+            foreach (var claim in userDetails.Claims) {
+                logger.LogDebug($"Claim from User.Claims collection: '{claim.Type}, {claim.Value}'");
             }
         }
     }

@@ -71,13 +71,28 @@ class App extends Component {
 
   // These callbacks will be passed down to child elements so that they can trigger a re-render of a different page
   // if a user signs in or out; for example if they sign in on the sign in page.
-  setGoogleSignedIn() {
+  setGoogleSignedIn(GoogleUserObj) {
+    const googleIdToken = GoogleUserObj.getAuthResponse().id_token;   // This should be sent with AJAX as a header, (HTTPS only!!)
+
+    console.log(GoogleUserObj.getBasicProfile());
+    console.log(GoogleUserObj.getBasicProfile().getId());
+
+    // Store the token in local storage, so it can be accessed later.
+    window.localStorage.setItem("googleIdToken", googleIdToken);
+
+    // TODO: Schedule a token refresh request every 55 minutes, so that we stay logged in longer than that!
+
     this.setState({
       googleAuthApiLoaded: true,
       googleUserIsLoggedIn: true
     });
   }
   setGoogleSignedOut() {
+    // Remove the saved google id token from local storage.
+    window.localStorage.removeItem("googleIdToken");
+
+    // TODO: Cancel the shceduled token refresh operation here.
+
     this.setState({
       googleUserIsLoggedIn: false
     });
