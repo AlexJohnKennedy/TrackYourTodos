@@ -75,7 +75,8 @@ namespace todo_app {
                 authOptions.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                 authOptions.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 authOptions.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(o.OptionsFunc);
+            })
+            .AddJwtBearer(o.OptionsFunc);
 
             // Register our EFCore database context with DI, and configure it to be backed by an in-memory database provider.
             // Later, we can replace this with a PostGres provider and hopefully not have to change much/any logic.

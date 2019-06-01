@@ -19,7 +19,7 @@ using todo_app.DomainLayer.Events;
 // business logic ocurring inside the server itself.. But there might be later!)
 namespace todo_app.DataTransferLayer.Entities {
 
-    // WARNING: THESE EVENT TYPE STRINGS MUST MATCH THOSE THAT ARE SENT AND RECEIVED BY THE CLIENT!
+    // Define the valide event type strings.
     public static class EventTypes {
         public const string TaskAdded = "taskCreated";
         public const string ChildTaskAdded = "subtaskCreated";
@@ -29,6 +29,30 @@ namespace todo_app.DataTransferLayer.Entities {
         public const string TaskFailed = "taskFailed";
         public const string TaskActivated = "taskActivated";
         public const string TaskStarted = "taskStarted";
+        public static readonly HashSet<string> ValidEventStrings = new HashSet<string>() {
+            TaskAdded, ChildTaskAdded, TaskRevived, TaskDeleted, TaskCompleted, TaskFailed, TaskActivated, TaskStarted
+        };
+    }
+
+    // Define custom validation operations for TODO event model objects. For example, the EventType field must
+    // be one of the valid strings. These operations are implemented as ValidationAttributes which allow us to
+    // apply them as attributes, e.g. [MustBeUppercase]
+
+    // Generic string attribute validator which asserts that a string field must be equal to one of a specified set.
+    internal class StringSetValidatorAttribute : ValidationAttribute {
+        private HashSet<string> validStrings;
+
+        // When the attribute is applied, it must contain a passed-in set of valid strings.
+        public StringSetValidatorAttribute(params string[] validStrings) {
+            this.validStrings = validStrings.ToHashSet();
+        }
+
+        protected override ValidationResult IsValid(object value, ValidationContext validationContext) {
+            return validStrings.Contains((string)value) ? ValidationResult.Success : new ValidationResult(GetErrorMessage(validationContext.MemberName));
+        }
+        private string GetErrorMessage(string member) {
+            return $"{member} must be to set to one of: " + validStrings.Aggregate("", (s, next) => s + next + ", ");
+        }
     }
 
     // Define a Model-bindable entity object; this must have public getters and setters for their properties.
@@ -42,10 +66,21 @@ namespace todo_app.DataTransferLayer.Entities {
 
         public string UserId { get; set; }
 
+        [Required]
+        [StringSetValidator(EventTypes.TaskAdded, EventTypes.ChildTaskAdded, EventTypes.TaskRevived, EventTypes.TaskDeleted, EventTypes.TaskCompleted, EventTypes.TaskFailed, EventTypes.TaskActivated, EventTypes.TaskStarted)]
         public string EventType { get; set; }
+
+        [Required]
         public long Timestamp { get; set; }
+
+        [Required]
         public int Id { get; set; }
+
+        [Required]
+        [StringLength(120)]   // Must match the string lenght defined in code on client app.
         public string Name { get; set; }
+
+        [Required]
         public int Category { get; set; }
         public int ProgressStatus { get; set; }
         public int ColourId { get; set; }
