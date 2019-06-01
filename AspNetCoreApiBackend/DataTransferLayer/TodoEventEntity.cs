@@ -20,7 +20,7 @@ using todo_app.DomainLayer.Events;
 // business logic ocurring inside the server itself.. But there might be later!)
 namespace todo_app.DataTransferLayer.Entities {
 
-    // Define the valide event type strings.
+    // Define the valid event type strings.
     public static class EventTypes {
         public const string TaskAdded = "taskCreated";
         public const string ChildTaskAdded = "subtaskCreated";
@@ -32,18 +32,30 @@ namespace todo_app.DataTransferLayer.Entities {
         public const string TaskStarted = "taskStarted";
         public static readonly HashSet<string> ValidEventStrings = new HashSet<string>() {
             TaskAdded, ChildTaskAdded, TaskRevived, TaskDeleted, TaskCompleted, TaskFailed, TaskActivated, TaskStarted
-        };
+        };         
     }
-
+    // Define Progress status and Category values to match Client application
+    public static class Category {
+        public const int Goal = 0;
+        public const int Weekly = 1;
+        public const int Daily = 2;
+        public const int Deferred = 3;
+    }
+    public static class ProgressStatus {
+        public const int NotStarted = 0;
+        public const int Started = 1;
+        public const int Completed = 2;
+        public const int Aborted = 3;
+        public const int Failed = 4;
+        public const int Reattempted = 5;
+    }
+    
     // Define custom validation operations for TODO event model objects. For example, the EventType field must
     // be one of the valid strings. These operations are implemented as ValidationAttributes which allow us to
     // apply them as attributes, e.g. [MustBeUppercase]
-
-    // Generic string attribute validator which asserts that a string field must be equal to one of a specified set.
     internal class StringSetValidatorAttribute : ValidationAttribute {
         private HashSet<string> validStrings;
 
-        // When the attribute is applied, it must contain a passed-in set of valid strings.
         public StringSetValidatorAttribute(params string[] validStrings) {
             this.validStrings = validStrings.ToHashSet();
         }
@@ -72,12 +84,45 @@ namespace todo_app.DataTransferLayer.Entities {
         }
     }
 
+    // Mapping of validation predicates depending on the event type.
+    internal static class EventTypeSpecificValidators {
+        public static readonly Dictionary<string, Func<GenericTodoEvent, bool>> Funcs = new Dictionary<string, Func<GenericTodoEvent, bool>>() {
+            // New independent tasks must have no parent, no child, no 'original' field, and Progress status must be 'Not started' (i.e. zero)
+            { EventTypes.TaskAdded, e => e.Parent == null && (e.Children == null || e.Children.Length == 0) && e.Original == null && e.ProgressStatus == ProgressStatus.NotStarted },
+
+            // New subtasks must have a parent, no child, no 'original' field, and ProgressStatus of Not started.
+            { EventTypes.ChildTaskAdded, e => e.Parent != null && (e.Children == null || e.Children.Length == 0) && e.Original == null && e.ProgressStatus == ProgressStatus.NotStarted },
+
+            // Revived tasks must have an 'original' field, and a ProgressStatus of Not started.
+            { EventTypes.TaskRevived, e => e.Original != null && e.ProgressStatus == ProgressStatus.NotStarted },
+
+            // Tasks which have just starts must have a progress status of started.
+            { EventTypes.TaskStarted, e => e.ProgressStatus == ProgressStatus.Started },
+
+            // Completed tasks must have a Category of not-deferred, and Progress status of completed.
+            { EventTypes.TaskCompleted, e => e.Category != Category.Deferred && e.ProgressStatus == ProgressStatus.Completed },
+
+            // Failed tasks must have a Category of not-deferred, and Progress status of failed.
+            { EventTypes.TaskFailed, e => e.Category != Category.Deferred && e.ProgressStatus == ProgressStatus.Failed },
+
+            // Activated tasks must have a Category of not-deferred, and ProgressStatus of not started.
+            { EventTypes.TaskActivated, e => e.Category != Category.Deferred && e.ProgressStatus == ProgressStatus.NotStarted },
+
+            // Deleted tasks currently have no validation applied
+            { EventTypes.TaskDeleted, e => true } 
+        };
+    }
+
     // Define a Model-bindable entity object; this must have public getters and setters for their properties.
     // The Generic event entity defines a type capable of being bound to ANY possible types. When we are sending
     // our responses, we will reply with a particular type. The Generic type contains properties for each of the
     // possible event types, and thus, can represent any one of them. Additionally, there are explicit conversion
     // operators defined, allowing us to easily CAST to one of the specific-event entity types.
-    public class GenericTodoEvent {
+    //
+    // This implements IValidatableObject so that I can have custom Model Validation; this is required because depending
+    // on the event type, certain other fields must, or must not, be null/required in order to be valid. E.g. New tasks
+    // should always have a null parent, whereas new subtasks must always HAVE a parent.
+    public class GenericTodoEvent : IValidatableObject {
         [Key]
         public int EventId { get; set; }
 
@@ -95,7 +140,7 @@ namespace todo_app.DataTransferLayer.Entities {
         public int Id { get; set; }
 
         [Required]
-        [StringLength(120)]   // Must match the string lenght defined in code on client app.
+        [StringLength(120)]   // Must match the string length defined in code on client app.
         public string Name { get; set; }
 
         [Required]
@@ -105,6 +150,12 @@ namespace todo_app.DataTransferLayer.Entities {
         public int? Parent { get; set; }        // Nullable, since some event types do not support this.
         public int[] Children { get; set; }
         public int? Original { get; set; }      // Nullable, since some event types do not support this.
+
+        // Return a collection of Failed-Validations. An empty IEnumerable means validation was successful
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext) {
+            var validationPredicate = EventTypeSpecificValidators.Funcs[EventType] ?? (e => false);
+            if (!validationPredicate(this)) yield return new ValidationResult($"Field values were not valid for eventType: {EventType}");
+        }
     }
     
     // Below are event-specific entity types which might be useful. They are able to be cast to, from the generic type.
