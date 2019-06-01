@@ -40,6 +40,10 @@ namespace todo_app.DataTransferLayer.Entities {
         public const int Weekly = 1;
         public const int Daily = 2;
         public const int Deferred = 3;
+
+        public static readonly HashSet<int> ValidValues = new HashSet<int>() {Goal, Weekly, Daily, Deferred};
+        public static readonly int MaxIndex = Enumerable.Max(ValidValues);
+        public static readonly int MinIndex = Enumerable.Min(ValidValues);
     }
     public static class ProgressStatus {
         public const int NotStarted = 0;
@@ -48,18 +52,32 @@ namespace todo_app.DataTransferLayer.Entities {
         public const int Aborted = 3;
         public const int Failed = 4;
         public const int Reattempted = 5;
+
+        public static readonly HashSet<int> ValidValues = new HashSet<int>() {NotStarted, Started, Completed, Aborted, Failed, Reattempted};
+        public static readonly int MaxIndex = Enumerable.Max(ValidValues);
+        public static readonly int MinIndex = Enumerable.Min(ValidValues);
     }
     
     // Define custom validation operations for TODO event model objects. For example, the EventType field must
     // be one of the valid strings. These operations are implemented as ValidationAttributes which allow us to
     // apply them as attributes, e.g. [MustBeUppercase]
+    internal class IntSetValidatorAttribute : ValidationAttribute {
+        private HashSet<int> validStrings;
+        public IntSetValidatorAttribute(params int[] validStrings) {
+            this.validStrings = validStrings.ToHashSet();
+        }
+        protected override ValidationResult IsValid(object value, ValidationContext validationContext) {
+            return validStrings.Contains((int)value) ? ValidationResult.Success : new ValidationResult(GetErrorMessage(validationContext.MemberName));
+        }
+        private string GetErrorMessage(string member) {
+            return $"{member} must be to set to one of: " + validStrings.Aggregate("", (s, next) => s + next.ToString() + ", ");
+        }
+    }
     internal class StringSetValidatorAttribute : ValidationAttribute {
         private HashSet<string> validStrings;
-
         public StringSetValidatorAttribute(params string[] validStrings) {
             this.validStrings = validStrings.ToHashSet();
         }
-
         protected override ValidationResult IsValid(object value, ValidationContext validationContext) {
             return validStrings.Contains((string)value) ? ValidationResult.Success : new ValidationResult(GetErrorMessage(validationContext.MemberName));
         }
@@ -144,8 +162,12 @@ namespace todo_app.DataTransferLayer.Entities {
         public string Name { get; set; }
 
         [Required]
+        [IntSetValidator(Entities.Category.Goal, Entities.Category.Weekly, Entities.Category.Daily, Entities.Category.Deferred)]
         public int Category { get; set; }
+
+        [IntSetValidator(Entities.ProgressStatus.NotStarted, Entities.ProgressStatus.Started, Entities.ProgressStatus.Completed, Entities.ProgressStatus.Aborted, Entities.ProgressStatus.Failed, Entities.ProgressStatus.Reattempted)]
         public int ProgressStatus { get; set; }
+
         public int ColourId { get; set; }
         public int? Parent { get; set; }        // Nullable, since some event types do not support this.
         public int[] Children { get; set; }

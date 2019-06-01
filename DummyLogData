@@ -1128,5 +1128,113 @@
 
       ],
       "original":null
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1559391434645,
+      "id":533,
+      "name":"Watch Avatar with J",
+      "category":2,
+      "progressStatus":0,
+      "colourId":0,
+      "parent":null,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskStarted",
+      "timestamp":1559391438119,
+      "id":533,
+      "name":"Watch Avatar with J",
+      "category":2,
+      "progressStatus":1,
+      "colourId":0,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCompleted",
+      "timestamp":1559404382561,
+      "id":74,
+      "name":"Implement field validation based on event types",
+      "category":2,
+      "progressStatus":2,
+      "colourId":2,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCompleted",
+      "timestamp":1559404384797,
+      "id":533,
+      "name":"Watch Avatar with J",
+      "category":2,
+      "progressStatus":2,
+      "colourId":0,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskRevived",
+      "timestamp":1559429565479,
+      "id":534,
+      "name":"Pull ups and hanging rows",
+      "category":2,
+      "progressStatus":0,
+      "colourId":1,
+      "parent":null,
+      "children":null,
+      "original":58
+   },
+   {
+      "eventType":"taskActivated",
+      "timestamp":1559429597841,
+      "id":70,
+      "name":"'Last 7 Days' graphic is not working. FIX IT",
+      "category":2,
+      "progressStatus":0,
+      "colourId":0,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskStarted",
+      "timestamp":1559429911239,
+      "id":70,
+      "name":"'Last 7 Days' graphic is not working. FIX IT",
+      "category":2,
+      "progressStatus":1,
+      "colourId":0,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCompleted",
+      "timestamp":1559429912187,
+      "id":70,
+      "name":"'Last 7 Days' graphic is not working. FIX IT",
+      "category":2,
+      "progressStatus":2,
+      "colourId":0,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
    }
 ]
