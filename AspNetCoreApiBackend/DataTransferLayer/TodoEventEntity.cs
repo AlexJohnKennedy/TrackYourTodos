@@ -55,6 +55,22 @@ namespace todo_app.DataTransferLayer.Entities {
             return $"{member} must be to set to one of: " + validStrings.Aggregate("", (s, next) => s + next + ", ");
         }
     }
+    internal class NotInTheFutureValidatorAttribute : ValidationAttribute {
+        private long clockSkewMilliseconds;     // How many milliseconds either side we are allowing.
+
+        public NotInTheFutureValidatorAttribute(long clockSkew) {
+            this.clockSkewMilliseconds = clockSkew;
+        }
+
+        protected override ValidationResult IsValid(object value, ValidationContext validationContext) {
+            long now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+            long timestampToValidate = (long)value;
+            return now + clockSkewMilliseconds >= timestampToValidate ? ValidationResult.Success : new ValidationResult(GetErrorMessage(timestampToValidate));
+        }
+        private string GetErrorMessage(long illegalTime) {
+            return $"Timestamp of {illegalTime} unix epoch milliseconds represented a value in the future; our system doesn't allow events to be saved that have not happened yet";
+        }
+    }
 
     // Define a Model-bindable entity object; this must have public getters and setters for their properties.
     // The Generic event entity defines a type capable of being bound to ANY possible types. When we are sending
@@ -72,6 +88,7 @@ namespace todo_app.DataTransferLayer.Entities {
         public string EventType { get; set; }
 
         [Required]
+        [NotInTheFutureValidator(5000)]
         public long Timestamp { get; set; }
 
         [Required]
