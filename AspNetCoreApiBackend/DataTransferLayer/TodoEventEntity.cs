@@ -165,10 +165,13 @@ namespace todo_app.DataTransferLayer.Entities {
         [IntSetValidator(Entities.Category.Goal, Entities.Category.Weekly, Entities.Category.Daily, Entities.Category.Deferred)]
         public int Category { get; set; }
 
+        [Required]
         [IntSetValidator(Entities.ProgressStatus.NotStarted, Entities.ProgressStatus.Started, Entities.ProgressStatus.Completed, Entities.ProgressStatus.Aborted, Entities.ProgressStatus.Failed, Entities.ProgressStatus.Reattempted)]
         public int ProgressStatus { get; set; }
 
+        [Required]
         public int ColourId { get; set; }
+        
         public int? Parent { get; set; }        // Nullable, since some event types do not support this.
         public int[] Children { get; set; }
         public int? Original { get; set; }      // Nullable, since some event types do not support this.
