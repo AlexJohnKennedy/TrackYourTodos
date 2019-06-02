@@ -13,8 +13,11 @@ export function forceTokenRefresh(retryAction) {
     if (refreshAuthenticationFunc !== null) { refreshAuthenticationFunc(retryAction); }
 }
 
-// This should be set by the Application on startup.
+// This should be set by the Application on startup. It is a funciton which is able to take an error message.
 let authFailureHandler = null;
+export function setAuthFailureHandler(func) {
+    authFailureHandler = func;
+}
 export function handleAuthFailure(message) {
     if (authFailureHandler !== null) { authFailureHandler(message); }
 }

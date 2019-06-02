@@ -5,7 +5,8 @@ import { AppPage } from './AppPage';
 import { LoadingPage } from './LoadingPage';
 import { LoginPage } from './LoginPage';
 
-import { setIdTokenRefreshFunction } from './interactionLayer/ajaxDataModules/ajaxErrorcaseHandlers';
+// Setters for application-level handlers for AJAX and Network errors. E.g. token expired, GET or POST failure, Authorization failed.
+import { setIdTokenRefreshFunction, setServerFailureAction, setAuthFailureHandler } from './interactionLayer/ajaxDataModules/ajaxErrorcaseHandlers';
 
 class App extends Component {
   constructor(props) {
@@ -25,6 +26,7 @@ class App extends Component {
     this.setGoogleSignedIn = this.setGoogleSignedIn.bind(this);
     this.setGoogleSignedOut = this.setGoogleSignedOut.bind(this);
     this.handleGoogleLoginFailure = this.handleGoogleLoginFailure.bind(this);
+    this.signUserOut = this.signUserOut.bind(this);
   }
 
   componentDidMount() {
@@ -91,10 +93,12 @@ class App extends Component {
     let scheduledTokenRefresh = window.setTimeout(() => refreshUserToken(GoogleUserObj, action), expiresInSeconds*1000 - 5000);
     setCancellationToken(scheduledTokenRefresh);
 
-    // Setup the 'refresh action' on the Ajax sub-system so that AJAX can force a token refresh if required.
+    // Setup the error handling actions on the Ajax sub-system so that AJAX can force a token refresh if required, and so on.
     setIdTokenRefreshFunction((onCompleted) => {
       refreshUserToken(GoogleUserObj, (throwAwayAuthResponse) => onCompleted());
     });
+    setAuthFailureHandler((throwAwayMessage) => this.signUserOut());
+    setServerFailureAction((message) => console.warn(message)); // TODO: Implement ACTUAL error page.
 
     this.setState({
       googleAuthApiLoaded: true,
@@ -102,6 +106,15 @@ class App extends Component {
     });
   }
 
+  signUserOut() {
+    // TODO: Move this copied logic our of the Header, so it's only here. The header should just invoke this via props.
+    window.gapi.auth2.getAuthInstance().isSignedIn.listen(flag => {
+      if (!flag) {
+        this.setGoogleSignedOut();
+      }
+    });
+    window.gapi.auth2.getAuthInstance().signOut();
+  }
   setGoogleSignedOut() {
     // Remove the saved google id token from local storage.
     window.localStorage.removeItem("googleIdToken");
@@ -118,7 +131,7 @@ class App extends Component {
   }
   handleGoogleLoginFailure() {
     // For now, we will just log the error for dev purposes and do nothing.
-    console.log("A google sign-in attempt failed! This typically means the user closed the popup or denied the permissions.");
+    console.warn("A google sign-in attempt failed! This typically means the user closed the popup or denied the permissions.");
   }
 
   render() {
