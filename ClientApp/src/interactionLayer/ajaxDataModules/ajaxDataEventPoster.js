@@ -27,6 +27,10 @@ function postEvent(eventText, retryCount, logoutOnAuthFailure) {
     httpRequest.open('POST', 'https://localhost:5001/todoevents', true); // Define a GET to our API endpoint, true marks asynchronous.
     httpRequest.setRequestHeader("Content-type", "application/json");    // Inform the reciever that the format is JSON.
     httpRequest.setRequestHeader("Authorization", "Bearer " + googleToken); // Specify the 'Bearer' authentication scheme, under Authorization header.
+    httpRequest.timeout = 5000;     // We MUST set a timeout otherwise uncaught exceptions will be thrown in scenarios where the browser is unable to complete reqeusts. (e.g. PC is asleep)
+    httpRequest.ontimeout = () => {
+        handleUnknownPostFailure(eventText, false);     // In these scenario's, don't try again just yet..
+    }
 
     // Assign a response handler function. If we get back a 200, we are done! If it fails with a server error, we will recursively retry,
     // unless our retry count is 0.

@@ -25,7 +25,11 @@ function PerformEventLogUpdate(tasklist, onLoadFunc, retryCount, logoutOnAuthFai
     let httpRequest = new XMLHttpRequest();
     httpRequest.open('GET', 'https://localhost:5001/todoevents', true); // Define a GET to our API endpoint, true marks asynchronous.
     httpRequest.setRequestHeader("Authorization", "Bearer " + googleToken); // Specify the 'Bearer' authentication scheme, under Authorization header.
-    
+    httpRequest.timeout = 5000;     // We MUST set a timeout otherwise uncaught exceptions will be thrown in scenarios where the browser is unable to complete reqeusts. (e.g. PC is asleep)
+    httpRequest.ontimeout = () => {
+        handleUnknownGetFailure("Oh dear. Was your PC snoozing? Maybe a nice, refreshing refresh will freshen up your refreshed computer");
+    }
+
     // Assign a response handler function
     httpRequest.onreadystatechange = () => {
         // Ensure the response object is ready to be read (Response is finished, and was successful)
