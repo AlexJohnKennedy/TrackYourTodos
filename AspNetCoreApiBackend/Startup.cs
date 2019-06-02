@@ -66,20 +66,17 @@ namespace todo_app {
 
             // Register our singleton 'public key provider' service which will be used by our middleware to supply google PK's.
             services.AddHttpClient();
-            services.AddSingleton<IRemotePublicKeyProvider, GooglePublicKeyProviderRefetchForEveryRequest>();    // Using the hardcoded one for testing purposes at the moment!
+            services.AddSingleton<IRemotePublicKeyProvider, GooglePublicKeyProviderFetchAndCache>();
 
             // Configure Authentication.
             MutateTokenValidationParametersOptionSet o = new MutateTokenValidationParametersOptionSet();
             services.AddAuthentication(authOptions => {
-                // Tell ASP's authentication service to authenticate using JWT Bearer flows, by setting it as our 'scheme(s)'.
                 authOptions.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                 authOptions.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 authOptions.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
             .AddJwtBearer(o.OptionsFunc);
 
-            // Register our EFCore database context with DI, and configure it to be backed by an in-memory database provider.
-            // Later, we can replace this with a PostGres provider and hopefully not have to change much/any logic.
             services.AddDbContext<TodoEventContext>(optionsObj => {
                 optionsObj.UseInMemoryDatabase("TestTodoEventStorage");
             });
