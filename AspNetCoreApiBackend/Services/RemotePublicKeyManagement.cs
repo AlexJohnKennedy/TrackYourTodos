@@ -170,7 +170,6 @@ namespace todo_app.Services.AuthenticationHelpers {
         }
     }
 
-
     internal class Parser {
         public static IEnumerable<SecurityKey> parseJsonIntoKeys(string json) {
             JObject rootJsonObj = JObject.Parse(json);
