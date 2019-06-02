@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './css/App.css';
 import '../node_modules/react-vis/dist/style.css';
 import { AppPage } from './AppPage';
-import { LoadingPage } from './LoadingPage';
+import { LoadingPage, ErrorPage } from './LoadingPage';
 import { LoginPage } from './LoginPage';
 
 // Setters for application-level handlers for AJAX and Network errors. E.g. token expired, GET or POST failure, Authorization failed.
@@ -19,7 +19,9 @@ class App extends Component {
     this.state = {
       googleAuthApiLoaded: false,
       googleAuthApiCrashed: false,
-      googleUserIsLoggedIn: false
+      googleUserIsLoggedIn: false,
+      errorOccurred: false,
+      errorMessage: ""
     }
 
     this.respondToGapiLoad = this.respondToGapiLoad.bind(this);
@@ -27,6 +29,7 @@ class App extends Component {
     this.setGoogleSignedOut = this.setGoogleSignedOut.bind(this);
     this.handleGoogleLoginFailure = this.handleGoogleLoginFailure.bind(this);
     this.signUserOut = this.signUserOut.bind(this);
+    this.setErrorPage = this.setErrorPage.bind(this);
   }
 
   componentDidMount() {
@@ -97,8 +100,15 @@ class App extends Component {
     setIdTokenRefreshFunction((onCompleted) => {
       refreshUserToken(GoogleUserObj, (throwAwayAuthResponse) => onCompleted());
     });
-    setAuthFailureHandler((throwAwayMessage) => this.signUserOut());
-    setServerFailureAction((message) => console.warn(message)); // TODO: Implement ACTUAL error page.
+    setAuthFailureHandler((message) => {
+      console.warn(message);
+      this.signUserOut();
+    });
+    setServerFailureAction((message) => {
+      console.warn(message);
+      this.signUserOut();
+      this.setErrorPage(message);
+    });
 
     this.setState({
       googleAuthApiLoaded: true,
@@ -106,6 +116,12 @@ class App extends Component {
     });
   }
 
+  setErrorPage(message) {
+    this.setState({
+      errorOccurred: true,
+      errorMessage: message
+    });
+  }
   signUserOut() {
     // TODO: Move this copied logic our of the Header, so it's only here. The header should just invoke this via props.
     window.gapi.auth2.getAuthInstance().isSignedIn.listen(flag => {
@@ -137,7 +153,10 @@ class App extends Component {
   render() {
     let PageToRender;
 
-    if (!this.state.googleAuthApiLoaded && !this.state.googleAuthApiCrashed) {
+    if (this.state.errorOccurred) {
+      PageToRender = <ErrorPage textLarge={"Oops!"} textSmall={"Something went wrong :("} errorMessage={this.state.errorMessage} />;
+    }
+    else if (!this.state.googleAuthApiLoaded && !this.state.googleAuthApiCrashed) {
       PageToRender = <LoadingPage />;
     }
     else if (this.state.googleAuthApiCrashed) {

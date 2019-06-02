@@ -3,15 +3,25 @@ import React, { Component } from 'react';
 export class LoadingPage extends Component {
     render() {
         return (
-            <div className="utilityPageBackground"> NOW LOADING :O (dw i'll make this look nicer soon) </div>
+            <div className="utilityPageBox"> NOW LOADING :O (dw i'll make this look nicer soon) </div>
         );
     }
 }
 
-export class FailurePage extends Component {
+export class ErrorPage extends Component {
     render() {
         return (
-            <div className="utilityPageBackground"> OH FUCK! Something went wrong over here :( ...try again later? </div>
+            <div className="utilityPageBox">
+                <div className="ErrorPromptTextLarge">
+                    {this.props.textLarge}
+                </div>
+                <div className="ErrorPromptTextSmall">
+                    {this.props.textSmall}
+                </div>
+                <div className="ErrorMessage">
+                    {this.props.errorMessage}
+                </div>
+            </div>
         );
     }
 }
