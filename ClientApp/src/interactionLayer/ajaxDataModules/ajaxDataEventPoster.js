@@ -1,17 +1,18 @@
 import { DataEventSerialisationFuncs } from '../dataEventSerialiser';
+import { forceTokenRefresh, handleAuthFailure, handleServerFailure, handleUnknownPostFailure } from './ajaxErrorcaseHandlers';
 
 export const DataEventHttpPostHandlers = {
-    taskAddedHandler: (task, list) => postEvent(DataEventSerialisationFuncs.taskAddedEvent(task, list), 2),
-    childTaskAddedHandler: (parent, child, list) => postEvent(DataEventSerialisationFuncs.childTaskAddedEvent(parent, child, list), 2),
-    taskRevivedHandler: (old, clone, list) => postEvent(DataEventSerialisationFuncs.taskRevivedEvent(old, clone, list), 2),
-    taskActivatedHandler: (task, list) => postEvent(DataEventSerialisationFuncs.taskActivatedEvent(task, list), 2),
-    taskDeletedHandler: (task, list) => postEvent(DataEventSerialisationFuncs.taskDeletedEvent(task, list), 2),
-    taskStartedHandler: (task, list) => postEvent(DataEventSerialisationFuncs.taskStartedEvent(task, list), 2),
-    taskCompletedHandler: (task, list) => postEvent(DataEventSerialisationFuncs.taskCompletedEvent(task, list), 2),
-    taskFailedHandler: (task, list) => postEvent(DataEventSerialisationFuncs.taskFailedEvent(task, list), 2)
+    taskAddedHandler: (task, list) => postEvent(DataEventSerialisationFuncs.taskAddedEvent(task, list), 2, false),
+    childTaskAddedHandler: (parent, child, list) => postEvent(DataEventSerialisationFuncs.childTaskAddedEvent(parent, child, list), 2, false),
+    taskRevivedHandler: (old, clone, list) => postEvent(DataEventSerialisationFuncs.taskRevivedEvent(old, clone, list), 2, false),
+    taskActivatedHandler: (task, list) => postEvent(DataEventSerialisationFuncs.taskActivatedEvent(task, list), 2, false),
+    taskDeletedHandler: (task, list) => postEvent(DataEventSerialisationFuncs.taskDeletedEvent(task, list), 2, false),
+    taskStartedHandler: (task, list) => postEvent(DataEventSerialisationFuncs.taskStartedEvent(task, list), 2, false),
+    taskCompletedHandler: (task, list) => postEvent(DataEventSerialisationFuncs.taskCompletedEvent(task, list), 2, false),
+    taskFailedHandler: (task, list) => postEvent(DataEventSerialisationFuncs.taskFailedEvent(task, list), 2, false)
 };
 
-function postEvent(eventText, retryCount) {
+function postEvent(eventText, retryCount, logoutOnAuthFailure) {
     console.log("Ajax POST request scheduled!");
     
     // We need to be authenticated on our backend using the google JWT. Thus, we must fetch it from our saved location in local storage.
@@ -32,21 +33,31 @@ function postEvent(eventText, retryCount) {
     httpRequest.onreadystatechange = () => {
         if (httpRequest.readyState === 4 && httpRequest.status === 200) {
             console.log("POST was successful!");
-            //console.log(httpRequest.responseText);
         }
         else if (httpRequest.readyState === 4 && httpRequest.status === 500) {
             if (retryCount > 0) {
-                console.warn("SERVER ERROR ON POST! Retrying...");
-                postEvent(eventText, retryCount-1);
+                console.warn("Server error on POST! Retrying...");
+                postEvent(eventText, retryCount - 1);
             }
             else {
-                console.Error("Failed to Post event, ran out of retries on 500 response: " + eventText);
-                
+                console.warn("Failed to Post event, ran out of retries on 500 response: " + eventText);
+                handleServerFailure("We couldn't save your updates! Our database must be snoozing... I'll blast the techno.");
+            }
+        }
+        else if (httpRequest.readyState === 4 && httpRequest.status === 401) {
+            // Authentication error. Try to force an id_token token refresh and then try again, or just handle auth failure.
+            if (logoutOnAuthFailure) {
+                console.warn("Got an un-authorized 401 error on attempted Event log fetch. Telling application to handler an auth failure.");
+                handleAuthFailure("We are having trouble accessing your Google account at the moment. It's probably their fault... probably. Please try again later!");
+            }
+            else {
+                console.warn("Got an un-authorized 401 error on attempted Event log fetch. Forcing a token refresh, and re-trying..");
+                forceTokenRefresh(() => postEvent(eventText, retryCount, true));
             }
         }
         else if (httpRequest.readyState === 4) {
-            // TODO: Handle server not present/not found errors, etc.
-            throw new Error("Failed to Post event for unknown reason! HTTP Response Code: " + httpRequest.status);
+            console.warn("Failed to Post event for unknown reason! HTTP Response Code: " + httpRequest.status);
+            handleUnknownPostFailure(eventText, true);
         }
     };
     

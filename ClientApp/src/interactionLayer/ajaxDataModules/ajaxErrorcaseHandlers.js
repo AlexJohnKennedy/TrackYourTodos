@@ -40,4 +40,5 @@ export function handleUnknownGetFailure(message) {
 // TODO: Add failed posts to queue (I.e. on AJAX timeout or some other unknown error)
 export function handleUnknownPostFailure(failedEventData, automaticallyScheduleRetry) {
     // TODO
+    console.warn("TODO: QUEUE UP POST REQUESTS");
 }
