@@ -3,13 +3,20 @@
 
 // This should be set by the Application on startup.
 // It is a function which is able to be called with an 'on completed' function as a parameter.
+// The 'on completed' or 'retry action' is another function with no parameters.
 let refreshAuthenticationFunc = null;
 export function setIdTokenRefreshFunction(func) {
     refreshAuthenticationFunc = func;
 }
-export function handleAuthFailure(retryAction) {
+export function forceTokenRefresh(retryAction) {
     // Simply request a refresh, then do the retry action!
     if (refreshAuthenticationFunc !== null) { refreshAuthenticationFunc(retryAction); }
+}
+
+// This should be set by the Application on startup.
+let authFailureHandler = null;
+export function handleAuthFailure(message) {
+    if (authFailureHandler !== null) { authFailureHandler(message); }
 }
 
 // This should be set by the Application on startup.
@@ -19,8 +26,12 @@ let serverFailureAction = null;
 export function setServerFailureAction(func) {
     serverFailureAction = func;
 }
-export function handleServerFailuer(message) {
+export function handleServerFailure(message) {
     if (serverFailureAction !== null) serverFailureAction(message);
+}
+
+export function handleUnknownGetFailure(message) {
+    handleServerFailure(message);   // For now, treat this exactly the same way.
 }
 
 // TODO: Add failed posts to queue (I.e. on AJAX timeout or some other unknown error)

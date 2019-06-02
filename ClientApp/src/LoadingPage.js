@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 export class LoadingPage extends Component {
     render() {
         return (
-            <div className="loadingPageBackground"> NOW LOADING :O (dw i'll make this look nicer soon) </div>
+            <div className="utilityPageBackground"> NOW LOADING :O (dw i'll make this look nicer soon) </div>
         );
     }
 }
@@ -11,7 +11,7 @@ export class LoadingPage extends Component {
 export class FailurePage extends Component {
     render() {
         return (
-            <div className="failurePageBackground"> OH FUCK! Something went wrong over here :( ...try again later? </div>
+            <div className="utilityPageBackground"> OH FUCK! Something went wrong over here :( ...try again later? </div>
         );
     }
 }
