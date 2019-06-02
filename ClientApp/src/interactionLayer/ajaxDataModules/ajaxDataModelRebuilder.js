@@ -42,7 +42,7 @@ function PerformEventLogUpdate(tasklist, onLoadFunc, retryCount, logoutOnAuthFai
                 PerformEventLogUpdate(tasklist, onLoadFunc, retryCount - 1, logoutOnAuthFailure);
             }
             else {
-                console.Error("Failed to Get, ran out of retries on 500 response. Invoking the generic server-failure handler ");
+                console.warn("Failed to Get, ran out of retries on 500 response. Invoking the generic server-failure handler.");
                 handleServerFailure("We couldn't fetch your data. Please try again later!");
             }
         }
@@ -59,6 +59,7 @@ function PerformEventLogUpdate(tasklist, onLoadFunc, retryCount, logoutOnAuthFai
         }
         else if (httpRequest.readyState === 4) {
             // Unknown error if we get in here. Invoke the generic AJAX error handler for GET.
+            console.warn("An Unknown request failure occurred. Invoking the generic GET error handler");
             handleUnknownGetFailure("We couldn't fetch your data. Please try again later!");
         }
     };
