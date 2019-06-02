@@ -1,22 +1,39 @@
-.loginBox {
+.utilityPageBox {
     width: 100%;
     display: inline-flex;
     flex-direction: column;
     align-items: center;
     padding-top: 9rem;
 }
-.loginBox .loginTitleText {
+.utilityPageBox .loginTitleText {
     font-size: 2.2rem;
     padding-left: 2rem;
     padding-right: 2rem;
     padding-bottom: 16rem;
 }
-.loginBox .googlePromptTextLarge {
+.utilityPageBox .googlePromptTextLarge {
     font-size: 5rem;
     padding-top: 1.8rem;
     padding-bottom: 0.4rem;
 }
-.loginBox .googlePromptTextSmall {
+.utilityPageBox .googlePromptTextSmall {
     padding-top: 0.4rem;
+    font-size: 1.8rem;
+}
+
+.utilityPageBox .ErrorPromptTextLarge {
+    font-size: 5rem;
+    padding-top: 1.8rem;
+    padding-bottom: 0.4rem;
+}
+
+.utilityPageBox .ErrorPromptTextSmall {
+    font-size: 2.6rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    padding-bottom: 8rem;
+}
+
+.utilityPageBox .ErrorMessage {
     font-size: 1.8rem;
 }

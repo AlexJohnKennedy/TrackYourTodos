@@ -137,11 +137,10 @@ export class TaskStatisticsSection extends Component {
         // One summary block for the last week, one for last month, and one for all time. (subject to change).
         let dayCompleted = 0;
         let dayFailed = 0;
-        if (this.state.statsObject.dayStats.numCompletedArray.length >= 7 && this.state.statsObject.dayStats.numFailedArray.length <= 7) {
-            for (let i = 0; i < 7; i++) {
-                dayCompleted += this.state.statsObject.dayStats.numCompletedArray[i];
-                dayFailed += this.state.statsObject.dayStats.numFailedArray[i];
-            }
+        const len = Math.min(7, this.state.statsObject.dayStats.numCompletedArray.length, this.state.statsObject.dayStats.numFailedArray.length);
+        for (let i = 0; i < len; i++) {
+            dayCompleted += this.state.statsObject.dayStats.numCompletedArray[i];
+            dayFailed += this.state.statsObject.dayStats.numFailedArray[i];
         }
         const monthCompleted = this.state.statsObject.dayStats.totalCompleted;
         const monthFailed = this.state.statsObject.dayStats.totalFailed;

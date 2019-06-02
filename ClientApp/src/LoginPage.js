@@ -5,7 +5,7 @@ import { GoogleSignInButton } from './reactComponents/GoogleSignInButton';
 export class LoginPage extends Component {
     render() {
         return (
-            <div className="loginBox">
+            <div className="utilityPageBox">
                 <div className="loginTitleText">
                     {this.props.titleText}
                 </div>

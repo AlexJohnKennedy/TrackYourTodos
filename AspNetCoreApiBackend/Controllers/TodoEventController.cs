@@ -58,10 +58,11 @@ namespace todo_app.Controllers {
         [EnableCors("UserFacingApplications")]
         [HttpPost("/todoevents")]
         public async Task<IActionResult> PostNewEvents([FromBody] IList<GenericTodoEvent> newEvents) {
-            // Populate the newEvents with the user's id string field. TODO: Make model binding do this automatically.
+            // Populate the newEvents with the user's id string field, and make sure the eventId is null, so the DB is always responsible for populating it.
             string userId = User.FindFirst(googleSubjectClaimType).Value.Trim();
             foreach (GenericTodoEvent e in newEvents) {
                 e.UserId = userId;
+                e.EventId = 0;  // Manually set this to the 'default' value, so that the database can write to it instead.
             }
 
             // Detect duplicate events.

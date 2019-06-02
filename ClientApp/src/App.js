@@ -2,8 +2,11 @@ import React, { Component } from 'react';
 import './css/App.css';
 import '../node_modules/react-vis/dist/style.css';
 import { AppPage } from './AppPage';
-import { LoadingPage } from './LoadingPage';
+import { LoadingPage, ErrorPage } from './LoadingPage';
 import { LoginPage } from './LoginPage';
+
+// Setters for application-level handlers for AJAX and Network errors. E.g. token expired, GET or POST failure, Authorization failed.
+import { setIdTokenRefreshFunction, setServerFailureAction, setAuthFailureHandler } from './interactionLayer/ajaxDataModules/ajaxErrorcaseHandlers';
 
 class App extends Component {
   constructor(props) {
@@ -16,13 +19,17 @@ class App extends Component {
     this.state = {
       googleAuthApiLoaded: false,
       googleAuthApiCrashed: false,
-      googleUserIsLoggedIn: false
+      googleUserIsLoggedIn: false,
+      errorOccurred: false,
+      errorMessage: ""
     }
 
     this.respondToGapiLoad = this.respondToGapiLoad.bind(this);
     this.setGoogleSignedIn = this.setGoogleSignedIn.bind(this);
     this.setGoogleSignedOut = this.setGoogleSignedOut.bind(this);
     this.handleGoogleLoginFailure = this.handleGoogleLoginFailure.bind(this);
+    this.signUserOut = this.signUserOut.bind(this);
+    this.setErrorPage = this.setErrorPage.bind(this);
   }
 
   componentDidMount() {
@@ -80,18 +87,59 @@ class App extends Component {
     // Store the token in local storage, so it can be accessed later.
     window.localStorage.setItem("googleIdToken", googleIdToken);
 
-    // TODO: Schedule a token refresh request every 55 minutes, so that we stay logged in longer than that!
+    // Schedule a token refresh request for the time at which the current id_token expires, so that we stay logged in.
+    const expiresInSeconds = GoogleUserObj.getAuthResponse(false).expires_in;
+    const action = (refreshedAuthResponse) => {
+      let newcanceltoken = window.setTimeout(() => refreshUserToken(GoogleUserObj, action), refreshedAuthResponse.expires_in*1000 - 5000);
+      setCancellationToken(newcanceltoken);
+    };
+    let scheduledTokenRefresh = window.setTimeout(() => refreshUserToken(GoogleUserObj, action), expiresInSeconds*1000 - 5000);
+    setCancellationToken(scheduledTokenRefresh);
+
+    // Setup the error handling actions on the Ajax sub-system so that AJAX can force a token refresh if required, and so on.
+    setIdTokenRefreshFunction((onCompleted) => {
+      refreshUserToken(GoogleUserObj, (throwAwayAuthResponse) => onCompleted());
+    });
+    setAuthFailureHandler((message) => {
+      console.warn(message);
+      this.signUserOut();
+    });
+    setServerFailureAction((message) => {
+      console.warn(message);
+      this.signUserOut();
+      this.setErrorPage(message);
+    });
 
     this.setState({
       googleAuthApiLoaded: true,
       googleUserIsLoggedIn: true
     });
   }
+
+  setErrorPage(message) {
+    this.setState({
+      errorOccurred: true,
+      errorMessage: message
+    });
+  }
+  signUserOut() {
+    // TODO: Move this copied logic our of the Header, so it's only here. The header should just invoke this via props.
+    window.gapi.auth2.getAuthInstance().isSignedIn.listen(flag => {
+      if (!flag) {
+        this.setGoogleSignedOut();
+      }
+    });
+    window.gapi.auth2.getAuthInstance().signOut();
+  }
   setGoogleSignedOut() {
     // Remove the saved google id token from local storage.
     window.localStorage.removeItem("googleIdToken");
 
-    // TODO: Cancel the shceduled token refresh operation here.
+    // Cancel auto-refresh
+    cancelTokenRefresh();
+
+    // Clear the set 'refresh action on the Ajax sub-system
+    setIdTokenRefreshFunction(null);
 
     this.setState({
       googleUserIsLoggedIn: false
@@ -99,13 +147,16 @@ class App extends Component {
   }
   handleGoogleLoginFailure() {
     // For now, we will just log the error for dev purposes and do nothing.
-    console.log("A google sign-in attempt failed! This typically means the user closed the popup or denied the permissions.");
+    console.warn("A google sign-in attempt failed! This typically means the user closed the popup or denied the permissions.");
   }
 
   render() {
     let PageToRender;
 
-    if (!this.state.googleAuthApiLoaded && !this.state.googleAuthApiCrashed) {
+    if (this.state.errorOccurred) {
+      PageToRender = <ErrorPage textLarge={"Oops!"} textSmall={"Something went wrong :("} errorMessage={this.state.errorMessage} />;
+    }
+    else if (!this.state.googleAuthApiLoaded && !this.state.googleAuthApiCrashed) {
       PageToRender = <LoadingPage />;
     }
     else if (this.state.googleAuthApiCrashed) {
@@ -131,3 +182,22 @@ class App extends Component {
 }
 
 export default App;
+
+function refreshUserToken(GoogleUserObj, actionOnCompletion) {
+  console.log("STARTING TO REFRESH TOKEN");
+  GoogleUserObj.reloadAuthResponse().then(refreshedAuthResponse => {
+    window.localStorage.setItem("googleIdToken", refreshedAuthResponse.id_token);
+    actionOnCompletion(refreshedAuthResponse);
+  });
+}
+let cancellationToken = null;
+function setCancellationToken(t) {
+  console.log("new scheduled id job token was recieved;" + t);
+  cancellationToken = t;
+}
+function cancelTokenRefresh() {
+  console.log("Cancelling scheduled id token update job. We probably just logged out!")
+  if (cancellationToken !== null) {
+    window.clearTimeout(cancellationToken);
+  }
+}

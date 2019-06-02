@@ -686,5 +686,695 @@
 
       ],
       "original":null
+   },
+   {
+      "eventType":"taskFailed",
+      "timestamp":1559142000000,
+      "id":57,
+      "name":"Do washing of T-shirts",
+      "category":2,
+      "progressStatus":4,
+      "colourId":0,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskFailed",
+      "timestamp":1559142000000,
+      "id":61,
+      "name":"Configure 'addJwtBearer' middleware to ASP",
+      "category":2,
+      "progressStatus":4,
+      "colourId":1,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskFailed",
+      "timestamp":1559142000000,
+      "id":58,
+      "name":"Pull ups and hanging rows",
+      "category":2,
+      "progressStatus":4,
+      "colourId":1,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskFailed",
+      "timestamp":1559142000000,
+      "id":62,
+      "name":"Implement an AJAX timeout & handler for IO suspend cases",
+      "category":2,
+      "progressStatus":4,
+      "colourId":0,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskFailed",
+      "timestamp":1559142000000,
+      "id":63,
+      "name":"Ensure all failed POSTs add their unsent events to an in-mem queue",
+      "category":2,
+      "progressStatus":4,
+      "colourId":1,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskFailed",
+      "timestamp":1559142000000,
+      "id":64,
+      "name":"When the 'unsent' queue is not empty, subsequent POSTs must send all",
+      "category":2,
+      "progressStatus":4,
+      "colourId":2,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskStarted",
+      "timestamp":1559380198888,
+      "id":32,
+      "name":"Get JWT authentication working on the API",
+      "category":1,
+      "progressStatus":1,
+      "colourId":1,
+      "parent":null,
+      "children":[
+         33,
+         34,
+         35
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskStarted",
+      "timestamp":1559380200583,
+      "id":38,
+      "name":"Load user-specific event logs from API",
+      "category":1,
+      "progressStatus":1,
+      "colourId":0,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskRevived",
+      "timestamp":1559380215461,
+      "id":65,
+      "name":"Implement an AJAX timeout & handler for IO suspend cases",
+      "category":3,
+      "progressStatus":0,
+      "colourId":0,
+      "parent":null,
+      "children":null,
+      "original":62
+   },
+   {
+      "eventType":"taskRevived",
+      "timestamp":1559380223180,
+      "id":66,
+      "name":"When the 'unsent' queue is not empty, subsequent POSTs must send all",
+      "category":3,
+      "progressStatus":0,
+      "colourId":2,
+      "parent":null,
+      "children":null,
+      "original":64
+   },
+   {
+      "eventType":"taskRevived",
+      "timestamp":1559380226466,
+      "id":67,
+      "name":"Ensure all failed POSTs add their unsent events to an in-mem queue",
+      "category":3,
+      "progressStatus":0,
+      "colourId":1,
+      "parent":null,
+      "children":null,
+      "original":63
+   },
+   {
+      "eventType":"taskRevived",
+      "timestamp":1559380231527,
+      "id":68,
+      "name":"Configure 'addJwtBearer' middleware to ASP",
+      "category":3,
+      "progressStatus":0,
+      "colourId":1,
+      "parent":null,
+      "children":null,
+      "original":61
+   },
+   {
+      "eventType":"taskRevived",
+      "timestamp":1559380233688,
+      "id":69,
+      "name":"Do washing of T-shirts",
+      "category":2,
+      "progressStatus":0,
+      "colourId":0,
+      "parent":null,
+      "children":null,
+      "original":57
+   },
+   {
+      "eventType":"taskStarted",
+      "timestamp":1559380234744,
+      "id":69,
+      "name":"Do washing of T-shirts",
+      "category":2,
+      "progressStatus":1,
+      "colourId":0,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCompleted",
+      "timestamp":1559380235614,
+      "id":69,
+      "name":"Do washing of T-shirts",
+      "category":2,
+      "progressStatus":2,
+      "colourId":0,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskActivated",
+      "timestamp":1559380254516,
+      "id":68,
+      "name":"Configure 'addJwtBearer' middleware to ASP",
+      "category":2,
+      "progressStatus":0,
+      "colourId":1,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskActivated",
+      "timestamp":1559380290601,
+      "id":65,
+      "name":"Implement an AJAX timeout & handler for IO suspend cases",
+      "category":2,
+      "progressStatus":0,
+      "colourId":0,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskActivated",
+      "timestamp":1559380292578,
+      "id":67,
+      "name":"Ensure all failed POSTs add their unsent events to an in-mem queue",
+      "category":2,
+      "progressStatus":0,
+      "colourId":1,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskActivated",
+      "timestamp":1559380296256,
+      "id":66,
+      "name":"When the 'unsent' queue is not empty, subsequent POSTs must send all",
+      "category":2,
+      "progressStatus":0,
+      "colourId":2,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCompleted",
+      "timestamp":1559380313717,
+      "id":38,
+      "name":"Load user-specific event logs from API",
+      "category":1,
+      "progressStatus":2,
+      "colourId":0,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskStarted",
+      "timestamp":1559380331838,
+      "id":68,
+      "name":"Configure 'addJwtBearer' middleware to ASP",
+      "category":2,
+      "progressStatus":1,
+      "colourId":1,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCompleted",
+      "timestamp":1559380335764,
+      "id":68,
+      "name":"Configure 'addJwtBearer' middleware to ASP",
+      "category":2,
+      "progressStatus":2,
+      "colourId":1,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1559380357335,
+      "id":70,
+      "name":"'Last 7 Days' graphic is not working. FIX IT",
+      "category":3,
+      "progressStatus":0,
+      "colourId":0,
+      "parent":null,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1559380405860,
+      "id":71,
+      "name":"Add a tooltip which shows value when you hover over bar in chart",
+      "category":3,
+      "progressStatus":0,
+      "colourId":1,
+      "parent":null,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"subtaskCreated",
+      "timestamp":1559380460261,
+      "id":72,
+      "name":"Factor out JWT options into it's own class to simplify Startup class",
+      "category":2,
+      "progressStatus":0,
+      "colourId":1,
+      "parent":32,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"subtaskCreated",
+      "timestamp":1559380476338,
+      "id":73,
+      "name":"Add caching to PK fetching middleware implementation",
+      "category":2,
+      "progressStatus":0,
+      "colourId":1,
+      "parent":32,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskStarted",
+      "timestamp":1559380481994,
+      "id":72,
+      "name":"Factor out JWT options into it's own class to simplify Startup class",
+      "category":2,
+      "progressStatus":1,
+      "colourId":1,
+      "parent":32,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1559380538429,
+      "id":74,
+      "name":"Implement field validation based on event types",
+      "category":2,
+      "progressStatus":0,
+      "colourId":2,
+      "parent":null,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskCompleted",
+      "timestamp":1559381305954,
+      "id":72,
+      "name":"Factor out JWT options into it's own class to simplify Startup class",
+      "category":2,
+      "progressStatus":2,
+      "colourId":1,
+      "parent":32,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskStarted",
+      "timestamp":1559381441940,
+      "id":74,
+      "name":"Implement field validation based on event types",
+      "category":2,
+      "progressStatus":1,
+      "colourId":2,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1559383643094,
+      "id":75,
+      "name":"Reply to IMC email",
+      "category":2,
+      "progressStatus":0,
+      "colourId":0,
+      "parent":null,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskStarted",
+      "timestamp":1559383645778,
+      "id":75,
+      "name":"Reply to IMC email",
+      "category":2,
+      "progressStatus":1,
+      "colourId":0,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCompleted",
+      "timestamp":1559383646853,
+      "id":75,
+      "name":"Reply to IMC email",
+      "category":2,
+      "progressStatus":2,
+      "colourId":0,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1559391434645,
+      "id":533,
+      "name":"Watch Avatar with J",
+      "category":2,
+      "progressStatus":0,
+      "colourId":0,
+      "parent":null,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskStarted",
+      "timestamp":1559391438119,
+      "id":533,
+      "name":"Watch Avatar with J",
+      "category":2,
+      "progressStatus":1,
+      "colourId":0,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCompleted",
+      "timestamp":1559404382561,
+      "id":74,
+      "name":"Implement field validation based on event types",
+      "category":2,
+      "progressStatus":2,
+      "colourId":2,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCompleted",
+      "timestamp":1559404384797,
+      "id":533,
+      "name":"Watch Avatar with J",
+      "category":2,
+      "progressStatus":2,
+      "colourId":0,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskRevived",
+      "timestamp":1559429565479,
+      "id":534,
+      "name":"Pull ups and hanging rows",
+      "category":2,
+      "progressStatus":0,
+      "colourId":1,
+      "parent":null,
+      "children":null,
+      "original":58
+   },
+   {
+      "eventType":"taskActivated",
+      "timestamp":1559429597841,
+      "id":70,
+      "name":"'Last 7 Days' graphic is not working. FIX IT",
+      "category":2,
+      "progressStatus":0,
+      "colourId":0,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskStarted",
+      "timestamp":1559429911239,
+      "id":70,
+      "name":"'Last 7 Days' graphic is not working. FIX IT",
+      "category":2,
+      "progressStatus":1,
+      "colourId":0,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCompleted",
+      "timestamp":1559429912187,
+      "id":70,
+      "name":"'Last 7 Days' graphic is not working. FIX IT",
+      "category":2,
+      "progressStatus":2,
+      "colourId":0,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskStarted",
+      "timestamp":1559455553820,
+      "id":73,
+      "name":"Add caching to PK fetching middleware implementation",
+      "category":2,
+      "progressStatus":1,
+      "colourId":1,
+      "parent":32,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCompleted",
+      "timestamp":1559455557342,
+      "id":32,
+      "name":"Get JWT authentication working on the API",
+      "category":1,
+      "progressStatus":2,
+      "colourId":1,
+      "parent":null,
+      "children":[
+         33,
+         34,
+         35,
+         72,
+         73
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1559457749731,
+      "id":535,
+      "name":"meme with louka",
+      "category":2,
+      "progressStatus":0,
+      "colourId":0,
+      "parent":null,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskStarted",
+      "timestamp":1559457906247,
+      "id":535,
+      "name":"meme with louka",
+      "category":2,
+      "progressStatus":1,
+      "colourId":0,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCompleted",
+      "timestamp":1559457907097,
+      "id":535,
+      "name":"meme with louka",
+      "category":2,
+      "progressStatus":2,
+      "colourId":0,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskStarted",
+      "timestamp":1559471118998,
+      "id":60,
+      "name":"Add an automatically scheduled 'refresh token' action every 50 mins",
+      "category":1,
+      "progressStatus":1,
+      "colourId":0,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCompleted",
+      "timestamp":1559471136509,
+      "id":60,
+      "name":"Add an automatically scheduled 'refresh token' action every 50 mins",
+      "category":1,
+      "progressStatus":2,
+      "colourId":0,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskStarted",
+      "timestamp":1559476150376,
+      "id":65,
+      "name":"Implement an AJAX timeout & handler for IO suspend cases",
+      "category":2,
+      "progressStatus":1,
+      "colourId":0,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1559476485801,
+      "id":536,
+      "name":"Implement AJAX failure handling, e.g. 401, 500 retry exhausted,  auto log out, failure page",
+      "category":2,
+      "progressStatus":0,
+      "colourId":0,
+      "parent":null,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskStarted",
+      "timestamp":1559476488851,
+      "id":536,
+      "name":"Implement AJAX failure handling, e.g. 401, 500 retry exhausted,  auto log out, failure page",
+      "category":2,
+      "progressStatus":1,
+      "colourId":0,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
    }
 ]
