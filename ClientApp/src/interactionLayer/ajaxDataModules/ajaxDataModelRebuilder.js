@@ -49,9 +49,11 @@ function PerformEventLogUpdate(tasklist, onLoadFunc, retryCount, logoutOnAuthFai
         else if (httpRequest.readyState === 4 && httpRequest.status === 401) {
             // Authentication error. Try to force an id_token token refresh and then try again, or just handle auth failure.
             if (logoutOnAuthFailure) {
+                console.warn("Got an un-authorized 401 error on attempted Event log fetch. Telling application to handler an auth failure.");
                 handleAuthFailure("We are having trouble accessing your Google account at the moment. It's probably their fault... probably. Please try again later!");
             }
             else {
+                console.warn("Got an un-authorized 401 error on attempted Event log fetch. Forcing a token refresh, and re-trying..");
                 forceTokenRefresh(() => PerformEventLogUpdate(tasklist, onLoadFunc, retryCount, true));
             }
         }
