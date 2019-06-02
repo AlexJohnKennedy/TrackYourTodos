@@ -5,6 +5,8 @@ import { AppPage } from './AppPage';
 import { LoadingPage } from './LoadingPage';
 import { LoginPage } from './LoginPage';
 
+import { setIdTokenRefreshFunction } from './interactionLayer/ajaxDataModules/ajaxErrorcaseHandlers';
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -80,18 +82,35 @@ class App extends Component {
     // Store the token in local storage, so it can be accessed later.
     window.localStorage.setItem("googleIdToken", googleIdToken);
 
-    // TODO: Schedule a token refresh request every 55 minutes, so that we stay logged in longer than that!
+    // Schedule a token refresh request for the time at which the current id_token expires, so that we stay logged in.
+    const expiresInSeconds = GoogleUserObj.getAuthResponse(false).expires_in;
+    const action = (refreshedAuthResponse) => {
+      let newcanceltoken = window.setTimeout(() => refreshUserToken(GoogleUserObj, action), refreshedAuthResponse.expires_in*1000 - 5000);
+      setCancellationToken(newcanceltoken);
+    };
+    let scheduledTokenRefresh = window.setTimeout(() => refreshUserToken(GoogleUserObj, action), expiresInSeconds*1000 - 5000);
+    setCancellationToken(scheduledTokenRefresh);
+
+    // Setup the 'refresh action' on the Ajax sub-system so that AJAX can force a token refresh if required.
+    setIdTokenRefreshFunction((onCompleted) => {
+      refreshUserToken(GoogleUserObj, (throwAwayAuthResponse) => onCompleted());
+    });
 
     this.setState({
       googleAuthApiLoaded: true,
       googleUserIsLoggedIn: true
     });
   }
+
   setGoogleSignedOut() {
     // Remove the saved google id token from local storage.
     window.localStorage.removeItem("googleIdToken");
 
-    // TODO: Cancel the shceduled token refresh operation here.
+    // Cancel auto-refresh
+    cancelTokenRefresh();
+
+    // Clear the set 'refresh action on the Ajax sub-system
+    setIdTokenRefreshFunction(null);
 
     this.setState({
       googleUserIsLoggedIn: false
@@ -131,3 +150,22 @@ class App extends Component {
 }
 
 export default App;
+
+function refreshUserToken(GoogleUserObj, actionOnCompletion) {
+  console.log("STARTING TO REFRESH TOKEN");
+  GoogleUserObj.reloadAuthResponse().then(refreshedAuthResponse => {
+    window.localStorage.setItem("googleIdToken", refreshedAuthResponse.id_token);
+    actionOnCompletion(refreshedAuthResponse);
+  });
+}
+let cancellationToken = null;
+function setCancellationToken(t) {
+  console.log("new scheduled id job token was recieved;" + t);
+  cancellationToken = t;
+}
+function cancelTokenRefresh() {
+  console.log("Cancelling scheduled id token update job. We probably just logged out!")
+  if (cancellationToken !== null) {
+    window.clearTimeout(cancellationToken);
+  }
+}

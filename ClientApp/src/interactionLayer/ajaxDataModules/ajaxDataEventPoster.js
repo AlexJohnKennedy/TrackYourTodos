@@ -31,8 +31,8 @@ function postEvent(eventText, retryCount) {
     // unless our retry count is 0.
     httpRequest.onreadystatechange = () => {
         if (httpRequest.readyState === 4 && httpRequest.status === 200) {
-            console.log("POST was successful! The following events were added to the database. (Any missing events must have already been saved)");
-            console.log(httpRequest.responseText);
+            console.log("POST was successful!");
+            //console.log(httpRequest.responseText);
         }
         else if (httpRequest.readyState === 4 && httpRequest.status === 500) {
             if (retryCount > 0) {
@@ -40,8 +40,8 @@ function postEvent(eventText, retryCount) {
                 postEvent(eventText, retryCount-1);
             }
             else {
-                // TODO: Handle server timeout
-                throw new Error("Failed to Post event, ran out of retries on 500 response: " + eventText);
+                console.Error("Failed to Post event, ran out of retries on 500 response: " + eventText);
+                
             }
         }
         else if (httpRequest.readyState === 4) {

@@ -1236,5 +1236,37 @@
 
       ],
       "original":null
+   },
+   {
+      "eventType":"taskStarted",
+      "timestamp":1559455553820,
+      "id":73,
+      "name":"Add caching to PK fetching middleware implementation",
+      "category":2,
+      "progressStatus":1,
+      "colourId":1,
+      "parent":32,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCompleted",
+      "timestamp":1559455557342,
+      "id":32,
+      "name":"Get JWT authentication working on the API",
+      "category":1,
+      "progressStatus":2,
+      "colourId":1,
+      "parent":null,
+      "children":[
+         33,
+         34,
+         35,
+         72,
+         73
+      ],
+      "original":null
    }
 ]
