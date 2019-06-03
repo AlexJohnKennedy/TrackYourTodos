@@ -1638,5 +1638,79 @@
       "parent":null,
       "children":null,
       "original":null
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1559536016528,
+      "id":546,
+      "name":"Implement some kind of 'snapshotting' on the Backend which essentially squashes all prior events into a state.",
+      "category":3,
+      "progressStatus":0,
+      "colourId":0,
+      "parent":null,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskActivated",
+      "timestamp":1559536038862,
+      "id":546,
+      "name":"Implement some kind of 'snapshotting' on the Backend which essentially squashes all prior events into a state.",
+      "category":0,
+      "progressStatus":0,
+      "colourId":0,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"subtaskCreated",
+      "timestamp":1559536090474,
+      "id":547,
+      "name":"Have backend squash every X events into a snapshot (e.g. 100)",
+      "category":1,
+      "progressStatus":0,
+      "colourId":0,
+      "parent":546,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"subtaskCreated",
+      "timestamp":1559536156712,
+      "id":548,
+      "name":"Have backend only return the event log from the latest snapshot by default, or configs via GET query string",
+      "category":1,
+      "progressStatus":0,
+      "colourId":0,
+      "parent":546,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"subtaskCreated",
+      "timestamp":1559536192224,
+      "id":549,
+      "name":"Add client-side capability to rebuild state from snapshot + event log",
+      "category":1,
+      "progressStatus":0,
+      "colourId":0,
+      "parent":546,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1559536300960,
+      "id":550,
+      "name":"Sit ups, Glute bridge, Curls",
+      "category":2,
+      "progressStatus":0,
+      "colourId":1,
+      "parent":null,
+      "children":null,
+      "original":null
    }
 ]
