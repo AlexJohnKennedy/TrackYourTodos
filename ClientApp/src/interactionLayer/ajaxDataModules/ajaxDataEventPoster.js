@@ -25,6 +25,21 @@ export function RetryPostingFailedEvents(failureCacheInstance) {
 function postEvent(eventText, failureCache, retryCount, logoutOnAuthFailure, sendFromFailureCache) {
     console.log("Ajax POST request scheduled! Send from failure cache flag = " + sendFromFailureCache);
     
+    // Build the message body array, depending on incoming message and failure cache state.
+    let eventArray = [];
+    if (sendFromFailureCache && !failureCache.IsEmpty() && eventText !== null && eventText.length > 0) {
+        eventArray = failureCache.FetchAndPopAll().concat(eventText);
+    }
+    else if (sendFromFailureCache && !failureCache.IsEmpty()) {
+        eventArray = failureCache.FetchAndPopAll();
+    }
+    else if (eventText !== null && eventText.length > 0) {
+        eventArray = [ eventText ];
+    }
+    else {
+        return;
+    }
+
     // We need to be authenticated on our backend using the google JWT. Thus, we must fetch it from our saved location in local storage.
     // The local storage key to place it is written in App.js as of 28th May 2019.
     const googleToken = window.localStorage.getItem("googleIdToken");
@@ -75,10 +90,17 @@ function postEvent(eventText, failureCache, retryCount, logoutOnAuthFailure, sen
         }
         else if (httpRequest.readyState === 4) {
             console.warn("Failed to Post event for unknown reason! HTTP Response Code: " + httpRequest.status);
-            handleUnknownPostFailure(eventText, failureCache);
+            handleUnknownPostFailure(eventArray, failureCache);
         }
     };
     
     // Send the request, with the serialised event text as the message body.
-    httpRequest.send('['+eventText+']');
+    let bodyString = "[";
+    for (let i=0; i < eventArray - 1; i++) {
+        bodyString = bodyString + eventArray[i] + ", ";
+    }
+    bodyString = bodyString + eventArray[eventArray.length - 1] + "]";
+    console.debug("MESSAGE BODY BEING POSTED: " + bodyString);
+    
+    httpRequest.send(bodyString);
 }
