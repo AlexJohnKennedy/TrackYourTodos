@@ -8,6 +8,7 @@ import { LoginPage } from './LoginPage';
 // Setters for application-level handlers for AJAX and Network errors. E.g. token expired, GET or POST failure, Authorization failed.
 import { setIdTokenRefreshFunction, setServerFailureAction, setAuthFailureHandler, setConflictingDataAction } from './interactionLayer/ajaxDataModules/ajaxErrorcaseHandlers';
 import { InstantiateNewFailedEventCacheScope } from './interactionLayer/ajaxDataModules/ajaxFailedEventCache';
+import { RetryPostingFailedEvents } from './interactionLayer/ajaxDataModules/ajaxDataEventPoster';
 
 class App extends Component {
   constructor(props) {
@@ -153,8 +154,12 @@ class App extends Component {
     });
   }
   signUserOut() {
-    // TODO: Put a 'trigger failed event cache send' here, which triggers if and only if the queue is not empty. This happens before the sign
-    // out is triggered.
+    // Trigger 'failed event cache send' here, which triggers if and only if the queue is not empty. This happens before the sign
+    // out is triggered, as a last ditch effort to save the user's data.
+    if (!this.state.ajaxFailedEventCacheInstance.IsEmpty()) {
+      RetryPostingFailedEvents(this.state.ajaxFailedEventCacheInstance);
+    }
+
     window.gapi.auth2.getAuthInstance().signOut();
   }
   setGoogleSignedOut() {

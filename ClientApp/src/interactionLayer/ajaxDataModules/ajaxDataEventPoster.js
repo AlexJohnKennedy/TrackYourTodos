@@ -28,12 +28,15 @@ function postEvent(eventText, failureCache, retryCount, logoutOnAuthFailure, sen
     // Build the message body array, depending on incoming message and failure cache state.
     let eventArray = [];
     if (sendFromFailureCache && !failureCache.IsEmpty() && eventText !== null && eventText.length > 0) {
+        console.debug("posting cache + event");
         eventArray = failureCache.FetchAndPopAll().concat(eventText);
     }
     else if (sendFromFailureCache && !failureCache.IsEmpty()) {
+        console.debug("posting cache only");
         eventArray = failureCache.FetchAndPopAll();
     }
     else if (eventText !== null && eventText.length > 0) {
+        console.debug("posting event only");
         eventArray = [ eventText ];
     }
     else {
@@ -96,11 +99,13 @@ function postEvent(eventText, failureCache, retryCount, logoutOnAuthFailure, sen
     
     // Send the request, with the serialised event text as the message body.
     let bodyString = "[";
-    for (let i=0; i < eventArray - 1; i++) {
+    for (let i=0; i < eventArray.length - 1; i++) {
         bodyString = bodyString + eventArray[i] + ", ";
     }
     bodyString = bodyString + eventArray[eventArray.length - 1] + "]";
-    console.debug("MESSAGE BODY BEING POSTED: " + bodyString);
     
+    console.debug(eventArray);
+    console.debug("MESSAGE BODY BEING POSTED: " + bodyString);
+
     httpRequest.send(bodyString);
 }

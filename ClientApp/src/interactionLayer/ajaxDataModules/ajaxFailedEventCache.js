@@ -13,7 +13,8 @@ export function InstantiateNewFailedEventCacheScope() {
 
     // Exported function.
     function IsEmpty() {
-        return FailedEventQueue.length > 0;
+        console.debug("Ooh someone checked my length :O");
+        return FailedEventQueue.length === 0;
     }
 
     // Exported function. Fetches all the currently stored failed events as correctly serialised strings, and
@@ -32,7 +33,7 @@ export function InstantiateNewFailedEventCacheScope() {
     function InsertEventsIntoCache(eventArray) {
         console.log("Inserting some item(s) into the failure cache! Logging them at debug log level:");
         eventArray.forEach(s => console.debug(s));
-        
+
         let eventObjects = eventArray.map(s => JSON.parse(s));
         eventObjects.forEach(o => {
             if (o.timestamp === undefined || o.timestamp === null || o.timestamp < 0) {
@@ -41,6 +42,9 @@ export function InstantiateNewFailedEventCacheScope() {
             FailedEventQueue.push(o);
         });
         FailedEventQueue.sort((a, b) => a.timestamp - b.timestamp);
+
+        console.debug("After FailureCache insertion: ");
+        FailedEventQueue.forEach(s => console.debug(s));
     }
 
     return Object.freeze({
