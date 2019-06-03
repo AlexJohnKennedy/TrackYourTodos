@@ -81,6 +81,13 @@ namespace todo_app.DomainLayer.TaskListModel {
             activeTasks.Add(id, t);
             return t;
         }
+        public void ActivateTask(Task toActivate, int newCategory, long timeStamp) {
+            if (toActivate.Category != CategoryVals.Deferred) throw new InvalidOperationException("Cannot activate a task which is not currently deferred. Task ID: " + toActivate.Id);
+            if (newCategory != CategoryVals.Daily || newCategory != CategoryVals.Weekly || newCategory != CategoryVals.Goal) throw new InvalidOperationException("Invalid target category for task-activation: " + newCategory);
+            if (timeStamp < toActivate.EventTimeStamps.TimeCreated) throw new InvalidOperationException("Cannot activate a task before it was created");
+            toActivate.EventTimeStamps.TimeActivated = timeStamp;
+            toActivate.Category = newCategory;
+        }
     }
 
     // A Task object containing data.
