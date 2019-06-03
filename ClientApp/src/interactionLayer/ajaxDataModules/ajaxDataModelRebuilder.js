@@ -34,8 +34,8 @@ function PerformEventLogUpdate(tasklist, onLoadFunc, retryCount, logoutOnAuthFai
     httpRequest.onreadystatechange = () => {
         // Ensure the response object is ready to be read (Response is finished, and was successful)
         if (httpRequest.readyState === 4 && httpRequest.status === 200) {
-            console.log("Request recieved! Logging raw repsonse:");
-            console.log(httpRequest.responseText);
+            console.log("Request recieved! Logging raw repsonse under 'trace' log level.");
+            console.debug(httpRequest.responseText);
 
             SetIdStartVal(RebuildState(httpRequest.responseText, tasklist) + 1);
             onLoadFunc(tasklist);
