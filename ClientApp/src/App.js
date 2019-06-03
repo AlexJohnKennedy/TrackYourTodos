@@ -63,6 +63,22 @@ class App extends Component {
 
     if (successful) {
       console.log("I am the App component, and I was just told via a callback that the google Authentication api is ready! I will now route to either the sign in or the app page");
+      
+      // Setup a listener for global sign-in/sign-out events. This means our app will respond even if another tab signs us out, or in!
+      window.gapi.auth2.getAuthInstance().isSignedIn.listen(justSignedIn => {
+        console.log("GOOGLE API: Sign-in state listener triggered! The sign in state just changed to " + justSignedIn);
+        if (justSignedIn) {
+          console.log("User just signed in: Name is" + window.gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile().getName());
+          // User just signed in!
+          this.setGoogleSignedIn(window.gapi.auth2.getAuthInstance().currentUser.get());
+        }
+        else {
+          console.log("===> User just signed out <===");
+          // User just signed out.
+          this.setGoogleSignedOut();
+        }
+      });
+      
       this.setState({
         googleAuthApiLoaded: true,
         googleAuthApiCrashed: false
@@ -93,6 +109,7 @@ class App extends Component {
       let newcanceltoken = window.setTimeout(() => refreshUserToken(GoogleUserObj, action), refreshedAuthResponse.expires_in*1000 - 5000);
       setCancellationToken(newcanceltoken);
     };
+    cancelTokenRefresh();   // Cancel previous scheduled refreshes whenever we schedule a new one.
     let scheduledTokenRefresh = window.setTimeout(() => refreshUserToken(GoogleUserObj, action), expiresInSeconds*1000 - 5000);
     setCancellationToken(scheduledTokenRefresh);
 
@@ -123,12 +140,6 @@ class App extends Component {
     });
   }
   signUserOut() {
-    // TODO: Move this copied logic our of the Header, so it's only here. The header should just invoke this via props.
-    window.gapi.auth2.getAuthInstance().isSignedIn.listen(flag => {
-      if (!flag) {
-        this.setGoogleSignedOut();
-      }
-    });
     window.gapi.auth2.getAuthInstance().signOut();
   }
   setGoogleSignedOut() {
@@ -172,7 +183,7 @@ class App extends Component {
       />;
     }
     else {
-      PageToRender = <AppPage onSignOut={this.setGoogleSignedOut} />;
+      PageToRender = <AppPage onSignOut={this.signUserOut} />;
     }
 
     return (
@@ -192,11 +203,11 @@ function refreshUserToken(GoogleUserObj, actionOnCompletion) {
 }
 let cancellationToken = null;
 function setCancellationToken(t) {
-  console.log("new scheduled id job token was recieved;" + t);
+  console.log("new scheduled id job token was recieved: " + t);
   cancellationToken = t;
 }
 function cancelTokenRefresh() {
-  console.log("Cancelling scheduled id token update job. We probably just logged out!")
+  console.log("Cancelling scheduled id token update job: " + cancellationToken + ". A user probably just logged in or out.")
   if (cancellationToken !== null) {
     window.clearTimeout(cancellationToken);
   }
