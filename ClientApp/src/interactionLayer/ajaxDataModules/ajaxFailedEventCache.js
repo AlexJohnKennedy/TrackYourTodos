@@ -19,13 +19,28 @@ export function InstantiateNewFailedEventCacheScope() {
     // Exported function. Fetches all the currently stored failed events as correctly serialised strings, and
     // removes them from the event queue.
     function FetchAndPopAll() {
-        // TODO
+        let eventsToPop = FailedEventQueue.splice(0, FailedEventQueue.length);   // Pop all event objects into a 'toRet' array.
+        let toRet = eventsToPop.map(eventObject => JSON.stringify(eventObject));
+        console.log("Popping all of the events from the failure cache! Logging them at debug log level:");
+        toRet.forEach(s => console.debug(s));
+
+        return toRet;
     }
 
     // Exported function. Places all of the events back into the cache queue, then sorts the queue based on event
     // timestamp, to ensure subsequently fetched events are correctly ordered.
     function InsertEventsIntoCache(eventArray) {
-        // TODO
+        console.log("Inserting some item(s) into the failure cache! Logging them at debug log level:");
+        eventArray.forEach(s => console.debug(s));
+        
+        let eventObjects = eventArray.map(s => JSON.parse(s));
+        eventObjects.forEach(o => {
+            if (o.timestamp === undefined || o.timestamp === null || o.timestamp < 0) {
+                throw new Error("ERROR: Invalid event string inserted into failure cache! " + o);
+            }
+            FailedEventQueue.push(o);
+        });
+        FailedEventQueue.sort((a, b) => a.timestamp - b.timestamp);
     }
 
     return Object.freeze({
