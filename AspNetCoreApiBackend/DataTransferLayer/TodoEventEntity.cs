@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 using todo_app.DomainLayer.Events;
 using todo_app.DomainLayer.TaskListModel;
-using Domain = todo_app.DomainLayer.TaskListModel;
 
 // Classes in this namespace are inherently coupled to BOTH the Database ORM model, and 
 // the JSON Schema which is used to communicate with the client application. In other
@@ -70,25 +69,25 @@ namespace todo_app.DataTransferLayer.Entities {
     internal static class EventTypeSpecificValidators {
         public static readonly Dictionary<string, Func<GenericTodoEvent, bool>> Funcs = new Dictionary<string, Func<GenericTodoEvent, bool>>() {
             // New independent tasks must have no parent, no child, no 'original' field, and Progress status must be 'Not started' (i.e. zero)
-            { EventTypes.TaskAdded, e => e.Parent == null && (e.Children == null || e.Children.Length == 0) && e.Original == null && e.ProgressStatus == ProgressStatus.NotStarted },
+            { EventTypes.TaskAdded, e => e.Parent == null && (e.Children == null || e.Children.Length == 0) && e.Original == null && e.ProgressStatus == ProgressStatusVals.NotStarted },
 
             // New subtasks must have a parent, no child, no 'original' field, and ProgressStatus of Not started.
-            { EventTypes.ChildTaskAdded, e => e.Parent != null && (e.Children == null || e.Children.Length == 0) && e.Original == null && e.ProgressStatus == ProgressStatus.NotStarted },
+            { EventTypes.ChildTaskAdded, e => e.Parent != null && (e.Children == null || e.Children.Length == 0) && e.Original == null && e.ProgressStatus == ProgressStatusVals.NotStarted },
 
             // Revived tasks must have an 'original' field, and a ProgressStatus of Not started.
-            { EventTypes.TaskRevived, e => e.Original != null && e.ProgressStatus == ProgressStatus.NotStarted },
+            { EventTypes.TaskRevived, e => e.Original != null && e.ProgressStatus == ProgressStatusVals.NotStarted },
 
             // Tasks which have just starts must have a progress status of started.
-            { EventTypes.TaskStarted, e => e.ProgressStatus == ProgressStatus.Started },
+            { EventTypes.TaskStarted, e => e.ProgressStatus == ProgressStatusVals.Started },
 
             // Completed tasks must have a Category of not-deferred, and Progress status of completed.
-            { EventTypes.TaskCompleted, e => e.Category != Category.Deferred && e.ProgressStatus == ProgressStatus.Completed },
+            { EventTypes.TaskCompleted, e => e.Category != CategoryVals.Deferred && e.ProgressStatus == ProgressStatusVals.Completed },
 
             // Failed tasks must have a Category of not-deferred, and Progress status of failed.
-            { EventTypes.TaskFailed, e => e.Category != Category.Deferred && e.ProgressStatus == ProgressStatus.Failed },
+            { EventTypes.TaskFailed, e => e.Category != CategoryVals.Deferred && e.ProgressStatus == ProgressStatusVals.Failed },
 
             // Activated tasks must have a Category of not-deferred, and ProgressStatus of not started.
-            { EventTypes.TaskActivated, e => e.Category != Category.Deferred && e.ProgressStatus == ProgressStatus.NotStarted },
+            { EventTypes.TaskActivated, e => e.Category != CategoryVals.Deferred && e.ProgressStatus == ProgressStatusVals.NotStarted },
 
             // Deleted tasks currently have no validation applied
             { EventTypes.TaskDeleted, e => true } 
@@ -126,11 +125,11 @@ namespace todo_app.DataTransferLayer.Entities {
         public string Name { get; set; }
 
         [Required]
-        [IntSetValidator(Domain.Category.Goal, Domain.Category.Weekly, Domain.Category.Daily, Domain.Category.Deferred)]
+        [IntSetValidator(CategoryVals.Goal, CategoryVals.Weekly, CategoryVals.Daily, CategoryVals.Deferred)]
         public int Category { get; set; }
 
         [Required]
-        [IntSetValidator(Domain.ProgressStatus.NotStarted, Domain.ProgressStatus.Started, Domain.ProgressStatus.Completed, Domain.ProgressStatus.Aborted, Domain.ProgressStatus.Failed, Domain.ProgressStatus.Reattempted)]
+        [IntSetValidator(ProgressStatusVals.NotStarted, ProgressStatusVals.Started, ProgressStatusVals.Completed, ProgressStatusVals.Aborted, ProgressStatusVals.Failed, ProgressStatusVals.Reattempted)]
         public int ProgressStatus { get; set; }
 
         [Required]

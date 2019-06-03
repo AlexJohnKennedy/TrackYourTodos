@@ -24,7 +24,7 @@ namespace todo_app.DomainLayer.TaskListModel {
     }
 
     // Define Progress status values to match Client application.
-    public static class Category {
+    public static class CategoryVals {
         public const int Goal = 0;
         public const int Weekly = 1;
         public const int Daily = 2;
@@ -36,7 +36,7 @@ namespace todo_app.DomainLayer.TaskListModel {
     }
 
     // Define Category values to match Client application.
-    public static class ProgressStatus {
+    public static class ProgressStatusVals {
         public const int NotStarted = 0;
         public const int Started = 1;
         public const int Completed = 2;
@@ -51,12 +51,95 @@ namespace todo_app.DomainLayer.TaskListModel {
 
     // Collection of tasks.
     public class TaskList {
+        // Store all tasks, mapped by ID
+        private Dictionary<int, Task> allTasks;
+        private Dictionary<int, Task> activeTasks;    // Goals, Weekly, Daily, and Deferred.
+        private Dictionary<int, Task> failedTasks;    // Graveyard.
+        private Dictionary<int, Task> completedTasks; // Completed.
+
+        // Constructor for creating an empty, blank task-state. From here we can rebuild the state by
+        // 'playing' the entire event log. Note in future we will have a constructor allowing snap-shot
+        // rebuilds.
+        public TaskList() {
+            allTasks       = new Dictionary<int, Task>();
+            activeTasks    = new Dictionary<int, Task>();
+            failedTasks    = new Dictionary<int, Task>();
+            completedTasks = new Dictionary<int, Task>();
+        }
         
+        public Task CreateNewIndependentTask(string name, int category, long timeCreatedUnix, int coulourId, int id) {
+            TaskParamValidationHelpers.BasicNewTaskParameterValidation(name, category, timeCreatedUnix, id, allTasks.Keys.ToHashSet());
+            Task t = new Task(id, name, category, null, timeCreatedUnix);
+            allTasks.Add(id, t);
+            activeTasks.Add(id, t);
+            return t;
+        }
+        public Task CreateNewSubtask(string name, Task parent, int category, long timeCreatedUnix, int id) {
+            TaskParamValidationHelpers.BasicNewTaskParameterValidation(name, category, timeCreatedUnix, id, allTasks.Keys.ToHashSet());
+            Task t = new Task(id, name, category, parent, timeCreatedUnix);
+            allTasks.Add(id, t);
+            activeTasks.Add(id, t);
+            return t;
+        }
     }
 
     // A Task object containing data.
     public class Task {
+        public int Id { get; }
+        public string Name { get; }
+        public int Category { get; set; }
+        public int ProgressStatus { get; set; }
+        public int ColourId { get; }
+        public Task Parent { get; set; }
+        public IList<Task> Children { get; set; }
+        public EventTimeStamps EventTimeStamps { get; }
+        
+        public Task(int id, string name, int category, Task parent, long timeCreatedUnix) {
+            this.Id = id;
+            this.Name = name;
+            this.Category = category;
+            this.ProgressStatus = ProgressStatusVals.NotStarted;
+            this.Parent = parent;
+            this.Children = new List<Task>();
+            this.EventTimeStamps = new EventTimeStamps();
+            this.EventTimeStamps.TimeCreated = timeCreatedUnix;
+        }
 
+        public void AddChild(Task child) {
+            this.Children.Add(child);
+            child.Parent = this;
+        }
+        public void RemoveChild(Task task) {
+            this.Children.Remove(task);
+            task.Parent = null;
+        }
     }
 
+    // Mutable data object allowing us to set when things happen.
+    // All times are stored as Unix Epoch Milliseconds.
+    public class EventTimeStamps {
+        public long? TimeCreated { get; set; }
+        public long? TimeActivated { get; set; }
+        public long? TimeStarted { get; set; }
+        public long? TimeClosed { get; set; }
+        public long? TimeRevived { get; set; }
+        public EventTimeStamps() {
+            TimeCreated = null;
+            TimeActivated = null;
+            TimeStarted = null;
+            TimeClosed = null;
+            TimeRevived = null;
+        }
+    }
+
+    internal static class TaskParamValidationHelpers {
+        public static void BasicNewTaskParameterValidation(string name, int category, long timeCreatedUnix, int id, ISet<int> existingIds) {
+            if (!CategoryVals.ValidValues.Contains(category) || string.IsNullOrWhiteSpace(name) || timeCreatedUnix < 0) {
+                throw new InvalidOperationException("Invalid data passed for a New Independent Task. Come on, this is easy to validate mate.");
+            }
+            if (existingIds.Contains(id)) {
+                throw new InvalidOperationException("Invalid id for new task. This ID is already present!");
+            }
+        }
+    }
 }
