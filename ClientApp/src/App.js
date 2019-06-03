@@ -6,7 +6,9 @@ import { LoadingPage, ErrorPage } from './LoadingPage';
 import { LoginPage } from './LoginPage';
 
 // Setters for application-level handlers for AJAX and Network errors. E.g. token expired, GET or POST failure, Authorization failed.
-import { setIdTokenRefreshFunction, setServerFailureAction, setAuthFailureHandler } from './interactionLayer/ajaxDataModules/ajaxErrorcaseHandlers';
+import { setIdTokenRefreshFunction, setServerFailureAction, setAuthFailureHandler, setConflictingDataAction } from './interactionLayer/ajaxDataModules/ajaxErrorcaseHandlers';
+import { InstantiateNewFailedEventCacheScope } from './interactionLayer/ajaxDataModules/ajaxFailedEventCache';
+import { RetryPostingFailedEvents } from './interactionLayer/ajaxDataModules/ajaxDataEventPoster';
 
 class App extends Component {
   constructor(props) {
@@ -21,7 +23,8 @@ class App extends Component {
       googleAuthApiCrashed: false,
       googleUserIsLoggedIn: false,
       errorOccurred: false,
-      errorMessage: ""
+      errorMessage: "",
+      ajaxFailedEventCacheInstance: null
     }
 
     this.respondToGapiLoad = this.respondToGapiLoad.bind(this);
@@ -92,7 +95,7 @@ class App extends Component {
     }
   }
 
-  // These callbacks will be passed down to child elements so that they can trigger a re-render of a different page
+  // These callbacks can be passed down to child elements so that they can trigger a re-render of a different page
   // if a user signs in or out; for example if they sign in on the sign in page.
   setGoogleSignedIn(GoogleUserObj) {
     const googleIdToken = GoogleUserObj.getAuthResponse().id_token;   // This should be sent with AJAX as a header, (HTTPS only!!)
@@ -102,6 +105,12 @@ class App extends Component {
 
     // Store the token in local storage, so it can be accessed later.
     window.localStorage.setItem("googleIdToken", googleIdToken);
+
+    // Since a new user has logged in, we will need to provide the app with a fresh 'failed event cache', which will not contain
+    // any left-over events from the previous user. We are constructing it here (above the AppPage component) because it should
+    // persist across context sessions, even if the user rebuilds the AppPage state. It should only clear if the user logs out,
+    // and only then, after the cache has triggered!
+    const ajaxFailedEventCacheInstance = InstantiateNewFailedEventCacheScope();
 
     // Schedule a token refresh request for the time at which the current id_token expires, so that we stay logged in.
     const expiresInSeconds = GoogleUserObj.getAuthResponse(false).expires_in;
@@ -126,10 +135,15 @@ class App extends Component {
       this.signUserOut();
       this.setErrorPage(message);
     });
+    setConflictingDataAction(() => {
+      console.warn("App is triggering the 'conflicting data' action. For now, this will simply log the user out to force a refresh");
+      this.signUserOut();
+    });
 
     this.setState({
       googleAuthApiLoaded: true,
-      googleUserIsLoggedIn: true
+      googleUserIsLoggedIn: true,
+      ajaxFailedEventCacheInstance: ajaxFailedEventCacheInstance
     });
   }
 
@@ -140,6 +154,12 @@ class App extends Component {
     });
   }
   signUserOut() {
+    // Trigger 'failed event cache send' here, which triggers if and only if the queue is not empty. This happens before the sign
+    // out is triggered, as a last ditch effort to save the user's data.
+    if (!this.state.ajaxFailedEventCacheInstance.IsEmpty()) {
+      RetryPostingFailedEvents(this.state.ajaxFailedEventCacheInstance);
+    }
+
     window.gapi.auth2.getAuthInstance().signOut();
   }
   setGoogleSignedOut() {
@@ -153,7 +173,8 @@ class App extends Component {
     setIdTokenRefreshFunction(null);
 
     this.setState({
-      googleUserIsLoggedIn: false
+      googleUserIsLoggedIn: false,
+      ajaxFailedEventCacheInstance: null
     });
   }
   handleGoogleLoginFailure() {
@@ -183,7 +204,7 @@ class App extends Component {
       />;
     }
     else {
-      PageToRender = <AppPage onSignOut={this.signUserOut} />;
+      PageToRender = <AppPage onSignOut={this.signUserOut} failedEventCacheInstance={this.state.ajaxFailedEventCacheInstance}/>;
     }
 
     return (
