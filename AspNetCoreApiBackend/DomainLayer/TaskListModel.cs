@@ -88,6 +88,17 @@ namespace todo_app.DomainLayer.TaskListModel {
             toActivate.EventTimeStamps.TimeActivated = timeStamp;
             toActivate.Category = newCategory;
         }
+        public void CompletedTask(Task t, long timeStamp) {
+            if (t.ProgressStatus != ProgressStatusVals.Started) throw new InvalidOperationException("Cannot call 'complete' on root task which is not started. Task id: " + t.Id);
+            if (t.Category == CategoryVals.Deferred) throw new InvalidOperationException("Cannot call 'complete' on root task which is not activated. Task id: " + t.Id);
+            if (timeStamp < t.EventTimeStamps.TimeStarted) throw new InvalidOperationException("Cannot complete a task before it was started! Task id: " + t.Id);
+        }
+        public void FailTask(Task t, long timeStamp) {
+
+        }
+        private void CloseTaskAndChildren(Task t, long timeStamp, bool completed) {
+            
+        }
     }
 
     // A Task object containing data.
