@@ -1,5 +1,5 @@
 import { DataEventSerialisationFuncs } from '../dataEventSerialiser';
-import { forceTokenRefresh, handleAuthFailure, handleServerFailure, handleUnknownPostFailure } from './ajaxErrorcaseHandlers';
+import { forceTokenRefresh, handleAuthFailure, handleServerFailure, handleUnknownPostFailure, handleConflictingDataOccurrance } from './ajaxErrorcaseHandlers';
 
 export const DataEventHttpPostHandlers = {
     taskAddedHandler: (task, list) => postEvent(DataEventSerialisationFuncs.taskAddedEvent(task, list), 2, false),
@@ -58,6 +58,10 @@ function postEvent(eventText, retryCount, logoutOnAuthFailure) {
                 console.warn("Got an un-authorized 401 error on attempted Event log fetch. Forcing a token refresh, and re-trying..");
                 forceTokenRefresh(() => postEvent(eventText, retryCount, true));
             }
+        }
+        else if (httpRequest.readyState === 4 && httpRequest.status === 409) {
+            console.warn("Got a 409 response. This means the data we tried to post is conflicting with the events already saved in the server! I am initiating 409 response handling");
+            handleConflictingDataOccurrance(eventText);
         }
         else if (httpRequest.readyState === 4) {
             console.warn("Failed to Post event for unknown reason! HTTP Response Code: " + httpRequest.status);

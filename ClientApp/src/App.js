@@ -6,7 +6,7 @@ import { LoadingPage, ErrorPage } from './LoadingPage';
 import { LoginPage } from './LoginPage';
 
 // Setters for application-level handlers for AJAX and Network errors. E.g. token expired, GET or POST failure, Authorization failed.
-import { setIdTokenRefreshFunction, setServerFailureAction, setAuthFailureHandler } from './interactionLayer/ajaxDataModules/ajaxErrorcaseHandlers';
+import { setIdTokenRefreshFunction, setServerFailureAction, setAuthFailureHandler, setConflictingDataAction } from './interactionLayer/ajaxDataModules/ajaxErrorcaseHandlers';
 
 class App extends Component {
   constructor(props) {
@@ -125,6 +125,10 @@ class App extends Component {
       console.warn(message);
       this.signUserOut();
       this.setErrorPage(message);
+    });
+    setConflictingDataAction(() => {
+      console.warn("App is triggering the 'conflicting data' action. For now, this will simply log the user out to force a refresh");
+      this.signUserOut();
     });
 
     this.setState({
