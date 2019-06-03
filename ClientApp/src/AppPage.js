@@ -10,7 +10,7 @@ import { ShortCutManager } from './viewLogic/keyboardShortcutHandler';
 import { ThemeId, currThemeId } from './viewLogic/colourSetManager';
 
 import { InstantiateNewDataModelScope } from './interactionLayer/viewLayerInteractionApi';
-import { DataEventHttpPostHandlers } from './interactionLayer/ajaxDataModules/ajaxDataEventPoster';
+import { BuildDataEventHttpPostHandlers } from './interactionLayer/ajaxDataModules/ajaxDataEventPoster';
 
 
 // A wrapper for the application 'page' itself, which will be rendered by react-router.
@@ -33,7 +33,7 @@ export class AppPage extends Component {
 
         // All of our children will have mounted by the time we mount, thus, they should have registered their update handlers.
         // Thus, we should now trigger a 'fetch and load data' operation, since everything is now instantiated correctly.
-        this.dataModelScope.RegisterForDataEvents(DataEventHttpPostHandlers);
+        this.dataModelScope.RegisterForDataEvents(BuildDataEventHttpPostHandlers(this.props.failedEventCacheInstance));
         this.dataModelScope.TriggerEventLogDataFetch();
     }
     componentWillUnmount() {
