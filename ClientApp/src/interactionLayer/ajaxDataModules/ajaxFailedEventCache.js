@@ -13,7 +13,6 @@ export function InstantiateNewFailedEventCacheScope() {
 
     // Exported function.
     function IsEmpty() {
-        console.debug("Ooh someone checked my length :O");
         return FailedEventQueue.length === 0;
     }
 
@@ -22,8 +21,6 @@ export function InstantiateNewFailedEventCacheScope() {
     function FetchAndPopAll() {
         let eventsToPop = FailedEventQueue.splice(0, FailedEventQueue.length);   // Pop all event objects into a 'toRet' array.
         let toRet = eventsToPop.map(eventObject => JSON.stringify(eventObject));
-        console.log("Popping all of the events from the failure cache! Logging them at debug log level:");
-        toRet.forEach(s => console.debug(s));
 
         return toRet;
     }
@@ -42,9 +39,6 @@ export function InstantiateNewFailedEventCacheScope() {
             FailedEventQueue.push(o);
         });
         FailedEventQueue.sort((a, b) => a.timestamp - b.timestamp);
-
-        console.debug("After FailureCache insertion: ");
-        FailedEventQueue.forEach(s => console.debug(s));
     }
 
     return Object.freeze({
