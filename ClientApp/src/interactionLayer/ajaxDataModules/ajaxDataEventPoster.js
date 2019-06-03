@@ -5,18 +5,24 @@ import { forceTokenRefresh, handleAuthFailure, handleServerFailure, handleUnknow
 // This will be called whenever the data-model rebuilds itself, and needs handlers with a fresh cache (for example).
 export function BuildDataEventHttpPostHandlers(FailedEventCache) {
     return {
-        taskAddedHandler: (task, list) => postEvent(DataEventSerialisationFuncs.taskAddedEvent(task, list), 2, false, true),
-        childTaskAddedHandler: (parent, child, list) => postEvent(DataEventSerialisationFuncs.childTaskAddedEvent(parent, child, list), 2, false, true),
-        taskRevivedHandler: (old, clone, list) => postEvent(DataEventSerialisationFuncs.taskRevivedEvent(old, clone, list), 2, false, true),
-        taskActivatedHandler: (task, list) => postEvent(DataEventSerialisationFuncs.taskActivatedEvent(task, list), 2, false, true),
-        taskDeletedHandler: (task, list) => postEvent(DataEventSerialisationFuncs.taskDeletedEvent(task, list), 2, false, true),
-        taskStartedHandler: (task, list) => postEvent(DataEventSerialisationFuncs.taskStartedEvent(task, list), 2, false, true),
-        taskCompletedHandler: (task, list) => postEvent(DataEventSerialisationFuncs.taskCompletedEvent(task, list), 2, false, true),
-        taskFailedHandler: (task, list) => postEvent(DataEventSerialisationFuncs.taskFailedEvent(task, list), 2, false, true)
+        taskAddedHandler: (task, list) => postEvent(DataEventSerialisationFuncs.taskAddedEvent(task, list), FailedEventCache, 2, false, true),
+        childTaskAddedHandler: (parent, child, list) => postEvent(DataEventSerialisationFuncs.childTaskAddedEvent(parent, child, list), FailedEventCache, 2, false, true),
+        taskRevivedHandler: (old, clone, list) => postEvent(DataEventSerialisationFuncs.taskRevivedEvent(old, clone, list), FailedEventCache, 2, false, true),
+        taskActivatedHandler: (task, list) => postEvent(DataEventSerialisationFuncs.taskActivatedEvent(task, list), FailedEventCache, 2, false, true),
+        taskDeletedHandler: (task, list) => postEvent(DataEventSerialisationFuncs.taskDeletedEvent(task, list), FailedEventCache, 2, false, true),
+        taskStartedHandler: (task, list) => postEvent(DataEventSerialisationFuncs.taskStartedEvent(task, list), FailedEventCache, 2, false, true),
+        taskCompletedHandler: (task, list) => postEvent(DataEventSerialisationFuncs.taskCompletedEvent(task, list), FailedEventCache, 2, false, true),
+        taskFailedHandler: (task, list) => postEvent(DataEventSerialisationFuncs.taskFailedEvent(task, list), FailedEventCache, 2, false, true)
     };
 }
 
-function postEvent(eventText, retryCount, logoutOnAuthFailure, sendFromFailureCache) {
+// Exported function for simply triggering a global retry; I.e., 'try to send all the failed events, but I dont have any new events'
+export function RetryPostingFailedEvents(failureCacheInstance) {
+    // Empty event data will mean it doesn't add anything.
+    postEvent("", failureCacheInstance, 0, true, true);
+}
+
+function postEvent(eventText, failureCache, retryCount, logoutOnAuthFailure, sendFromFailureCache) {
     console.log("Ajax POST request scheduled! Send from failure cache flag = " + sendFromFailureCache);
     
     // We need to be authenticated on our backend using the google JWT. Thus, we must fetch it from our saved location in local storage.
@@ -69,7 +75,7 @@ function postEvent(eventText, retryCount, logoutOnAuthFailure, sendFromFailureCa
         }
         else if (httpRequest.readyState === 4) {
             console.warn("Failed to Post event for unknown reason! HTTP Response Code: " + httpRequest.status);
-            handleUnknownPostFailure(eventText, true);
+            handleUnknownPostFailure(eventText, failureCache);
         }
     };
     

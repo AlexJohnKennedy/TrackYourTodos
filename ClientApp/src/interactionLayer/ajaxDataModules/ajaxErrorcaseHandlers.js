@@ -56,8 +56,7 @@ export function handleConflictingDataOccurrance(postedData) {
     if (conflictingDataAction !== null) conflictingDataAction(postedData);
 }
 
-// TODO: Add failed posts to queue (I.e. on AJAX timeout or some other unknown error)
-export function handleUnknownPostFailure(failedEventData, automaticallyScheduleRetry) {
-    // TODO
-    console.warn("TODO: QUEUE UP POST REQUESTS");
+// Add failed posts to queue (I.e. on AJAX timeout or some other unknown error)
+export function handleUnknownPostFailure(failedEventData, failedCacheInstance) {
+    failedCacheInstance.InsertEventsIntoCache(failedEventData);
 }
