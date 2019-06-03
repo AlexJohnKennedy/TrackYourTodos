@@ -5,6 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using todo_app.DomainLayer.Events;
+using todo_app.DomainLayer.TaskListModel;
+using Domain = todo_app.DomainLayer.TaskListModel;
 
 // Classes in this namespace are inherently coupled to BOTH the Database ORM model, and 
 // the JSON Schema which is used to communicate with the client application. In other
@@ -20,44 +22,6 @@ using todo_app.DomainLayer.Events;
 // business logic ocurring inside the server itself.. But there might be later!)
 namespace todo_app.DataTransferLayer.Entities {
 
-    // Define the valid event type strings.
-    public static class EventTypes {
-        public const string TaskAdded = "taskCreated";
-        public const string ChildTaskAdded = "subtaskCreated";
-        public const string TaskRevived = "taskRevived";
-        public const string TaskDeleted = "taskDeleted";
-        public const string TaskCompleted = "taskCompleted";
-        public const string TaskFailed = "taskFailed";
-        public const string TaskActivated = "taskActivated";
-        public const string TaskStarted = "taskStarted";
-        public static readonly HashSet<string> ValidEventStrings = new HashSet<string>() {
-            TaskAdded, ChildTaskAdded, TaskRevived, TaskDeleted, TaskCompleted, TaskFailed, TaskActivated, TaskStarted
-        };         
-    }
-    // Define Progress status and Category values to match Client application
-    public static class Category {
-        public const int Goal = 0;
-        public const int Weekly = 1;
-        public const int Daily = 2;
-        public const int Deferred = 3;
-
-        public static readonly HashSet<int> ValidValues = new HashSet<int>() {Goal, Weekly, Daily, Deferred};
-        public static readonly int MaxIndex = Enumerable.Max(ValidValues);
-        public static readonly int MinIndex = Enumerable.Min(ValidValues);
-    }
-    public static class ProgressStatus {
-        public const int NotStarted = 0;
-        public const int Started = 1;
-        public const int Completed = 2;
-        public const int Aborted = 3;
-        public const int Failed = 4;
-        public const int Reattempted = 5;
-
-        public static readonly HashSet<int> ValidValues = new HashSet<int>() {NotStarted, Started, Completed, Aborted, Failed, Reattempted};
-        public static readonly int MaxIndex = Enumerable.Max(ValidValues);
-        public static readonly int MinIndex = Enumerable.Min(ValidValues);
-    }
-    
     // Define custom validation operations for TODO event model objects. For example, the EventType field must
     // be one of the valid strings. These operations are implemented as ValidationAttributes which allow us to
     // apply them as attributes, e.g. [MustBeUppercase]
@@ -162,11 +126,11 @@ namespace todo_app.DataTransferLayer.Entities {
         public string Name { get; set; }
 
         [Required]
-        [IntSetValidator(Entities.Category.Goal, Entities.Category.Weekly, Entities.Category.Daily, Entities.Category.Deferred)]
+        [IntSetValidator(Domain.Category.Goal, Domain.Category.Weekly, Domain.Category.Daily, Domain.Category.Deferred)]
         public int Category { get; set; }
 
         [Required]
-        [IntSetValidator(Entities.ProgressStatus.NotStarted, Entities.ProgressStatus.Started, Entities.ProgressStatus.Completed, Entities.ProgressStatus.Aborted, Entities.ProgressStatus.Failed, Entities.ProgressStatus.Reattempted)]
+        [IntSetValidator(Domain.ProgressStatus.NotStarted, Domain.ProgressStatus.Started, Domain.ProgressStatus.Completed, Domain.ProgressStatus.Aborted, Domain.ProgressStatus.Failed, Domain.ProgressStatus.Reattempted)]
         public int ProgressStatus { get; set; }
 
         [Required]
