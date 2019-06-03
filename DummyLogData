@@ -1534,5 +1534,109 @@
       "parent":null,
       "children":null,
       "original":null
+   },
+   {
+      "eventType":"taskStarted",
+      "timestamp":1559523209473,
+      "id":541,
+      "name":"Fix multi-tab issue where they read from the same token in local storage, allowing cross-account posting by accident",
+      "category":2,
+      "progressStatus":1,
+      "colourId":0,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCompleted",
+      "timestamp":1559523210320,
+      "id":541,
+      "name":"Fix multi-tab issue where they read from the same token in local storage, allowing cross-account posting by accident",
+      "category":2,
+      "progressStatus":2,
+      "colourId":0,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskStarted",
+      "timestamp":1559532721377,
+      "id":539,
+      "name":"Ensure all failed POSTs add their unsent events to an in-mem queue",
+      "category":2,
+      "progressStatus":1,
+      "colourId":1,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1559534701672,
+      "id":542,
+      "name":"Add ability to add 'notes' to each event by double clicking. This should be editable and each edit emits a dataevent",
+      "category":3,
+      "progressStatus":0,
+      "colourId":0,
+      "parent":null,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1559534807477,
+      "id":543,
+      "name":"Task-notes should be displayed (or just previewed if too long) with tooltip on task mouse-hover",
+      "category":3,
+      "progressStatus":0,
+      "colourId":1,
+      "parent":null,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskActivated",
+      "timestamp":1559534826961,
+      "id":48,
+      "name":"Have API verify validity of events",
+      "category":1,
+      "progressStatus":0,
+      "colourId":2,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1559534871074,
+      "id":544,
+      "name":"Finish Track your TODOs by end of June",
+      "category":0,
+      "progressStatus":0,
+      "colourId":2,
+      "parent":null,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1559534987810,
+      "id":545,
+      "name":"Determine strategy for dealing with multiple devices on same user. Pull-push with reconcile log strat? or Server-push?",
+      "category":1,
+      "progressStatus":0,
+      "colourId":3,
+      "parent":null,
+      "children":null,
+      "original":null
    }
 ]
