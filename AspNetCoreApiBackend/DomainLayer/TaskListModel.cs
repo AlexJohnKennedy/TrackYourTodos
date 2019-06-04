@@ -94,6 +94,9 @@ namespace todo_app.DomainLayer.TaskListModel {
             if (timeStamp < t.EventTimeStamps.TimeStarted) throw new InvalidOperationException("Cannot complete a task before it was started! Task id: " + t.Id);
         }
         public void FailTask(Task t, long timeStamp) {
+            if (t.ProgressStatus != ProgressStatusVals.Started && t.ProgressStatus != ProgressStatusVals.NotStarted) throw new InvalidOperationException("Cannot call 'fail' on root task which is already closed. Task id: " + t.Id);
+            if (t.Category == CategoryVals.Deferred) throw new InvalidOperationException("Cannot call 'fail' on root task which is not activated. Task id: " + t.Id);
+            if (timeStamp < t.EventTimeStamps.TimeCreated) throw new InvalidOperationException("Cannot fail a task before it was created! Task id: " + t.Id);
 
         }
         private void CloseTaskAndChildren(Task t, long timeStamp, bool completed) {
