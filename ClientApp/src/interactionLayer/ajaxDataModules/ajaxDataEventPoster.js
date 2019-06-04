@@ -54,7 +54,7 @@ function postEvent(eventText, failureCache, retryCount, logoutOnAuthFailure, sen
     httpRequest.setRequestHeader("Authorization", "Bearer " + googleToken); // Specify the 'Bearer' authentication scheme, under Authorization header.
     httpRequest.timeout = 5000;     // We MUST set a timeout otherwise uncaught exceptions will be thrown in scenarios where the browser is unable to complete reqeusts. (e.g. PC is asleep)
     httpRequest.ontimeout = () => {
-        handleUnknownPostFailure(eventText, false);     // In these scenario's, don't try again just yet..
+        handleUnknownPostFailure(eventText, failureCache);     // In these scenario's, don't try again just yet..
     }
 
     // Assign a response handler function. If we get back a 200, we are done! If it fails with a server error, we will recursively retry,
