@@ -81,7 +81,7 @@ function postEvent(eventText, failureCache, retryCount, logoutOnAuthFailure, sen
             }
             else {
                 console.warn("Got an un-authorized 401 error on attempted Event log fetch. Forcing a token refresh, and re-trying..");
-                forceTokenRefresh(() => postEvent(eventText, retryCount, true, sendFromFailureCache));
+                forceTokenRefresh(() => postEvent(eventText, failureCache, retryCount, true, sendFromFailureCache));
             }
         }
         else if (httpRequest.readyState === 4 && httpRequest.status === 409) {
