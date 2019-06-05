@@ -109,10 +109,28 @@ namespace todo_app.DomainLayer.TaskListModel {
             // Update state.
             t.ProgressStatus = completed ? ProgressStatusVals.Completed : ProgressStatusVals.Failed;
             t.EventTimeStamps.TimeClosed = timeStamp;
+            
+            // Check for state consistency.
+            if (!activeTasks.ContainsKey(t.Id)) { throw new InvalidOperationException("Tried to close a task which was not in the active task collection! Task Id: " + t.Id); }
             activeTasks.Remove(t.Id);
 
             // Recurse to children.
             foreach (Task child in t.Children) { CloseTaskAndChildren(child, timeStamp, completed); }
+        }
+        public void StartTask(Task t, long timeStamp) {
+            if (t.Category == CategoryVals.Deferred) { throw new InvalidOperationException("Cannot start a task which is currently deferred. Task Id: " + t.Id); }
+            if (t.ProgressStatus == ProgressStatusVals.Started) return; // Do nothing.
+            if (t.ProgressStatus != ProgressStatusVals.NotStarted) { throw new InvalidOperationException("Cannot start a task which is already starts or closed. Task Id: " + t.Id); }
+            t.ProgressStatus = ProgressStatusVals.Started;
+            t.EventTimeStamps.TimeStarted = timeStamp;
+        }
+        public void ReviveTaskAsClone(Task t, bool reviveAsActive, long timeStamp, int id) {
+            if (t.ProgressStatus != ProgressStatusVals.Failed) throw new InvalidOperationException("Cannot revive a task which is not failed! Task.Id: " + t.Id);
+            t.ProgressStatus = ProgressStatusVals.Reattempted;
+            t.EventTimeStamps.TimeRevived = timeStamp;
+
+            int newCategory = reviveAsActive ? t.Category : CategoryVals.Deferred;
+            CreateNewIndependentTask(t.Name, newCategory, timeStamp, t.ColourId, id);
         }
     }
 
@@ -167,9 +185,13 @@ namespace todo_app.DomainLayer.TaskListModel {
 
     internal static class TaskParamValidationHelpers {
         public static void BasicNewTaskParameterValidation(string name, int category, long timeCreatedUnix, int id, ISet<int> existingIds) {
+            TaskIdUniquenessCheck(id, existingIds);
             if (!CategoryVals.ValidValues.Contains(category) || string.IsNullOrWhiteSpace(name) || timeCreatedUnix < 0) {
                 throw new InvalidOperationException("Invalid data passed for a New Independent Task. Come on, this is easy to validate mate.");
             }
+            
+        }
+        public static void TaskIdUniquenessCheck(int id, ISet<int> existingIds) {
             if (existingIds.Contains(id)) {
                 throw new InvalidOperationException("Invalid id for new task. This ID is already present!");
             }
