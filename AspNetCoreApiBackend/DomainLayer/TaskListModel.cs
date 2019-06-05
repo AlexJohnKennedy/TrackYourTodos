@@ -59,6 +59,12 @@ namespace todo_app.DomainLayer.TaskListModel {
         private Dictionary<int, Task> failedTasks;    // Graveyard.
         private Dictionary<int, Task> completedTasks; // Completed.
 
+        // Reader funcs
+        public Func<int, Task> AllTaskReader { get { return i => allTasks[i]; } }
+        public Func<int, Task> ActiveTaskReader { get { return i => activeTasks[i]; } }
+        public Func<int, Task> FailedTaskReader { get { return i => failedTasks[i]; } }
+        public Func<int, Task> CompletedTaskReader { get { return i => completedTasks[i]; } }
+
         // Constructor for creating an empty, blank task-state. From here we can rebuild the state by
         // 'playing' the entire event log. Note in future we will have a constructor allowing snap-shot
         // rebuilds.
@@ -114,6 +120,9 @@ namespace todo_app.DomainLayer.TaskListModel {
             if (!activeTasks.ContainsKey(t.Id)) { throw new InvalidOperationException("Tried to close a task which was not in the active task collection! Task Id: " + t.Id); }
             activeTasks.Remove(t.Id);
 
+            if (completed) completedTasks.Add(t.Id, t);
+            else failedTasks.Add(t.Id, t);
+
             // Recurse to children.
             foreach (Task child in t.Children) { CloseTaskAndChildren(child, timeStamp, completed); }
         }
@@ -124,13 +133,13 @@ namespace todo_app.DomainLayer.TaskListModel {
             t.ProgressStatus = ProgressStatusVals.Started;
             t.EventTimeStamps.TimeStarted = timeStamp;
         }
-        public void ReviveTaskAsClone(Task t, bool reviveAsActive, long timeStamp, int id) {
-            if (t.ProgressStatus != ProgressStatusVals.Failed) throw new InvalidOperationException("Cannot revive a task which is not failed! Task.Id: " + t.Id);
-            t.ProgressStatus = ProgressStatusVals.Reattempted;
-            t.EventTimeStamps.TimeRevived = timeStamp;
+        public void ReviveTaskAsClone(Task original, bool reviveAsActive, long timeStamp, int id) {
+            if (original.ProgressStatus != ProgressStatusVals.Failed) throw new InvalidOperationException("Cannot revive a task which is not failed! Task.Id: " + original.Id);
+            original.ProgressStatus = ProgressStatusVals.Reattempted;
+            original.EventTimeStamps.TimeRevived = timeStamp;
 
-            int newCategory = reviveAsActive ? t.Category : CategoryVals.Deferred;
-            CreateNewIndependentTask(t.Name, newCategory, timeStamp, t.ColourId, id);
+            int newCategory = reviveAsActive ? original.Category : CategoryVals.Deferred;
+            CreateNewIndependentTask(original.Name, newCategory, timeStamp, original.ColourId, id);
         }
     }
 
