@@ -7,6 +7,32 @@ using todo_app.DataTransferLayer.Entities;
 
 namespace todo_app.DataTransferLayer.EventReconciliationSystem {
     
+    public class EventLogReconciler {
+        private TaskList tasklist;
+        private IList<GenericTodoEvent> truthLog;   // Represents the 'official' event log, i.e., the log which is already saved in the database.
+
+        public EventLogReconciler() {
+            tasklist = new TaskList();
+        }
+        public EventLogReconciler(IList<GenericTodoEvent> truthLog) {
+            tasklist = new TaskList();
+            this.truthLog = truthLog;
+        }
+
+        // Method which reconciles incoming events (which are considered possibly invalid), with the current state
+        // truth log. If new events create invalid states, it will reject them, except it will attempt to reconcile 
+        // the logs such that it can keep as many of the new events as it can, whilst:
+        //  a) Maintaining a valid state
+        //  b) Keeping all of the original events
+        //
+        // If the 'mergeIntoTruthLog' flag is set to true, then any new events which are successfully reconciled will
+        // subsequently become part of the truth log and update this object's state, such that they are part of the
+        // truth log the next time this method is called.
+        public int ReconcileNewEvents(IList<GenericTodoEvent> newEvents, bool mergeIntoTruthLog) {
+            
+        }
+    }
+
     public static class EventReplayer {
         // Define a function signature type which represents a function which can apply an event to a tasklist model object.
         public delegate TaskList EventReplayFunc(GenericTodoEvent e, TaskList tasklist);
