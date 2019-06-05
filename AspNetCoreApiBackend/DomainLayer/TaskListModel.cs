@@ -45,6 +45,8 @@ namespace todo_app.DomainLayer.TaskListModel {
         public const int Reattempted = 5;
 
         public static readonly HashSet<int> ValidValues = new HashSet<int>() {NotStarted, Started, Completed, Aborted, Failed, Reattempted};
+        public static readonly HashSet<int> ActiveTaskValues = new HashSet<int>() {NotStarted, Started};
+        public static readonly HashSet<int> ClosedTaskValues = new HashSet<int>() {Completed, Aborted, Failed, Reattempted};
         public static readonly int MaxIndex = Enumerable.Max(ValidValues);
         public static readonly int MinIndex = Enumerable.Min(ValidValues);
     }
@@ -92,15 +94,25 @@ namespace todo_app.DomainLayer.TaskListModel {
             if (t.ProgressStatus != ProgressStatusVals.Started) throw new InvalidOperationException("Cannot call 'complete' on root task which is not started. Task id: " + t.Id);
             if (t.Category == CategoryVals.Deferred) throw new InvalidOperationException("Cannot call 'complete' on root task which is not activated. Task id: " + t.Id);
             if (timeStamp < t.EventTimeStamps.TimeStarted) throw new InvalidOperationException("Cannot complete a task before it was started! Task id: " + t.Id);
+            CloseTaskAndChildren(t, timeStamp, true);
         }
         public void FailTask(Task t, long timeStamp) {
-            if (t.ProgressStatus != ProgressStatusVals.Started && t.ProgressStatus != ProgressStatusVals.NotStarted) throw new InvalidOperationException("Cannot call 'fail' on root task which is already closed. Task id: " + t.Id);
+            if (!ProgressStatusVals.ActiveTaskValues.Contains(t.ProgressStatus)) throw new InvalidOperationException("Cannot call 'fail' on root task which is already closed. Task id: " + t.Id);
             if (t.Category == CategoryVals.Deferred) throw new InvalidOperationException("Cannot call 'fail' on root task which is not activated. Task id: " + t.Id);
             if (timeStamp < t.EventTimeStamps.TimeCreated) throw new InvalidOperationException("Cannot fail a task before it was created! Task id: " + t.Id);
-
+            CloseTaskAndChildren(t, timeStamp, false);
         }
         private void CloseTaskAndChildren(Task t, long timeStamp, bool completed) {
+            // Can only close active tasks. If a child is deferred we will stop.
+            if (t.Category == CategoryVals.Deferred || ProgressStatusVals.ClosedTaskValues.Contains(t.ProgressStatus)) return;  // Cease recursion
             
+            // Update state.
+            t.ProgressStatus = completed ? ProgressStatusVals.Completed : ProgressStatusVals.Failed;
+            t.EventTimeStamps.TimeClosed = timeStamp;
+            activeTasks.Remove(t.Id);
+
+            // Recurse to children.
+            foreach (Task child in t.Children) { CloseTaskAndChildren(child, timeStamp, completed); }
         }
     }
 
