@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Cors;
 
 using todo_app.DataTransferLayer.Entities;
 using todo_app.DataTransferLayer.DatabaseContext;
+using todo_app.DataTransferLayer.EventReconciliationSystem;
 
 
 namespace todo_app.Controllers {
@@ -67,23 +68,32 @@ namespace todo_app.Controllers {
 
             // Detect duplicate events.
             var compositeKeyset = newEvents.Select(e => new { e.Id, e.Timestamp, e.EventType }).ToHashSet();
-            List<GenericTodoEvent> duplicates = await dbContext.TodoEvents.Where(e => e.UserId.Equals(userId) && compositeKeyset.Contains(new { e.Id, e.Timestamp, e.EventType })).ToListAsync();
+            List<GenericTodoEvent> savedEvents = await dbContext.TodoEvents.Where(e => e.UserId.Equals(userId)).OrderBy(e => e.Timestamp).ToListAsync();
+            IEnumerable<GenericTodoEvent> duplicates = savedEvents.Where(e => compositeKeyset.Contains(new { e.Id, e.Timestamp, e.EventType }));
 
-            // If there are not duplicates, do a save. We are assuming that they are not causing an invalid state. Later on, I will
-            // simulate the state
-            if (duplicates.Count == 0) {
-                dbContext.TodoEvents.AddRange(newEvents);
-                await dbContext.SaveChangesAsync();
-                return Ok(newEvents);
+            if (duplicates.Count() == 0) {
+                return await ValidateAndSave(newEvents, savedEvents);
             }
             else {
                 var duplicateSet = duplicates.Select(e => new { e.Id, e.Timestamp, e.EventType }).ToHashSet();
-                var nonDups = newEvents.Where(e => !duplicateSet.Contains(new { e.Id, e.Timestamp, e.EventType }));
-                dbContext.TodoEvents.AddRange(nonDups);
-                await dbContext.SaveChangesAsync();
-                return Ok(nonDups);
+                var nonDups = newEvents.Where(e => !duplicateSet.Contains(new { e.Id, e.Timestamp, e.EventType })).ToList();
+                return await ValidateAndSave(nonDups, savedEvents);
             }
         }
+        private async Task<IActionResult> ValidateAndSave(IList<GenericTodoEvent> newEvents, IList<GenericTodoEvent> savedEvents) {
+            // Try to validate. If we fail, just save nothing and return a 409 to indicate the client's data is conflicting.
+            EventLogReconciler logReconciler = new EventLogReconciler(savedEvents);
+            
+            if (!logReconciler.SimpleFullStateRebuildValidation(newEvents, out string err)) {
+                // 409 Code indicates to the client that their events are 'in conflict' with the server's state, i.e., these events are not valid.
+                return StatusCode(409, err);
+            }
+            
+            dbContext.TodoEvents.AddRange(newEvents);
+            await dbContext.SaveChangesAsync();
+            return Ok(newEvents);
+        }
+
 
         private void PrintClaimsPrincipal(ClaimsPrincipal userDetails) {
             logger.LogDebug(" ---> Logging User details <--- ");
