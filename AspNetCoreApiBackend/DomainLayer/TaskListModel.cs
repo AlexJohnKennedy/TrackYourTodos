@@ -89,6 +89,7 @@ namespace todo_app.DomainLayer.TaskListModel {
         public Task CreateNewSubtask(string name, Task parent, int category, long timeCreatedUnix, int id) {
             TaskParamValidationHelpers.BasicNewTaskParameterValidation(name, category, timeCreatedUnix, id, allTasks.Keys.ToHashSet());
             Task t = new Task(id, name, category, parent, timeCreatedUnix);
+            parent.AddChild(t);
             allTasks.Add(id, t);
             activeTasks.Add(id, t);
             return t;
@@ -116,10 +117,6 @@ namespace todo_app.DomainLayer.TaskListModel {
             // Can only close active tasks. If a child is deferred we will stop.
             if (t.Category == CategoryVals.Deferred || ProgressStatusVals.ClosedTaskValues.Contains(t.ProgressStatus)) return;  // Cease recursion
             
-            // Update state.
-            t.ProgressStatus = completed ? ProgressStatusVals.Completed : ProgressStatusVals.Failed;
-            t.EventTimeStamps.TimeClosed = timeStamp;
-            
             // Check for state consistency.
             if (!activeTasks.ContainsKey(t.Id)) { throw new InvalidOperationException("Tried to close a task which was not in the active task collection! Task Id: " + t.Id); }
             activeTasks.Remove(t.Id);
@@ -127,6 +124,10 @@ namespace todo_app.DomainLayer.TaskListModel {
             if (completed) completedTasks.Add(t.Id, t);
             else failedTasks.Add(t.Id, t);
 
+            // Update state.
+            t.ProgressStatus = completed ? ProgressStatusVals.Completed : ProgressStatusVals.Failed;
+            t.EventTimeStamps.TimeClosed = timeStamp;
+            
             // Recurse to children.
             foreach (Task child in t.Children) { CloseTaskAndChildren(child, timeStamp, completed); }
         }
