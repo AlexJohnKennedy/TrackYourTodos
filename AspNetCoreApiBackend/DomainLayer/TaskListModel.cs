@@ -64,6 +64,10 @@ namespace todo_app.DomainLayer.TaskListModel {
         public Func<int, Task> ActiveTaskReader { get { return i => activeTasks.ContainsKey(i) ? activeTasks[i] : null; } }
         public Func<int, Task> FailedTaskReader { get { return i => failedTasks.ContainsKey(i) ? failedTasks[i] : null; } }
         public Func<int, Task> CompletedTaskReader { get { return i => completedTasks.ContainsKey(i) ? completedTasks[i] : null; } }
+        public IEnumerable<Task> AllTasks { get { return allTasks.Values; } }
+        public IEnumerable<Task> ActiveTasks { get { return activeTasks.Values; } }
+        public IEnumerable<Task> FailedTasks { get { return failedTasks.Values; } }
+        public IEnumerable<Task> CompletedTasks { get { return completedTasks.Values; } }
 
         // Constructor for creating an empty, blank task-state. From here we can rebuild the state by
         // 'playing' the entire event log. Note in future we will have a constructor allowing snap-shot
