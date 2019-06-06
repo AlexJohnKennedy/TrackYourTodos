@@ -8,15 +8,13 @@ using todo_app.DataTransferLayer.Entities;
 namespace todo_app.DataTransferLayer.EventReconciliationSystem {
     
     public class EventLogReconciler {
-        private TaskList tasklist;
         private IList<GenericTodoEvent> truthLog;   // Represents the 'official' event log, i.e., the log which is already saved in the database.
 
         public EventLogReconciler() {
-            tasklist = new TaskList();
+            this.truthLog = new List<GenericTodoEvent>();
         }
         public EventLogReconciler(IList<GenericTodoEvent> truthLog) {
-            tasklist = new TaskList();
-            this.truthLog = truthLog;
+            this.truthLog = truthLog;   // Must be sorted.
         }
 
         // Method which reconciles incoming events (which are considered possibly invalid), with the current state
@@ -25,11 +23,42 @@ namespace todo_app.DataTransferLayer.EventReconciliationSystem {
         //  a) Maintaining a valid state
         //  b) Keeping all of the original events
         //
-        // If the 'mergeIntoTruthLog' flag is set to true, then any new events which are successfully reconciled will
-        // subsequently become part of the truth log and update this object's state, such that they are part of the
-        // truth log the next time this method is called.
-        public int ReconcileNewEvents(IList<GenericTodoEvent> newEvents, bool mergeIntoTruthLog) {
+        // Any new events which are successfully reconciled will subsequently become part of the truth log and update
+        // this object's state, such that they are part of the truth log the next time this method is called.
+        public void ReconcileNewEvents(IList<GenericTodoEvent> newEvents, out IList<GenericTodoEvent> acceptedEvents, out IList<GenericTodoEvent> rejectedEvents) {
+            TaskList tasklist = new TaskList();
+            IList<GenericTodoEvent> sorted = newEvents.OrderBy(e => e.Timestamp).ToList();
             
+            // TODO: Recursive reconciliation algorithm. However, this requires UNDO operations to be implemented!
+
+            acceptedEvents = new List<GenericTodoEvent>();
+            rejectedEvents = new List<GenericTodoEvent>();
+        }
+
+        // This method is the simple solution: It will simply attempt to merge ALL the incoming events, and if any failures arise, at all, then
+        // the entire set of incoming new events is rejected. This is more primitive than the search-reconcilitation solution, but is faster and
+        // less complicated. So i'm going to implement it this way for now just to get fundamental event validation in place.
+        // Returns TRUE if the new events are valid. Returns FALSE for any error case, regardless of which new events caused the error.
+        public bool SimpleFullStateRebuildValidation(IList<GenericTodoEvent> newEvents, out string errorMsg) {
+            TaskList tasklist = new TaskList();
+            IList<GenericTodoEvent> sorted = newEvents.OrderBy(e => e.Timestamp).ToList();
+
+            errorMsg = "";
+            
+            int i=0, j=0;   // i => index for truth log, j => index for new event log
+            try {
+                while (i < truthLog.Count || j < newEvents.Count) {
+                    // Pick the oldest remaining event, and apply it
+                    var nextEvent = (i == truthLog.Count || (j < newEvents.Count && newEvents[j].Timestamp < truthLog[i].Timestamp)) ? newEvents[j++] : truthLog[i++];
+                    tasklist = EventReplayer.Replay(nextEvent, tasklist);
+                }
+            }
+            // If any InvalidOperationExceptions are thrown, that means the event is invalid, and we should return false.
+            catch (InvalidOperationException e) {
+                errorMsg = e.Message;
+                return false;
+            }
+            return true;
         }
     }
 
