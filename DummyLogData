@@ -1712,5 +1712,339 @@
       "parent":null,
       "children":null,
       "original":null
+   },
+   {
+      "eventType":"taskStarted",
+      "timestamp":1559547217175,
+      "id":537,
+      "name":"When the 'unsent' queue is not empty, subsequent POSTs must send all",
+      "category":2,
+      "progressStatus":1,
+      "colourId":2,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCompleted",
+      "timestamp":1559547218971,
+      "id":539,
+      "name":"Ensure all failed POSTs add their unsent events to an in-mem queue",
+      "category":2,
+      "progressStatus":2,
+      "colourId":1,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCompleted",
+      "timestamp":1559547220407,
+      "id":537,
+      "name":"When the 'unsent' queue is not empty, subsequent POSTs must send all",
+      "category":2,
+      "progressStatus":2,
+      "colourId":2,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskStarted",
+      "timestamp":1559547238413,
+      "id":550,
+      "name":"Sit ups, Glute bridge, Curls",
+      "category":2,
+      "progressStatus":1,
+      "colourId":1,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskStarted",
+      "timestamp":1559553412154,
+      "id":48,
+      "name":"Have API verify validity of events",
+      "category":1,
+      "progressStatus":1,
+      "colourId":2,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskFailed",
+      "timestamp":1559574000000,
+      "id":550,
+      "name":"Sit ups, Glute bridge, Curls",
+      "category":2,
+      "progressStatus":4,
+      "colourId":1,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskFailed",
+      "timestamp":1559574000000,
+      "id":538,
+      "name":"Pull ups and hanging rows",
+      "category":2,
+      "progressStatus":4,
+      "colourId":1,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"subtaskCreated",
+      "timestamp":1559597045265,
+      "id":551,
+      "name":"Complete domain-model objects and task list",
+      "category":2,
+      "progressStatus":0,
+      "colourId":2,
+      "parent":48,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"subtaskCreated",
+      "timestamp":1559597069052,
+      "id":552,
+      "name":"Implement state rebuilder",
+      "category":2,
+      "progressStatus":0,
+      "colourId":2,
+      "parent":48,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskStarted",
+      "timestamp":1559597074341,
+      "id":551,
+      "name":"Complete domain-model objects and task list",
+      "category":2,
+      "progressStatus":1,
+      "colourId":2,
+      "parent":48,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskFailed",
+      "timestamp":1559660400000,
+      "id":552,
+      "name":"Implement state rebuilder",
+      "category":2,
+      "progressStatus":4,
+      "colourId":2,
+      "parent":48,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskFailed",
+      "timestamp":1559660400000,
+      "id":551,
+      "name":"Complete domain-model objects and task list",
+      "category":2,
+      "progressStatus":4,
+      "colourId":2,
+      "parent":48,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskRevived",
+      "timestamp":1559684285301,
+      "id":553,
+      "name":"Complete domain-model objects and task list",
+      "category":2,
+      "progressStatus":0,
+      "colourId":2,
+      "parent":null,
+      "children":null,
+      "original":551
+   },
+   {
+      "eventType":"taskStarted",
+      "timestamp":1559684287935,
+      "id":553,
+      "name":"Complete domain-model objects and task list",
+      "category":2,
+      "progressStatus":1,
+      "colourId":2,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskStarted",
+      "timestamp":1559716554462,
+      "id":549,
+      "name":"Add client-side capability to rebuild state from snapshot + event log",
+      "category":1,
+      "progressStatus":1,
+      "colourId":0,
+      "parent":546,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCompleted",
+      "timestamp":1559721241657,
+      "id":553,
+      "name":"Complete domain-model objects and task list",
+      "category":2,
+      "progressStatus":2,
+      "colourId":2,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"subtaskCreated",
+      "timestamp":1559721287163,
+      "id":554,
+      "name":"Implement Event Log 'replay' ability on server, such that new and old events are reconciled (old are always kept)",
+      "category":2,
+      "progressStatus":0,
+      "colourId":2,
+      "parent":48,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskStarted",
+      "timestamp":1559805854267,
+      "id":554,
+      "name":"Implement Event Log 'replay' ability on server, such that new and old events are reconciled (old are always kept)",
+      "category":2,
+      "progressStatus":1,
+      "colourId":2,
+      "parent":48,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCompleted",
+      "timestamp":1559814004352,
+      "id":554,
+      "name":"Implement Event Log 'replay' ability on server, such that new and old events are reconciled (old are always kept)",
+      "category":2,
+      "progressStatus":2,
+      "colourId":2,
+      "parent":48,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1559814159374,
+      "id":555,
+      "name":"Fix issue where a failed token refresh does not schedule another refresh action. Need to catch error & schedule anyway?",
+      "category":2,
+      "progressStatus":0,
+      "colourId":0,
+      "parent":null,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1559814273773,
+      "id":556,
+      "name":"Implement upgraded reconciliation alg, which tries to keep as many new events as possible",
+      "category":3,
+      "progressStatus":0,
+      "colourId":1,
+      "parent":null,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"subtaskCreated",
+      "timestamp":1559814311866,
+      "id":557,
+      "name":"Look into Handling Database concurrency issues: Ensure that simlutaneous, constradicting writes do not corrupt event lo",
+      "category":2,
+      "progressStatus":0,
+      "colourId":3,
+      "parent":545,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskRevived",
+      "timestamp":1559814401242,
+      "id":558,
+      "name":"Implement state rebuilder",
+      "category":2,
+      "progressStatus":0,
+      "colourId":2,
+      "parent":null,
+      "children":null,
+      "original":552
+   },
+   {
+      "eventType":"taskStarted",
+      "timestamp":1559814402672,
+      "id":558,
+      "name":"Implement state rebuilder",
+      "category":2,
+      "progressStatus":1,
+      "colourId":2,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCompleted",
+      "timestamp":1559814403540,
+      "id":558,
+      "name":"Implement state rebuilder",
+      "category":2,
+      "progressStatus":2,
+      "colourId":2,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
    }
 ]
