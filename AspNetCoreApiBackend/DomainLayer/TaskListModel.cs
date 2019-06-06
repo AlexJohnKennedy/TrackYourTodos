@@ -60,10 +60,10 @@ namespace todo_app.DomainLayer.TaskListModel {
         private Dictionary<int, Task> completedTasks; // Completed.
 
         // Reader funcs
-        public Func<int, Task> AllTaskReader { get { return i => allTasks[i]; } }
-        public Func<int, Task> ActiveTaskReader { get { return i => activeTasks[i]; } }
-        public Func<int, Task> FailedTaskReader { get { return i => failedTasks[i]; } }
-        public Func<int, Task> CompletedTaskReader { get { return i => completedTasks[i]; } }
+        public Func<int, Task> AllTaskReader { get { return i => allTasks.ContainsKey(i) ? allTasks[i] : null; } }
+        public Func<int, Task> ActiveTaskReader { get { return i => activeTasks.ContainsKey(i) ? activeTasks[i] : null; } }
+        public Func<int, Task> FailedTaskReader { get { return i => failedTasks.ContainsKey(i) ? failedTasks[i] : null; } }
+        public Func<int, Task> CompletedTaskReader { get { return i => completedTasks.ContainsKey(i) ? completedTasks[i] : null; } }
 
         // Constructor for creating an empty, blank task-state. From here we can rebuild the state by
         // 'playing' the entire event log. Note in future we will have a constructor allowing snap-shot
@@ -91,7 +91,7 @@ namespace todo_app.DomainLayer.TaskListModel {
         }
         public void ActivateTask(Task toActivate, int newCategory, long timeStamp) {
             if (toActivate.Category != CategoryVals.Deferred) throw new InvalidOperationException("Cannot activate a task which is not currently deferred. Task ID: " + toActivate.Id);
-            if (newCategory != CategoryVals.Daily || newCategory != CategoryVals.Weekly || newCategory != CategoryVals.Goal) throw new InvalidOperationException("Invalid target category for task-activation: " + newCategory);
+            if (newCategory != CategoryVals.Daily && newCategory != CategoryVals.Weekly && newCategory != CategoryVals.Goal) throw new InvalidOperationException("Invalid target category for task-activation: " + newCategory);
             if (timeStamp < toActivate.EventTimeStamps.TimeCreated) throw new InvalidOperationException("Cannot activate a task before it was created");
             toActivate.EventTimeStamps.TimeActivated = timeStamp;
             toActivate.Category = newCategory;
