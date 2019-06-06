@@ -2046,5 +2046,161 @@
 
       ],
       "original":null
+   },
+   {
+      "eventType":"taskCompleted",
+      "timestamp":1559821977701,
+      "id":48,
+      "name":"Have API verify validity of events",
+      "category":1,
+      "progressStatus":2,
+      "colourId":2,
+      "parent":null,
+      "children":[
+         551,
+         552,
+         554
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1559822011710,
+      "id":559,
+      "name":"Write Unit tests for Server side validation logic",
+      "category":3,
+      "progressStatus":0,
+      "colourId":0,
+      "parent":null,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1559822103268,
+      "id":560,
+      "name":"Implement ability for a 'data refresh' action on client-side without refreshing page",
+      "category":2,
+      "progressStatus":0,
+      "colourId":1,
+      "parent":null,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1559822116063,
+      "id":561,
+      "name":"Make 409 error trigger the data refresh action",
+      "category":2,
+      "progressStatus":0,
+      "colourId":2,
+      "parent":null,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1559822634948,
+      "id":562,
+      "name":"Improve UI: Replace <Button>'s with SVG images, Improve graph controls seciton, possibly fix Firefox CSS",
+      "category":3,
+      "progressStatus":0,
+      "colourId":3,
+      "parent":null,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1559822696057,
+      "id":563,
+      "name":"Add ability to 'swap' the views of Active board and backlog section. Backlog/Comp/Grave appear on main, active on side",
+      "category":3,
+      "progressStatus":0,
+      "colourId":0,
+      "parent":null,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1559822770782,
+      "id":564,
+      "name":"Test script injection:",
+      "category":2,
+      "progressStatus":0,
+      "colourId":1,
+      "parent":null,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskStarted",
+      "timestamp":1559822774619,
+      "id":564,
+      "name":"Test script injection:",
+      "category":2,
+      "progressStatus":1,
+      "colourId":1,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1559822792755,
+      "id":565,
+      "name":"<script> console.log(\"hi\"); </script>",
+      "category":2,
+      "progressStatus":0,
+      "colourId":2,
+      "parent":null,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskCompleted",
+      "timestamp":1559822802131,
+      "id":564,
+      "name":"Test script injection:",
+      "category":2,
+      "progressStatus":2,
+      "colourId":1,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskStarted",
+      "timestamp":1559822803451,
+      "id":565,
+      "name":"<script> console.log(\"hi\"); </script>",
+      "category":2,
+      "progressStatus":1,
+      "colourId":2,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCompleted",
+      "timestamp":1559822804333,
+      "id":565,
+      "name":"<script> console.log(\"hi\"); </script>",
+      "category":2,
+      "progressStatus":2,
+      "colourId":2,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
    }
 ]
