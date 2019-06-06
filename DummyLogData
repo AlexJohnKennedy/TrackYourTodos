@@ -2202,5 +2202,41 @@
 
       ],
       "original":null
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1559856787492,
+      "id":566,
+      "name":"Handle out-of-order event arrival w/o rejecting events which MIGHT become valid if another e arrives w/ earlier time",
+      "category":1,
+      "progressStatus":0,
+      "colourId":3,
+      "parent":null,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"subtaskCreated",
+      "timestamp":1559857212777,
+      "id":567,
+      "name":"Look into Firebase/Real-time databases.",
+      "category":2,
+      "progressStatus":0,
+      "colourId":3,
+      "parent":545,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"subtaskCreated",
+      "timestamp":1559857229544,
+      "id":568,
+      "name":"Look into Server-Sent-Events 'push' model",
+      "category":2,
+      "progressStatus":0,
+      "colourId":3,
+      "parent":545,
+      "children":null,
+      "original":null
    }
 ]
