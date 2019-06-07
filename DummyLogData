@@ -2238,5 +2238,17 @@
       "parent":545,
       "children":null,
       "original":null
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1559895097872,
+      "id":569,
+      "name":"Fix issue where keeping the app open to the next day does not update the stats bar, which doesn't refresh and roll over",
+      "category":3,
+      "progressStatus":0,
+      "colourId":0,
+      "parent":null,
+      "children":null,
+      "original":null
    }
 ]
