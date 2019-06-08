@@ -206,13 +206,23 @@ export function InstantiateNewDataModelScope() {
         });
     }
 
+    // Exported innder function: Refreshes the Statistics Model object entirely, meaning it will be re-instantiated. This is
+    // required to make day-rollover visible. I.e., if the app is left open over the day boundary, the StatisticsModel instance
+    // never knows it needs to shuffle over all of the data one place (since 'today' has moved to 'yesterday', etc.). The easiest
+    // way to get around this is to simply rebuild the model periodically/when needed, since this is a once off operation the
+    // inefficiency is preferred over the logical complexity.
+    function RefreshStatisticsModel() {
+        StatisticsModelObj = new StatisticsModel(ActiveTaskDataObj);
+    }
+
     return Object.freeze({
         TriggerEventLogDataFetch : TriggerEventLogDataFetch,
         RegisterForDataEvents : RegisterForDataEvents,
         RegisterForOnDataLoadCallback : RegisterForOnDataLoadCallback,
         RegisterToActiveTaskListAPI : RegisterToActiveTaskListAPI,
         RegisterForStatisticsModel : RegisterForStatisticsModel,
-        ClearAllRegisteredCallbacks : ClearAllRegisteredCallbacks
+        ClearAllRegisteredCallbacks : ClearAllRegisteredCallbacks,
+        RefreshStatisticsModel : RefreshStatisticsModel
     });
 }
 
