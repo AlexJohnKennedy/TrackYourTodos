@@ -24,7 +24,6 @@ export function handleAuthFailure(message) {
 
 // This should be set by the Application on startup.
 // It is a function which is able to take an error message.
-// TODO: This would probably just redirect to some 'something is wrong' page, but we are allowing the React view logic to specify what to do.
 let serverFailureAction = null;
 export function setServerFailureAction(func) {
     serverFailureAction = func;
@@ -54,6 +53,14 @@ export function setConflictingDataAction(func) {
 }
 export function handleConflictingDataOccurrance(postedData) {
     if (conflictingDataAction !== null) conflictingDataAction(postedData);
+}
+
+let unknownErrorAction = null;
+export function setUnknownErrorAction(func) {
+    unknownErrorAction = func;
+}
+export function handleUnknownError(message) {
+    if (unknownErrorAction !== null) unknownErrorAction(message);
 }
 
 // Add failed posts to queue (I.e. on AJAX timeout or some other unknown error)

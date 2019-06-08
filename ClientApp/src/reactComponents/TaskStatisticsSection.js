@@ -53,7 +53,8 @@ export class TaskStatisticsSection extends Component {
     componentDidMount() {
         // Register to access and receive updates from the statistics model in the Data-model scope handed to us from our parent.
         this.statisticsModelApi = this.props.dataModelScope.RegisterForStatisticsModel(this.handleChange, this.handleChange);
-        this.props.dataModelScope.RegisterForOnDataLoadCallback(() => this.handleChange(null, null));
+        this.props.dataModelScope.RegisterForOnInitialDataLoadCallback(() => this.handleChange(null, null));
+        this.props.dataModelScope.RegisterForOnDataRefreshCallback(() => this.handleChange(null, null));
 
         //this.statisticsModelApi = this.statisticsModelApi.bind(this);
         this.handleChange(null, null);

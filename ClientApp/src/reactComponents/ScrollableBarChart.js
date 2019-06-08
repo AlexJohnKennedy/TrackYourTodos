@@ -8,13 +8,13 @@ export class ScrollableBarChart extends Component {
         let max = 0;
         let j=0;
         let i=0;
-        const completedData = this.props.stats.numCompletedArray.filter(c => j++ >= this.props.startIndex).map(c => {
+        const completedData = this.props.stats.numCompletedArray.filter(c => j++ >= this.props.startIndex && j <= this.props.stopIndex).map(c => {
             if (c > max) max = c;
             return {x: i++, y: c};
         });
         j=0;
         i=0;
-        const failedData = this.props.stats.numFailedArray.filter(f => j++ >= this.props.startIndex).map(f => {
+        const failedData = this.props.stats.numFailedArray.filter(f => j++ >= this.props.startIndex && j <= this.props.stopIndex).map(f => {
             if (f > max) max = f;
             return {x: i++, y: f}
         });

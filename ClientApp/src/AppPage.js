@@ -11,6 +11,7 @@ import { ThemeId, currThemeId } from './viewLogic/colourSetManager';
 
 import { InstantiateNewDataModelScope } from './interactionLayer/viewLayerInteractionApi';
 import { BuildDataEventHttpPostHandlers } from './interactionLayer/ajaxDataModules/ajaxDataEventPoster';
+import { setConflictingDataAction } from './interactionLayer/ajaxDataModules/ajaxErrorcaseHandlers';
 
 
 // A wrapper for the application 'page' itself, which will be rendered by react-router.
@@ -31,10 +32,13 @@ export class AppPage extends Component {
         // Access the global keyboard shortcut manager, and register the form cleanup function as 'esc' key.
         ShortCutManager.registerShortcut('Escape', this.cleanUpFormStates);
 
+        const conflictingDataAction = () => this.dataModelScope.TriggerEventLogDataRefresh();
+        setConflictingDataAction(conflictingDataAction);
+
         // All of our children will have mounted by the time we mount, thus, they should have registered their update handlers.
         // Thus, we should now trigger a 'fetch and load data' operation, since everything is now instantiated correctly.
         this.dataModelScope.RegisterForDataEvents(BuildDataEventHttpPostHandlers(this.props.failedEventCacheInstance));
-        this.dataModelScope.TriggerEventLogDataFetch();
+        this.dataModelScope.TriggerEventLogInitialDataFetch();
     }
     componentWillUnmount() {
         // Short cuts should only be active while the application page is mounted/rendered.
@@ -44,7 +48,8 @@ export class AppPage extends Component {
         // happens if React secretly maintains the un-mounted instance, we should now EXPLICITLY wipe out all registered handlers
         // as the last thing we do. Now, our children should also de-register their callbacks when they unmount, because there is
         // a chance some children will mount and un-mount independently of the AppPage itself.
-        // WARNING: No other component except the 'data model owner' (root component who passes the instance down) should do this.
+        // WARNING: No other component except the 'data model owner' (root component who passes the instance down) should 'clear all'
+        // like this!
         this.dataModelScope.ClearAllRegisteredCallbacks();
         this.dataModelScope = null;
     }
