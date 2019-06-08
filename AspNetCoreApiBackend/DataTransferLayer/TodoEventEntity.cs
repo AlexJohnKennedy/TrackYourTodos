@@ -49,6 +49,7 @@ namespace todo_app.DataTransferLayer.Entities {
     }
     internal class NotInTheFutureValidatorAttribute : ValidationAttribute {
         private long clockSkewMilliseconds;     // How many milliseconds either side we are allowing.
+        private const long ageTolerance = 5_000_000_000;
 
         public NotInTheFutureValidatorAttribute(long clockSkew) {
             this.clockSkewMilliseconds = clockSkew;
@@ -57,6 +58,7 @@ namespace todo_app.DataTransferLayer.Entities {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext) {
             long now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
             long timestampToValidate = (long)value;
+            if (timestampToValidate < now - clockSkewMilliseconds - ageTolerance) return new ValidationResult("Timestamp for an event was too old");
             return now + clockSkewMilliseconds >= timestampToValidate ? ValidationResult.Success : new ValidationResult(GetErrorMessage(timestampToValidate));
         }
         private string GetErrorMessage(long illegalTime) {
