@@ -30,7 +30,8 @@ export class BacklogSection extends Component {
     componentDidMount() {
         // Register to access and recieve updates from the ActiveTaskList from the Data-model instance handed to us.
         this.activeTaskListAPI = this.props.dataModelScope.RegisterToActiveTaskListAPI(this.handleActiveChange);
-        this.props.dataModelScope.RegisterForOnDataLoadCallback(this.handleActiveChange);
+        this.props.dataModelScope.RegisterForOnInitialDataLoadCallback(this.handleActiveChange);
+        this.props.dataModelScope.RegisterForOnDataRefreshCallback(this.handleActiveChange);
 
         ShortCutManager.registerShiftShortcut("Digit4", this.toggleFormOn);
 

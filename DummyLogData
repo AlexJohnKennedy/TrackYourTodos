@@ -2250,5 +2250,249 @@
       "parent":null,
       "children":null,
       "original":null
+   },
+   {
+      "eventType":"taskFailed",
+      "timestamp":1559919600000,
+      "id":555,
+      "name":"Fix issue where a failed token refresh does not schedule another refresh action. Need to catch error & schedule anyway?",
+      "category":2,
+      "progressStatus":4,
+      "colourId":0,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskFailed",
+      "timestamp":1559919600000,
+      "id":557,
+      "name":"Look into Handling Database concurrency issues: Ensure that simlutaneous, constradicting writes do not corrupt event lo",
+      "category":2,
+      "progressStatus":4,
+      "colourId":3,
+      "parent":545,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskFailed",
+      "timestamp":1559919600000,
+      "id":560,
+      "name":"Implement ability for a 'data refresh' action on client-side without refreshing page",
+      "category":2,
+      "progressStatus":4,
+      "colourId":1,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskFailed",
+      "timestamp":1559919600000,
+      "id":568,
+      "name":"Look into Server-Sent-Events 'push' model",
+      "category":2,
+      "progressStatus":4,
+      "colourId":3,
+      "parent":545,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskFailed",
+      "timestamp":1559919600000,
+      "id":561,
+      "name":"Make 409 error trigger the data refresh action",
+      "category":2,
+      "progressStatus":4,
+      "colourId":2,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskFailed",
+      "timestamp":1559919600000,
+      "id":567,
+      "name":"Look into Firebase/Real-time databases.",
+      "category":2,
+      "progressStatus":4,
+      "colourId":3,
+      "parent":545,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskRevived",
+      "timestamp":1559952794531,
+      "id":570,
+      "name":"Implement ability for a 'data refresh' action on client-side without refreshing page",
+      "category":2,
+      "progressStatus":0,
+      "colourId":1,
+      "parent":null,
+      "children":null,
+      "original":560
+   },
+   {
+      "eventType":"taskRevived",
+      "timestamp":1559952795879,
+      "id":571,
+      "name":"Make 409 error trigger the data refresh action",
+      "category":2,
+      "progressStatus":0,
+      "colourId":2,
+      "parent":null,
+      "children":null,
+      "original":561
+   },
+   {
+      "eventType":"taskStarted",
+      "timestamp":1559954454071,
+      "id":570,
+      "name":"Implement ability for a 'data refresh' action on client-side without refreshing page",
+      "category":2,
+      "progressStatus":1,
+      "colourId":1,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1559954485268,
+      "id":572,
+      "name":"Fix issue where zooming out on graph changes range, but zooming in does not shrink Y-range back down",
+      "category":3,
+      "progressStatus":0,
+      "colourId":0,
+      "parent":null,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskActivated",
+      "timestamp":1559955830080,
+      "id":569,
+      "name":"Fix issue where keeping the app open to the next day does not update the stats bar, which doesn't refresh and roll over",
+      "category":2,
+      "progressStatus":0,
+      "colourId":0,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskStarted",
+      "timestamp":1559955831491,
+      "id":569,
+      "name":"Fix issue where keeping the app open to the next day does not update the stats bar, which doesn't refresh and roll over",
+      "category":2,
+      "progressStatus":1,
+      "colourId":0,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCompleted",
+      "timestamp":1559955832520,
+      "id":569,
+      "name":"Fix issue where keeping the app open to the next day does not update the stats bar, which doesn't refresh and roll over",
+      "category":2,
+      "progressStatus":2,
+      "colourId":0,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskActivated",
+      "timestamp":1559955837676,
+      "id":572,
+      "name":"Fix issue where zooming out on graph changes range, but zooming in does not shrink Y-range back down",
+      "category":2,
+      "progressStatus":0,
+      "colourId":0,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskStarted",
+      "timestamp":1559955839356,
+      "id":572,
+      "name":"Fix issue where zooming out on graph changes range, but zooming in does not shrink Y-range back down",
+      "category":2,
+      "progressStatus":1,
+      "colourId":0,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCompleted",
+      "timestamp":1559956287374,
+      "id":572,
+      "name":"Fix issue where zooming out on graph changes range, but zooming in does not shrink Y-range back down",
+      "category":2,
+      "progressStatus":2,
+      "colourId":0,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskStarted",
+      "timestamp":1559963956927,
+      "id":571,
+      "name":"Make 409 error trigger the data refresh action",
+      "category":2,
+      "progressStatus":1,
+      "colourId":2,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1559964181269,
+      "id":573,
+      "name":"Add ability to 'abandon' backlog tasks",
+      "category":0,
+      "progressStatus":0,
+      "colourId":0,
+      "parent":null,
+      "children":null,
+      "original":null
    }
 ]

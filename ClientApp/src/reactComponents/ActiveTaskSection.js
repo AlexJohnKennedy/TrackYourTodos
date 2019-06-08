@@ -41,7 +41,7 @@ export class ActiveTaskSection extends Component {
         };
 
         // Register for a 'failure check' and a state-query when the Server data loads, via the Data-model scope.
-        this.props.dataModelScope.RegisterForOnDataLoadCallback(() => {
+        this.props.dataModelScope.RegisterForOnInitialDataLoadCallback(() => {
             this.initialCheck = window.setTimeout(checkAction, 2000);   // Wait 2 seconds before 'melting' the failed tasks
             this.intervalCheck = window.setInterval(() => { 
                 checkAction();
@@ -49,6 +49,7 @@ export class ActiveTaskSection extends Component {
             }, 3600000);  // Re-check for failures every hour, and refresh the statistics model every hour in case of day roll-over.
             this.handleChange();
         });
+        this.props.dataModelScope.RegisterForOnDataRefreshCallback(this.handleChange);
 
         // Initialise state of this component
         this.handleChange();

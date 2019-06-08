@@ -55,7 +55,7 @@ export function InstantiateNewDataModelScope() {
     // the current tasklist state in order to construct itself correctly. This is because the GET request does not emit dataevents for the
     // stats model to respond to: Data-events are only emitted when a NEW event is 'created' by the world; a data GET is only retrieving
     // previously-existing events.
-    const ActiveTaskDataObj = new TaskObjects();
+    let ActiveTaskDataObj = new TaskObjects();
     let StatisticsModelObj = new StatisticsModel(ActiveTaskDataObj);
     
     // Initialise all our callback containers. These are ViewLayerCallbacks, DataEventCallbacks, and OnDataLoadedFromServer callbacks
@@ -71,6 +71,7 @@ export function InstantiateNewDataModelScope() {
         taskStartedHandlers : []
     };
     const DataLoadedFromServerCallbacks = [];
+    const DataRefreshedFromServerCallbacks = [];
 
     // Setup inter-datamodel event callbacks here, since they both exist in the global interaction layer scope.
     DataEventCallbackHandlers.taskCompletedHandlers.push((task, tasklist) => StatisticsModelObj.AddCompletedTask(task));
@@ -94,10 +95,21 @@ export function InstantiateNewDataModelScope() {
     // Exported inner function: Tells the interaction layer to fetch the latest event log from the backend, and apply it to datamodel
     // upon completion. Upon completion, we will trigger the stashed DataLoadedFromServer callbacks. Thus, it is expected that any
     // client object who want to know about the data-load will have already called 'RegisterForDataLoad' before this happens.
-    function TriggerEventLogDataFetch() {
-        ScheduleEventLogUpdate(ActiveTaskDataObj, (rebuiltTaskList) => {
+    function TriggerEventLogInitialDataFetch() {
+        ScheduleEventLogUpdate(new TaskObjects(), (rebuiltTaskList) => {
+            ActiveTaskDataObj = rebuiltTaskList;
             StatisticsModelObj = new StatisticsModel(rebuiltTaskList);
             DataLoadedFromServerCallbacks.forEach(cb => {
+                cb();
+            });
+        });
+    }
+
+    function TriggerEventLogDataRefresh() {
+        ScheduleEventLogUpdate(new TaskObjects(), (rebuiltTaskList) => {
+            ActiveTaskDataObj = rebuiltTaskList;
+            StatisticsModelObj = new StatisticsModel(rebuiltTaskList);
+            DataRefreshedFromServerCallbacks.forEach(cb => {
                 cb();
             });
         });
@@ -116,9 +128,14 @@ export function InstantiateNewDataModelScope() {
         DataEventCallbackHandlers.taskStartedHandlers.push(dataEventhandlers.taskStartedHandler);
     }
 
-    // Exported inner function: Allows clients to register for callbacks when a state-rebuild from server data is completed
-    function RegisterForOnDataLoadCallback(callback) {
+    // Exported inner function: Allows clients to register for callbacks when an INITIAL state-build from server data is completed.
+    function RegisterForOnInitialDataLoadCallback(callback) {
         DataLoadedFromServerCallbacks.push(callback);
+    }
+
+    // Exported inner function: Allows clients to register for callbacks when a state-rebuild from a data REFRESH is completed.
+    function RegisterForOnDataRefreshCallback(callback) {
+        DataRefreshedFromServerCallbacks.push(callback);
     }
 
     // Exported inner function: Allows clients to register to the ActiveTaskList object directly, allowing them to subsequently query tasks,
@@ -216,9 +233,11 @@ export function InstantiateNewDataModelScope() {
     }
 
     return Object.freeze({
-        TriggerEventLogDataFetch : TriggerEventLogDataFetch,
+        TriggerEventLogInitialDataFetch : TriggerEventLogInitialDataFetch,
+        TriggerEventLogDataRefresh : TriggerEventLogDataRefresh,
         RegisterForDataEvents : RegisterForDataEvents,
-        RegisterForOnDataLoadCallback : RegisterForOnDataLoadCallback,
+        RegisterForOnInitialDataLoadCallback : RegisterForOnInitialDataLoadCallback,
+        RegisterForOnDataRefreshCallback : RegisterForOnDataRefreshCallback,
         RegisterToActiveTaskListAPI : RegisterToActiveTaskListAPI,
         RegisterForStatisticsModel : RegisterForStatisticsModel,
         ClearAllRegisteredCallbacks : ClearAllRegisteredCallbacks,
