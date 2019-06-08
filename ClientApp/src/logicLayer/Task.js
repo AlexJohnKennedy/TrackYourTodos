@@ -108,7 +108,6 @@ export class TaskObjects {
         else {
             this.tasks.push(newTask);
         }
-        console.log(newTask);
         return newTask;
     }
     
