@@ -10,10 +10,12 @@ export const PUT_NEW_TASKS_AT_TOP_OF_LIST = false;
 // Character limit for text fields of an item.
 export const MAX_TASK_NAME_LEN = 120;
 
+export const MAX_CONTEXT_NAME_LEN = 30;
+
 export const DEFAULT_GLOBAL_CONTEXT_STRING = "global";  // Context strings are NOT case sensitive.
 
 function isValidContextString(s) {
-    if (s === undefined || s === null || s === "") return false;
+    if (s === undefined || s === null || s === "" || s.length > MAX_CONTEXT_NAME_LEN) return false;
 
     // TODO: Alpha numeric check, no whitespace check
 

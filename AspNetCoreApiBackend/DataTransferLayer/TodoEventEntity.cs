@@ -63,6 +63,20 @@ namespace todo_app.DataTransferLayer.Entities {
             return $"Timestamp of {illegalTime} unix epoch milliseconds represented a value in the future; our system doesn't allow events to be saved that have not happened yet";
         }
     }
+    internal class AlphaNumericSpacesAllowed : ValidationAttribute {
+        protected override ValidationResult IsValid(object value, ValidationContext validationContext) {
+            string s = (string)value;
+            // If the string is not trimmed, we should reject it. I.e. leading or trailing whitespace is not allowed!
+            if (s.Length == 0) { return new ValidationResult("Context strings cannot be empty"); }
+            if (!s.Equals(s.Trim())) { return new ValidationResult("Leading or trailing whitespace is not allowed for context strings! Trim them before sending to API."); }
+            foreach (char c in s.ToCharArray()) {
+                if (!char.IsLetterOrDigit(c) && !c.Equals(' ')) {
+                    return new ValidationResult("Only letters, numbers and spaces are allowed in the context string");
+                }
+            }
+            return ValidationResult.Success;
+        }
+    }
 
     // Mapping of validation predicates depending on the event type.
     internal static class EventTypeSpecificValidators {
@@ -133,7 +147,12 @@ namespace todo_app.DataTransferLayer.Entities {
 
         [Required]
         public int ColourId { get; set; }
-        
+
+        [Required]
+        [StringLength(30, MinimumLength = 1)]
+        [AlphaNumericSpacesAllowed]
+        public string Context { get; set; }
+
         public Guid? Parent { get; set; }        // Nullable, since some event types do not support this.
         public Guid[] Children { get; set; }
         public Guid? Original { get; set; }      // Nullable, since some event types do not support this.
