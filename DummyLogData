@@ -2292,5 +2292,207 @@
       "parent":null,
       "children":null,
       "original":null
+   },
+   {
+      "eventType":"taskCompleted",
+      "timestamp":1559987276039,
+      "id":"49cf7aeb-a425-4d52-aa0d-ca0b63a37fec",
+      "name":"Implement ability for a 'data refresh' action on client-side without refreshing page",
+      "category":2,
+      "progressStatus":2,
+      "colourId":1,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCompleted",
+      "timestamp":1559987279374,
+      "id":"3311377d-5462-48ff-a5ae-0a78141d9a99",
+      "name":"Make 409 error trigger the data refresh action",
+      "category":2,
+      "progressStatus":2,
+      "colourId":2,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskStarted",
+      "timestamp":1559987337895,
+      "id":"b16bc768-33e4-4e7c-9582-443978d9e926",
+      "name":"Add 'Context switching' mechanism to app",
+      "category":0,
+      "progressStatus":1,
+      "colourId":1,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"subtaskCreated",
+      "timestamp":1559987346801,
+      "id":"43ff592f-119c-40da-98f5-d4362f6b1d08",
+      "name":"Design react state flow for context switching",
+      "category":2,
+      "progressStatus":0,
+      "colourId":1,
+      "parent":"b16bc768-33e4-4e7c-9582-443978d9e926",
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskStarted",
+      "timestamp":1559987348223,
+      "id":"43ff592f-119c-40da-98f5-d4362f6b1d08",
+      "name":"Design react state flow for context switching",
+      "category":2,
+      "progressStatus":1,
+      "colourId":1,
+      "parent":"b16bc768-33e4-4e7c-9582-443978d9e926",
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"subtaskCreated",
+      "timestamp":1559987368715,
+      "id":"ec0ac215-7a95-4dfa-852e-0599862b9c8e",
+      "name":"design domain layer implications for context switching & server side validations",
+      "category":2,
+      "progressStatus":0,
+      "colourId":1,
+      "parent":"b16bc768-33e4-4e7c-9582-443978d9e926",
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskStarted",
+      "timestamp":1559987370650,
+      "id":"ec0ac215-7a95-4dfa-852e-0599862b9c8e",
+      "name":"design domain layer implications for context switching & server side validations",
+      "category":2,
+      "progressStatus":1,
+      "colourId":1,
+      "parent":"b16bc768-33e4-4e7c-9582-443978d9e926",
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCompleted",
+      "timestamp":1559987371752,
+      "id":"ec0ac215-7a95-4dfa-852e-0599862b9c8e",
+      "name":"design domain layer implications for context switching & server side validations",
+      "category":2,
+      "progressStatus":2,
+      "colourId":1,
+      "parent":"b16bc768-33e4-4e7c-9582-443978d9e926",
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCompleted",
+      "timestamp":1559987372388,
+      "id":"43ff592f-119c-40da-98f5-d4362f6b1d08",
+      "name":"Design react state flow for context switching",
+      "category":2,
+      "progressStatus":2,
+      "colourId":1,
+      "parent":"b16bc768-33e4-4e7c-9582-443978d9e926",
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1559987408656,
+      "id":"7e01c821-5967-40c2-85b8-c00bc8866253",
+      "name":"Upgrade client side task id generation to use UUIDs instead of ints so that multiple devices and contexts can use them",
+      "category":2,
+      "progressStatus":0,
+      "colourId":0,
+      "parent":null,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskStarted",
+      "timestamp":1559987410266,
+      "id":"7e01c821-5967-40c2-85b8-c00bc8866253",
+      "name":"Upgrade client side task id generation to use UUIDs instead of ints so that multiple devices and contexts can use them",
+      "category":2,
+      "progressStatus":1,
+      "colourId":0,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCompleted",
+      "timestamp":1559987411120,
+      "id":"7e01c821-5967-40c2-85b8-c00bc8866253",
+      "name":"Upgrade client side task id generation to use UUIDs instead of ints so that multiple devices and contexts can use them",
+      "category":2,
+      "progressStatus":2,
+      "colourId":0,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCreated",
+      "timestamp":1559987448639,
+      "id":"d7a48f4f-310c-4f09-bac8-de2fcdc0a2ce",
+      "name":"update dummy log",
+      "category":2,
+      "progressStatus":0,
+      "colourId":1,
+      "parent":null,
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskStarted",
+      "timestamp":1559987451023,
+      "id":"d7a48f4f-310c-4f09-bac8-de2fcdc0a2ce",
+      "name":"update dummy log",
+      "category":2,
+      "progressStatus":1,
+      "colourId":1,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCompleted",
+      "timestamp":1559987451893,
+      "id":"d7a48f4f-310c-4f09-bac8-de2fcdc0a2ce",
+      "name":"update dummy log",
+      "category":2,
+      "progressStatus":2,
+      "colourId":1,
+      "parent":null,
+      "children":[
+
+      ],
+      "original":null
    }
 ]
