@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { RadialSummaryBlock } from './RadialSummaryBlock';
-import { SelectableChildrenWithController } from './SelectableChildrenWithController';
-import { ScrollableBarChart } from './ScrollableBarChart';
+import { RadialSummaryBlock } from '../RadialSummaryBlock';
+import { SelectableChildrenWithController } from '../SelectableChildrenWithController';
+import { ScrollableBarChart } from '../ScrollableBarChart';
 
 export class TaskStatisticsSection extends Component {
     constructor(props) {

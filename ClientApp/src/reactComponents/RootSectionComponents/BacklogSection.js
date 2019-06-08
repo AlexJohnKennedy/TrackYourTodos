@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { NavigationStateWrapper } from './NavigationTabs';
-import { Category } from '../logicLayer/Task';
-import { TaskList } from './TaskList';
-import { CreationForm } from './CreationForm';
+import { NavigationStateWrapper } from '../NavigationTabs';
+import { Category } from '../../logicLayer/Task';
+import { TaskList } from '../TaskList';
+import { CreationForm } from '../CreationForm';
 
-import { ShortCutManager } from '../viewLogic/keyboardShortcutHandler';
-import { ColourIdTracker } from '../viewLogic/colourSetManager';
+import { ShortCutManager } from '../../viewLogic/keyboardShortcutHandler';
+import { ColourIdTracker } from '../../viewLogic/colourSetManager';
 
 
 export class BacklogSection extends Component {

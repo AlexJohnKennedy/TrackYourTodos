@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { GoogleSignInButton } from './reactComponents/GoogleSignInButton';
+import { GoogleSignInButton } from '../GoogleSignInButton';
 
 // A simple page with a bog box, and a single Google sign in button.
 export class LoginPage extends Component {

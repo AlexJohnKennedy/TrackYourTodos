@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
-import { ActiveTaskSection } from './reactComponents/ActiveTaskSection';
-import { TaskStatisticsSection } from './reactComponents/TaskStatisticsSection';
-import { BacklogSection } from './reactComponents/BacklogSection';
-import { Footer } from './reactComponents/Footer';
-import { Header } from './reactComponents/Header';
+import { ActiveTaskSection } from '../RootSectionComponents/ActiveTaskSection';
+import { TaskStatisticsSection } from '../RootSectionComponents/TaskStatisticsSection';
+import { BacklogSection } from '../RootSectionComponents/BacklogSection';
+import { Footer } from '../Footer';
+import { Header } from '../Header';
 
-import { TemporaryStateManager } from './viewLogic/temporaryStateManager';
-import { ShortCutManager } from './viewLogic/keyboardShortcutHandler';
-import { ThemeId, currThemeId } from './viewLogic/colourSetManager';
+import { TemporaryStateManager } from '../../viewLogic/temporaryStateManager';
+import { ShortCutManager } from '../../viewLogic/keyboardShortcutHandler';
+import { ThemeId, currThemeId } from '../../viewLogic/colourSetManager';
 
-import { InstantiateNewDataModelScope } from './interactionLayer/viewLayerInteractionApi';
-import { BuildDataEventHttpPostHandlers } from './interactionLayer/ajaxDataModules/ajaxDataEventPoster';
-import { setConflictingDataAction } from './interactionLayer/ajaxDataModules/ajaxErrorcaseHandlers';
+import { InstantiateNewDataModelScope } from '../../interactionLayer/viewLayerInteractionApi';
+import { BuildDataEventHttpPostHandlers } from '../../interactionLayer/ajaxDataModules/ajaxDataEventPoster';
+import { setConflictingDataAction } from '../../interactionLayer/ajaxDataModules/ajaxErrorcaseHandlers';
 
 
 // A wrapper for the application 'page' itself, which will be rendered by react-router.

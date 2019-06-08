@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Category } from '../logicLayer/Task';
-import { GoalBoard, WeeklyBoard, DailyBoard } from './Board';
-import { ColourIdTracker } from '../viewLogic/colourSetManager';
+import { Category } from '../../logicLayer/Task';
+import { GoalBoard, WeeklyBoard, DailyBoard } from '../Board';
+import { ColourIdTracker } from '../../viewLogic/colourSetManager';
 
 export class ActiveTaskSection extends Component {
     constructor(props) {
