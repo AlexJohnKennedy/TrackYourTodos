@@ -1,6 +1,7 @@
 // This file defines the basic object-prototype for any item on any list.
 // We will call these items a 'Task', and they will self contain all their state data.
 import { TimeGroupTypes, BuildNewTimeGroupedTaskList } from './dateGroupTaskList';
+import NewUuid from 'uuid/v4';
 
 /* Global settings */
 
@@ -37,11 +38,15 @@ function DowngradeCategory(category) {
     }
 }
 
-// TODO: Replace this will a persistence-safe method of acquiring a unique, new id value!
-let GetNewId = ((startVal) => () => startVal++)(0);
+//let GetNewId = ((startVal) => () => startVal++)(0);
+//export function SetIdStartVal(newStartVal) {
+//    GetNewId = ((startVal) => () => startVal++)(newStartVal);
+//} 
+
+let GetNewId = () => NewUuid();
 export function SetIdStartVal(newStartVal) {
-    GetNewId = ((startVal) => () => startVal++)(newStartVal);
-} 
+    /* do nothing, since we are using v4 uuids for now! */
+}
 
 export class TaskObjects {
     constructor() {

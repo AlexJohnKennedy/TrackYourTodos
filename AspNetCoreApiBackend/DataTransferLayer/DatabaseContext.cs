@@ -20,7 +20,7 @@ namespace todo_app.DataTransferLayer.DatabaseContext {
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
             modelBuilder.Entity<GenericTodoEvent>().Property(e => e.Children).HasConversion(
                 intArray => string.Join(",", intArray),
-                commaSeparatedString => commaSeparatedString.Split(",", StringSplitOptions.RemoveEmptyEntries).Select(s => int.Parse(s)).ToArray()
+                commaSeparatedString => commaSeparatedString.Split(",", StringSplitOptions.RemoveEmptyEntries).Select(s => Guid.Parse(s)).ToArray()
             );
         }
     }

@@ -54,16 +54,16 @@ namespace todo_app.DomainLayer.TaskListModel {
     // Collection of tasks.
     public class TaskList {
         // Store all tasks, mapped by ID
-        private Dictionary<int, Task> allTasks;
-        private Dictionary<int, Task> activeTasks;    // Goals, Weekly, Daily, and Deferred.
-        private Dictionary<int, Task> failedTasks;    // Graveyard.
-        private Dictionary<int, Task> completedTasks; // Completed.
+        private Dictionary<Guid, Task> allTasks;
+        private Dictionary<Guid, Task> activeTasks;    // Goals, Weekly, Daily, and Deferred.
+        private Dictionary<Guid, Task> failedTasks;    // Graveyard.
+        private Dictionary<Guid, Task> completedTasks; // Completed.
 
         // Reader funcs
-        public Func<int, Task> AllTaskReader { get { return i => allTasks.ContainsKey(i) ? allTasks[i] : null; } }
-        public Func<int, Task> ActiveTaskReader { get { return i => activeTasks.ContainsKey(i) ? activeTasks[i] : null; } }
-        public Func<int, Task> FailedTaskReader { get { return i => failedTasks.ContainsKey(i) ? failedTasks[i] : null; } }
-        public Func<int, Task> CompletedTaskReader { get { return i => completedTasks.ContainsKey(i) ? completedTasks[i] : null; } }
+        public Func<Guid, Task> AllTaskReader { get { return i => allTasks.ContainsKey(i) ? allTasks[i] : null; } }
+        public Func<Guid, Task> ActiveTaskReader { get { return i => activeTasks.ContainsKey(i) ? activeTasks[i] : null; } }
+        public Func<Guid, Task> FailedTaskReader { get { return i => failedTasks.ContainsKey(i) ? failedTasks[i] : null; } }
+        public Func<Guid, Task> CompletedTaskReader { get { return i => completedTasks.ContainsKey(i) ? completedTasks[i] : null; } }
         public IEnumerable<Task> AllTasks { get { return allTasks.Values; } }
         public IEnumerable<Task> ActiveTasks { get { return activeTasks.Values; } }
         public IEnumerable<Task> FailedTasks { get { return failedTasks.Values; } }
@@ -73,20 +73,20 @@ namespace todo_app.DomainLayer.TaskListModel {
         // 'playing' the entire event log. Note in future we will have a constructor allowing snap-shot
         // rebuilds.
         public TaskList() {
-            allTasks       = new Dictionary<int, Task>();
-            activeTasks    = new Dictionary<int, Task>();
-            failedTasks    = new Dictionary<int, Task>();
-            completedTasks = new Dictionary<int, Task>();
+            allTasks       = new Dictionary<Guid, Task>();
+            activeTasks    = new Dictionary<Guid, Task>();
+            failedTasks    = new Dictionary<Guid, Task>();
+            completedTasks = new Dictionary<Guid, Task>();
         }
         
-        public Task CreateNewIndependentTask(string name, int category, long timeCreatedUnix, int coulourId, int id) {
+        public Task CreateNewIndependentTask(string name, int category, long timeCreatedUnix, int coulourId, Guid id) {
             TaskParamValidationHelpers.BasicNewTaskParameterValidation(name, category, timeCreatedUnix, id, allTasks.Keys.ToHashSet());
             Task t = new Task(id, name, category, null, timeCreatedUnix);
             allTasks.Add(id, t);
             activeTasks.Add(id, t);
             return t;
         }
-        public Task CreateNewSubtask(string name, Task parent, int category, long timeCreatedUnix, int id) {
+        public Task CreateNewSubtask(string name, Task parent, int category, long timeCreatedUnix, Guid id) {
             TaskParamValidationHelpers.BasicNewTaskParameterValidation(name, category, timeCreatedUnix, id, allTasks.Keys.ToHashSet());
             Task t = new Task(id, name, category, parent, timeCreatedUnix);
             parent.AddChild(t);
@@ -138,7 +138,7 @@ namespace todo_app.DomainLayer.TaskListModel {
             t.ProgressStatus = ProgressStatusVals.Started;
             t.EventTimeStamps.TimeStarted = timeStamp;
         }
-        public void ReviveTaskAsClone(Task original, bool reviveAsActive, long timeStamp, int id) {
+        public void ReviveTaskAsClone(Task original, bool reviveAsActive, long timeStamp, Guid id) {
             if (original.ProgressStatus != ProgressStatusVals.Failed) throw new InvalidOperationException("Cannot revive a task which is not failed! Task.Id: " + original.Id);
             original.ProgressStatus = ProgressStatusVals.Reattempted;
             original.EventTimeStamps.TimeRevived = timeStamp;
@@ -150,7 +150,7 @@ namespace todo_app.DomainLayer.TaskListModel {
 
     // A Task object containing data.
     public class Task {
-        public int Id { get; }
+        public Guid Id { get; }
         public string Name { get; }
         public int Category { get; set; }
         public int ProgressStatus { get; set; }
@@ -159,7 +159,7 @@ namespace todo_app.DomainLayer.TaskListModel {
         public IList<Task> Children { get; set; }
         public EventTimeStamps EventTimeStamps { get; }
         
-        public Task(int id, string name, int category, Task parent, long timeCreatedUnix) {
+        public Task(Guid id, string name, int category, Task parent, long timeCreatedUnix) {
             this.Id = id;
             this.Name = name;
             this.Category = category;
@@ -198,14 +198,14 @@ namespace todo_app.DomainLayer.TaskListModel {
     }
 
     internal static class TaskParamValidationHelpers {
-        public static void BasicNewTaskParameterValidation(string name, int category, long timeCreatedUnix, int id, ISet<int> existingIds) {
+        public static void BasicNewTaskParameterValidation(string name, int category, long timeCreatedUnix, Guid id, ISet<Guid> existingIds) {
             TaskIdUniquenessCheck(id, existingIds);
             if (!CategoryVals.ValidValues.Contains(category) || string.IsNullOrWhiteSpace(name) || timeCreatedUnix < 0) {
                 throw new InvalidOperationException("Invalid data passed for a New Independent Task. Come on, this is easy to validate mate.");
             }
             
         }
-        public static void TaskIdUniquenessCheck(int id, ISet<int> existingIds) {
+        public static void TaskIdUniquenessCheck(Guid id, ISet<Guid> existingIds) {
             if (existingIds.Contains(id)) {
                 throw new InvalidOperationException("Invalid id for new task. This ID is already present!");
             }

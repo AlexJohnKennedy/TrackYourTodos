@@ -37,7 +37,7 @@ class App extends Component {
 
   componentDidMount() {
     console.log("Application is mounting!");
-
+    
     // Register to receive a callback when google auth loads up. Doing this before polling the load, so that weird races don't happen.
     window.registerForGapiLoadedCallback(this.respondToGapiLoad);
 

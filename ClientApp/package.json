@@ -6,7 +6,8 @@
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
     "react-scripts": "2.1.8",
-    "react-vis": "^1.11.7"
+    "react-vis": "^1.11.7",
+    "uuid": "^3.3.2"
   },
   "scripts": {
     "start": "react-scripts start",
