@@ -21,7 +21,7 @@ export class AppPage extends Component {
         super(props);
         
         // Whenever this page is constructed, we will re-instantiate a fresh scope and data model instance to pass to our children.
-        this.dataModelScope = InstantiateNewDataModelScope();
+        this.dataModelScope = InstantiateNewDataModelScope( /* TODO: Pass in from props */ );
 
         // Create a temporary state context for creation forms
         this.formStateManager = TemporaryStateManager();

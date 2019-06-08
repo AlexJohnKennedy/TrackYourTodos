@@ -2494,5 +2494,121 @@
 
       ],
       "original":null
+   },
+   {
+      "eventType":"subtaskCreated",
+      "timestamp":1559992308317,
+      "id":"f5cdfe34-baa9-4773-a16c-0df1f9b4c147",
+      "name":"Implement a 'Context' string field in domain layer, and serialise it to dataevents",
+      "category":2,
+      "progressStatus":0,
+      "colourId":1,
+      "parent":"b16bc768-33e4-4e7c-9582-443978d9e926",
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"subtaskCreated",
+      "timestamp":1559992333732,
+      "id":"e1274ac2-e862-4a0a-b73a-dd2a8fe44b4d",
+      "name":"Implement ability to rebuild state including context strings",
+      "category":2,
+      "progressStatus":0,
+      "colourId":1,
+      "parent":"b16bc768-33e4-4e7c-9582-443978d9e926",
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"subtaskCreated",
+      "timestamp":1559992496639,
+      "id":"9c76ae76-e57e-4a1c-bf12-bd9f5a8a00cb",
+      "name":"Implement context string required field in ServerEntity, and validate that task context's never change",
+      "category":2,
+      "progressStatus":0,
+      "colourId":1,
+      "parent":"b16bc768-33e4-4e7c-9582-443978d9e926",
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"subtaskCreated",
+      "timestamp":1559992575914,
+      "id":"8e9c8138-e904-4fd8-998c-836cfc663e36",
+      "name":"Create 'ContextState' component which passes in 1. Curr context, 2. visible contexts, 3. available contexts to AppPage",
+      "category":2,
+      "progressStatus":0,
+      "colourId":1,
+      "parent":"b16bc768-33e4-4e7c-9582-443978d9e926",
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"subtaskCreated",
+      "timestamp":1559992618304,
+      "id":"b88b38df-27af-4920-9108-498eba701018",
+      "name":"DataModelScope instance tasks 'curr context' parameter, which automatically is assigned to newly created tasks",
+      "category":1,
+      "progressStatus":0,
+      "colourId":1,
+      "parent":"b16bc768-33e4-4e7c-9582-443978d9e926",
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"taskStarted",
+      "timestamp":1559992756001,
+      "id":"f5cdfe34-baa9-4773-a16c-0df1f9b4c147",
+      "name":"Implement a 'Context' string field in domain layer, and serialise it to dataevents",
+      "category":2,
+      "progressStatus":1,
+      "colourId":1,
+      "parent":"b16bc768-33e4-4e7c-9582-443978d9e926",
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskStarted",
+      "timestamp":1559993602233,
+      "id":"9c76ae76-e57e-4a1c-bf12-bd9f5a8a00cb",
+      "name":"Implement context string required field in ServerEntity, and validate that task context's never change",
+      "category":2,
+      "progressStatus":1,
+      "colourId":1,
+      "parent":"b16bc768-33e4-4e7c-9582-443978d9e926",
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCompleted",
+      "timestamp":1559994702346,
+      "id":"f5cdfe34-baa9-4773-a16c-0df1f9b4c147",
+      "name":"Implement a 'Context' string field in domain layer, and serialise it to dataevents",
+      "category":2,
+      "progressStatus":2,
+      "colourId":1,
+      "parent":"b16bc768-33e4-4e7c-9582-443978d9e926",
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCompleted",
+      "timestamp":1559996794528,
+      "id":"9c76ae76-e57e-4a1c-bf12-bd9f5a8a00cb",
+      "name":"Implement context string required field in ServerEntity, and validate that task context's never change",
+      "category":2,
+      "progressStatus":2,
+      "colourId":1,
+      "parent":"b16bc768-33e4-4e7c-9582-443978d9e926",
+      "children":[
+
+      ],
+      "original":null
    }
 ]
