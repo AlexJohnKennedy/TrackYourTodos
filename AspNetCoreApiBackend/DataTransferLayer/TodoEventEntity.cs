@@ -67,7 +67,7 @@ namespace todo_app.DataTransferLayer.Entities {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext) {
             string s = (string)value;
             // If the string is not trimmed, we should reject it. I.e. leading or trailing whitespace is not allowed!
-            if (s.Length == 0) { return new ValidationResult("Context strings cannot be empty"); }
+            if (s == null || s.Length == 0) { return new ValidationResult("Context strings cannot be empty"); }
             if (!s.Equals(s.Trim())) { return new ValidationResult("Leading or trailing whitespace is not allowed for context strings! Trim them before sending to API."); }
             foreach (char c in s.ToCharArray()) {
                 if (!char.IsLetterOrDigit(c) && !c.Equals(' ')) {
@@ -150,7 +150,7 @@ namespace todo_app.DataTransferLayer.Entities {
 
         [Required]
         [StringLength(30, MinimumLength = 1)]
-        [AlphaNumericSpacesAllowed]
+        //[AlphaNumericSpacesAllowed]   // TODO: Fix this validator. It's causing some whack issues at the moment, and I don't know why
         public string Context { get; set; }
 
         public Guid? Parent { get; set; }        // Nullable, since some event types do not support this.
