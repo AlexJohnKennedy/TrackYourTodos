@@ -55,7 +55,7 @@ function replayEvent(event, tasklist, taskMap) {
 // Specific Handlers
 function replayTaskAddedEvent(eventData, tasklist, taskMap) {
     if (eventData.parent !== null) throw new Error("Invalid event state: Tried to add a new independent task but event data state the new task already had a parent!");
-    taskMap.set(eventData.id, tasklist.CreateNewIndependentTask(eventData.name, eventData.category, eventData.timestamp, eventData.colourId, eventData.id));
+    taskMap.set(eventData.id, tasklist.CreateNewIndependentTask(eventData.name, eventData.category, eventData.timestamp, eventData.context, eventData.colourId, eventData.id));
 }
 function replayChildTaskAddedEvent(eventData, tasklist, taskMap) {
     if (eventData.parent === null) throw new Error("Invalid event state: Tried to add a child, but the eventData stated the task had no parent");

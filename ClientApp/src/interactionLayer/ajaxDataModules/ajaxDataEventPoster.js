@@ -24,6 +24,7 @@ export function RetryPostingFailedEvents(failureCacheInstance) {
 
 function postEvent(eventText, failureCache, retryCount, logoutOnAuthFailure, sendFromFailureCache) {
     console.log("Ajax POST request scheduled! Send from failure cache flag = " + sendFromFailureCache);
+    //console.log(eventText);
     
     // Build the message body array, depending on incoming message and failure cache state.
     let eventArray = [];

@@ -96,7 +96,7 @@ export class TaskObjects {
     }
 
     // Creates a parentless task, in a specified category!
-    CreateNewIndependentTask(name, category, timeCreatedUNIX, colourid = DefaultColourId, id = null, context = DEFAULT_GLOBAL_CONTEXT_STRING) {
+    CreateNewIndependentTask(name, category, timeCreatedUNIX, context = DEFAULT_GLOBAL_CONTEXT_STRING, colourid = DefaultColourId, id = null) {
         if (id === null || id === undefined) {
             id = GetNewId();
         }
@@ -108,7 +108,7 @@ export class TaskObjects {
         else {
             this.tasks.push(newTask);
         }
-
+        
         return newTask;
     }
     
@@ -205,7 +205,7 @@ export class TaskObjects {
         let category = asActive ? task.category : Category.Deferred;
         task.progressStatus = ProgressStatus.Reattempted;   // Signal that this task has been revived. We only want to be able to do this once per failure.
         task.eventTimestamps.timeRevived = timeRevivedUNIX;
-        return this.CreateNewIndependentTask(task.name, category, timeRevivedUNIX, task.colourid, id, task.context);
+        return this.CreateNewIndependentTask(task.name, category, timeRevivedUNIX, task.context, task.colourid, id);
     }
 }
 
