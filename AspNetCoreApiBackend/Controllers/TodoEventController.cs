@@ -55,6 +55,8 @@ namespace todo_app.Controllers {
 
         // A POST request to the todoevent endpoint will pass in a log of new events to use. Most often, this will just be
         // a single event, but the API will support an array of events, such that clients can implement batch-sending if needed.
+        // After a successful save, this endpoint always returns the full, verified event log. I.e., exactly what will be returned
+        // be the GET endpoint immediately after this POST completed. This allows the client POSTer to verify the results of the POST.
         [Authorize]
         [EnableCors("UserFacingApplications")]
         [HttpPost("/todoevents")]
@@ -71,13 +73,17 @@ namespace todo_app.Controllers {
             List<GenericTodoEvent> savedEvents = await dbContext.TodoEvents.Where(e => e.UserId.Equals(userId)).OrderBy(e => e.Timestamp).ToListAsync();
             IEnumerable<GenericTodoEvent> duplicates = savedEvents.Where(e => compositeKeyset.Contains(new { e.Id, e.Timestamp, e.EventType }));
 
-            if (duplicates.Count() == 0) {
+            int count = duplicates.Count();
+            if (count == 0) {
                 return await ValidateAndSave(newEvents, savedEvents);
             }
-            else {
+            else if (count < newEvents.Count) {
                 var duplicateSet = duplicates.Select(e => new { e.Id, e.Timestamp, e.EventType }).ToHashSet();
                 var nonDups = newEvents.Where(e => !duplicateSet.Contains(new { e.Id, e.Timestamp, e.EventType })).ToList();
                 return await ValidateAndSave(nonDups, savedEvents);
+            }
+            else {
+                return Ok(savedEvents);
             }
         }
         private async Task<IActionResult> ValidateAndSave(IList<GenericTodoEvent> newEvents, IList<GenericTodoEvent> savedEvents) {
@@ -91,9 +97,8 @@ namespace todo_app.Controllers {
             
             dbContext.TodoEvents.AddRange(newEvents);
             await dbContext.SaveChangesAsync();
-            return Ok(newEvents);
+            return Ok(savedEvents.Concat(newEvents).OrderBy(e => e.Timestamp));
         }
-
 
         private void PrintClaimsPrincipal(ClaimsPrincipal userDetails) {
             logger.LogDebug(" ---> Logging User details <--- ");
