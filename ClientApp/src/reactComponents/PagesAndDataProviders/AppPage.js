@@ -22,8 +22,6 @@ export class AppPage extends Component {
     constructor(props) {
         super(props);
 
-        console.log("AppPage constructor");
-
         this.state = {
             currentContext: DEFAULT_GLOBAL_CONTEXT_STRING,
             visibleContexts: [],     // Empty means that global is being rendered. Must be empty since we havne't loaded anything yet.
@@ -48,8 +46,6 @@ export class AppPage extends Component {
         this.state.dataModelScope.TriggerEventLogInitialDataFetch(this.state.visibleContexts);
     }
     componentDidMount() {
-        console.log("AppPage mounted");
-
         // Access the global keyboard shortcut manager, and register the form cleanup function as 'esc' key.
         ShortCutManager.registerShortcut('Escape', this.cleanUpFormStates);
 
@@ -59,8 +55,6 @@ export class AppPage extends Component {
         setTimeout(action, 8000); 
     }
     componentWillUnmount() {
-        console.log("AppPage AppPage unmounted");
-
         // Short cuts should only be active while the application page is mounted/rendered.
         ShortCutManager.clearAllShortcuts();
 
@@ -73,7 +67,6 @@ export class AppPage extends Component {
         this.state.dataModelScope.ClearAllRegisteredCallbacks();
     }
     componentDidUpdate(prevProps, prevState, snapshot) {
-        console.log("AppPage did-update");
         if (prevState.dataModelScope !== this.state.dataModelScope) {
             this.setupInitialDataFetch();
         }
@@ -145,9 +138,6 @@ export class AppPage extends Component {
 
 
     render() {
-        console.log("AppPage render");
-
-
         return (
             // Return each 'section' of the app as siblings, so that the root div can arrange them using CSS Grid!
             <ThemeId.Provider value={{ themeId: currThemeId }}>

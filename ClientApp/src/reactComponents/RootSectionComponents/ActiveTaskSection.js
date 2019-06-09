@@ -7,8 +7,6 @@ export class ActiveTaskSection extends Component {
     constructor(props) {
         super(props);
 
-        console.log("ActiveTaskSection constructor");
-
         this.taskMap = null;    // This will be a map of taskViews based on id.
         this.state = {
             goalTaskViews : [],
@@ -60,24 +58,17 @@ export class ActiveTaskSection extends Component {
         this.handleChange();
     }
     componentDidMount() {
-        console.log("ActiveTaskSection mounted");
         this.setupWithNewDataModelInstance();
     }
     componentDidUpdate(prevProps, prevState, snapshot) {
-        console.log("ACTIVE TASKS FUCKING UPDATED");
         if (prevProps.dataModelScope !== this.props.dataModelScope) {
             console.log("ActiveTasksSection got a newly instantiated data-model. We need to refresh our registrations, and re-render!");
             this.setupWithNewDataModelInstance();
         }
     }
     componentWillUnmount() {
-        console.log("ActiveTaskSection unmounted");
-
-
         window.clearInterval(this.intervalCheck);
         window.clearTimeout(this.initialCheck);
-
-        // TODO: IMPLEMENT DE-REGISTER CAPABILITY, AND PERFORM IT HERE!
     }
     
     
@@ -170,8 +161,6 @@ export class ActiveTaskSection extends Component {
 
     // Render the child elements and pass in the correct callbacks and taskviews from our react-state.
     render() {
-        console.log("ActiveTaskSection render");
-
         return (
             <div className="ActiveTaskSection">
                 <GoalBoard 
