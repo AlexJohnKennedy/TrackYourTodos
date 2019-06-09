@@ -5,10 +5,15 @@ export class Header extends Component {
         // Get access to the Google Auth api, in order to gain access to profile information
         const basicProfile = window.gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile();
         const capitaliseFirstLetter = s => s.charAt(0).toUpperCase() + s.slice(1);
+        let availableContextsConcatString = this.props.availableContexts.map(s => capitaliseFirstLetter(s)).reduce((curr, s) => curr + s + ", ", "All contexts: ");
+        availableContextsConcatString = availableContextsConcatString.substring(0, availableContextsConcatString.length - 2);
 
         return (
             <div className="Header">
-                <div className="context"> Current context: {capitaliseFirstLetter(this.props.currentContext)} </div>
+                <div className="contextListings">
+                    <div className="context"> Current context: {capitaliseFirstLetter(this.props.currentContext)} </div>
+                    <div className="allContexts"> {availableContextsConcatString} </div>
+                </div>
                 <div className="userDetails">
                     <div className="greetingText"> Hi, {basicProfile.getGivenName()} </div>
                     <div className="signOutButton" onClick={this.props.onSignOut}>

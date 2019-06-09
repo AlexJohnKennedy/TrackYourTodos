@@ -5,9 +5,19 @@
     padding-right: 0.6rem;
 }
 
+.contextListings {
+    display: inline-flex;
+}
+
 .context {
     font-size: 2rem;
-    margin-left: 0.5rem;
+    margin-top: 0.15rem;
+}
+
+.allContexts {
+    font-size: 1.4rem;
+    margin-top: 0.75rem;
+    margin-left: 3rem;
 }
 
 .userDetails {
