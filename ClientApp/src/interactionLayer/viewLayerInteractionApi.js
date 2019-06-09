@@ -103,8 +103,8 @@ export function InstantiateNewDataModelScope(currContext) {
     // Exported inner function: Tells the interaction layer to fetch the latest event log from the backend, and apply it to datamodel
     // upon completion. Upon completion, we will trigger the stashed DataLoadedFromServer callbacks. Thus, it is expected that any
     // client object who want to know about the data-load will have already called 'RegisterForDataLoad' before this happens.
-    function TriggerEventLogInitialDataFetch() {
-        ScheduleEventLogUpdate(new TaskObjects(), (rebuiltTaskList) => {
+    function TriggerEventLogInitialDataFetch(visibleContexts) {
+        ScheduleEventLogUpdate(new TaskObjects(), visibleContexts, (rebuiltTaskList) => {
             ActiveTaskDataObj = rebuiltTaskList;
             StatisticsModelObj = new StatisticsModel(rebuiltTaskList);
             DataLoadedFromServerCallbacks.forEach(cb => {
@@ -113,8 +113,8 @@ export function InstantiateNewDataModelScope(currContext) {
         });
     }
 
-    function TriggerEventLogDataRefresh() {
-        ScheduleEventLogUpdate(new TaskObjects(), (rebuiltTaskList) => {
+    function TriggerEventLogDataRefresh(visibleContexts) {
+        ScheduleEventLogUpdate(new TaskObjects(), visibleContexts, (rebuiltTaskList) => {
             ActiveTaskDataObj = rebuiltTaskList;
             StatisticsModelObj = new StatisticsModel(rebuiltTaskList);
             DataRefreshedFromServerCallbacks.forEach(cb => {

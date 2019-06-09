@@ -28,21 +28,12 @@ function PerformEventLogUpdate(tasklist, visibleContexts, onLoadFunc, retryCount
     const baseUrl = 'https://localhost:5001/todoevents';
     let contructedUrl;
     if (visibleContexts === undefined || visibleContexts === null || visibleContexts.length === 0) {
-        // If we are provided with no visible contexts, then we will query the base url with no query. This will mean 'get all contexts'.
         contructedUrl = baseUrl;
     }
     else {
-        let queryString = visibleContexts.reduce((result, context) => result + 'contexts=' + encodeURIComponent(context) + '&', '?');
-
-        console.log("QUERY STRING:");
-        console.log(queryString);
-        
-        contructedUrl = baseUrl + queryString;
+        contructedUrl = baseUrl + visibleContexts.reduce((result, context) => result + 'contexts=' + encodeURIComponent(context) + '&', '?');
     }
-
-    console.log("GET URL STRING:");
-    console.log(contructedUrl);
-
+    console.log("GET URL STRING: " + contructedUrl);
     httpRequest.open('GET', contructedUrl, true);
 
     // Setup Authorization details, carried in header. Specify the 'Bearer' authentication scheme, under Authorization header.
