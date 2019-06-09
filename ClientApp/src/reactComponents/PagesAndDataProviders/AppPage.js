@@ -92,7 +92,7 @@ export class AppPage extends Component {
         if (context === DEFAULT_GLOBAL_CONTEXT_STRING) {
             this.setState({
                 currentContext: context,
-                visibleContexts: this.state.availableContexts   // Everything is visible!
+                visibleContexts: []   // Empty means everything is visible.
             });
         }
         else {
@@ -128,10 +128,8 @@ export class AppPage extends Component {
             console.warn("Invalid context passed to ContextState! Just doing nothing instead of crashing. Context was: " + context);
             return null;
         }
-        return context.trim();
+        return context.trim().toLowerCase();
     }
-
-
 
     render() {
         return (
