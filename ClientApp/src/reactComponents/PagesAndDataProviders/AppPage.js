@@ -42,13 +42,13 @@ export class AppPage extends Component {
         // Access the global keyboard shortcut manager, and register the form cleanup function as 'esc' key.
         ShortCutManager.registerShortcut('Escape', this.cleanUpFormStates);
 
-        const conflictingDataAction = () => this.dataModelScope.TriggerEventLogDataRefresh();
+        const conflictingDataAction = () => this.dataModelScope.TriggerEventLogDataRefresh(this.state.visibleContexts);
         setConflictingDataAction(conflictingDataAction);
 
         // All of our children will have mounted by the time we mount, thus, they should have registered their update handlers.
         // Thus, we should now trigger a 'fetch and load data' operation, since everything is now instantiated correctly.
         this.dataModelScope.RegisterForDataEvents(BuildDataEventHttpPostHandlers(this.props.failedEventCacheInstance));
-        this.dataModelScope.TriggerEventLogInitialDataFetch();
+        this.dataModelScope.TriggerEventLogInitialDataFetch(this.state.visibleContexts);
     }
     componentWillUnmount() {
         // Short cuts should only be active while the application page is mounted/rendered.
