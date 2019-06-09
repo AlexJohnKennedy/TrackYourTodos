@@ -48,11 +48,7 @@ export class AppPage extends Component {
     componentDidMount() {
         // Access the global keyboard shortcut manager, and register the form cleanup function as 'esc' key.
         ShortCutManager.registerShortcut('Escape', this.cleanUpFormStates);
-
         this.setupInitialDataFetch();
-
-        const action = () => { console.log("============ TESTING THE SET STATE! =============="); this.switchContext("tytodos development") };
-        setTimeout(action, 8000); 
     }
     componentWillUnmount() {
         // Short cuts should only be active while the application page is mounted/rendered.
