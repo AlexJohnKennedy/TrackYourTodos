@@ -13,6 +13,8 @@ import { InstantiateNewDataModelScope } from '../../interactionLayer/viewLayerIn
 import { BuildDataEventHttpPostHandlers } from '../../interactionLayer/ajaxDataModules/ajaxDataEventPoster';
 import { setConflictingDataAction } from '../../interactionLayer/ajaxDataModules/ajaxErrorcaseHandlers';
 
+import { DEFAULT_GLOBAL_CONTEXT_STRING } from '../../logicLayer/Task';
+
 
 // A wrapper for the application 'page' itself, which will be rendered by react-router.
 // This basically acts as the subtree-root for the actual todo-app page.
@@ -20,13 +22,21 @@ export class AppPage extends Component {
     constructor(props) {
         super(props);
         
+        this.state = {
+            currentContext: DEFAULT_GLOBAL_CONTEXT_STRING,
+            visibleContexts: [],     // Empty means that global is being rendered. Must be empty since 
+            availableContexts: []
+        }
+
         // Whenever this page is constructed, we will re-instantiate a fresh scope and data model instance to pass to our children.
-        this.dataModelScope = InstantiateNewDataModelScope( /* TODO: Pass in from props */ );
+        this.dataModelScope = InstantiateNewDataModelScope(this.state.currentContext);
 
         // Create a temporary state context for creation forms
         this.formStateManager = TemporaryStateManager();
-               
+
         this.cleanUpFormStates = this.cleanUpFormStates.bind(this);
+        this.switchContext = this.switchContext.bind(this);
+        this.createNewContext = this.createNewContext.bind(this);
     }
     componentDidMount() {
         // Access the global keyboard shortcut manager, and register the form cleanup function as 'esc' key.
@@ -53,10 +63,66 @@ export class AppPage extends Component {
         this.dataModelScope.ClearAllRegisteredCallbacks();
         this.dataModelScope = null;
     }
-
     cleanUpFormStates() {
         this.formStateManager.triggerCleanup();
     }
+
+    // Passed down to our children, allowing them to switch contexts between the currently available ones.
+    switchContext(context) {
+        context = this.validateContextString(context);
+        if (context === null || !this.state.availableContexts.includes(context)) {
+            console.warn("Invalid context passed to context switch! You must pick a context which is already availble. Use 'CreateNewContext' to make a new one. Param was: " + context);
+            return;
+        }
+        if (this.state.currentContext === context) {
+            return;
+        }
+
+        this.performSwitch(context);
+    }
+    // Encapsultates the logic for choosing the visible contexts for a given current context. E.g., global => all are visible. 
+    // If we end up implemented nested contexts, then for a given current context, we would search and make the current's entire
+    // subtree visible as well! But for now, it's either global, or just one.
+    performSwitch(context) {
+        if (context === DEFAULT_GLOBAL_CONTEXT_STRING) {
+            this.setState({
+                currentContext: context,
+                visibleContexts: this.state.availableContexts   // Everything is visible!
+            });
+        }
+        else {
+            this.setState({
+                currentContext: context,
+                visibleContexts: [context]
+            });
+        }
+    }
+
+    // Pased fown to our children, allowing them to create new contexts.
+    createNewContext(newContext) {
+        newContext = this.validateContextString(newContext);
+        if (newContext === null) { return null; }
+        if (this.state.availableContexts.includes(newContext) || newContext === DEFAULT_GLOBAL_CONTEXT_STRING) { 
+            this.performSwitch(newContext);
+        }
+        else {
+            this.setState({
+                currentContext: newContext,
+                visibleContexts: newContext,
+                availableContexts: this.state.availableContexts.concat([newContext])
+            });
+        }
+    }
+
+    validateContextString(context) {
+        if (context === null || context === undefined || context === "" || context.trim().length === 0) {
+            console.warn("Invalid context passed to ContextState! Just doing nothing instead of crashing. Context was: " + context);
+            return null;
+        }
+        return context.trim();
+    }
+
+
 
     render() {
         return (
