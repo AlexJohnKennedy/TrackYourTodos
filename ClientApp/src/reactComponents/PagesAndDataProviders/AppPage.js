@@ -21,15 +21,15 @@ import { DEFAULT_GLOBAL_CONTEXT_STRING } from '../../logicLayer/Task';
 export class AppPage extends Component {
     constructor(props) {
         super(props);
-        
+
+        console.log("AppPage constructor");
+
         this.state = {
             currentContext: DEFAULT_GLOBAL_CONTEXT_STRING,
             visibleContexts: [],     // Empty means that global is being rendered. Must be empty since we havne't loaded anything yet.
-            availableContexts: []
+            availableContexts: [DEFAULT_GLOBAL_CONTEXT_STRING, "tytodos development"],
+            dataModelScope: InstantiateNewDataModelScope(DEFAULT_GLOBAL_CONTEXT_STRING)
         }
-
-        // Whenever this page is constructed, we will re-instantiate a fresh scope and data model instance to pass to our children.
-        this.dataModelScope = InstantiateNewDataModelScope(this.state.currentContext);
 
         // Create a temporary state context for creation forms
         this.formStateManager = TemporaryStateManager();
@@ -38,19 +38,29 @@ export class AppPage extends Component {
         this.switchContext = this.switchContext.bind(this);
         this.createNewContext = this.createNewContext.bind(this);
     }
-    componentDidMount() {
-        // Access the global keyboard shortcut manager, and register the form cleanup function as 'esc' key.
-        ShortCutManager.registerShortcut('Escape', this.cleanUpFormStates);
-
-        const conflictingDataAction = () => this.dataModelScope.TriggerEventLogDataRefresh(this.state.visibleContexts);
+    setupInitialDataFetch() {
+        const conflictingDataAction = () => this.state.dataModelScope.TriggerEventLogDataRefresh(this.state.visibleContexts);
         setConflictingDataAction(conflictingDataAction);
 
         // All of our children will have mounted by the time we mount, thus, they should have registered their update handlers.
         // Thus, we should now trigger a 'fetch and load data' operation, since everything is now instantiated correctly.
-        this.dataModelScope.RegisterForDataEvents(BuildDataEventHttpPostHandlers(this.props.failedEventCacheInstance));
-        this.dataModelScope.TriggerEventLogInitialDataFetch(this.state.visibleContexts);
+        this.state.dataModelScope.RegisterForDataEvents(BuildDataEventHttpPostHandlers(this.props.failedEventCacheInstance));
+        this.state.dataModelScope.TriggerEventLogInitialDataFetch(this.state.visibleContexts);
+    }
+    componentDidMount() {
+        console.log("AppPage mounted");
+
+        // Access the global keyboard shortcut manager, and register the form cleanup function as 'esc' key.
+        ShortCutManager.registerShortcut('Escape', this.cleanUpFormStates);
+
+        this.setupInitialDataFetch();
+
+        const action = () => { console.log("============ TESTING THE SET STATE! =============="); this.switchContext("tytodos development") };
+        setTimeout(action, 8000); 
     }
     componentWillUnmount() {
+        console.log("AppPage AppPage unmounted");
+
         // Short cuts should only be active while the application page is mounted/rendered.
         ShortCutManager.clearAllShortcuts();
 
@@ -60,9 +70,15 @@ export class AppPage extends Component {
         // a chance some children will mount and un-mount independently of the AppPage itself.
         // WARNING: No other component except the 'data model owner' (root component who passes the instance down) should 'clear all'
         // like this!
-        this.dataModelScope.ClearAllRegisteredCallbacks();
-        this.dataModelScope = null;
+        this.state.dataModelScope.ClearAllRegisteredCallbacks();
     }
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        console.log("AppPage did-update");
+        if (prevState.dataModelScope !== this.state.dataModelScope) {
+            this.setupInitialDataFetch();
+        }
+    }
+
     cleanUpFormStates() {
         this.formStateManager.triggerCleanup();
     }
@@ -91,9 +107,11 @@ export class AppPage extends Component {
             });
         }
         else {
+            this.state.dataModelScope.ClearAllRegisteredCallbacks();
             this.setState({
                 currentContext: context,
-                visibleContexts: [context]
+                visibleContexts: [context],
+                dataModelScope: InstantiateNewDataModelScope(context)
             });
         }
     }
@@ -106,10 +124,12 @@ export class AppPage extends Component {
             this.performSwitch(newContext);
         }
         else {
+            this.state.dataModelScope.ClearAllRegisteredCallbacks();
             this.setState({
                 currentContext: newContext,
                 visibleContexts: newContext,
-                availableContexts: this.state.availableContexts.concat([newContext])
+                availableContexts: this.state.availableContexts.concat([newContext]),
+                dataModelScope: InstantiateNewDataModelScope(newContext)
             });
         }
     }
@@ -125,14 +145,17 @@ export class AppPage extends Component {
 
 
     render() {
+        console.log("AppPage render");
+
+
         return (
             // Return each 'section' of the app as siblings, so that the root div can arrange them using CSS Grid!
             <ThemeId.Provider value={{ themeId: currThemeId }}>
                 <div id="appPageRoot">
                     <Header onSignOut={this.props.onSignOut}/>
-                    <BacklogSection dataModelScope={this.dataModelScope} formStateManager={this.formStateManager} />
-                    <ActiveTaskSection dataModelScope={this.dataModelScope} formStateManager={this.formStateManager} />
-                    <TaskStatisticsSection dataModelScope={this.dataModelScope} formStateManager={this.formStateManager} />
+                    <BacklogSection dataModelScope={this.state.dataModelScope} formStateManager={this.formStateManager} />
+                    <ActiveTaskSection dataModelScope={this.state.dataModelScope} formStateManager={this.formStateManager} />
+                    <TaskStatisticsSection dataModelScope={this.state.dataModelScope} formStateManager={this.formStateManager} />
                     <Footer />
                 </div>
             </ThemeId.Provider>

@@ -53,6 +53,7 @@ import { StatisticsModel } from '../logicLayer/statisticsModel';
 // there is a context switch! This is sensible, since it means we are not saving out-of-context tasks in memory. This approuch should help
 // to reduce the size of the event log the browser has to manage at a given time; unless they are viewing the global context of course.
 export function InstantiateNewDataModelScope(currContext) {
+    console.log("Instantiating a new data model scope. Context for data-model: " + currContext);
     
     // default to the global context, defined in the domain layer. Also, trim that sucka, just in case.
     if (currContext === null || currContext === undefined || currContext === "") { currContext = DEFAULT_GLOBAL_CONTEXT_STRING; }
@@ -98,6 +99,7 @@ export function InstantiateNewDataModelScope(currContext) {
         DataEventCallbackHandlers.taskActivatedHandlers.length = 0;
         DataEventCallbackHandlers.taskStartedHandlers.length = 0;
         DataLoadedFromServerCallbacks.length = 0;
+        DataRefreshedFromServerCallbacks.length = 0;
     }
 
     // Exported inner function: Tells the interaction layer to fetch the latest event log from the backend, and apply it to datamodel

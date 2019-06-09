@@ -7,6 +7,8 @@ export class ActiveTaskSection extends Component {
     constructor(props) {
         super(props);
 
+        console.log("ActiveTaskSection constructor");
+
         this.taskMap = null;    // This will be a map of taskViews based on id.
         this.state = {
             goalTaskViews : [],
@@ -30,7 +32,10 @@ export class ActiveTaskSection extends Component {
         this.initialCheck = null;
         this.intervalCheck = null;
     }
-    componentDidMount() {
+    setupWithNewDataModelInstance() {
+        window.clearInterval(this.intervalCheck);
+        window.clearTimeout(this.initialCheck);
+
         // Register to access, and recieve updates from, the active take list in the data-model instance handed to us.
         this.activeTaskListAPI = this.props.dataModelScope.RegisterToActiveTaskListAPI(this.handleChange);
 
@@ -54,12 +59,27 @@ export class ActiveTaskSection extends Component {
         // Initialise state of this component
         this.handleChange();
     }
+    componentDidMount() {
+        console.log("ActiveTaskSection mounted");
+        this.setupWithNewDataModelInstance();
+    }
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        console.log("ACTIVE TASKS FUCKING UPDATED");
+        if (prevProps.dataModelScope !== this.props.dataModelScope) {
+            console.log("ActiveTasksSection got a newly instantiated data-model. We need to refresh our registrations, and re-render!");
+            this.setupWithNewDataModelInstance();
+        }
+    }
     componentWillUnmount() {
+        console.log("ActiveTaskSection unmounted");
+
+
         window.clearInterval(this.intervalCheck);
         window.clearTimeout(this.initialCheck);
 
         // TODO: IMPLEMENT DE-REGISTER CAPABILITY, AND PERFORM IT HERE!
     }
+    
     
     // Callback for when tasks are hovered over and we need to highlight them, and all their relatives.
     registerForHighlights(id) {
@@ -150,6 +170,8 @@ export class ActiveTaskSection extends Component {
 
     // Render the child elements and pass in the correct callbacks and taskviews from our react-state.
     render() {
+        console.log("ActiveTaskSection render");
+
         return (
             <div className="ActiveTaskSection">
                 <GoalBoard 
