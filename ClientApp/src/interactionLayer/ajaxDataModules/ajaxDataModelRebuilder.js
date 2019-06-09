@@ -52,8 +52,10 @@ function PerformEventLogUpdate(tasklist, visibleContexts, onLoadFunc, retryCount
             console.log("Request recieved! Logging raw repsonse under 'trace' log level.");
             console.debug(httpRequest.responseText);
 
-            SetIdStartVal(RebuildState(httpRequest.responseText, tasklist) + 1);
-            onLoadFunc(tasklist);
+            const responseData = JSON.parse(httpRequest.responseText);
+
+            SetIdStartVal(RebuildState(responseData.eventLog, tasklist) + 1);
+            onLoadFunc(tasklist, responseData.availableContexts);
         }
         else if (httpRequest.readyState === 4 && httpRequest.status === 500) {
             if (retryCount > 0) {

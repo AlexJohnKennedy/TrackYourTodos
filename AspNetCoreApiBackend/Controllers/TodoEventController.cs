@@ -54,14 +54,20 @@ namespace todo_app.Controllers {
             // For safety, convert all strings to lowercase before matching them against the saved database values
             contexts = contexts.Select(s => s.ToLower()).ToHashSet();
 
-            IEnumerable<GenericTodoEvent> eventLog;
-            if (contexts.Count == 0) {
-                eventLog = await dbContext.TodoEvents.Where(e => userIdStrings.Contains(e.UserId.Trim())).OrderBy(e => e.Timestamp).ToListAsync();
+            IEnumerable<GenericTodoEvent> eventLog = await dbContext.TodoEvents.Where(e => userIdStrings.Contains(e.UserId.Trim())).OrderBy(e => e.Timestamp).ToListAsync();
+            
+            // Look through all the user's events to find the set of 'contexts' which already exist, so we can send it back to them.
+            List<string> allContextsNoDups = eventLog.Select(e => e.Context.ToLower().Trim()).ToHashSet().ToList();
+
+            if (contexts.Count > 0) {
+                eventLog = eventLog.Where(e => contexts.Contains(e.Context.Trim().ToLower())).OrderBy(e => e.Timestamp).ToList();
             }
-            else {
-                eventLog = await dbContext.TodoEvents.Where(e => userIdStrings.Contains(e.UserId.Trim()) && contexts.Contains(e.Context.Trim().ToLower())).OrderBy(e => e.Timestamp).ToListAsync();
-            } 
-            return Ok(eventLog);
+
+            // Return the context-specific event log(s) and the set of all available contexts
+            return Ok(new {
+                eventLog = eventLog,
+                availableContexts = allContextsNoDups
+            });
         }
 
         // A POST request to the todoevent endpoint will pass in a log of new events to use. Most often, this will just be

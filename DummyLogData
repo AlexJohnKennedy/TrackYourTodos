@@ -2957,54 +2957,54 @@
       "original":null
    },
    {
-      "eventType":"taskCreated",
-      "timestamp":1560044540588,
-      "id":"0db2ca55-14fa-48ad-ad48-54ad02b9b5b4",
-      "name":"Jog soon after midday",
-      "category":2,
-      "progressStatus":0,
-      "colourId":0,
-      "context":"global",
-      "parent":null,
-      "children":null,
-      "original":null
-   },
-   {
-      "eventType":"taskCreated",
-      "timestamp":1560044545404,
-      "id":"3362e524-b24a-4f19-b24e-02f00246e528",
-      "name":"Stretch in the morning",
+      "eventType":"subtaskCreated",
+      "timestamp":1560045416662,
+      "id":"d1801f86-d2cd-4b33-89b1-583eee1365c8",
+      "name":"Ajax sender encodes the visible contexts into the GET query string, and uses an empty query string is vis-arr is empty",
       "category":2,
       "progressStatus":0,
       "colourId":1,
-      "context":"global",
-      "parent":null,
+      "context":"tytodos development",
+      "parent":"b16bc768-33e4-4e7c-9582-443978d9e926",
       "children":null,
       "original":null
    },
    {
-      "eventType":"taskCreated",
-      "timestamp":1560044558518,
-      "id":"07f72a24-3d10-4aa0-9666-6b84764cf566",
-      "name":"Track ALL food on MyFitnessPal",
+      "eventType":"subtaskCreated",
+      "timestamp":1560045492358,
+      "id":"7970abb9-8fc4-444c-8c41-fa6ed8155c3b",
+      "name":"ViewLayerInteraction.TriggerFetch and .TriggerRefresh are passed visible-contexts-array as a param",
       "category":2,
       "progressStatus":0,
-      "colourId":2,
-      "context":"global",
-      "parent":null,
+      "colourId":1,
+      "context":"tytodos development",
+      "parent":"b16bc768-33e4-4e7c-9582-443978d9e926",
+      "children":null,
+      "original":null
+   },
+   {
+      "eventType":"subtaskCreated",
+      "timestamp":1560045590458,
+      "id":"4f06cd10-987c-4a33-81f8-476a38244c7f",
+      "name":"GET Endpoint on API encodes the available contexts into response. State-rebuilder on client parses that info and 'sets'",
+      "category":1,
+      "progressStatus":0,
+      "colourId":1,
+      "context":"tytodos development",
+      "parent":"b16bc768-33e4-4e7c-9582-443978d9e926",
       "children":null,
       "original":null
    },
    {
       "eventType":"taskStarted",
-      "timestamp":1560044560549,
-      "id":"07f72a24-3d10-4aa0-9666-6b84764cf566",
-      "name":"Track ALL food on MyFitnessPal",
-      "category":2,
+      "timestamp":1560045608392,
+      "id":"b88b38df-27af-4920-9108-498eba701018",
+      "name":"DataModelScope instance tasks 'curr context' parameter, which automatically is assigned to newly created tasks",
+      "category":1,
       "progressStatus":1,
-      "colourId":2,
-      "context":"global",
-      "parent":null,
+      "colourId":1,
+      "context":"tytodos development",
+      "parent":"b16bc768-33e4-4e7c-9582-443978d9e926",
       "children":[
 
       ],
@@ -3012,14 +3012,48 @@
    },
    {
       "eventType":"taskStarted",
-      "timestamp":1560044561865,
-      "id":"3362e524-b24a-4f19-b24e-02f00246e528",
-      "name":"Stretch in the morning",
+      "timestamp":1560045667400,
+      "id":"83b7bfa1-146a-423b-8d12-451b6503c985",
+      "name":"Determine strategy for dealing with multiple devices on same user. Pull-push with reconcile log strat? or Server-push?",
+      "category":1,
+      "progressStatus":1,
+      "colourId":3,
+      "context":"tytodos development",
+      "parent":null,
+      "children":[
+         "9f9f60de-ab9e-4009-883c-e4d644bc4df4",
+         "efdfa3b7-731d-4339-a664-ff45593036ac",
+         "10a6fd37-180d-4713-8874-5a8e5d88c0df"
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCompleted",
+      "timestamp":1560045668624,
+      "id":"83b7bfa1-146a-423b-8d12-451b6503c985",
+      "name":"Determine strategy for dealing with multiple devices on same user. Pull-push with reconcile log strat? or Server-push?",
+      "category":1,
+      "progressStatus":2,
+      "colourId":3,
+      "context":"tytodos development",
+      "parent":null,
+      "children":[
+         "9f9f60de-ab9e-4009-883c-e4d644bc4df4",
+         "efdfa3b7-731d-4339-a664-ff45593036ac",
+         "10a6fd37-180d-4713-8874-5a8e5d88c0df"
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskStarted",
+      "timestamp":1560046819839,
+      "id":"d1801f86-d2cd-4b33-89b1-583eee1365c8",
+      "name":"Ajax sender encodes the visible contexts into the GET query string, and uses an empty query string is vis-arr is empty",
       "category":2,
       "progressStatus":1,
       "colourId":1,
-      "context":"global",
-      "parent":null,
+      "context":"tytodos development",
+      "parent":"b16bc768-33e4-4e7c-9582-443978d9e926",
       "children":[
 
       ],
@@ -3027,30 +3061,77 @@
    },
    {
       "eventType":"taskCompleted",
-      "timestamp":1560044562768,
-      "id":"3362e524-b24a-4f19-b24e-02f00246e528",
-      "name":"Stretch in the morning",
+      "timestamp":1560046821865,
+      "id":"d1801f86-d2cd-4b33-89b1-583eee1365c8",
+      "name":"Ajax sender encodes the visible contexts into the GET query string, and uses an empty query string is vis-arr is empty",
       "category":2,
       "progressStatus":2,
       "colourId":1,
-      "context":"global",
-      "parent":null,
+      "context":"tytodos development",
+      "parent":"b16bc768-33e4-4e7c-9582-443978d9e926",
       "children":[
 
       ],
       "original":null
    },
    {
-      "eventType":"taskCreated",
-      "timestamp":1560044576346,
-      "id":"8eda5c9c-ae1a-47b2-a4cb-9ee4042dbd51",
-      "name":"Abs, Glutes and bench (Bench first)",
+      "eventType":"taskStarted",
+      "timestamp":1560047141770,
+      "id":"7970abb9-8fc4-444c-8c41-fa6ed8155c3b",
+      "name":"ViewLayerInteraction.TriggerFetch and .TriggerRefresh are passed visible-contexts-array as a param",
       "category":2,
-      "progressStatus":0,
-      "colourId":3,
-      "context":"global",
-      "parent":null,
-      "children":null,
+      "progressStatus":1,
+      "colourId":1,
+      "context":"tytodos development",
+      "parent":"b16bc768-33e4-4e7c-9582-443978d9e926",
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCompleted",
+      "timestamp":1560047160035,
+      "id":"b88b38df-27af-4920-9108-498eba701018",
+      "name":"DataModelScope instance tasks 'curr context' parameter, which automatically is assigned to newly created tasks",
+      "category":1,
+      "progressStatus":2,
+      "colourId":1,
+      "context":"tytodos development",
+      "parent":"b16bc768-33e4-4e7c-9582-443978d9e926",
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCompleted",
+      "timestamp":1560053141021,
+      "id":"7970abb9-8fc4-444c-8c41-fa6ed8155c3b",
+      "name":"ViewLayerInteraction.TriggerFetch and .TriggerRefresh are passed visible-contexts-array as a param",
+      "category":2,
+      "progressStatus":2,
+      "colourId":1,
+      "context":"tytodos development",
+      "parent":"b16bc768-33e4-4e7c-9582-443978d9e926",
+      "children":[
+
+      ],
+      "original":null
+   },
+   {
+      "eventType":"taskCompleted",
+      "timestamp":1560053149273,
+      "id":"8e9c8138-e904-4fd8-998c-836cfc663e36",
+      "name":"Create 'ContextState' component which passes in 1. Curr context, 2. visible contexts, 3. available contexts to AppPage",
+      "category":2,
+      "progressStatus":2,
+      "colourId":1,
+      "context":"tytodos development",
+      "parent":"b16bc768-33e4-4e7c-9582-443978d9e926",
+      "children":[
+
+      ],
       "original":null
    }
 ]

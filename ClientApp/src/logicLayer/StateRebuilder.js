@@ -25,10 +25,10 @@ const EventReplayFunctions = new Map([
 // Replays all event in the json log to rebuild the state exactly. It also tracks the largest id it found, which is returned.
 // The return value should therefore be used to tell the logic layer what 'id' to start at to avoid id collisions when new
 // tasks are created by the user.
-export function RebuildState(eventLogAsJsonArray, tasklist) {
+export function RebuildState(eventLogAsArray, tasklist) {
     let taskMap = createTaskMap(tasklist);
     let latestid = "";
-    JSON.parse(eventLogAsJsonArray).forEach(eventObj => {
+    eventLogAsArray.forEach(eventObj => {
         replayEvent(eventObj, tasklist, taskMap);
         latestid = eventObj.id;
     });
