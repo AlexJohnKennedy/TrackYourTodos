@@ -51,12 +51,15 @@ namespace todo_app.Controllers {
         public async Task<IActionResult> FetchEntireEventLog([FromQuery] HashSet<string> contexts) {
             HashSet<string> userIdStrings = User.FindAll(googleSubjectClaimType).Select(claim => claim.Value.Trim()).ToHashSet();
 
+            // For safety, convert all strings to lowercase before matching them against the saved database values
+            contexts = contexts.Select(s => s.ToLower()).ToHashSet();
+
             IEnumerable<GenericTodoEvent> eventLog;
             if (contexts.Count == 0) {
                 eventLog = await dbContext.TodoEvents.Where(e => userIdStrings.Contains(e.UserId.Trim())).OrderBy(e => e.Timestamp).ToListAsync();
             }
             else {
-                eventLog = await dbContext.TodoEvents.Where(e => userIdStrings.Contains(e.UserId.Trim()) && contexts.Contains(e.Context.Trim())).OrderBy(e => e.Timestamp).ToListAsync();
+                eventLog = await dbContext.TodoEvents.Where(e => userIdStrings.Contains(e.UserId.Trim()) && contexts.Contains(e.Context.Trim().ToLower())).OrderBy(e => e.Timestamp).ToListAsync();
             } 
             return Ok(eventLog);
         }
@@ -74,6 +77,7 @@ namespace todo_app.Controllers {
             foreach (GenericTodoEvent e in newEvents) {
                 e.UserId = userId;
                 e.EventId = 0;  // Manually set this to the 'default' value, so that the database can write to it instead.
+                e.Context = e.Context.ToLower().Trim();
             }
 
             // Detect duplicate events.
