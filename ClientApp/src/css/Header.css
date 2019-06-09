@@ -5,9 +5,18 @@
     padding-right: 0.6rem;
 }
 
-.greetingText {
+.context {
     font-size: 2rem;
-    margin-top: 0.15rem;
+    margin-left: 0.5rem;
+}
+
+.userDetails {
+    display: inline-flex;
+}
+
+.greetingText {
+    margin-top: 0.3rem;
+    margin-right: 3rem;
 }
 
 .signOutButton {

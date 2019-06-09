@@ -25,7 +25,7 @@ export class AppPage extends Component {
         this.state = {
             currentContext: DEFAULT_GLOBAL_CONTEXT_STRING,
             visibleContexts: [],     // Empty means that global is being rendered. Must be empty since we havne't loaded anything yet.
-            availableContexts: [DEFAULT_GLOBAL_CONTEXT_STRING],   // This should be populated by the GET request handler.
+            availableContexts: [DEFAULT_GLOBAL_CONTEXT_STRING],   // This should be re-populated by the GET request handler.
             dataModelScope: InstantiateNewDataModelScope(DEFAULT_GLOBAL_CONTEXT_STRING)
         }
 
