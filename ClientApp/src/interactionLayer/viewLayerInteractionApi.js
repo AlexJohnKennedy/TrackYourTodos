@@ -152,7 +152,6 @@ export function InstantiateNewDataModelScope(currContext) {
     // recieve view-layer callbacks, and so on.
     function RegisterToActiveTaskListAPI(viewLayerCallbackFunc) {
 
-        const logicLayerFailureChecker = RegisterForFailureChecking(ActiveTaskDataObj);
         ViewLayerCallbacks.push(viewLayerCallbackFunc);
 
         function getActiveTasks() {
@@ -198,6 +197,7 @@ export function InstantiateNewDataModelScope(currContext) {
         // layer update, which then invokes view layer and data event callbacks. The reason that is delayed is to allow the view layer
         // to play an animation
         function performFailureCheck(updateDelayMilliseconds, additionalCallback = null) {
+            const logicLayerFailureChecker = RegisterForFailureChecking(ActiveTaskDataObj);
             window.setTimeout(() => {
                 logicLayerFailureChecker.FailTasks().forEach(task => {
                     if (additionalCallback !== null) additionalCallback(task.id);
