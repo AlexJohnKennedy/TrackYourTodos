@@ -35,10 +35,14 @@ export class AppPage extends Component {
         this.cleanUpFormStates = this.cleanUpFormStates.bind(this);
         this.switchContext = this.switchContext.bind(this);
         this.createNewContext = this.createNewContext.bind(this);
+        this.updateAvailableContexts = this.updateAvailableContexts.bind(this);
     }
     setupInitialDataFetch() {
         const conflictingDataAction = () => this.state.dataModelScope.TriggerEventLogDataRefresh(this.state.visibleContexts);
         setConflictingDataAction(conflictingDataAction);
+
+        // Register for some response handlers
+        
 
         // All of our children will have mounted by the time we mount, thus, they should have registered their update handlers.
         // Thus, we should now trigger a 'fetch and load data' operation, since everything is now instantiated correctly.
@@ -105,7 +109,7 @@ export class AppPage extends Component {
         }
     }
 
-    // Pased fown to our children, allowing them to create new contexts.
+    // Pased down to our children, allowing them to create new contexts.
     createNewContext(newContext) {
         newContext = this.validateContextString(newContext);
         if (newContext === null) { return null; }
@@ -123,6 +127,17 @@ export class AppPage extends Component {
         }
     }
 
+    // Used as a callback for when data loads, to populate the 'available contexts' so that users can select them.
+    updateAvailableContexts(contextStrings) {
+        if (contextStrings === undefined || contextStrings === null) throw new Error("Cannot parse null contexts to updateAvailableContexts.");
+        // converts all strings with validator, filters out the failed ones (null), then build a set out of them to remove duplicats, then place
+        // the de-duplicated values back into an array using the spread (...) operator on the set.
+        const validatedStrings = [ ...new Set(contextStrings.concat(DEFAULT_GLOBAL_CONTEXT_STRING).map(s => this.validateContextString(s)).filter(s => s !== null)) ];
+        this.setState({
+            availableContexts: validatedStrings
+        });
+    }
+
     validateContextString(context) {
         if (context === null || context === undefined || context === "" || context.trim().length === 0) {
             console.warn("Invalid context passed to ContextState! Just doing nothing instead of crashing. Context was: " + context);
@@ -136,7 +151,7 @@ export class AppPage extends Component {
             // Return each 'section' of the app as siblings, so that the root div can arrange them using CSS Grid!
             <ThemeId.Provider value={{ themeId: currThemeId }}>
                 <div id="appPageRoot">
-                    <Header onSignOut={this.props.onSignOut}/>
+                    <Header currentContext={this.state.currentContext} availableContexts={this.state.availableContexts} onSignOut={this.props.onSignOut}/>
                     <BacklogSection dataModelScope={this.state.dataModelScope} formStateManager={this.formStateManager} />
                     <ActiveTaskSection dataModelScope={this.state.dataModelScope} formStateManager={this.formStateManager} />
                     <TaskStatisticsSection dataModelScope={this.state.dataModelScope} formStateManager={this.formStateManager} />
