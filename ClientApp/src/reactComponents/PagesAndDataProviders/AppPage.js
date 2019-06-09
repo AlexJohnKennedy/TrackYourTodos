@@ -42,7 +42,8 @@ export class AppPage extends Component {
         setConflictingDataAction(conflictingDataAction);
 
         // Register for some response handlers
-        
+        this.state.dataModelScope.RegisterForOnInitialDataLoadCallback(availableContexts => this.updateAvailableContexts(availableContexts));
+        this.state.dataModelScope.RegisterForOnDataRefreshCallback(availableContexts => this.updateAvailableContexts(availableContexts));
 
         // All of our children will have mounted by the time we mount, thus, they should have registered their update handlers.
         // Thus, we should now trigger a 'fetch and load data' operation, since everything is now instantiated correctly.

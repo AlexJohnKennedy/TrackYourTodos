@@ -106,21 +106,21 @@ export function InstantiateNewDataModelScope(currContext) {
     // upon completion. Upon completion, we will trigger the stashed DataLoadedFromServer callbacks. Thus, it is expected that any
     // client object who want to know about the data-load will have already called 'RegisterForDataLoad' before this happens.
     function TriggerEventLogInitialDataFetch(visibleContexts) {
-        ScheduleEventLogUpdate(new TaskObjects(), visibleContexts, (rebuiltTaskList) => {
+        ScheduleEventLogUpdate(new TaskObjects(), visibleContexts, (rebuiltTaskList, availableContextsArray) => {
             ActiveTaskDataObj = rebuiltTaskList;
             StatisticsModelObj = new StatisticsModel(rebuiltTaskList);
             DataLoadedFromServerCallbacks.forEach(cb => {
-                cb();
+                cb(availableContextsArray);
             });
         });
     }
 
     function TriggerEventLogDataRefresh(visibleContexts) {
-        ScheduleEventLogUpdate(new TaskObjects(), visibleContexts, (rebuiltTaskList) => {
+        ScheduleEventLogUpdate(new TaskObjects(), visibleContexts, (rebuiltTaskList, availableContextsArray) => {
             ActiveTaskDataObj = rebuiltTaskList;
             StatisticsModelObj = new StatisticsModel(rebuiltTaskList);
             DataRefreshedFromServerCallbacks.forEach(cb => {
-                cb();
+                cb(availableContextsArray);
             });
         });
     }
