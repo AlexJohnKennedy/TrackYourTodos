@@ -24,7 +24,7 @@ export class AppPage extends Component {
         
         this.state = {
             currentContext: DEFAULT_GLOBAL_CONTEXT_STRING,
-            visibleContexts: [],     // Empty means that global is being rendered. Must be empty since 
+            visibleContexts: [],     // Empty means that global is being rendered. Must be empty since we havne't loaded anything yet.
             availableContexts: []
         }
 

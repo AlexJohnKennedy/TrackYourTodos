@@ -15,8 +15,8 @@ export class ContextState extends Component {
 
         this.state = {
             currentContext: DEFAULT_GLOBAL_CONTEXT_STRING,
-            visibleContexts: [],     // Empty means that global is being rendered. Must be empty since 
-            availableContexts: []
+            visibleContexts: [],     // Empty means that global is being rendered. Must be empty here since we haven't loaded anything yet.
+            availableContexts: []    // Empty means we have not loaded anything yet.
         }
 
         this.switchContext = this.switchContext.bind(this);

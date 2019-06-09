@@ -42,14 +42,22 @@ namespace todo_app.Controllers {
             this.dbContext = injectedContext;
         }
 
-        // A GET request to the todoevent endpoint will automatically fetch all of a user's events.
+        // A GET request to the todoevent endpoint will automatically fetch all of a user's events, matching a provided set of contexts.
+        // If the provided set of contexts is empty, then we will simply return ALL of a user's events. This is how the client will ask
+        // for the 'Global' context!
         [Authorize]
         [EnableCors("UserFacingApplications")]
         [HttpGet("/todoevents")]
-        public async Task<IActionResult> FetchEntireEventLog() {
+        public async Task<IActionResult> FetchEntireEventLog([FromQuery] HashSet<string> contexts) {
             HashSet<string> userIdStrings = User.FindAll(googleSubjectClaimType).Select(claim => claim.Value.Trim()).ToHashSet();
 
-            IEnumerable<GenericTodoEvent> eventLog = await dbContext.TodoEvents.Where(e => userIdStrings.Contains(e.UserId.Trim())).OrderBy(e => e.Timestamp).ToListAsync();
+            IEnumerable<GenericTodoEvent> eventLog;
+            if (contexts.Count == 0) {
+                eventLog = await dbContext.TodoEvents.Where(e => userIdStrings.Contains(e.UserId.Trim())).OrderBy(e => e.Timestamp).ToListAsync();
+            }
+            else {
+                eventLog = await dbContext.TodoEvents.Where(e => userIdStrings.Contains(e.UserId.Trim()) && contexts.Contains(e.Context.Trim())).OrderBy(e => e.Timestamp).ToListAsync();
+            } 
             return Ok(eventLog);
         }
 
