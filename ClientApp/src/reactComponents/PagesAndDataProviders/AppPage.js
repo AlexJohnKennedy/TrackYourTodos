@@ -135,7 +135,7 @@ export class AppPage extends Component {
         if (contextStrings === undefined || contextStrings === null) throw new Error("Cannot parse null contexts to updateAvailableContexts.");
         // converts all strings with validator, filters out the failed ones (null), then build a set out of them to remove duplicats, then place
         // the de-duplicated values back into an array using the spread (...) operator on the set.
-        const validatedStrings = [ ...new Set(contextStrings.concat(DEFAULT_GLOBAL_CONTEXT_STRING).map(s => this.validateContextString(s)).filter(s => s !== null)) ];
+        const validatedStrings = [ ...new Set([DEFAULT_GLOBAL_CONTEXT_STRING].concat(contextStrings).map(s => this.validateContextString(s)).filter(s => s !== null)) ];
         this.setState({
             availableContexts: validatedStrings
         });
