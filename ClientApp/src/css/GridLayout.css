@@ -19,36 +19,36 @@
 @media (min-width: 1270px) {
     #appPageRoot {
         display: grid;
-        grid-template-columns: 1fr minmax(auto, 115rem) var(--divider-column-width) minmax(var(--backlog-tasks-total-width-squashed), var(--backlog-tasks-total-width)) 1fr;
+        grid-template-columns: 1fr 0.8rem minmax(auto, 115rem) var(--divider-column-width) minmax(var(--backlog-tasks-total-width-squashed), var(--backlog-tasks-total-width)) 0.8rem 1fr;
         grid-template-rows: 3.4rem 3.4rem auto auto auto;
     }
     .Header {
-        grid-column-start: 2;
-        grid-column-end: 5;
+        grid-column-start: 3;
+        grid-column-end: 6;
         grid-row-start: 1;
         grid-row-end: 2;
     }
     .HeaderLeftBlock {
         grid-column-start: 1;
-        grid-column-end: 2;
+        grid-column-end: 3;
         grid-row-start: 1;
         grid-row-end: 2;
     }
     .HeaderRightBlock {
-        grid-column-start: 5;
-        grid-column-end: 6;
+        grid-column-start: 6;
+        grid-column-end: 8;
         grid-row-start: 1;
         grid-row-end: 2;
     }
     .ContextTabsWrapper {
-        grid-column-start: 2;
-        grid-column-end: 5;
+        grid-column-start: 3;
+        grid-column-end: 6;
         grid-row-start: 2;
         grid-row-end: 3;
     }
     .ActiveTaskSection {
-        grid-column-start: 2;
-        grid-column-end: 3;
+        grid-column-start: 3;
+        grid-column-end: 4;
         grid-row-start: 3;
         grid-row-end: 4;
 
@@ -64,8 +64,8 @@
         justify-content: space-between;
     }
     .BacklogSection {
-        grid-column-start: 4;
-        grid-column-end: 5;
+        grid-column-start: 5;
+        grid-column-end: 6;
         grid-row-start: 3;
         grid-row-end: 5;
 
@@ -81,8 +81,8 @@
         justify-content: flex-start;
     }
     .TaskStatisticsSection {
-        grid-column-start: 2;
-        grid-column-end: 3;
+        grid-column-start: 3;
+        grid-column-end: 4;
         grid-row-start: 4;
         grid-row-end: 5;
 
@@ -117,8 +117,8 @@
         grid-row-end: 3;
     }
     .Footer {
-        grid-column-start: 2;
-        grid-column-end: 5;
+        grid-column-start: 3;
+        grid-column-end: 6;
         grid-row-start: 5;
         grid-row-end: 6;
     }
