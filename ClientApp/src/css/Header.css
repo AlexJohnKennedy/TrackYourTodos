@@ -1,32 +1,12 @@
 .Header {
     display: inline-flex;
     justify-content: space-between;
-    padding-left: 0.6rem;
-    padding-right: 0.6rem;
-}
-
-.contextListings {
-    display: inline-flex;
-}
-
-.context {
-    font-size: 2rem;
-    margin-top: 0.15rem;
-}
-
-.allContexts {
-    font-size: 1.4rem;
-    margin-top: 0.75rem;
-    margin-left: 3rem;
-}
-
-.userDetails {
-    display: inline-flex;
+    padding-top: 0.3rem;
 }
 
 .greetingText {
-    margin-top: 0.3rem;
-    margin-right: 3rem;
+    font-size: 1.8rem;
+    margin-top: 0.15rem;
 }
 
 .signOutButton {
@@ -35,8 +15,8 @@
 }
 .signOutButton img {
     border-radius: 50%;
-    width: 3rem;
-    height: 3rem;
+    width: 2.8rem;
+    height: 2.8rem;
     margin-left: 1rem;
 }
 .signOutButton div {

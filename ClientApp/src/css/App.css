@@ -8,6 +8,7 @@
 @import "./Footer.css";
 @import "./Header.css";
 @import "./LoginPage.css";
+@import "./ContextTabs.css";
 
 /* Define some global variables to define VSCode colour scheme colours! */
 :root {
@@ -43,7 +44,7 @@ button {
   padding: 0rem;
 }
 body {
-  padding-top: 0.8rem;
+  padding-top: 0rem;
   padding-left: 0.8rem;
   padding-right: 0.8rem;
   padding-bottom: 0.8rem;
@@ -51,6 +52,7 @@ body {
   color: var(--bright-text-colour);
   background-color: var(--sidebar-background-colour);
   background-size: cover;
+  overflow-y: scroll;
 }
 h1, h2 {
   display: inline-block;

@@ -4,6 +4,7 @@ import { TaskStatisticsSection } from '../RootSectionComponents/TaskStatisticsSe
 import { BacklogSection } from '../RootSectionComponents/BacklogSection';
 import { Footer } from '../Footer';
 import { Header } from '../Header';
+import { ContextTabs } from '../ContextTabs';
 
 import { TemporaryStateManager } from '../../viewLogic/temporaryStateManager';
 import { ShortCutManager } from '../../viewLogic/keyboardShortcutHandler';
@@ -97,7 +98,8 @@ export class AppPage extends Component {
         if (context === DEFAULT_GLOBAL_CONTEXT_STRING) {
             this.setState({
                 currentContext: context,
-                visibleContexts: []   // Empty means everything is visible.
+                visibleContexts: [],   // Empty means everything is visible.
+                dataModelScope: InstantiateNewDataModelScope(context)
             });
         }
         else {
@@ -152,7 +154,8 @@ export class AppPage extends Component {
             // Return each 'section' of the app as siblings, so that the root div can arrange them using CSS Grid!
             <ThemeId.Provider value={{ themeId: currThemeId }}>
                 <div id="appPageRoot">
-                    <Header currentContext={this.state.currentContext} availableContexts={this.state.availableContexts} onSignOut={this.props.onSignOut}/>
+                    <Header onSignOut={this.props.onSignOut}/>
+                    <ContextTabs switchContext={this.switchContext} createNewContext={this.createNewContext} currentContext={this.state.currentContext} selectableContexts={this.state.availableContexts}/>
                     <BacklogSection dataModelScope={this.state.dataModelScope} formStateManager={this.formStateManager} />
                     <ActiveTaskSection dataModelScope={this.state.dataModelScope} formStateManager={this.formStateManager} />
                     <TaskStatisticsSection dataModelScope={this.state.dataModelScope} formStateManager={this.formStateManager} />

@@ -1,0 +1,31 @@
+.ContextTabsWrapper {
+    display: inline-flex;
+    justify-content: flex-start;
+}
+
+.ContextTabsWrapper .navigation-tabs-container {
+    background-color: rgb(0,0,0,0);
+    
+    border-radius: var(--border-radius);
+    flex-grow: 0;
+
+    display: inline-flex;
+    justify-content: flex-start;
+
+    height: 100%;
+    line-height: 3.4rem;
+}
+
+.ContextTabsWrapper .navigation-tabs-container .navigation-tab {
+    flex-grow: 0;
+    text-align: center;
+    cursor: pointer;
+    background-color: var(--sidebar-background-colour);
+    padding-left: 1rem;
+    padding-right: 1rem;
+    font-size: 1.8rem;
+}
+
+.ContextTabsWrapper .navigation-tabs-container > .active-navigation-tab {
+    background-color: var(--middle-tone-background-colour);
+}
