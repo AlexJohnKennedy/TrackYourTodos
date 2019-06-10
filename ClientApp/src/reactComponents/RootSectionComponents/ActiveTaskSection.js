@@ -39,6 +39,7 @@ export class ActiveTaskSection extends Component {
 
         // Setup timing callbacks for task-failure checks. This will the be the callback we register for OnDataLoad callbacks.
         const checkAction = () => {
+            console.log("Checking for failed tasks, via timed callback!");
             let ids = this.activeTaskListAPI.PerformFailureCheck(800, id => this.unregisterForAnimation(id, false));
             ids.forEach(id => this.registerForAnimation(id, false));
         };
