@@ -6,7 +6,6 @@
 .ContextTabsWrapper .navigation-tabs-container {
     background-color: rgb(0,0,0,0);
     
-    border-radius: var(--border-radius);
     flex-grow: 0;
 
     display: inline-flex;
@@ -27,5 +26,5 @@
 }
 
 .ContextTabsWrapper .navigation-tabs-container > .active-navigation-tab {
-    background-color: var(--middle-tone-background-colour);
+    background-color: var(--editor-background-colour);
 }

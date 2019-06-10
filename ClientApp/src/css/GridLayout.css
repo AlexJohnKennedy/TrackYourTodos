@@ -28,6 +28,18 @@
         grid-row-start: 1;
         grid-row-end: 2;
     }
+    .HeaderLeftBlock {
+        grid-column-start: 1;
+        grid-column-end: 2;
+        grid-row-start: 1;
+        grid-row-end: 2;
+    }
+    .HeaderRightBlock {
+        grid-column-start: 5;
+        grid-column-end: 6;
+        grid-row-start: 1;
+        grid-row-end: 2;
+    }
     .ContextTabsWrapper {
         grid-column-start: 2;
         grid-column-end: 5;
@@ -124,6 +136,18 @@
     .Header {
         grid-column-start: 2;
         grid-column-end: 3;
+        grid-row-start: 1;
+        grid-row-end: 2;
+    }
+    .HeaderLeftBlock {
+        grid-column-start: 1;
+        grid-column-end: 2;
+        grid-row-start: 1;
+        grid-row-end: 2;
+    }
+    .HeaderRightBlock {
+        grid-column-start: 3;
+        grid-column-end: 4;
         grid-row-start: 1;
         grid-row-end: 2;
     }

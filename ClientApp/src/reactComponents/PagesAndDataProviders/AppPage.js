@@ -154,7 +154,9 @@ export class AppPage extends Component {
             // Return each 'section' of the app as siblings, so that the root div can arrange them using CSS Grid!
             <ThemeId.Provider value={{ themeId: currThemeId }}>
                 <div id="appPageRoot">
+                    <div className="HeaderLeftBlock"/>
                     <Header onSignOut={this.props.onSignOut}/>
+                    <div className="HeaderRightBlock"/>
                     <ContextTabs switchContext={this.switchContext} createNewContext={this.createNewContext} currentContext={this.state.currentContext} selectableContexts={this.state.availableContexts}/>
                     <BacklogSection dataModelScope={this.state.dataModelScope} formStateManager={this.formStateManager} />
                     <ActiveTaskSection dataModelScope={this.state.dataModelScope} formStateManager={this.formStateManager} />
