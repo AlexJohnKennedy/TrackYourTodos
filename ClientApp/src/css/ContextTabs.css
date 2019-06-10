@@ -22,13 +22,11 @@
 }
 
 .ContextTabsWrapper .navigation-tabs-container .navigation-tab {
+    /* font size and padding is different depending on screen width. Thus, it's defined in GridLayout.css */
     flex-shrink: 1;
     text-align: center;
     cursor: pointer;
     background-color: var(--sidebar-background-colour);
-    padding-left: 1rem;
-    padding-right: 1rem;
-    font-size: 1.8rem;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

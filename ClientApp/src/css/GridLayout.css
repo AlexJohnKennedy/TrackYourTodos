@@ -126,6 +126,11 @@
         padding: 0.6rem;
         padding-bottom: 0rem;   /* tasks have a margin on the bottom, which will form this spacing instead */
     }
+    .ContextTabsWrapper .navigation-tabs-container .navigation-tab {
+        padding-left: 1rem;
+        padding-right: 1rem;
+        font-size: 1.8rem;
+    }
 }
 @media (max-width: 1270px) {
     #appPageRoot {
@@ -222,6 +227,11 @@
         padding: 0.6rem;
         padding-bottom: 0rem;   /* tasks have a margin on the bottom, which will form this spacing instead */
     }
+    .ContextTabsWrapper .navigation-tabs-container .navigation-tab {
+        padding-left: 1rem;
+        padding-right: 1rem;
+        font-size: 1.8rem;
+    }
 }
 @media (max-width: 800px) {
     #appPageRoot {
@@ -277,6 +287,11 @@
         padding: 1rem;
         padding-bottom: 0.4rem;   /* tasks have a margin on the bottom, which will form this spacing instead */
         padding-top: 0.2rem;
+    }
+    .ContextTabsWrapper .navigation-tabs-container .navigation-tab {
+        padding-left: 0.6rem;
+        padding-right: 0.6rem;
+        font-size: 1.4rem;
     }
     .TaskStatisticsSection {
         grid-column-start: 3;
