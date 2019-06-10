@@ -7,6 +7,14 @@
 .ContextTabsWrapper .contextSettingsButton {
     grid-column-start: 2;
     grid-column-end: 3;
+    padding-top: 0.2rem;
+}
+.ContextTabsWrapper .contextSettingsButton div {
+    background-color: var(--divider-colour-lighter);
+    border-radius: 40%;
+    width: 3rem;
+    height: 3rem;
+    cursor: pointer;
 }
 
 .ContextTabsWrapper .navigation-tabs-container {
