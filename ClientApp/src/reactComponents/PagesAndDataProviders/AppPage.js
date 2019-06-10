@@ -191,7 +191,7 @@ export class AppPage extends Component {
                         selectableContexts={this.state.selectableContexts}
                         addSelectableContext={this.addSelectableContext}
                         removeSelectableContext={this.removeSelectableContext}
-                        maxSelectable={2}
+                        maxSelectable={5}
                     />
                 }
                 { !this.state.showingContextManagerPage &&
