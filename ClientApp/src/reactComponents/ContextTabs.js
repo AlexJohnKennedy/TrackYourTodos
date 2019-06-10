@@ -21,6 +21,9 @@ export class ContextTabs extends Component {
                     callbackList={callbacks}
                     currActiveIndex={currActiveIndex}
                 />
+                <div className="contextSettingsButton">
+                    <div/>
+                </div>
             </div>
         );
     }

@@ -1,28 +1,37 @@
 .ContextTabsWrapper {
-    display: inline-flex;
-    justify-content: flex-start;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 3.4rem;
+}
+
+.ContextTabsWrapper .contextSettingsButton {
+    grid-column-start: 2;
+    grid-column-end: 3;
 }
 
 .ContextTabsWrapper .navigation-tabs-container {
-    background-color: rgb(0,0,0,0);
+    grid-column-start: 1;
+    grid-column-end: 2;
     
-    flex-grow: 0;
-
-    display: inline-flex;
+    background-color: rgb(0,0,0,0);
+    display: flex;
     justify-content: flex-start;
-
     height: 100%;
     line-height: 3.4rem;
+    overflow: hidden;
 }
 
 .ContextTabsWrapper .navigation-tabs-container .navigation-tab {
-    flex-grow: 0;
+    flex-shrink: 1;
     text-align: center;
     cursor: pointer;
     background-color: var(--sidebar-background-colour);
     padding-left: 1rem;
     padding-right: 1rem;
     font-size: 1.8rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .ContextTabsWrapper .navigation-tabs-container > .active-navigation-tab {
