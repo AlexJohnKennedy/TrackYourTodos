@@ -130,36 +130,36 @@
 @media (max-width: 1270px) {
     #appPageRoot {
         display: grid;
-        grid-template-columns: 1fr minmax(auto, 115rem) 1fr;
+        grid-template-columns: 1fr 0.8rem minmax(auto, 115rem) 0.8rem 1fr;
         grid-template-rows: 3.4rem 3.4rem auto auto auto;
     }
     .Header {
-        grid-column-start: 2;
-        grid-column-end: 3;
-        grid-row-start: 1;
-        grid-row-end: 2;
-    }
-    .HeaderLeftBlock {
-        grid-column-start: 1;
-        grid-column-end: 2;
-        grid-row-start: 1;
-        grid-row-end: 2;
-    }
-    .HeaderRightBlock {
         grid-column-start: 3;
         grid-column-end: 4;
         grid-row-start: 1;
         grid-row-end: 2;
     }
-    .ContextTabsWrapper {
-        grid-column-start: 2;
+    .HeaderLeftBlock {
+        grid-column-start: 1;
         grid-column-end: 3;
+        grid-row-start: 1;
+        grid-row-end: 2;
+    }
+    .HeaderRightBlock {
+        grid-column-start: 4;
+        grid-column-end: 6;
+        grid-row-start: 1;
+        grid-row-end: 2;
+    }
+    .ContextTabsWrapper {
+        grid-column-start: 3;
+        grid-column-end: 4;
         grid-row-start: 2;
         grid-row-end: 3;
     }
     .ActiveTaskSection {
-        grid-column-start: 2;
-        grid-column-end: 3;
+        grid-column-start: 3;
+        grid-column-end: 4;
         grid-row-start: 3;
         grid-row-end: 4;
 
@@ -177,8 +177,8 @@
         display: none;  /* For now. Later we will make the backlog section tab-selectable in the same section as the stats section! */
     }
     .TaskStatisticsSection {
-        grid-column-start: 2;
-        grid-column-end: 3;
+        grid-column-start: 3;
+        grid-column-end: 4;
         grid-row-start: 4;
         grid-row-end: 5;
 
@@ -213,8 +213,8 @@
         grid-row-end: 3;
     }
     .Footer {
-        grid-column-start: 2;
-        grid-column-end: 3;
+        grid-column-start: 3;
+        grid-column-end: 4;
         grid-row-start: 5;
         grid-row-end: 6;
     }
@@ -226,24 +226,36 @@
 @media (max-width: 800px) {
     #appPageRoot {
         display: grid;
-        grid-template-columns: 1fr minmax(var(--active-tasks-single-board-min-width), var(--active-tasks-single-board-max-width)) 1fr;
+        grid-template-columns: 1fr 0.4rem minmax(var(--active-tasks-single-board-min-width), var(--active-tasks-single-board-max-width)) 0.4rem 1fr;
         grid-template-rows: 3.4rem 3.4rem auto auto auto;
     }
     .Header {
-        grid-column-start: 2;
+        grid-column-start: 3;
+        grid-column-end: 4;
+        grid-row-start: 1;
+        grid-row-end: 2;
+    }
+    .HeaderLeftBlock {
+        grid-column-start: 1;
         grid-column-end: 3;
         grid-row-start: 1;
         grid-row-end: 2;
     }
+    .HeaderRightBlock {
+        grid-column-start: 4;
+        grid-column-end: 6;
+        grid-row-start: 1;
+        grid-row-end: 2;
+    }
     .ContextTabsWrapper {
-        grid-column-start: 2;
-        grid-column-end: 3;
+        grid-column-start: 3;
+        grid-column-end: 4;
         grid-row-start: 2;
         grid-row-end: 3;
     }
     .ActiveTaskSection {
-        grid-column-start: 2;
-        grid-column-end: 3;
+        grid-column-start: 3;
+        grid-column-end: 4;
         grid-row-start: 3;
         grid-row-end: 4;
 
@@ -267,8 +279,8 @@
         padding-top: 0.2rem;
     }
     .TaskStatisticsSection {
-        grid-column-start: 2;
-        grid-column-end: 3;
+        grid-column-start: 3;
+        grid-column-end: 4;
         grid-row-start: 4;
         grid-row-end: 5;
 
@@ -303,8 +315,8 @@
         grid-row-end: 3;
     }
     .Footer {
-        grid-column-start: 2;
-        grid-column-end: 3;
+        grid-column-start: 3;
+        grid-column-end: 4;
         grid-row-start: 5;
         grid-row-end: 6;
     }
