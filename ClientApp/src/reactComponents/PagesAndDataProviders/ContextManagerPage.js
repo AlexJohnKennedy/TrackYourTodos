@@ -52,6 +52,7 @@ class ContextSelectionCheckbox extends Component {
     constructor(props) {
         super(props);
         this.CheckboxInputRef = React.createRef();
+        this.handleClick = this.handleClick.bind(this);
     }
     componentDidMount() {
         this.CheckboxInputRef.current.checked = this.props.isSelected;  // boolean
@@ -59,10 +60,14 @@ class ContextSelectionCheckbox extends Component {
     componentDidUpdate() {
         this.CheckboxInputRef.current.checked = this.props.isSelected;  // boolean
     }
+    handleClick() {
+        this.CheckboxInputRef.current.checked = this.props.isSelected;  // boolean
+        this.props.toggleCheckbox();
+    }
     render() {
         return (
             <div className="contextSelectionCheckboxWrapper">
-                <input type="checkbox" ref={this.CheckboxInputRef} onClick={this.props.toggleCheckbox}/>
+                <input type="checkbox" ref={this.CheckboxInputRef} onClick={this.handleClick}/>
                 <div> {this.props.name} </div>
             </div>
         );
