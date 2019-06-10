@@ -57,7 +57,8 @@ namespace todo_app.Controllers {
             IEnumerable<GenericTodoEvent> eventLog = await dbContext.TodoEvents.Where(e => userIdStrings.Contains(e.UserId.Trim())).OrderBy(e => e.Timestamp).ToListAsync();
             
             // Look through all the user's events to find the set of 'contexts' which already exist, so we can send it back to them.
-            List<string> allContextsNoDups = eventLog.Select(e => e.Context.ToLower().Trim()).ToHashSet().ToList();
+            // By ordering the event log BACKWARDS for this query (i.e. latest first), then we will 'discover' the contexts in most-recently-used order.
+            List<string> allContextsNoDups = eventLog.OrderByDescending(e => e.Timestamp).Select(e => e.Context.ToLower().Trim()).ToHashSet().ToList();
 
             if (contexts.Count > 0) {
                 eventLog = eventLog.Where(e => contexts.Contains(e.Context.Trim().ToLower())).OrderBy(e => e.Timestamp).ToList();

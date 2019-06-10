@@ -48,6 +48,7 @@ function replayEvent(event, tasklist, taskMap) {
         throw new Error("Could not identify the event type of a parsed data event! The invalid event type was: " + event.eventType);
     }
     else {
+        console.log(event);
         EventReplayFunctions.get(event.eventType)(event, tasklist, taskMap);
     }
 }
