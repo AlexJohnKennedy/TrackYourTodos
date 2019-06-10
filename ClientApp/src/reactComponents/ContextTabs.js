@@ -22,7 +22,7 @@ export class ContextTabs extends Component {
                     currActiveIndex={currActiveIndex}
                 />
                 <div className="contextSettingsButton">
-                    <div/>
+                    <div onClick={this.props.togglePage}/>
                 </div>
             </div>
         );

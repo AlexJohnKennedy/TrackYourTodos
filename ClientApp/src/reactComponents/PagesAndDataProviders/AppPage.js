@@ -5,6 +5,7 @@ import { BacklogSection } from '../RootSectionComponents/BacklogSection';
 import { Footer } from '../Footer';
 import { Header } from '../Header';
 import { ContextTabs } from '../ContextTabs';
+import { ContextManagerPage } from './ContextManagerPage';
 
 import { TemporaryStateManager } from '../../viewLogic/temporaryStateManager';
 import { ShortCutManager } from '../../viewLogic/keyboardShortcutHandler';
@@ -14,7 +15,7 @@ import { InstantiateNewDataModelScope } from '../../interactionLayer/viewLayerIn
 import { BuildDataEventHttpPostHandlers } from '../../interactionLayer/ajaxDataModules/ajaxDataEventPoster';
 import { setConflictingDataAction } from '../../interactionLayer/ajaxDataModules/ajaxErrorcaseHandlers';
 
-import { DEFAULT_GLOBAL_CONTEXT_STRING } from '../../logicLayer/Task';
+import { DEFAULT_GLOBAL_CONTEXT_STRING, MAX_CONTEXT_NAME_LEN } from '../../logicLayer/Task';
 
 
 // A wrapper for the application 'page' itself, which will be rendered by react-router.
@@ -27,7 +28,10 @@ export class AppPage extends Component {
             currentContext: DEFAULT_GLOBAL_CONTEXT_STRING,
             visibleContexts: [],     // Empty means that global is being rendered. Must be empty since we havne't loaded anything yet.
             availableContexts: [DEFAULT_GLOBAL_CONTEXT_STRING],   // This should be re-populated by the GET request handler.
-            dataModelScope: InstantiateNewDataModelScope(DEFAULT_GLOBAL_CONTEXT_STRING)
+            selectableContexts: [DEFAULT_GLOBAL_CONTEXT_STRING],
+            dataModelScope: InstantiateNewDataModelScope(DEFAULT_GLOBAL_CONTEXT_STRING),
+            showingContextManagerPage: false,
+
         }
 
         // Create a temporary state context for creation forms
@@ -37,6 +41,9 @@ export class AppPage extends Component {
         this.switchContext = this.switchContext.bind(this);
         this.createNewContext = this.createNewContext.bind(this);
         this.updateAvailableContexts = this.updateAvailableContexts.bind(this);
+        this.togglePage = this.togglePage.bind(this);
+        this.addSelectableContext = this.addSelectableContext.bind(this);
+        this.removeSelectableContext = this.removeSelectableContext.bind(this);
     }
     setupInitialDataFetch() {
         const conflictingDataAction = () => this.state.dataModelScope.TriggerEventLogDataRefresh(this.state.visibleContexts);
@@ -115,7 +122,7 @@ export class AppPage extends Component {
     // Pased down to our children, allowing them to create new contexts.
     createNewContext(newContext) {
         newContext = this.validateContextString(newContext);
-        if (newContext === null) { return null; }
+        if (newContext === null) { return; }
         if (this.state.availableContexts.includes(newContext) || newContext === DEFAULT_GLOBAL_CONTEXT_STRING) { 
             this.performSwitch(newContext);
         }
@@ -141,8 +148,31 @@ export class AppPage extends Component {
         });
     }
 
+    togglePage(isSettings) {
+        if (isSettings !== this.state.showingContextManagerPage) {
+            this.setState({
+                showingContextManagerPage: isSettings
+            });
+        }
+    }
+
+    addSelectableContext(context) {
+        context = this.validateContextString(context);
+        if (context === null || this.state.selectableContexts.includes(context)) return;
+        this.setState((prevState, prevProps) => ({
+            selectableContexts: prevState.selectableContexts.concat(context)
+        }));
+    }
+    removeSelectableContext(context) {
+        context = this.validateContextString(context);
+        if (context === null || !this.state.selectableContexts.includes(context)) return;
+        this.setState((prevState, prevProps) => ({
+            selectableContexts: prevState.selectableContexts.filter(s => s !== context)
+        }));
+    }
+
     validateContextString(context) {
-        if (context === null || context === undefined || context === "" || context.trim().length === 0) {
+        if (context === null || context === undefined || context === "" || context.trim().length === 0 || context.trim().length > MAX_CONTEXT_NAME_LEN) {
             console.warn("Invalid context passed to ContextState! Just doing nothing instead of crashing. Context was: " + context);
             return null;
         }
@@ -153,16 +183,29 @@ export class AppPage extends Component {
         return (
             // Return each 'section' of the app as siblings, so that the root div can arrange them using CSS Grid!
             <ThemeId.Provider value={{ themeId: currThemeId }}>
-                <div id="appPageRoot">
-                    <div className="HeaderLeftBlock"/>
-                    <Header onSignOut={this.props.onSignOut}/>
-                    <div className="HeaderRightBlock"/>
-                    <ContextTabs switchContext={this.switchContext} createNewContext={this.createNewContext} currentContext={this.state.currentContext} selectableContexts={this.state.availableContexts}/>
-                    <BacklogSection dataModelScope={this.state.dataModelScope} formStateManager={this.formStateManager} />
-                    <ActiveTaskSection dataModelScope={this.state.dataModelScope} formStateManager={this.formStateManager} />
-                    <TaskStatisticsSection dataModelScope={this.state.dataModelScope} formStateManager={this.formStateManager} />
-                    <Footer />
-                </div>
+                { this.state.showingContextManagerPage &&
+                    <ContextManagerPage 
+                        togglePage={() => this.togglePage(false)} 
+                        createNewContext={this.createNewContext} 
+                        availableContexts={this.state.availableContexts} 
+                        selectableContexts={this.state.selectableContexts}
+                        addSelectableContext={this.addSelectableContext}
+                        removeSelectableContext={this.removeSelectableContext}
+                        maxSelectable={5}
+                    />
+                }
+                { !this.state.showingContextManagerPage &&
+                    <div id="appPageRoot">
+                        <div className="HeaderLeftBlock"/>
+                        <Header onSignOut={this.props.onSignOut}/>
+                        <div className="HeaderRightBlock"/>
+                        <ContextTabs togglePage={() => this.togglePage(true)} switchContext={this.switchContext} currentContext={this.state.currentContext} selectableContexts={this.state.selectableContexts}/>
+                        <BacklogSection dataModelScope={this.state.dataModelScope} formStateManager={this.formStateManager} />
+                        <ActiveTaskSection dataModelScope={this.state.dataModelScope} formStateManager={this.formStateManager} />
+                        <TaskStatisticsSection dataModelScope={this.state.dataModelScope} formStateManager={this.formStateManager} />
+                        <Footer />
+                    </div>
+                }
             </ThemeId.Provider>
         );
     }
