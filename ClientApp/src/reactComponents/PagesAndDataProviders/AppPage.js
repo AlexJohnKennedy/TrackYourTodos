@@ -83,6 +83,11 @@ export class AppPage extends Component {
 
     cleanUpFormStates() {
         this.formStateManager.triggerCleanup();
+        if (this.state.showingContextManagerPage) {
+            this.setState({
+                showingContextManagerPage: false
+            });
+        }
     }
 
     // Passed down to our children, allowing them to switch contexts between the currently available ones.
@@ -149,6 +154,7 @@ export class AppPage extends Component {
     }
 
     togglePage(isSettings) {
+        this.cleanUpFormStates();
         if (isSettings !== this.state.showingContextManagerPage) {
             this.setState({
                 showingContextManagerPage: isSettings
