@@ -28,9 +28,6 @@
     margin-bottom: 3rem;
 }
 
-.firstContextSelectionCheckboxWrapper {
-    border-top: 1px solid var(--divider-colour-lighter);
-}
 .contextSelectionCheckboxWrapper {
     position: relative;
     display: inline-flex;
@@ -54,4 +51,13 @@
     height: 100%;
     padding: 0rem;
     margin: 0rem;
+}
+.contextManagerPage button {
+    position: absolute;
+    right: 0.8rem;
+    top: 0.6rem;
+    margin: 0;
+    padding: 0;
+    width: 2.5rem;
+    height: 2.5rem;
 }

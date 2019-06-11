@@ -30,8 +30,7 @@ export class AppPage extends Component {
             availableContexts: [DEFAULT_GLOBAL_CONTEXT_STRING],   // This should be re-populated by the GET request handler.
             selectableContexts: [DEFAULT_GLOBAL_CONTEXT_STRING],
             dataModelScope: InstantiateNewDataModelScope(DEFAULT_GLOBAL_CONTEXT_STRING),
-            showingContextManagerPage: false,
-
+            showingContextManagerPage: false
         }
 
         // Create a temporary state context for creation forms

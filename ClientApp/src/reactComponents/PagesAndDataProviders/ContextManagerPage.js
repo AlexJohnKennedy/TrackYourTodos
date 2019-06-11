@@ -70,10 +70,12 @@ class ContextSelectionCheckbox extends Component {
         if (this.props.isDisabled) checkbox = <input type="checkbox" ref={this.CheckboxInputRef} onClick={this.handleClick} disabled="disabled"/>
         else checkbox = <input type="checkbox" ref={this.CheckboxInputRef} onClick={this.handleClick}/>
 
+        const capitaliseFirstLetter = s => s.charAt(0).toUpperCase() + s.slice(1);
+
         return (
             <div className="contextSelectionCheckboxWrapper">
                 {checkbox}
-                {this.props.name}
+                {capitaliseFirstLetter(this.props.name)}
             </div>
         );
     }
