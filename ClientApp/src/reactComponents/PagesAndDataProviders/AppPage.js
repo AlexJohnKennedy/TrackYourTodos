@@ -182,30 +182,28 @@ export class AppPage extends Component {
     render() {
         return (
             // Return each 'section' of the app as siblings, so that the root div can arrange them using CSS Grid!
-            <ThemeId.Provider value={{ themeId: currThemeId }}>
-                { this.state.showingContextManagerPage &&
-                    <ContextManagerPage 
-                        togglePage={() => this.togglePage(false)} 
-                        createNewContext={this.createNewContext} 
-                        availableContexts={this.state.availableContexts} 
-                        selectableContexts={this.state.selectableContexts}
-                        addSelectableContext={this.addSelectableContext}
-                        removeSelectableContext={this.removeSelectableContext}
-                        maxSelectable={5}
-                    />
-                }
-                { !this.state.showingContextManagerPage &&
-                    <div id="appPageRoot">
-                        <div className="HeaderLeftBlock"/>
-                        <Header onSignOut={this.props.onSignOut}/>
-                        <div className="HeaderRightBlock"/>
-                        <ContextTabs togglePage={() => this.togglePage(true)} switchContext={this.switchContext} currentContext={this.state.currentContext} selectableContexts={this.state.selectableContexts}/>
-                        <BacklogSection dataModelScope={this.state.dataModelScope} formStateManager={this.formStateManager} />
-                        <ActiveTaskSection dataModelScope={this.state.dataModelScope} formStateManager={this.formStateManager} />
-                        <TaskStatisticsSection dataModelScope={this.state.dataModelScope} formStateManager={this.formStateManager} />
-                        <Footer />
-                    </div>
-                }
+            <ThemeId.Provider value={{ themeId: currThemeId }}> 
+                <div id="appPageRoot">
+                    <div className="HeaderLeftBlock"/>
+                    <Header onSignOut={this.props.onSignOut}/>
+                    <div className="HeaderRightBlock"/>
+                    <ContextTabs togglePage={() => this.togglePage(true)} switchContext={this.switchContext} currentContext={this.state.currentContext} selectableContexts={this.state.selectableContexts}/>
+                    <BacklogSection dataModelScope={this.state.dataModelScope} formStateManager={this.formStateManager} />
+                    <ActiveTaskSection dataModelScope={this.state.dataModelScope} formStateManager={this.formStateManager} />
+                    <TaskStatisticsSection dataModelScope={this.state.dataModelScope} formStateManager={this.formStateManager} />
+                    { this.state.showingContextManagerPage &&
+                        <ContextManagerPage 
+                            togglePage={() => this.togglePage(false)} 
+                            createNewContext={this.createNewContext} 
+                            availableContexts={this.state.availableContexts} 
+                            selectableContexts={this.state.selectableContexts}
+                            addSelectableContext={this.addSelectableContext}
+                            removeSelectableContext={this.removeSelectableContext}
+                            maxSelectable={5}
+                        />
+                    }
+                    <Footer />
+                </div>
             </ThemeId.Provider>
         );
     }

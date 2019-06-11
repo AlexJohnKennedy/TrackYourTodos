@@ -9,6 +9,7 @@
 @import "./Header.css";
 @import "./LoginPage.css";
 @import "./ContextTabs.css";
+@import "./ContextManagerPage.css";
 
 /* Define some global variables to define VSCode colour scheme colours! */
 :root {

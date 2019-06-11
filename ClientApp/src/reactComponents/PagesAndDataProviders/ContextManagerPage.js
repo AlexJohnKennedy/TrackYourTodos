@@ -37,9 +37,9 @@ export class ContextManagerPage extends Component {
         }
 
         return (
-            <div className="utilityPageBox">
+            <div className="contextManagerPage">
                 <div className="titleText">
-                    Select the contexts you want to work with! <br/> You can have up to {this.props.maxSelectable} selected at a time.
+                    Context manangement <br/> You can have up to {this.props.maxSelectable} selected at a time.
                 </div>
                 {checkboxitems}
                 <button onClick={this.props.togglePage}> Return to app page and away from this disgusting page </button>
