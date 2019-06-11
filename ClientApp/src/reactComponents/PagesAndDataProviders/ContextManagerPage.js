@@ -39,10 +39,11 @@ export class ContextManagerPage extends Component {
         return (
             <div className="contextManagerPage">
                 <div className="titleText">
-                    Context manangement <br/> You can have up to {this.props.maxSelectable} selected at a time.
+                   <h2> Context manangement </h2>
                 </div>
+                <div className="subheading"> You can have up to {this.props.maxSelectable} selected at a time. </div>
                 {checkboxitems}
-                <button onClick={this.props.togglePage}> Return to app page and away from this disgusting page </button>
+                <button onClick={this.props.togglePage}> x </button>
             </div>
         );
     }
