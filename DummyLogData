@@ -1,7 +1,5 @@
 [
       {
-         "eventId":1,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1558991351915,
          "id":"fd02df1a-8027-41e3-9be9-ec6d44ff157f",
@@ -15,8 +13,6 @@
          "original":null
       },
       {
-         "eventId":2,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1558991378887,
          "id":"32c2d829-2b38-46ef-b1a4-e78f06ce81eb",
@@ -30,8 +26,6 @@
          "original":null
       },
       {
-         "eventId":3,
-         "userId":"118113125420969511952",
          "eventType":"subtaskCreated",
          "timestamp":1558991425388,
          "id":"f5e4c961-9bcf-44b5-b1be-d624d7ad1807",
@@ -45,8 +39,6 @@
          "original":null
       },
       {
-         "eventId":4,
-         "userId":"118113125420969511952",
          "eventType":"subtaskCreated",
          "timestamp":1558991458694,
          "id":"a5917e2a-a28c-478d-8fba-7c61a908a236",
@@ -60,8 +52,6 @@
          "original":null
       },
       {
-         "eventId":5,
-         "userId":"118113125420969511952",
          "eventType":"subtaskCreated",
          "timestamp":1558991500939,
          "id":"95fe3000-ea1a-4380-a468-0798f5ca03e3",
@@ -75,8 +65,6 @@
          "original":null
       },
       {
-         "eventId":6,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1558991664419,
          "id":"6861a802-5cba-49f5-b87d-d139fe7d617b",
@@ -90,8 +78,6 @@
          "original":null
       },
       {
-         "eventId":7,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1558991701746,
          "id":"3e8c42d7-8854-4f3d-97c7-97a18d4ef5b7",
@@ -105,8 +91,6 @@
          "original":null
       },
       {
-         "eventId":8,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1558991792915,
          "id":"fe7fe4c2-1fd2-46a0-9e50-5c6d1ef87f58",
@@ -120,8 +104,6 @@
          "original":null
       },
       {
-         "eventId":9,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1558991859465,
          "id":"9e0b90ba-0889-4060-be7d-25241c2eea6c",
@@ -135,8 +117,6 @@
          "original":null
       },
       {
-         "eventId":10,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1558991894989,
          "id":"8199f628-e569-4c47-b18d-73c497ed08d6",
@@ -150,8 +130,6 @@
          "original":null
       },
       {
-         "eventId":11,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1558991924392,
          "id":"cb919864-522a-491c-af2b-c3186ae7174d",
@@ -165,8 +143,6 @@
          "original":null
       },
       {
-         "eventId":12,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1558991940496,
          "id":"990596f7-e716-416e-a96a-6e062937e937",
@@ -180,8 +156,6 @@
          "original":null
       },
       {
-         "eventId":13,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1558991956797,
          "id":"eb4983d9-6ed0-497a-a44e-e65e837d9521",
@@ -195,8 +169,6 @@
          "original":null
       },
       {
-         "eventId":14,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1558992017133,
          "id":"d046fdba-628c-41d0-a136-e62a738b2125",
@@ -210,8 +182,6 @@
          "original":null
       },
       {
-         "eventId":15,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1558992065976,
          "id":"9ab0d27b-fa4b-4234-87a8-7d07e882203d",
@@ -225,8 +195,6 @@
          "original":null
       },
       {
-         "eventId":16,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1558992077011,
          "id":"5a4ef632-54f1-4e28-b422-9f323560b52f",
@@ -240,8 +208,6 @@
          "original":null
       },
       {
-         "eventId":17,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1558992142282,
          "id":"cc3763b5-c747-4e26-8d94-be8967c4a659",
@@ -255,8 +221,6 @@
          "original":null
       },
       {
-         "eventId":18,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1558992203945,
          "id":"47674cf4-8746-4f24-a512-d11772597f9b",
@@ -270,8 +234,6 @@
          "original":null
       },
       {
-         "eventId":19,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1558992219924,
          "id":"9468dc3d-8150-4ed9-b2ef-ccf3c44e8b16",
@@ -285,8 +247,6 @@
          "original":null
       },
       {
-         "eventId":20,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1558992286228,
          "id":"d8f46b97-ad1f-43ba-ab6f-eb940db4ddf7",
@@ -300,8 +260,6 @@
          "original":null
       },
       {
-         "eventId":21,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1558992314827,
          "id":"d500f23a-28f4-4632-bce2-ec5563a973e9",
@@ -315,8 +273,6 @@
          "original":null
       },
       {
-         "eventId":22,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1558992470663,
          "id":"30cb29ba-8f35-4b75-875e-b32ac3f9fe94",
@@ -330,8 +286,6 @@
          "original":null
       },
       {
-         "eventId":23,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1558992570368,
          "id":"eb4983d9-6ed0-497a-a44e-e65e837d9521",
@@ -345,8 +299,6 @@
          "original":null
       },
       {
-         "eventId":24,
-         "userId":"118113125420969511952",
          "eventType":"taskCompleted",
          "timestamp":1558992680494,
          "id":"eb4983d9-6ed0-497a-a44e-e65e837d9521",
@@ -360,8 +312,6 @@
          "original":null
       },
       {
-         "eventId":25,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1559024730773,
          "id":"fd02df1a-8027-41e3-9be9-ec6d44ff157f",
@@ -375,8 +325,6 @@
          "original":null
       },
       {
-         "eventId":26,
-         "userId":"118113125420969511952",
          "eventType":"taskCompleted",
          "timestamp":1559024731906,
          "id":"fd02df1a-8027-41e3-9be9-ec6d44ff157f",
@@ -390,8 +338,6 @@
          "original":null
       },
       {
-         "eventId":27,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1559031852598,
          "id":"30cb29ba-8f35-4b75-875e-b32ac3f9fe94",
@@ -405,8 +351,6 @@
          "original":null
       },
       {
-         "eventId":28,
-         "userId":"118113125420969511952",
          "eventType":"taskCompleted",
          "timestamp":1559031854536,
          "id":"30cb29ba-8f35-4b75-875e-b32ac3f9fe94",
@@ -420,8 +364,6 @@
          "original":null
       },
       {
-         "eventId":29,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1559031856210,
          "id":"d500f23a-28f4-4632-bce2-ec5563a973e9",
@@ -435,8 +377,6 @@
          "original":null
       },
       {
-         "eventId":30,
-         "userId":"118113125420969511952",
          "eventType":"taskCompleted",
          "timestamp":1559031857100,
          "id":"d500f23a-28f4-4632-bce2-ec5563a973e9",
@@ -450,8 +390,6 @@
          "original":null
       },
       {
-         "eventId":31,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1559031860987,
          "id":"6861a802-5cba-49f5-b87d-d139fe7d617b",
@@ -465,8 +403,6 @@
          "original":null
       },
       {
-         "eventId":32,
-         "userId":"118113125420969511952",
          "eventType":"taskCompleted",
          "timestamp":1559031861959,
          "id":"6861a802-5cba-49f5-b87d-d139fe7d617b",
@@ -480,8 +416,6 @@
          "original":null
       },
       {
-         "eventId":33,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1559034155708,
          "id":"9e0b90ba-0889-4060-be7d-25241c2eea6c",
@@ -495,8 +429,6 @@
          "original":null
       },
       {
-         "eventId":34,
-         "userId":"118113125420969511952",
          "eventType":"taskCompleted",
          "timestamp":1559043445099,
          "id":"9e0b90ba-0889-4060-be7d-25241c2eea6c",
@@ -510,8 +442,6 @@
          "original":null
       },
       {
-         "eventId":35,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1559044059728,
          "id":"5a4ef632-54f1-4e28-b422-9f323560b52f",
@@ -525,8 +455,6 @@
          "original":null
       },
       {
-         "eventId":36,
-         "userId":"118113125420969511952",
          "eventType":"taskCompleted",
          "timestamp":1559044060743,
          "id":"5a4ef632-54f1-4e28-b422-9f323560b52f",
@@ -540,8 +468,6 @@
          "original":null
       },
       {
-         "eventId":37,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1559044310963,
          "id":"3198ba0c-6813-4904-a48e-f3df46eb2f25",
@@ -555,8 +481,6 @@
          "original":null
       },
       {
-         "eventId":38,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1559044323112,
          "id":"b16bc768-33e4-4e7c-9582-443978d9e926",
@@ -570,8 +494,6 @@
          "original":null
       },
       {
-         "eventId":39,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1559044331443,
          "id":"94574b2e-2117-458e-b752-a31e1ca8670c",
@@ -585,8 +507,6 @@
          "original":null
       },
       {
-         "eventId":40,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1559044429859,
          "id":"f5e4c961-9bcf-44b5-b1be-d624d7ad1807",
@@ -600,8 +520,6 @@
          "original":null
       },
       {
-         "eventId":41,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1559044473022,
          "id":"59ea6802-48a7-491f-9e6d-2531c3b8637b",
@@ -615,8 +533,6 @@
          "original":null
       },
       {
-         "eventId":42,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1559044522841,
          "id":"4e21b0a9-2d59-4ef8-a2e5-c013a041d72c",
@@ -630,8 +546,6 @@
          "original":null
       },
       {
-         "eventId":43,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1559044541388,
          "id":"aeffeaa7-f88e-4c79-8451-4866f031174a",
@@ -645,8 +559,6 @@
          "original":null
       },
       {
-         "eventId":44,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1559044570111,
          "id":"39f4b1a7-19ce-434f-a62a-afadc1c1789e",
@@ -660,8 +572,6 @@
          "original":null
       },
       {
-         "eventId":45,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1559047401336,
          "id":"a5917e2a-a28c-478d-8fba-7c61a908a236",
@@ -675,8 +585,6 @@
          "original":null
       },
       {
-         "eventId":46,
-         "userId":"118113125420969511952",
          "eventType":"taskCompleted",
          "timestamp":1559047405486,
          "id":"f5e4c961-9bcf-44b5-b1be-d624d7ad1807",
@@ -690,8 +598,6 @@
          "original":null
       },
       {
-         "eventId":47,
-         "userId":"118113125420969511952",
          "eventType":"taskCompleted",
          "timestamp":1559047467560,
          "id":"a5917e2a-a28c-478d-8fba-7c61a908a236",
@@ -705,8 +611,6 @@
          "original":null
       },
       {
-         "eventId":48,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1559047732750,
          "id":"d86e0660-d854-4952-b0ed-079184741078",
@@ -720,8 +624,6 @@
          "original":null
       },
       {
-         "eventId":49,
-         "userId":"118113125420969511952",
          "eventType":"taskFailed",
          "timestamp":1559055600000,
          "id":"95fe3000-ea1a-4380-a468-0798f5ca03e3",
@@ -735,8 +637,6 @@
          "original":null
       },
       {
-         "eventId":50,
-         "userId":"118113125420969511952",
          "eventType":"taskRevived",
          "timestamp":1559080013987,
          "id":"1233e403-3cbb-4a42-82d3-c152e083a010",
@@ -750,8 +650,6 @@
          "original":"95fe3000-ea1a-4380-a468-0798f5ca03e3"
       },
       {
-         "eventId":51,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1559080088316,
          "id":"8d0eab13-0e03-4d79-a48c-c316c5a78b73",
@@ -765,8 +663,6 @@
          "original":null
       },
       {
-         "eventId":52,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1559080132952,
          "id":"f817d272-e9a1-4c8a-9088-35e8369fbd67",
@@ -780,8 +676,6 @@
          "original":null
       },
       {
-         "eventId":53,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1559080167099,
          "id":"e97bbc07-74b5-42df-a9dc-252ee9da9813",
@@ -795,8 +689,6 @@
          "original":null
       },
       {
-         "eventId":54,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1559112367842,
          "id":"1233e403-3cbb-4a42-82d3-c152e083a010",
@@ -810,8 +702,6 @@
          "original":null
       },
       {
-         "eventId":55,
-         "userId":"118113125420969511952",
          "eventType":"taskFailed",
          "timestamp":1559142000000,
          "id":"4e21b0a9-2d59-4ef8-a2e5-c013a041d72c",
@@ -825,8 +715,6 @@
          "original":null
       },
       {
-         "eventId":56,
-         "userId":"118113125420969511952",
          "eventType":"taskFailed",
          "timestamp":1559142000000,
          "id":"1233e403-3cbb-4a42-82d3-c152e083a010",
@@ -840,8 +728,6 @@
          "original":null
       },
       {
-         "eventId":57,
-         "userId":"118113125420969511952",
          "eventType":"taskFailed",
          "timestamp":1559142000000,
          "id":"aeffeaa7-f88e-4c79-8451-4866f031174a",
@@ -855,8 +741,6 @@
          "original":null
       },
       {
-         "eventId":58,
-         "userId":"118113125420969511952",
          "eventType":"taskFailed",
          "timestamp":1559142000000,
          "id":"8d0eab13-0e03-4d79-a48c-c316c5a78b73",
@@ -870,8 +754,6 @@
          "original":null
       },
       {
-         "eventId":59,
-         "userId":"118113125420969511952",
          "eventType":"taskFailed",
          "timestamp":1559142000000,
          "id":"f817d272-e9a1-4c8a-9088-35e8369fbd67",
@@ -885,8 +767,6 @@
          "original":null
       },
       {
-         "eventId":60,
-         "userId":"118113125420969511952",
          "eventType":"taskFailed",
          "timestamp":1559142000000,
          "id":"e97bbc07-74b5-42df-a9dc-252ee9da9813",
@@ -900,8 +780,6 @@
          "original":null
       },
       {
-         "eventId":61,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1559380198888,
          "id":"32c2d829-2b38-46ef-b1a4-e78f06ce81eb",
@@ -919,8 +797,6 @@
          "original":null
       },
       {
-         "eventId":62,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1559380200583,
          "id":"fe7fe4c2-1fd2-46a0-9e50-5c6d1ef87f58",
@@ -934,8 +810,6 @@
          "original":null
       },
       {
-         "eventId":63,
-         "userId":"118113125420969511952",
          "eventType":"taskRevived",
          "timestamp":1559380215461,
          "id":"591c0035-92d5-4e95-99dd-a0318ce42c2e",
@@ -949,8 +823,6 @@
          "original":"8d0eab13-0e03-4d79-a48c-c316c5a78b73"
       },
       {
-         "eventId":64,
-         "userId":"118113125420969511952",
          "eventType":"taskRevived",
          "timestamp":1559380223180,
          "id":"edd41b38-1858-47d0-90e5-3e0d87150b26",
@@ -964,8 +836,6 @@
          "original":"e97bbc07-74b5-42df-a9dc-252ee9da9813"
       },
       {
-         "eventId":65,
-         "userId":"118113125420969511952",
          "eventType":"taskRevived",
          "timestamp":1559380226466,
          "id":"160364fc-a837-4200-8d72-5314ccc4d887",
@@ -979,8 +849,6 @@
          "original":"f817d272-e9a1-4c8a-9088-35e8369fbd67"
       },
       {
-         "eventId":66,
-         "userId":"118113125420969511952",
          "eventType":"taskRevived",
          "timestamp":1559380231527,
          "id":"8a27e340-b0a8-49df-a6d6-3f1772badc1d",
@@ -994,8 +862,6 @@
          "original":"1233e403-3cbb-4a42-82d3-c152e083a010"
       },
       {
-         "eventId":67,
-         "userId":"118113125420969511952",
          "eventType":"taskRevived",
          "timestamp":1559380233688,
          "id":"23a114ba-6f41-47e5-a81b-d441877a6b0f",
@@ -1009,8 +875,6 @@
          "original":"4e21b0a9-2d59-4ef8-a2e5-c013a041d72c"
       },
       {
-         "eventId":68,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1559380234744,
          "id":"23a114ba-6f41-47e5-a81b-d441877a6b0f",
@@ -1024,8 +888,6 @@
          "original":null
       },
       {
-         "eventId":69,
-         "userId":"118113125420969511952",
          "eventType":"taskCompleted",
          "timestamp":1559380235614,
          "id":"23a114ba-6f41-47e5-a81b-d441877a6b0f",
@@ -1039,8 +901,6 @@
          "original":null
       },
       {
-         "eventId":70,
-         "userId":"118113125420969511952",
          "eventType":"taskActivated",
          "timestamp":1559380254516,
          "id":"8a27e340-b0a8-49df-a6d6-3f1772badc1d",
@@ -1054,8 +914,6 @@
          "original":null
       },
       {
-         "eventId":71,
-         "userId":"118113125420969511952",
          "eventType":"taskActivated",
          "timestamp":1559380290601,
          "id":"591c0035-92d5-4e95-99dd-a0318ce42c2e",
@@ -1069,8 +927,6 @@
          "original":null
       },
       {
-         "eventId":72,
-         "userId":"118113125420969511952",
          "eventType":"taskActivated",
          "timestamp":1559380292578,
          "id":"160364fc-a837-4200-8d72-5314ccc4d887",
@@ -1084,8 +940,6 @@
          "original":null
       },
       {
-         "eventId":73,
-         "userId":"118113125420969511952",
          "eventType":"taskActivated",
          "timestamp":1559380296256,
          "id":"edd41b38-1858-47d0-90e5-3e0d87150b26",
@@ -1099,8 +953,6 @@
          "original":null
       },
       {
-         "eventId":74,
-         "userId":"118113125420969511952",
          "eventType":"taskCompleted",
          "timestamp":1559380313717,
          "id":"fe7fe4c2-1fd2-46a0-9e50-5c6d1ef87f58",
@@ -1114,8 +966,6 @@
          "original":null
       },
       {
-         "eventId":75,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1559380331838,
          "id":"8a27e340-b0a8-49df-a6d6-3f1772badc1d",
@@ -1129,8 +979,6 @@
          "original":null
       },
       {
-         "eventId":76,
-         "userId":"118113125420969511952",
          "eventType":"taskCompleted",
          "timestamp":1559380335764,
          "id":"8a27e340-b0a8-49df-a6d6-3f1772badc1d",
@@ -1144,8 +992,6 @@
          "original":null
       },
       {
-         "eventId":77,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1559380357335,
          "id":"59247be1-94a7-422b-b485-97c63a495bb1",
@@ -1159,8 +1005,6 @@
          "original":null
       },
       {
-         "eventId":78,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1559380405860,
          "id":"b95fe72e-9708-40de-afc2-f32c4de7da3d",
@@ -1174,8 +1018,6 @@
          "original":null
       },
       {
-         "eventId":79,
-         "userId":"118113125420969511952",
          "eventType":"subtaskCreated",
          "timestamp":1559380460261,
          "id":"c92a32db-e8c4-41a4-8461-80b30261e161",
@@ -1189,8 +1031,6 @@
          "original":null
       },
       {
-         "eventId":80,
-         "userId":"118113125420969511952",
          "eventType":"subtaskCreated",
          "timestamp":1559380476338,
          "id":"2590f7fc-92df-47c5-a19b-b25f31020f2d",
@@ -1204,8 +1044,6 @@
          "original":null
       },
       {
-         "eventId":81,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1559380481994,
          "id":"c92a32db-e8c4-41a4-8461-80b30261e161",
@@ -1219,8 +1057,6 @@
          "original":null
       },
       {
-         "eventId":82,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1559380538429,
          "id":"32fb9dc2-db0c-4329-a23e-64c703c9b58f",
@@ -1234,8 +1070,6 @@
          "original":null
       },
       {
-         "eventId":83,
-         "userId":"118113125420969511952",
          "eventType":"taskCompleted",
          "timestamp":1559381305954,
          "id":"c92a32db-e8c4-41a4-8461-80b30261e161",
@@ -1249,8 +1083,6 @@
          "original":null
       },
       {
-         "eventId":84,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1559381441940,
          "id":"32fb9dc2-db0c-4329-a23e-64c703c9b58f",
@@ -1264,8 +1096,6 @@
          "original":null
       },
       {
-         "eventId":85,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1559383643094,
          "id":"f93efd84-73ea-44d3-9796-be7f34be79e4",
@@ -1279,8 +1109,6 @@
          "original":null
       },
       {
-         "eventId":86,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1559383645778,
          "id":"f93efd84-73ea-44d3-9796-be7f34be79e4",
@@ -1294,8 +1122,6 @@
          "original":null
       },
       {
-         "eventId":87,
-         "userId":"118113125420969511952",
          "eventType":"taskCompleted",
          "timestamp":1559383646853,
          "id":"f93efd84-73ea-44d3-9796-be7f34be79e4",
@@ -1309,8 +1135,6 @@
          "original":null
       },
       {
-         "eventId":88,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1559391434645,
          "id":"4d0f2308-1d19-4059-aa63-1f435c58f45a",
@@ -1324,8 +1148,6 @@
          "original":null
       },
       {
-         "eventId":89,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1559391438119,
          "id":"4d0f2308-1d19-4059-aa63-1f435c58f45a",
@@ -1339,8 +1161,6 @@
          "original":null
       },
       {
-         "eventId":90,
-         "userId":"118113125420969511952",
          "eventType":"taskCompleted",
          "timestamp":1559404382561,
          "id":"32fb9dc2-db0c-4329-a23e-64c703c9b58f",
@@ -1354,8 +1174,6 @@
          "original":null
       },
       {
-         "eventId":91,
-         "userId":"118113125420969511952",
          "eventType":"taskCompleted",
          "timestamp":1559404384797,
          "id":"4d0f2308-1d19-4059-aa63-1f435c58f45a",
@@ -1369,8 +1187,6 @@
          "original":null
       },
       {
-         "eventId":92,
-         "userId":"118113125420969511952",
          "eventType":"taskRevived",
          "timestamp":1559429565479,
          "id":"4f5edc9e-26c0-4037-b9ba-6e610d00012c",
@@ -1384,8 +1200,6 @@
          "original":"aeffeaa7-f88e-4c79-8451-4866f031174a"
       },
       {
-         "eventId":93,
-         "userId":"118113125420969511952",
          "eventType":"taskActivated",
          "timestamp":1559429597841,
          "id":"59247be1-94a7-422b-b485-97c63a495bb1",
@@ -1399,8 +1213,6 @@
          "original":null
       },
       {
-         "eventId":94,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1559429911239,
          "id":"59247be1-94a7-422b-b485-97c63a495bb1",
@@ -1414,8 +1226,6 @@
          "original":null
       },
       {
-         "eventId":95,
-         "userId":"118113125420969511952",
          "eventType":"taskCompleted",
          "timestamp":1559429912187,
          "id":"59247be1-94a7-422b-b485-97c63a495bb1",
@@ -1429,8 +1239,6 @@
          "original":null
       },
       {
-         "eventId":96,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1559455553820,
          "id":"2590f7fc-92df-47c5-a19b-b25f31020f2d",
@@ -1444,8 +1252,6 @@
          "original":null
       },
       {
-         "eventId":97,
-         "userId":"118113125420969511952",
          "eventType":"taskCompleted",
          "timestamp":1559455557342,
          "id":"32c2d829-2b38-46ef-b1a4-e78f06ce81eb",
@@ -1465,8 +1271,6 @@
          "original":null
       },
       {
-         "eventId":98,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1559457749731,
          "id":"835e2682-4c81-4af5-ac7f-5436d4c8e3b8",
@@ -1480,8 +1284,6 @@
          "original":null
       },
       {
-         "eventId":99,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1559457906247,
          "id":"835e2682-4c81-4af5-ac7f-5436d4c8e3b8",
@@ -1495,8 +1297,6 @@
          "original":null
       },
       {
-         "eventId":100,
-         "userId":"118113125420969511952",
          "eventType":"taskCompleted",
          "timestamp":1559457907097,
          "id":"835e2682-4c81-4af5-ac7f-5436d4c8e3b8",
@@ -1510,8 +1310,6 @@
          "original":null
       },
       {
-         "eventId":101,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1559471118998,
          "id":"d86e0660-d854-4952-b0ed-079184741078",
@@ -1525,8 +1323,6 @@
          "original":null
       },
       {
-         "eventId":102,
-         "userId":"118113125420969511952",
          "eventType":"taskCompleted",
          "timestamp":1559471136509,
          "id":"d86e0660-d854-4952-b0ed-079184741078",
@@ -1540,8 +1336,6 @@
          "original":null
       },
       {
-         "eventId":103,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1559476150376,
          "id":"591c0035-92d5-4e95-99dd-a0318ce42c2e",
@@ -1555,8 +1349,6 @@
          "original":null
       },
       {
-         "eventId":104,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1559476485801,
          "id":"4860c959-d317-4e93-89bf-eaaf216c6958",
@@ -1570,8 +1362,6 @@
          "original":null
       },
       {
-         "eventId":105,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1559476488851,
          "id":"4860c959-d317-4e93-89bf-eaaf216c6958",
@@ -1585,8 +1375,6 @@
          "original":null
       },
       {
-         "eventId":106,
-         "userId":"118113125420969511952",
          "eventType":"taskFailed",
          "timestamp":1559487600000,
          "id":"9ab0d27b-fa4b-4234-87a8-7d07e882203d",
@@ -1600,8 +1388,6 @@
          "original":null
       },
       {
-         "eventId":107,
-         "userId":"118113125420969511952",
          "eventType":"taskFailed",
          "timestamp":1559487600000,
          "id":"cc3763b5-c747-4e26-8d94-be8967c4a659",
@@ -1615,8 +1401,6 @@
          "original":null
       },
       {
-         "eventId":108,
-         "userId":"118113125420969511952",
          "eventType":"taskFailed",
          "timestamp":1559487600000,
          "id":"edd41b38-1858-47d0-90e5-3e0d87150b26",
@@ -1630,8 +1414,6 @@
          "original":null
       },
       {
-         "eventId":109,
-         "userId":"118113125420969511952",
          "eventType":"taskFailed",
          "timestamp":1559487600000,
          "id":"160364fc-a837-4200-8d72-5314ccc4d887",
@@ -1645,8 +1427,6 @@
          "original":null
       },
       {
-         "eventId":110,
-         "userId":"118113125420969511952",
          "eventType":"taskFailed",
          "timestamp":1559487600000,
          "id":"4f5edc9e-26c0-4037-b9ba-6e610d00012c",
@@ -1660,8 +1440,6 @@
          "original":null
       },
       {
-         "eventId":111,
-         "userId":"118113125420969511952",
          "eventType":"taskCompleted",
          "timestamp":1559520303873,
          "id":"591c0035-92d5-4e95-99dd-a0318ce42c2e",
@@ -1675,8 +1453,6 @@
          "original":null
       },
       {
-         "eventId":112,
-         "userId":"118113125420969511952",
          "eventType":"taskCompleted",
          "timestamp":1559520306389,
          "id":"4860c959-d317-4e93-89bf-eaaf216c6958",
@@ -1690,8 +1466,6 @@
          "original":null
       },
       {
-         "eventId":113,
-         "userId":"118113125420969511952",
          "eventType":"taskRevived",
          "timestamp":1559520334464,
          "id":"4b785129-9ec6-4b2a-8629-4348a0b20ae9",
@@ -1705,8 +1479,6 @@
          "original":"edd41b38-1858-47d0-90e5-3e0d87150b26"
       },
       {
-         "eventId":114,
-         "userId":"118113125420969511952",
          "eventType":"taskRevived",
          "timestamp":1559520337091,
          "id":"34be9594-0d5d-4f10-b0a9-a77aa6e84f2b",
@@ -1720,8 +1492,6 @@
          "original":"4f5edc9e-26c0-4037-b9ba-6e610d00012c"
       },
       {
-         "eventId":115,
-         "userId":"118113125420969511952",
          "eventType":"taskRevived",
          "timestamp":1559520339814,
          "id":"de8af2b9-5bb0-4ed2-8a06-2a1f56b5dfbc",
@@ -1735,8 +1505,6 @@
          "original":"160364fc-a837-4200-8d72-5314ccc4d887"
       },
       {
-         "eventId":116,
-         "userId":"118113125420969511952",
          "eventType":"taskRevived",
          "timestamp":1559520343577,
          "id":"c639260c-c362-46e7-8720-6f5e9cb2884b",
@@ -1750,8 +1518,6 @@
          "original":"cc3763b5-c747-4e26-8d94-be8967c4a659"
       },
       {
-         "eventId":117,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1559520375883,
          "id":"3f32ae81-c49a-4605-9409-cfd70308f1c5",
@@ -1765,8 +1531,6 @@
          "original":null
       },
       {
-         "eventId":118,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1559523209473,
          "id":"3f32ae81-c49a-4605-9409-cfd70308f1c5",
@@ -1780,8 +1544,6 @@
          "original":null
       },
       {
-         "eventId":119,
-         "userId":"118113125420969511952",
          "eventType":"taskCompleted",
          "timestamp":1559523210320,
          "id":"3f32ae81-c49a-4605-9409-cfd70308f1c5",
@@ -1795,8 +1557,6 @@
          "original":null
       },
       {
-         "eventId":120,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1559532721377,
          "id":"de8af2b9-5bb0-4ed2-8a06-2a1f56b5dfbc",
@@ -1810,8 +1570,6 @@
          "original":null
       },
       {
-         "eventId":121,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1559534701672,
          "id":"73246891-b617-4803-9e99-9f9406f053a6",
@@ -1825,8 +1583,6 @@
          "original":null
       },
       {
-         "eventId":122,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1559534807477,
          "id":"b27c1fdf-56a7-4cf6-92d1-e89bca38facc",
@@ -1840,8 +1596,6 @@
          "original":null
       },
       {
-         "eventId":123,
-         "userId":"118113125420969511952",
          "eventType":"taskActivated",
          "timestamp":1559534826961,
          "id":"47674cf4-8746-4f24-a512-d11772597f9b",
@@ -1855,8 +1609,6 @@
          "original":null
       },
       {
-         "eventId":124,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1559534871074,
          "id":"5f6355cd-bc7c-414c-8a9b-97dd77398bf0",
@@ -1870,8 +1622,6 @@
          "original":null
       },
       {
-         "eventId":125,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1559534987810,
          "id":"83b7bfa1-146a-423b-8d12-451b6503c985",
@@ -1885,8 +1635,6 @@
          "original":null
       },
       {
-         "eventId":126,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1559536016528,
          "id":"945fee66-d3f9-4fe6-8ab5-998dd4a941bb",
@@ -1900,8 +1648,6 @@
          "original":null
       },
       {
-         "eventId":127,
-         "userId":"118113125420969511952",
          "eventType":"taskActivated",
          "timestamp":1559536038862,
          "id":"945fee66-d3f9-4fe6-8ab5-998dd4a941bb",
@@ -1915,8 +1661,6 @@
          "original":null
       },
       {
-         "eventId":128,
-         "userId":"118113125420969511952",
          "eventType":"subtaskCreated",
          "timestamp":1559536090474,
          "id":"1f5dccdd-770c-4bac-9089-4333b75f7d83",
@@ -1930,8 +1674,6 @@
          "original":null
       },
       {
-         "eventId":129,
-         "userId":"118113125420969511952",
          "eventType":"subtaskCreated",
          "timestamp":1559536156712,
          "id":"1357d4af-f60e-4c92-bca0-eb8d1b9654a1",
@@ -1945,8 +1687,6 @@
          "original":null
       },
       {
-         "eventId":130,
-         "userId":"118113125420969511952",
          "eventType":"subtaskCreated",
          "timestamp":1559536192224,
          "id":"9316a781-82ea-4b06-8c14-07de07212364",
@@ -1960,8 +1700,6 @@
          "original":null
       },
       {
-         "eventId":131,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1559536300960,
          "id":"f25fa2c3-d9d4-490d-8e5f-d28a8275050e",
@@ -1975,8 +1713,6 @@
          "original":null
       },
       {
-         "eventId":132,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1559547217175,
          "id":"4b785129-9ec6-4b2a-8629-4348a0b20ae9",
@@ -1990,8 +1726,6 @@
          "original":null
       },
       {
-         "eventId":133,
-         "userId":"118113125420969511952",
          "eventType":"taskCompleted",
          "timestamp":1559547218971,
          "id":"de8af2b9-5bb0-4ed2-8a06-2a1f56b5dfbc",
@@ -2005,8 +1739,6 @@
          "original":null
       },
       {
-         "eventId":134,
-         "userId":"118113125420969511952",
          "eventType":"taskCompleted",
          "timestamp":1559547220407,
          "id":"4b785129-9ec6-4b2a-8629-4348a0b20ae9",
@@ -2020,8 +1752,6 @@
          "original":null
       },
       {
-         "eventId":135,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1559547238413,
          "id":"f25fa2c3-d9d4-490d-8e5f-d28a8275050e",
@@ -2035,8 +1765,6 @@
          "original":null
       },
       {
-         "eventId":136,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1559553412154,
          "id":"47674cf4-8746-4f24-a512-d11772597f9b",
@@ -2050,8 +1778,6 @@
          "original":null
       },
       {
-         "eventId":137,
-         "userId":"118113125420969511952",
          "eventType":"taskFailed",
          "timestamp":1559574000000,
          "id":"f25fa2c3-d9d4-490d-8e5f-d28a8275050e",
@@ -2065,8 +1791,6 @@
          "original":null
       },
       {
-         "eventId":138,
-         "userId":"118113125420969511952",
          "eventType":"taskFailed",
          "timestamp":1559574000000,
          "id":"34be9594-0d5d-4f10-b0a9-a77aa6e84f2b",
@@ -2080,8 +1804,6 @@
          "original":null
       },
       {
-         "eventId":139,
-         "userId":"118113125420969511952",
          "eventType":"subtaskCreated",
          "timestamp":1559597045265,
          "id":"342b415c-59dc-463a-9325-ab8c02fabfb0",
@@ -2095,8 +1817,6 @@
          "original":null
       },
       {
-         "eventId":140,
-         "userId":"118113125420969511952",
          "eventType":"subtaskCreated",
          "timestamp":1559597069052,
          "id":"0d9be778-38f0-4ab7-8e34-3dd921e59e49",
@@ -2110,8 +1830,6 @@
          "original":null
       },
       {
-         "eventId":141,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1559597074341,
          "id":"342b415c-59dc-463a-9325-ab8c02fabfb0",
@@ -2125,8 +1843,6 @@
          "original":null
       },
       {
-         "eventId":142,
-         "userId":"118113125420969511952",
          "eventType":"taskFailed",
          "timestamp":1559660400000,
          "id":"0d9be778-38f0-4ab7-8e34-3dd921e59e49",
@@ -2140,8 +1856,6 @@
          "original":null
       },
       {
-         "eventId":143,
-         "userId":"118113125420969511952",
          "eventType":"taskFailed",
          "timestamp":1559660400000,
          "id":"342b415c-59dc-463a-9325-ab8c02fabfb0",
@@ -2155,8 +1869,6 @@
          "original":null
       },
       {
-         "eventId":144,
-         "userId":"118113125420969511952",
          "eventType":"taskRevived",
          "timestamp":1559684285301,
          "id":"27e87015-214b-48e2-a314-41f4badf66d7",
@@ -2170,8 +1882,6 @@
          "original":"342b415c-59dc-463a-9325-ab8c02fabfb0"
       },
       {
-         "eventId":145,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1559684287935,
          "id":"27e87015-214b-48e2-a314-41f4badf66d7",
@@ -2185,8 +1895,6 @@
          "original":null
       },
       {
-         "eventId":146,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1559716554462,
          "id":"9316a781-82ea-4b06-8c14-07de07212364",
@@ -2200,8 +1908,6 @@
          "original":null
       },
       {
-         "eventId":147,
-         "userId":"118113125420969511952",
          "eventType":"taskCompleted",
          "timestamp":1559721241657,
          "id":"27e87015-214b-48e2-a314-41f4badf66d7",
@@ -2215,8 +1921,6 @@
          "original":null
       },
       {
-         "eventId":148,
-         "userId":"118113125420969511952",
          "eventType":"subtaskCreated",
          "timestamp":1559721287163,
          "id":"c83ff88e-ec26-4a6a-aacc-5725781aebac",
@@ -2230,8 +1934,6 @@
          "original":null
       },
       {
-         "eventId":149,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1559805854267,
          "id":"c83ff88e-ec26-4a6a-aacc-5725781aebac",
@@ -2245,8 +1947,6 @@
          "original":null
       },
       {
-         "eventId":150,
-         "userId":"118113125420969511952",
          "eventType":"taskCompleted",
          "timestamp":1559814004352,
          "id":"c83ff88e-ec26-4a6a-aacc-5725781aebac",
@@ -2260,8 +1960,6 @@
          "original":null
       },
       {
-         "eventId":151,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1559814159374,
          "id":"b478948f-a2bb-4368-8c9f-0cee94e52f42",
@@ -2275,8 +1973,6 @@
          "original":null
       },
       {
-         "eventId":152,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1559814273773,
          "id":"80c6a258-54d9-4046-b1fd-ffe935592dbe",
@@ -2290,8 +1986,6 @@
          "original":null
       },
       {
-         "eventId":153,
-         "userId":"118113125420969511952",
          "eventType":"subtaskCreated",
          "timestamp":1559814311866,
          "id":"9f9f60de-ab9e-4009-883c-e4d644bc4df4",
@@ -2305,8 +1999,6 @@
          "original":null
       },
       {
-         "eventId":154,
-         "userId":"118113125420969511952",
          "eventType":"taskRevived",
          "timestamp":1559814401242,
          "id":"1496dc88-86b7-429b-8242-bcfd28e87377",
@@ -2320,8 +2012,6 @@
          "original":"0d9be778-38f0-4ab7-8e34-3dd921e59e49"
       },
       {
-         "eventId":155,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1559814402672,
          "id":"1496dc88-86b7-429b-8242-bcfd28e87377",
@@ -2335,8 +2025,6 @@
          "original":null
       },
       {
-         "eventId":156,
-         "userId":"118113125420969511952",
          "eventType":"taskCompleted",
          "timestamp":1559814403540,
          "id":"1496dc88-86b7-429b-8242-bcfd28e87377",
@@ -2350,8 +2038,6 @@
          "original":null
       },
       {
-         "eventId":157,
-         "userId":"118113125420969511952",
          "eventType":"taskCompleted",
          "timestamp":1559821977701,
          "id":"47674cf4-8746-4f24-a512-d11772597f9b",
@@ -2369,8 +2055,6 @@
          "original":null
       },
       {
-         "eventId":158,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1559822011710,
          "id":"133e16b6-721f-4b02-9774-b173029d5829",
@@ -2384,8 +2068,6 @@
          "original":null
       },
       {
-         "eventId":159,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1559822103268,
          "id":"0e0de3ca-8aaf-4815-ad42-e418e1060906",
@@ -2399,8 +2081,6 @@
          "original":null
       },
       {
-         "eventId":160,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1559822116063,
          "id":"e688397b-e891-4f0f-9aff-fd10a21de142",
@@ -2414,8 +2094,6 @@
          "original":null
       },
       {
-         "eventId":161,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1559822634948,
          "id":"d7d6fe1b-257a-4d93-a540-a1cc476439fa",
@@ -2429,8 +2107,6 @@
          "original":null
       },
       {
-         "eventId":162,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1559822696057,
          "id":"ddb7b495-633c-4c17-a80d-cd4d7f53c764",
@@ -2444,8 +2120,6 @@
          "original":null
       },
       {
-         "eventId":163,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1559822770782,
          "id":"11b96b3f-11f9-4e44-bd8d-9a5430e7b783",
@@ -2459,8 +2133,6 @@
          "original":null
       },
       {
-         "eventId":164,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1559822774619,
          "id":"11b96b3f-11f9-4e44-bd8d-9a5430e7b783",
@@ -2474,8 +2146,6 @@
          "original":null
       },
       {
-         "eventId":165,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1559822792755,
          "id":"70f0d87d-5e17-43ea-9d66-af9ac5609622",
@@ -2489,8 +2159,6 @@
          "original":null
       },
       {
-         "eventId":166,
-         "userId":"118113125420969511952",
          "eventType":"taskCompleted",
          "timestamp":1559822802131,
          "id":"11b96b3f-11f9-4e44-bd8d-9a5430e7b783",
@@ -2504,8 +2172,6 @@
          "original":null
       },
       {
-         "eventId":167,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1559822803451,
          "id":"70f0d87d-5e17-43ea-9d66-af9ac5609622",
@@ -2519,8 +2185,6 @@
          "original":null
       },
       {
-         "eventId":168,
-         "userId":"118113125420969511952",
          "eventType":"taskCompleted",
          "timestamp":1559822804333,
          "id":"70f0d87d-5e17-43ea-9d66-af9ac5609622",
@@ -2534,8 +2198,6 @@
          "original":null
       },
       {
-         "eventId":169,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1559856787492,
          "id":"f4d75e1d-3813-45c0-a09a-bf79ba5e7d44",
@@ -2549,8 +2211,6 @@
          "original":null
       },
       {
-         "eventId":170,
-         "userId":"118113125420969511952",
          "eventType":"subtaskCreated",
          "timestamp":1559857212777,
          "id":"efdfa3b7-731d-4339-a664-ff45593036ac",
@@ -2564,8 +2224,6 @@
          "original":null
       },
       {
-         "eventId":171,
-         "userId":"118113125420969511952",
          "eventType":"subtaskCreated",
          "timestamp":1559857229544,
          "id":"10a6fd37-180d-4713-8874-5a8e5d88c0df",
@@ -2579,8 +2237,6 @@
          "original":null
       },
       {
-         "eventId":172,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1559895097872,
          "id":"0d1f74dc-ab54-4689-9ba0-f5df55a9142e",
@@ -2594,8 +2250,6 @@
          "original":null
       },
       {
-         "eventId":173,
-         "userId":"118113125420969511952",
          "eventType":"taskFailed",
          "timestamp":1559919600000,
          "id":"b478948f-a2bb-4368-8c9f-0cee94e52f42",
@@ -2609,8 +2263,6 @@
          "original":null
       },
       {
-         "eventId":174,
-         "userId":"118113125420969511952",
          "eventType":"taskFailed",
          "timestamp":1559919600000,
          "id":"9f9f60de-ab9e-4009-883c-e4d644bc4df4",
@@ -2624,8 +2276,6 @@
          "original":null
       },
       {
-         "eventId":175,
-         "userId":"118113125420969511952",
          "eventType":"taskFailed",
          "timestamp":1559919600000,
          "id":"0e0de3ca-8aaf-4815-ad42-e418e1060906",
@@ -2639,8 +2289,6 @@
          "original":null
       },
       {
-         "eventId":176,
-         "userId":"118113125420969511952",
          "eventType":"taskFailed",
          "timestamp":1559919600000,
          "id":"10a6fd37-180d-4713-8874-5a8e5d88c0df",
@@ -2654,8 +2302,6 @@
          "original":null
       },
       {
-         "eventId":177,
-         "userId":"118113125420969511952",
          "eventType":"taskFailed",
          "timestamp":1559919600000,
          "id":"e688397b-e891-4f0f-9aff-fd10a21de142",
@@ -2669,8 +2315,6 @@
          "original":null
       },
       {
-         "eventId":178,
-         "userId":"118113125420969511952",
          "eventType":"taskFailed",
          "timestamp":1559919600000,
          "id":"efdfa3b7-731d-4339-a664-ff45593036ac",
@@ -2684,8 +2328,6 @@
          "original":null
       },
       {
-         "eventId":179,
-         "userId":"118113125420969511952",
          "eventType":"taskRevived",
          "timestamp":1559952794531,
          "id":"49cf7aeb-a425-4d52-aa0d-ca0b63a37fec",
@@ -2699,8 +2341,6 @@
          "original":"0e0de3ca-8aaf-4815-ad42-e418e1060906"
       },
       {
-         "eventId":180,
-         "userId":"118113125420969511952",
          "eventType":"taskRevived",
          "timestamp":1559952795879,
          "id":"3311377d-5462-48ff-a5ae-0a78141d9a99",
@@ -2714,8 +2354,6 @@
          "original":"e688397b-e891-4f0f-9aff-fd10a21de142"
       },
       {
-         "eventId":181,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1559954454071,
          "id":"49cf7aeb-a425-4d52-aa0d-ca0b63a37fec",
@@ -2729,8 +2367,6 @@
          "original":null
       },
       {
-         "eventId":182,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1559954485268,
          "id":"049f6c6b-e4bd-4d12-9399-e1439654f22e",
@@ -2744,8 +2380,6 @@
          "original":null
       },
       {
-         "eventId":183,
-         "userId":"118113125420969511952",
          "eventType":"taskActivated",
          "timestamp":1559955830080,
          "id":"0d1f74dc-ab54-4689-9ba0-f5df55a9142e",
@@ -2759,8 +2393,6 @@
          "original":null
       },
       {
-         "eventId":184,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1559955831491,
          "id":"0d1f74dc-ab54-4689-9ba0-f5df55a9142e",
@@ -2774,8 +2406,6 @@
          "original":null
       },
       {
-         "eventId":185,
-         "userId":"118113125420969511952",
          "eventType":"taskCompleted",
          "timestamp":1559955832520,
          "id":"0d1f74dc-ab54-4689-9ba0-f5df55a9142e",
@@ -2789,8 +2419,6 @@
          "original":null
       },
       {
-         "eventId":186,
-         "userId":"118113125420969511952",
          "eventType":"taskActivated",
          "timestamp":1559955837676,
          "id":"049f6c6b-e4bd-4d12-9399-e1439654f22e",
@@ -2804,8 +2432,6 @@
          "original":null
       },
       {
-         "eventId":187,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1559955839356,
          "id":"049f6c6b-e4bd-4d12-9399-e1439654f22e",
@@ -2819,8 +2445,6 @@
          "original":null
       },
       {
-         "eventId":188,
-         "userId":"118113125420969511952",
          "eventType":"taskCompleted",
          "timestamp":1559956287374,
          "id":"049f6c6b-e4bd-4d12-9399-e1439654f22e",
@@ -2834,8 +2458,6 @@
          "original":null
       },
       {
-         "eventId":189,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1559963956927,
          "id":"3311377d-5462-48ff-a5ae-0a78141d9a99",
@@ -2849,8 +2471,6 @@
          "original":null
       },
       {
-         "eventId":190,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1559964181269,
          "id":"a5e62a35-44d0-4867-a6d2-fd5aa235efac",
@@ -2864,8 +2484,6 @@
          "original":null
       },
       {
-         "eventId":191,
-         "userId":"118113125420969511952",
          "eventType":"taskCompleted",
          "timestamp":1559987276039,
          "id":"49cf7aeb-a425-4d52-aa0d-ca0b63a37fec",
@@ -2881,8 +2499,6 @@
          "original":null
       },
       {
-         "eventId":192,
-         "userId":"118113125420969511952",
          "eventType":"taskCompleted",
          "timestamp":1559987279374,
          "id":"3311377d-5462-48ff-a5ae-0a78141d9a99",
@@ -2898,8 +2514,6 @@
          "original":null
       },
       {
-         "eventId":193,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1559987337895,
          "id":"b16bc768-33e4-4e7c-9582-443978d9e926",
@@ -2915,8 +2529,6 @@
          "original":null
       },
       {
-         "eventId":194,
-         "userId":"118113125420969511952",
          "eventType":"subtaskCreated",
          "timestamp":1559987346801,
          "id":"43ff592f-119c-40da-98f5-d4362f6b1d08",
@@ -2930,8 +2542,6 @@
          "original":null
       },
       {
-         "eventId":195,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1559987348223,
          "id":"43ff592f-119c-40da-98f5-d4362f6b1d08",
@@ -2947,8 +2557,6 @@
          "original":null
       },
       {
-         "eventId":196,
-         "userId":"118113125420969511952",
          "eventType":"subtaskCreated",
          "timestamp":1559987368715,
          "id":"ec0ac215-7a95-4dfa-852e-0599862b9c8e",
@@ -2962,8 +2570,6 @@
          "original":null
       },
       {
-         "eventId":197,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1559987370650,
          "id":"ec0ac215-7a95-4dfa-852e-0599862b9c8e",
@@ -2979,8 +2585,6 @@
          "original":null
       },
       {
-         "eventId":198,
-         "userId":"118113125420969511952",
          "eventType":"taskCompleted",
          "timestamp":1559987371752,
          "id":"ec0ac215-7a95-4dfa-852e-0599862b9c8e",
@@ -2996,8 +2600,6 @@
          "original":null
       },
       {
-         "eventId":199,
-         "userId":"118113125420969511952",
          "eventType":"taskCompleted",
          "timestamp":1559987372388,
          "id":"43ff592f-119c-40da-98f5-d4362f6b1d08",
@@ -3013,8 +2615,6 @@
          "original":null
       },
       {
-         "eventId":200,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1559987408656,
          "id":"7e01c821-5967-40c2-85b8-c00bc8866253",
@@ -3028,8 +2628,6 @@
          "original":null
       },
       {
-         "eventId":201,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1559987410266,
          "id":"7e01c821-5967-40c2-85b8-c00bc8866253",
@@ -3045,8 +2643,6 @@
          "original":null
       },
       {
-         "eventId":202,
-         "userId":"118113125420969511952",
          "eventType":"taskCompleted",
          "timestamp":1559987411120,
          "id":"7e01c821-5967-40c2-85b8-c00bc8866253",
@@ -3062,8 +2658,6 @@
          "original":null
       },
       {
-         "eventId":203,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1559987448639,
          "id":"d7a48f4f-310c-4f09-bac8-de2fcdc0a2ce",
@@ -3077,8 +2671,6 @@
          "original":null
       },
       {
-         "eventId":204,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1559987451023,
          "id":"d7a48f4f-310c-4f09-bac8-de2fcdc0a2ce",
@@ -3094,8 +2686,6 @@
          "original":null
       },
       {
-         "eventId":205,
-         "userId":"118113125420969511952",
          "eventType":"taskCompleted",
          "timestamp":1559987451893,
          "id":"d7a48f4f-310c-4f09-bac8-de2fcdc0a2ce",
@@ -3111,8 +2701,6 @@
          "original":null
       },
       {
-         "eventId":206,
-         "userId":"118113125420969511952",
          "eventType":"subtaskCreated",
          "timestamp":1559992308317,
          "id":"f5cdfe34-baa9-4773-a16c-0df1f9b4c147",
@@ -3126,8 +2714,6 @@
          "original":null
       },
       {
-         "eventId":207,
-         "userId":"118113125420969511952",
          "eventType":"subtaskCreated",
          "timestamp":1559992333732,
          "id":"e1274ac2-e862-4a0a-b73a-dd2a8fe44b4d",
@@ -3141,8 +2727,6 @@
          "original":null
       },
       {
-         "eventId":208,
-         "userId":"118113125420969511952",
          "eventType":"subtaskCreated",
          "timestamp":1559992496639,
          "id":"9c76ae76-e57e-4a1c-bf12-bd9f5a8a00cb",
@@ -3156,8 +2740,6 @@
          "original":null
       },
       {
-         "eventId":209,
-         "userId":"118113125420969511952",
          "eventType":"subtaskCreated",
          "timestamp":1559992575914,
          "id":"8e9c8138-e904-4fd8-998c-836cfc663e36",
@@ -3171,8 +2753,6 @@
          "original":null
       },
       {
-         "eventId":210,
-         "userId":"118113125420969511952",
          "eventType":"subtaskCreated",
          "timestamp":1559992618304,
          "id":"b88b38df-27af-4920-9108-498eba701018",
@@ -3186,8 +2766,6 @@
          "original":null
       },
       {
-         "eventId":211,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1559992756001,
          "id":"f5cdfe34-baa9-4773-a16c-0df1f9b4c147",
@@ -3203,8 +2781,6 @@
          "original":null
       },
       {
-         "eventId":212,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1559993602233,
          "id":"9c76ae76-e57e-4a1c-bf12-bd9f5a8a00cb",
@@ -3220,8 +2796,6 @@
          "original":null
       },
       {
-         "eventId":213,
-         "userId":"118113125420969511952",
          "eventType":"taskCompleted",
          "timestamp":1559994702346,
          "id":"f5cdfe34-baa9-4773-a16c-0df1f9b4c147",
@@ -3237,8 +2811,6 @@
          "original":null
       },
       {
-         "eventId":214,
-         "userId":"118113125420969511952",
          "eventType":"taskCompleted",
          "timestamp":1559996794528,
          "id":"9c76ae76-e57e-4a1c-bf12-bd9f5a8a00cb",
@@ -3254,8 +2826,6 @@
          "original":null
       },
       {
-         "eventId":215,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1559996883362,
          "id":"feeaad0e-95d9-4a45-bff7-de9d1a3844f9",
@@ -3269,8 +2839,6 @@
          "original":null
       },
       {
-         "eventId":216,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1559996921494,
          "id":"b378d1bb-b987-4b45-9448-0f006635a6fd",
@@ -3284,8 +2852,6 @@
          "original":null
       },
       {
-         "eventId":217,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1559997223399,
          "id":"e1274ac2-e862-4a0a-b73a-dd2a8fe44b4d",
@@ -3301,8 +2867,6 @@
          "original":null
       },
       {
-         "eventId":218,
-         "userId":"118113125420969511952",
          "eventType":"taskCompleted",
          "timestamp":1559997284831,
          "id":"e1274ac2-e862-4a0a-b73a-dd2a8fe44b4d",
@@ -3318,8 +2882,6 @@
          "original":null
       },
       {
-         "eventId":219,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1560044513799,
          "id":"b378d1bb-b987-4b45-9448-0f006635a6fd",
@@ -3335,8 +2897,6 @@
          "original":null
       },
       {
-         "eventId":220,
-         "userId":"118113125420969511952",
          "eventType":"taskCompleted",
          "timestamp":1560044514661,
          "id":"b378d1bb-b987-4b45-9448-0f006635a6fd",
@@ -3352,8 +2912,6 @@
          "original":null
       },
       {
-         "eventId":221,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1560044515537,
          "id":"feeaad0e-95d9-4a45-bff7-de9d1a3844f9",
@@ -3369,8 +2927,6 @@
          "original":null
       },
       {
-         "eventId":222,
-         "userId":"118113125420969511952",
          "eventType":"taskCompleted",
          "timestamp":1560044516419,
          "id":"feeaad0e-95d9-4a45-bff7-de9d1a3844f9",
@@ -3386,8 +2942,6 @@
          "original":null
       },
       {
-         "eventId":223,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1560044522631,
          "id":"8e9c8138-e904-4fd8-998c-836cfc663e36",
@@ -3403,8 +2957,6 @@
          "original":null
       },
       {
-         "eventId":224,
-         "userId":"118113125420969511952",
          "eventType":"subtaskCreated",
          "timestamp":1560045416662,
          "id":"d1801f86-d2cd-4b33-89b1-583eee1365c8",
@@ -3418,8 +2970,6 @@
          "original":null
       },
       {
-         "eventId":225,
-         "userId":"118113125420969511952",
          "eventType":"subtaskCreated",
          "timestamp":1560045492358,
          "id":"7970abb9-8fc4-444c-8c41-fa6ed8155c3b",
@@ -3433,8 +2983,6 @@
          "original":null
       },
       {
-         "eventId":226,
-         "userId":"118113125420969511952",
          "eventType":"subtaskCreated",
          "timestamp":1560045590458,
          "id":"4f06cd10-987c-4a33-81f8-476a38244c7f",
@@ -3448,8 +2996,6 @@
          "original":null
       },
       {
-         "eventId":227,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1560045608392,
          "id":"b88b38df-27af-4920-9108-498eba701018",
@@ -3465,8 +3011,6 @@
          "original":null
       },
       {
-         "eventId":228,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1560045667400,
          "id":"83b7bfa1-146a-423b-8d12-451b6503c985",
@@ -3484,8 +3028,6 @@
          "original":null
       },
       {
-         "eventId":229,
-         "userId":"118113125420969511952",
          "eventType":"taskCompleted",
          "timestamp":1560045668624,
          "id":"83b7bfa1-146a-423b-8d12-451b6503c985",
@@ -3503,8 +3045,6 @@
          "original":null
       },
       {
-         "eventId":230,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1560046819839,
          "id":"d1801f86-d2cd-4b33-89b1-583eee1365c8",
@@ -3520,8 +3060,6 @@
          "original":null
       },
       {
-         "eventId":231,
-         "userId":"118113125420969511952",
          "eventType":"taskCompleted",
          "timestamp":1560046821865,
          "id":"d1801f86-d2cd-4b33-89b1-583eee1365c8",
@@ -3537,8 +3075,6 @@
          "original":null
       },
       {
-         "eventId":232,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1560047141770,
          "id":"7970abb9-8fc4-444c-8c41-fa6ed8155c3b",
@@ -3554,8 +3090,6 @@
          "original":null
       },
       {
-         "eventId":233,
-         "userId":"118113125420969511952",
          "eventType":"taskCompleted",
          "timestamp":1560047160035,
          "id":"b88b38df-27af-4920-9108-498eba701018",
@@ -3571,8 +3105,6 @@
          "original":null
       },
       {
-         "eventId":234,
-         "userId":"118113125420969511952",
          "eventType":"taskCompleted",
          "timestamp":1560053141021,
          "id":"7970abb9-8fc4-444c-8c41-fa6ed8155c3b",
@@ -3588,8 +3120,6 @@
          "original":null
       },
       {
-         "eventId":235,
-         "userId":"118113125420969511952",
          "eventType":"taskCompleted",
          "timestamp":1560053149273,
          "id":"8e9c8138-e904-4fd8-998c-836cfc663e36",
@@ -3605,8 +3135,6 @@
          "original":null
       },
       {
-         "eventId":236,
-         "userId":"118113125420969511952",
          "eventType":"taskFailed",
          "timestamp":1560092400000,
          "id":"c639260c-c362-46e7-8720-6f5e9cb2884b",
@@ -3622,8 +3150,6 @@
          "original":null
       },
       {
-         "eventId":237,
-         "userId":"118113125420969511952",
          "eventType":"taskFailed",
          "timestamp":1560092400000,
          "id":"9316a781-82ea-4b06-8c14-07de07212364",
@@ -3639,8 +3165,6 @@
          "original":null
       },
       {
-         "eventId":238,
-         "userId":"118113125420969511952",
          "eventType":"taskFailed",
          "timestamp":1560092400000,
          "id":"1f5dccdd-770c-4bac-9089-4333b75f7d83",
@@ -3656,8 +3180,6 @@
          "original":null
       },
       {
-         "eventId":239,
-         "userId":"118113125420969511952",
          "eventType":"taskFailed",
          "timestamp":1560092400000,
          "id":"1357d4af-f60e-4c92-bca0-eb8d1b9654a1",
@@ -3673,8 +3195,6 @@
          "original":null
       },
       {
-         "eventId":240,
-         "userId":"118113125420969511952",
          "eventType":"taskFailed",
          "timestamp":1560092400000,
          "id":"f4d75e1d-3813-45c0-a09a-bf79ba5e7d44",
@@ -3690,8 +3210,6 @@
          "original":null
       },
       {
-         "eventId":241,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1560122707514,
          "id":"4f06cd10-987c-4a33-81f8-476a38244c7f",
@@ -3707,8 +3225,6 @@
          "original":null
       },
       {
-         "eventId":242,
-         "userId":"118113125420969511952",
          "eventType":"taskCompleted",
          "timestamp":1560122708368,
          "id":"4f06cd10-987c-4a33-81f8-476a38244c7f",
@@ -3724,8 +3240,6 @@
          "original":null
       },
       {
-         "eventId":243,
-         "userId":"118113125420969511952",
          "eventType":"subtaskCreated",
          "timestamp":1560126147190,
          "id":"33135db1-cbd2-4ffa-86a5-fc27fcb8cd14",
@@ -3739,8 +3253,6 @@
          "original":null
       },
       {
-         "eventId":244,
-         "userId":"118113125420969511952",
          "eventType":"subtaskCreated",
          "timestamp":1560126162113,
          "id":"4df58ea2-fc74-4639-8f8c-9e00ad8d45a6",
@@ -3754,8 +3266,6 @@
          "original":null
       },
       {
-         "eventId":245,
-         "userId":"118113125420969511952",
          "eventType":"taskActivated",
          "timestamp":1560126173076,
          "id":"d046fdba-628c-41d0-a136-e62a738b2125",
@@ -3771,8 +3281,6 @@
          "original":null
       },
       {
-         "eventId":246,
-         "userId":"118113125420969511952",
          "eventType":"taskActivated",
          "timestamp":1560126176141,
          "id":"d8f46b97-ad1f-43ba-ab6f-eb940db4ddf7",
@@ -3788,8 +3296,6 @@
          "original":null
       },
       {
-         "eventId":247,
-         "userId":"118113125420969511952",
          "eventType":"taskActivated",
          "timestamp":1560126274786,
          "id":"73246891-b617-4803-9e99-9f9406f053a6",
@@ -3805,8 +3311,6 @@
          "original":null
       },
       {
-         "eventId":248,
-         "userId":"118113125420969511952",
          "eventType":"taskActivated",
          "timestamp":1560126282006,
          "id":"b27c1fdf-56a7-4cf6-92d1-e89bca38facc",
@@ -3822,8 +3326,6 @@
          "original":null
       },
       {
-         "eventId":249,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1560127311975,
          "id":"117141bb-c2ce-49d6-a424-800fd63618f6",
@@ -3837,8 +3339,6 @@
          "original":null
       },
       {
-         "eventId":250,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1560127315052,
          "id":"117141bb-c2ce-49d6-a424-800fd63618f6",
@@ -3854,8 +3354,6 @@
          "original":null
       },
       {
-         "eventId":251,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1560135743252,
          "id":"73246891-b617-4803-9e99-9f9406f053a6",
@@ -3871,8 +3369,6 @@
          "original":null
       },
       {
-         "eventId":252,
-         "userId":"118113125420969511952",
          "eventType":"taskCompleted",
          "timestamp":1560135744100,
          "id":"73246891-b617-4803-9e99-9f9406f053a6",
@@ -3888,8 +3384,6 @@
          "original":null
       },
       {
-         "eventId":253,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1560135745361,
          "id":"b27c1fdf-56a7-4cf6-92d1-e89bca38facc",
@@ -3905,8 +3399,6 @@
          "original":null
       },
       {
-         "eventId":254,
-         "userId":"118113125420969511952",
          "eventType":"taskCompleted",
          "timestamp":1560135746213,
          "id":"b27c1fdf-56a7-4cf6-92d1-e89bca38facc",
@@ -3922,8 +3414,6 @@
          "original":null
       },
       {
-         "eventId":255,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1560148587819,
          "id":"33135db1-cbd2-4ffa-86a5-fc27fcb8cd14",
@@ -3939,8 +3429,6 @@
          "original":null
       },
       {
-         "eventId":256,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1560150336626,
          "id":"74372427-660b-4e8a-a547-4ab70fc7b52b",
@@ -3954,8 +3442,6 @@
          "original":null
       },
       {
-         "eventId":257,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1560150340041,
          "id":"74372427-660b-4e8a-a547-4ab70fc7b52b",
@@ -3971,8 +3457,6 @@
          "original":null
       },
       {
-         "eventId":258,
-         "userId":"118113125420969511952",
          "eventType":"taskCompleted",
          "timestamp":1560150340902,
          "id":"74372427-660b-4e8a-a547-4ab70fc7b52b",
@@ -3988,8 +3472,6 @@
          "original":null
       },
       {
-         "eventId":259,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1560150534879,
          "id":"73e334bc-0962-4abc-b25c-2bce5b7a2176",
@@ -4003,8 +3485,6 @@
          "original":null
       },
       {
-         "eventId":260,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1560150558509,
          "id":"73e334bc-0962-4abc-b25c-2bce5b7a2176",
@@ -4020,8 +3500,6 @@
          "original":null
       },
       {
-         "eventId":261,
-         "userId":"118113125420969511952",
          "eventType":"taskCompleted",
          "timestamp":1560150559364,
          "id":"73e334bc-0962-4abc-b25c-2bce5b7a2176",
@@ -4037,8 +3515,6 @@
          "original":null
       },
       {
-         "eventId":262,
-         "userId":"118113125420969511952",
          "eventType":"taskRevived",
          "timestamp":1560150571797,
          "id":"7fcdfa98-adca-453a-94c6-1f93eb38e4e1",
@@ -4052,8 +3528,6 @@
          "original":"c639260c-c362-46e7-8720-6f5e9cb2884b"
       },
       {
-         "eventId":263,
-         "userId":"118113125420969511952",
          "eventType":"taskActivated",
          "timestamp":1560150577274,
          "id":"7fcdfa98-adca-453a-94c6-1f93eb38e4e1",
@@ -4069,8 +3543,6 @@
          "original":null
       },
       {
-         "eventId":264,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1560150786818,
          "id":"8060c8e2-f413-4dad-b8d4-e7372ed4d61f",
@@ -4084,8 +3556,6 @@
          "original":null
       },
       {
-         "eventId":265,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1560150801896,
          "id":"8060c8e2-f413-4dad-b8d4-e7372ed4d61f",
@@ -4101,8 +3571,6 @@
          "original":null
       },
       {
-         "eventId":266,
-         "userId":"118113125420969511952",
          "eventType":"taskCompleted",
          "timestamp":1560151021525,
          "id":"8060c8e2-f413-4dad-b8d4-e7372ed4d61f",
@@ -4118,8 +3586,6 @@
          "original":null
       },
       {
-         "eventId":267,
-         "userId":"118113125420969511952",
          "eventType":"taskCompleted",
          "timestamp":1560158862404,
          "id":"117141bb-c2ce-49d6-a424-800fd63618f6",
@@ -4135,8 +3601,6 @@
          "original":null
       },
       {
-         "eventId":268,
-         "userId":"118113125420969511952",
          "eventType":"taskCompleted",
          "timestamp":1560159129050,
          "id":"33135db1-cbd2-4ffa-86a5-fc27fcb8cd14",
@@ -4152,8 +3616,6 @@
          "original":null
       },
       {
-         "eventId":269,
-         "userId":"118113125420969511952",
          "eventType":"taskStarted",
          "timestamp":1560159129640,
          "id":"4df58ea2-fc74-4639-8f8c-9e00ad8d45a6",
@@ -4169,8 +3631,6 @@
          "original":null
       },
       {
-         "eventId":270,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1560172250373,
          "id":"09d2b2b8-12e1-4bd5-a6c6-1d5d7f0f5046",
@@ -4184,8 +3644,6 @@
          "original":null
       },
       {
-         "eventId":271,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1560172288565,
          "id":"d545a9c4-8d75-4409-827d-234de37f7bdd",
@@ -4199,8 +3657,6 @@
          "original":null
       },
       {
-         "eventId":272,
-         "userId":"118113125420969511952",
          "eventType":"taskFailed",
          "timestamp":1560178800000,
          "id":"4df58ea2-fc74-4639-8f8c-9e00ad8d45a6",
@@ -4216,8 +3672,6 @@
          "original":null
       },
       {
-         "eventId":273,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1560201900286,
          "id":"749d4634-8c69-4f0f-980b-241b616b2e0a",
@@ -4231,8 +3685,6 @@
          "original":null
       },
       {
-         "eventId":274,
-         "userId":"118113125420969511952",
          "eventType":"taskActivated",
          "timestamp":1560203031070,
          "id":"80c6a258-54d9-4046-b1fd-ffe935592dbe",
@@ -4248,8 +3700,6 @@
          "original":null
       },
       {
-         "eventId":275,
-         "userId":"118113125420969511952",
          "eventType":"taskActivated",
          "timestamp":1560203047292,
          "id":"d7d6fe1b-257a-4d93-a540-a1cc476439fa",
@@ -4265,8 +3715,6 @@
          "original":null
       },
       {
-         "eventId":276,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1560203652231,
          "id":"fb1b5538-eee6-44b0-92a5-3dcaa046259b",
@@ -4280,8 +3728,6 @@
          "original":null
       },
       {
-         "eventId":277,
-         "userId":"118113125420969511952",
          "eventType":"taskRevived",
          "timestamp":1560203793791,
          "id":"8443d10e-0dfa-4486-97b8-670bc93eacf2",
@@ -4295,8 +3741,6 @@
          "original":"f4d75e1d-3813-45c0-a09a-bf79ba5e7d44"
       },
       {
-         "eventId":278,
-         "userId":"118113125420969511952",
          "eventType":"taskActivated",
          "timestamp":1560203796234,
          "id":"8443d10e-0dfa-4486-97b8-670bc93eacf2",
@@ -4312,8 +3756,6 @@
          "original":null
       },
       {
-         "eventId":279,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1560203902148,
          "id":"29bfd7b6-9145-4f61-8c40-dea22b0b03fd",
@@ -4327,8 +3769,6 @@
          "original":null
       },
       {
-         "eventId":280,
-         "userId":"118113125420969511952",
          "eventType":"taskCreated",
          "timestamp":1560203936440,
          "id":"5a9a9016-0955-4a11-ae3d-49f3c6a099a7",
@@ -4337,6 +3777,180 @@
          "progressStatus":0,
          "colourId":1,
          "context":"tytodos development",
+         "parent":null,
+         "children":null,
+         "original":null
+      },
+      {
+         "eventType":"taskStarted",
+         "timestamp":1560245386625,
+         "id":"fb1b5538-eee6-44b0-92a5-3dcaa046259b",
+         "name":"Fix issue where API does not detect duplicates in the incoming event log if they are in same POST",
+         "category":2,
+         "progressStatus":1,
+         "colourId":3,
+         "context":"tytodos development",
+         "parent":null,
+         "children":[
+
+         ],
+         "original":null
+      },
+      {
+         "eventType":"taskCompleted",
+         "timestamp":1560245387489,
+         "id":"fb1b5538-eee6-44b0-92a5-3dcaa046259b",
+         "name":"Fix issue where API does not detect duplicates in the incoming event log if they are in same POST",
+         "category":2,
+         "progressStatus":2,
+         "colourId":3,
+         "context":"tytodos development",
+         "parent":null,
+         "children":[
+
+         ],
+         "original":null
+      },
+      {
+         "eventType":"taskStarted",
+         "timestamp":1560245387977,
+         "id":"749d4634-8c69-4f0f-980b-241b616b2e0a",
+         "name":"Fix state de-sync issues when switching tasks with a failed item on the board",
+         "category":2,
+         "progressStatus":1,
+         "colourId":2,
+         "context":"global",
+         "parent":null,
+         "children":[
+
+         ],
+         "original":null
+      },
+      {
+         "eventType":"taskCompleted",
+         "timestamp":1560245388838,
+         "id":"749d4634-8c69-4f0f-980b-241b616b2e0a",
+         "name":"Fix state de-sync issues when switching tasks with a failed item on the board",
+         "category":2,
+         "progressStatus":2,
+         "colourId":2,
+         "context":"global",
+         "parent":null,
+         "children":[
+
+         ],
+         "original":null
+      },
+      {
+         "eventType":"taskStarted",
+         "timestamp":1560245391443,
+         "id":"09d2b2b8-12e1-4bd5-a6c6-1d5d7f0f5046",
+         "name":"Make the Context-selection page not cancerous looking, and add grey-out when no more can be chosen",
+         "category":2,
+         "progressStatus":1,
+         "colourId":0,
+         "context":"global",
+         "parent":null,
+         "children":[
+
+         ],
+         "original":null
+      },
+      {
+         "eventType":"taskCreated",
+         "timestamp":1560245461431,
+         "id":"b389d1bb-2d02-435b-a2b9-2920a8f990a9",
+         "name":"Write a brief active-weekly planner and show J tomorrow :)",
+         "category":2,
+         "progressStatus":0,
+         "colourId":0,
+         "context":"global",
+         "parent":null,
+         "children":null,
+         "original":null
+      },
+      {
+         "eventType":"taskCreated",
+         "timestamp":1560245476106,
+         "id":"0c74182e-5231-42cb-b922-fb60894b2941",
+         "name":"Wash Polo shirt",
+         "category":2,
+         "progressStatus":0,
+         "colourId":1,
+         "context":"global",
+         "parent":null,
+         "children":null,
+         "original":null
+      },
+      {
+         "eventType":"taskStarted",
+         "timestamp":1560247267311,
+         "id":"0c74182e-5231-42cb-b922-fb60894b2941",
+         "name":"Wash Polo shirt",
+         "category":2,
+         "progressStatus":1,
+         "colourId":1,
+         "context":"global",
+         "parent":null,
+         "children":[
+
+         ],
+         "original":null
+      },
+      {
+         "eventType":"taskCompleted",
+         "timestamp":1560249530772,
+         "id":"0c74182e-5231-42cb-b922-fb60894b2941",
+         "name":"Wash Polo shirt",
+         "category":2,
+         "progressStatus":2,
+         "colourId":1,
+         "context":"global",
+         "parent":null,
+         "children":[
+
+         ],
+         "original":null
+      },
+      {
+         "eventType":"taskCompleted",
+         "timestamp":1560255966446,
+         "id":"09d2b2b8-12e1-4bd5-a6c6-1d5d7f0f5046",
+         "name":"Make the Context-selection page not cancerous looking, and add grey-out when no more can be chosen",
+         "category":2,
+         "progressStatus":2,
+         "colourId":0,
+         "context":"global",
+         "parent":null,
+         "children":[
+
+         ],
+         "original":null
+      },
+      {
+         "eventType":"taskFailed",
+         "timestamp":1560265200000,
+         "id":"7fcdfa98-adca-453a-94c6-1f93eb38e4e1",
+         "name":"Sent in Atlassian Application",
+         "category":2,
+         "progressStatus":4,
+         "colourId":1,
+         "context":"tytodos development",
+         "parent":null,
+         "children":[
+
+         ],
+         "original":null
+      },
+      {
+         "eventType":"taskCreated",
+         "timestamp":1560287880291,
+         "id":"00acd520-57ae-4b64-a353-dedc294778da",
+         "name":"Fix bug where the context re-instantiates a new datamodel during an anim, which then mutates the new scope",
+         "category":2,
+         "progressStatus":0,
+         "colourId":0,
+         "context":"global",
          "parent":null,
          "children":null,
          "original":null
