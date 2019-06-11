@@ -18,19 +18,19 @@ export class ContextManagerPage extends Component {
                 // If this context is already selected, then render the checkbox as 'checked' and have to toggle remove it.
                 if (this.props.selectableContexts.includes(context)) {
                     checkboxitems.push(
-                        <ContextSelectionCheckbox key={context} name={context} isSelected={true} toggleCheckbox={() => this.props.removeSelectableContext(context)}/>
+                        <ContextSelectionCheckbox key={context} name={context} isSelected={true} isDisabled={false} toggleCheckbox={() => this.props.removeSelectableContext(context)}/>
                     );
                 }
-                // If it's not selected, and the selection list is not at max capacity, allow the users to toggle them on.
-                else if (this.props.selectableContexts.length < this.props.maxSelectable) {
+                // If it's not selected, and the selection list is not at max capacity, allow the users to toggle them on. Plus one because the global context does not count!
+                else if (this.props.selectableContexts.length < this.props.maxSelectable + 1) {
                     checkboxitems.push(
-                        <ContextSelectionCheckbox key={context} name={context} isSelected={false} toggleCheckbox={() => this.props.addSelectableContext(context)}/>                        
+                        <ContextSelectionCheckbox key={context} name={context} isSelected={false} isDisabled={false} toggleCheckbox={() => this.props.addSelectableContext(context)}/>                        
                     );
                 }
                 // Else, they are unselected, and should not be selected, due to the number of selected items being too many!
                 else {
                     checkboxitems.push(
-                        <ContextSelectionCheckbox key={context} name={context} isSelected={false} toggleCheckbox={() => console.warn("User just tried to add " + context + " as a selectable context, but there are too many selected. TODO: Add a 'grey out' onto these!")}/>
+                        <ContextSelectionCheckbox key={context} name={context} isSelected={false} isDisabled={true} toggleCheckbox={() => console.warn("User just tried to add " + context + " as a selectable context, but there are too many selected. TODO: Add a 'grey out' onto these!")}/>
                     );
                 }
             }
@@ -66,10 +66,14 @@ class ContextSelectionCheckbox extends Component {
         this.props.toggleCheckbox();
     }
     render() {
+        let checkbox;
+        if (this.props.isDisabled) checkbox = <input type="checkbox" ref={this.CheckboxInputRef} onClick={this.handleClick} disabled="disabled"/>
+        else checkbox = <input type="checkbox" ref={this.CheckboxInputRef} onClick={this.handleClick}/>
+
         return (
             <div className="contextSelectionCheckboxWrapper">
-                <input type="checkbox" ref={this.CheckboxInputRef} onClick={this.handleClick}/>
-                <div> {this.props.name} </div>
+                {checkbox}
+                {this.props.name}
             </div>
         );
     }
