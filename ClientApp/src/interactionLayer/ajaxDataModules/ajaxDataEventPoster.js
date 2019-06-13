@@ -63,7 +63,7 @@ function postEvent(eventArray, failureCache, retryCount, logoutOnAuthFailure, se
         else if (httpRequest.readyState === 4 && httpRequest.status === 500) {
             if (retryCount > 0) {
                 console.warn("Server error on POST! Retrying...");
-                postEvent(eventArray, retryCount - 1, logoutOnAuthFailure, sendFromFailureCache);
+                postEvent(eventArray, failureCache, retryCount - 1, logoutOnAuthFailure, sendFromFailureCache);
             }
             else {
                 console.warn("Failed to Post event, ran out of retries on 500 response: " + eventArray);
