@@ -7,7 +7,6 @@
     flex-direction: column;
     align-items: center;
     padding-top: 1.6rem;
-    overflow-y: scroll;
 
     /* Relative position, so that the back button can be positions absolutely, with respect to this element */
     position: relative;
@@ -20,12 +19,19 @@
 .contextManagerPage .titleText h2 {
     font-size: 2.6rem;
 }
-.contextManagerPage::-webkit-scrollbar {
+.contextManagerPage::-webkit-scrollbar, .checklistWrapper::-webkit-scrollbar {
     width: 0rem;        /* MAKE THE SCROLLBAR INVISIBLE LIKE A SEXY MOFO */
 }
 .contextManagerPage .subheading {
     font-size: 2rem;
     margin-bottom: 3rem;
+}
+
+.contextManagerPage .checklistWrapper {
+    overflow-y: scroll;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .contextSelectionCheckboxWrapper {
@@ -50,11 +56,11 @@
     flex-direction: column;
 
     box-sizing: border-box;
-    width: 40rem;
+    width: 30rem;
     height: 10rem;
 }
 .contextManagerPage > .creation-form h2 {
-    padding-top: 1.5rem;
+    padding-top: 1rem;
     padding-bottom: 1rem;
 }
 

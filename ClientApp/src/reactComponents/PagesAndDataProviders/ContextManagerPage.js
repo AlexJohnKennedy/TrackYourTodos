@@ -51,7 +51,9 @@ export class ContextManagerPage extends Component {
                     formStateManager={this.props.formStateManager}
                     maxFieldLength={MAX_CONTEXT_NAME_LEN}
                 />
-                {checkboxitems}
+                <div className="checklistWrapper">
+                    {checkboxitems} 
+                </div>
                 <button onClick={this.props.togglePage}> x </button>
             </div>
         );

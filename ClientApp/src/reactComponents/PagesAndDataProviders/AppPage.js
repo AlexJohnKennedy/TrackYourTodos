@@ -177,9 +177,20 @@ export class AppPage extends Component {
     removeSelectableContext(context) {
         context = this.validateContextString(context);
         if (context === null || !this.state.selectableContexts.includes(context)) return;
-        this.setState((prevState, prevProps) => ({
-            selectableContexts: prevState.selectableContexts.filter(s => s !== context)
-        }));
+
+        // If the context we are removing is also the currently selected context, then we will simply default back to the global context.
+        if (context === this.state.currentContext){
+            this.setState((prevState, prevProps) => ({
+                currentContext: DEFAULT_GLOBAL_CONTEXT_STRING,
+                visibleContexts: [],     // Empty means global
+                selectableContexts: prevState.selectableContexts.filter(s => s !== context)
+            }));
+        }
+        else {
+            this.setState((prevState, prevProps) => ({
+                selectableContexts: prevState.selectableContexts.filter(s => s !== context)
+            }));
+        }
     }
 
     validateContextString(context) {
