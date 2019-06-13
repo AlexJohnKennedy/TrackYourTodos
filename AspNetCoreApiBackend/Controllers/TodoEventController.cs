@@ -33,6 +33,11 @@ namespace todo_app.Controllers {
     public class TodoEventController : ControllerBase {
 
         private const string googleSubjectClaimType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier";
+        private static readonly IEqualityComparer<GenericTodoEvent> eventComparer = new GenericTodoEventComparer();
+        
+        // Define functions to use to determine event log ordering. Timestamp, and break ties based on event type precedence. (I.e. Created always preceedes started)        
+        private static readonly Func<GenericTodoEvent, EventOrderingKey> keySelector = e => new EventOrderingKey(e.Timestamp, e.EventType);
+        private static readonly EventOrderingKeyComparer keyComparer = new EventOrderingKeyComparer();
 
         private ILogger logger;
         private TodoEventContext dbContext;
@@ -42,15 +47,34 @@ namespace todo_app.Controllers {
             this.dbContext = injectedContext;
         }
 
-        // A GET request to the todoevent endpoint will automatically fetch all of a user's events.
+        // A GET request to the todoevent endpoint will automatically fetch all of a user's events, matching a provided set of contexts.
+        // If the provided set of contexts is empty, then we will simply return ALL of a user's events. This is how the client will ask
+        // for the 'Global' context!
         [Authorize]
         [EnableCors("UserFacingApplications")]
         [HttpGet("/todoevents")]
-        public async Task<IActionResult> FetchEntireEventLog() {
+        public async Task<IActionResult> FetchEntireEventLog([FromQuery] HashSet<string> contexts) {
             HashSet<string> userIdStrings = User.FindAll(googleSubjectClaimType).Select(claim => claim.Value.Trim()).ToHashSet();
 
-            IEnumerable<GenericTodoEvent> eventLog = await dbContext.TodoEvents.Where(e => userIdStrings.Contains(e.UserId.Trim())).OrderBy(e => e.Timestamp).ToListAsync();
-            return Ok(eventLog);
+            // For safety, convert all strings to lowercase before matching them against the saved database values
+            contexts = contexts.Select(s => s.ToLower()).ToHashSet();
+
+            IEnumerable<GenericTodoEvent> eventLog = await dbContext.TodoEvents.Where(e => userIdStrings.Contains(e.UserId.Trim())).ToListAsync();
+            eventLog = eventLog.OrderBy(keySelector, keyComparer).ToList();
+            
+            // Look through all the user's events to find the set of 'contexts' which already exist, so we can send it back to them.
+            // By ordering the event log BACKWARDS for this query (i.e. latest first), then we will 'discover' the contexts in most-recently-used order.
+            List<string> allContextsNoDups = eventLog.OrderByDescending(e => e.Timestamp).Select(e => e.Context.ToLower().Trim()).ToHashSet().ToList();
+
+            if (contexts.Count > 0) {
+                eventLog = eventLog.Where(e => contexts.Contains(e.Context.Trim().ToLower())).OrderBy(keySelector, keyComparer).ToList();
+            }
+
+            // Return the context-specific event log(s) and the set of all available contexts
+            return Ok(new {
+                eventLog = eventLog,
+                availableContexts = allContextsNoDups
+            });
         }
 
         // A POST request to the todoevent endpoint will pass in a log of new events to use. Most often, this will just be
@@ -66,20 +90,24 @@ namespace todo_app.Controllers {
             foreach (GenericTodoEvent e in newEvents) {
                 e.UserId = userId;
                 e.EventId = 0;  // Manually set this to the 'default' value, so that the database can write to it instead.
+                e.Context = e.Context.ToLower().Trim();
             }
 
-            // Detect duplicate events.
-            var compositeKeyset = newEvents.Select(e => new { e.Id, e.Timestamp, e.EventType }).ToHashSet();
+            // Remove duplicate events from the incoming event list.
+            newEvents = newEvents.OrderBy(e => e.Timestamp).ToHashSet(eventComparer).OrderBy(keySelector, keyComparer).ToList();
+
+            // Detect duplicate events. Duplicates between those which have already been saved, and the new events.
+            var compositeKeyset = newEvents.Select(e => new { e.Id, e.EventType }).ToHashSet();
             List<GenericTodoEvent> savedEvents = await dbContext.TodoEvents.Where(e => e.UserId.Equals(userId)).OrderBy(e => e.Timestamp).ToListAsync();
-            IEnumerable<GenericTodoEvent> duplicates = savedEvents.Where(e => compositeKeyset.Contains(new { e.Id, e.Timestamp, e.EventType }));
+            IEnumerable<GenericTodoEvent> duplicates = savedEvents.Where(e => compositeKeyset.Contains(new { e.Id, e.EventType }));
 
             int count = duplicates.Count();
             if (count == 0) {
                 return await ValidateAndSave(newEvents, savedEvents);
             }
             else if (count < newEvents.Count) {
-                var duplicateSet = duplicates.Select(e => new { e.Id, e.Timestamp, e.EventType }).ToHashSet();
-                var nonDups = newEvents.Where(e => !duplicateSet.Contains(new { e.Id, e.Timestamp, e.EventType })).ToList();
+                var duplicateSet = duplicates.Select(e => new { e.Id, e.EventType }).ToHashSet();
+                var nonDups = newEvents.Where(e => !duplicateSet.Contains(new { e.Id, e.EventType })).ToList();
                 return await ValidateAndSave(nonDups, savedEvents);
             }
             else {

@@ -8,6 +8,8 @@
 @import "./Footer.css";
 @import "./Header.css";
 @import "./LoginPage.css";
+@import "./ContextTabs.css";
+@import "./ContextManagerPage.css";
 
 /* Define some global variables to define VSCode colour scheme colours! */
 :root {
@@ -20,6 +22,7 @@
   --selected-text-colour: #FFFFFF;
   --dull-text-colour: #7D7D7D;
   --divider-colour: #414141;
+  --divider-colour-lighter: #474747;
 
   --blue-icon: #007ACC;
   --muted-yellow-icon: #CBCB41;
@@ -43,14 +46,15 @@ button {
   padding: 0rem;
 }
 body {
-  padding-top: 0.8rem;
-  padding-left: 0.8rem;
-  padding-right: 0.8rem;
+  padding-top: 0rem;
+  padding-left: 0rem;
+  padding-right: 0rem;
   padding-bottom: 0.8rem;
   text-align: center;
   color: var(--bright-text-colour);
   background-color: var(--sidebar-background-colour);
   background-size: cover;
+  overflow-y: scroll;
 }
 h1, h2 {
   display: inline-block;

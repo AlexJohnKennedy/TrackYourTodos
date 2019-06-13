@@ -1,0 +1,84 @@
+.contextManagerPage {
+    background-color: var(--editor-background-colour);
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 1.6rem;
+
+    /* Relative position, so that the back button can be positions absolutely, with respect to this element */
+    position: relative;
+    z-index: 2;
+}
+.contextManagerPage .titleText {
+    margin-top: 0.8rem;
+    margin-bottom: 0.8rem;
+}
+.contextManagerPage .titleText h2 {
+    font-size: 2.6rem;
+}
+.contextManagerPage::-webkit-scrollbar, .checklistWrapper::-webkit-scrollbar {
+    width: 0rem;        /* MAKE THE SCROLLBAR INVISIBLE LIKE A SEXY MOFO */
+}
+.contextManagerPage .subheading {
+    font-size: 2rem;
+    margin-bottom: 3rem;
+}
+
+.contextManagerPage .checklistWrapper {
+    overflow-y: scroll;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 2rem;
+}
+
+.contextSelectionCheckboxWrapper {
+    position: relative;
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    
+    width: 30rem;
+    box-sizing: border-box;
+    font-size: 1.8rem;
+    text-align: center;
+
+    padding-top: 1.1rem;
+    padding-bottom: 1.1rem;
+    border-bottom: 1px solid var(--divider-colour-lighter);
+}
+
+.contextManagerPage > .creation-form {
+    display: inline-flex;
+    flex-direction: column;
+
+    box-sizing: border-box;
+    width: 30rem;
+    height: 10rem;
+}
+.contextManagerPage > .creation-form h2 {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+.contextManagerPage .contextSelectionCheckboxWrapper input {
+    position: absolute;
+    left: 0.4rem;
+    top: 0rem;
+    height: 100%;
+    padding: 0rem;
+    margin: 0rem;
+}
+.contextManagerPage button {
+    position: absolute;
+    right: 0.8rem;
+    top: 0.6rem;
+    margin: 0;
+    padding: 0;
+    width: 2.5rem;
+    height: 2.5rem;
+}

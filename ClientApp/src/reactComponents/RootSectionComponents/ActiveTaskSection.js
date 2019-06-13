@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Category } from '../logicLayer/Task';
-import { GoalBoard, WeeklyBoard, DailyBoard } from './Board';
-import { ColourIdTracker } from '../viewLogic/colourSetManager';
+import { Category } from '../../logicLayer/Task';
+import { GoalBoard, WeeklyBoard, DailyBoard } from '../Board';
+import { ColourIdTracker } from '../../viewLogic/colourSetManager';
 
 export class ActiveTaskSection extends Component {
     constructor(props) {
@@ -30,12 +30,16 @@ export class ActiveTaskSection extends Component {
         this.initialCheck = null;
         this.intervalCheck = null;
     }
-    componentDidMount() {
+    setupWithNewDataModelInstance() {
+        window.clearInterval(this.intervalCheck);
+        window.clearTimeout(this.initialCheck);
+
         // Register to access, and recieve updates from, the active take list in the data-model instance handed to us.
         this.activeTaskListAPI = this.props.dataModelScope.RegisterToActiveTaskListAPI(this.handleChange);
 
         // Setup timing callbacks for task-failure checks. This will the be the callback we register for OnDataLoad callbacks.
         const checkAction = () => {
+            console.log("Checking for failed tasks, via timed callback!");
             let ids = this.activeTaskListAPI.PerformFailureCheck(800, id => this.unregisterForAnimation(id, false));
             ids.forEach(id => this.registerForAnimation(id, false));
         };
@@ -54,12 +58,20 @@ export class ActiveTaskSection extends Component {
         // Initialise state of this component
         this.handleChange();
     }
+    componentDidMount() {
+        this.setupWithNewDataModelInstance();
+    }
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevProps.dataModelScope !== this.props.dataModelScope) {
+            console.log("ActiveTasksSection got a newly instantiated data-model. We need to refresh our registrations, and re-render!");
+            this.setupWithNewDataModelInstance();
+        }
+    }
     componentWillUnmount() {
         window.clearInterval(this.intervalCheck);
         window.clearTimeout(this.initialCheck);
-
-        // TODO: IMPLEMENT DE-REGISTER CAPABILITY, AND PERFORM IT HERE!
     }
+    
     
     // Callback for when tasks are hovered over and we need to highlight them, and all their relatives.
     registerForHighlights(id) {

@@ -25,10 +25,10 @@ const EventReplayFunctions = new Map([
 // Replays all event in the json log to rebuild the state exactly. It also tracks the largest id it found, which is returned.
 // The return value should therefore be used to tell the logic layer what 'id' to start at to avoid id collisions when new
 // tasks are created by the user.
-export function RebuildState(eventLogAsJsonArray, tasklist) {
+export function RebuildState(eventLogAsArray, tasklist) {
     let taskMap = createTaskMap(tasklist);
     let latestid = "";
-    JSON.parse(eventLogAsJsonArray).forEach(eventObj => {
+    eventLogAsArray.forEach(eventObj => {
         replayEvent(eventObj, tasklist, taskMap);
         latestid = eventObj.id;
     });
@@ -55,7 +55,7 @@ function replayEvent(event, tasklist, taskMap) {
 // Specific Handlers
 function replayTaskAddedEvent(eventData, tasklist, taskMap) {
     if (eventData.parent !== null) throw new Error("Invalid event state: Tried to add a new independent task but event data state the new task already had a parent!");
-    taskMap.set(eventData.id, tasklist.CreateNewIndependentTask(eventData.name, eventData.category, eventData.timestamp, eventData.colourId, eventData.id));
+    taskMap.set(eventData.id, tasklist.CreateNewIndependentTask(eventData.name, eventData.category, eventData.timestamp, eventData.context, eventData.colourId, eventData.id));
 }
 function replayChildTaskAddedEvent(eventData, tasklist, taskMap) {
     if (eventData.parent === null) throw new Error("Invalid event state: Tried to add a child, but the eventData stated the task had no parent");

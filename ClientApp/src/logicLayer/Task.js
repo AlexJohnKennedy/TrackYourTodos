@@ -10,6 +10,18 @@ export const PUT_NEW_TASKS_AT_TOP_OF_LIST = false;
 // Character limit for text fields of an item.
 export const MAX_TASK_NAME_LEN = 120;
 
+export const MAX_CONTEXT_NAME_LEN = 20;
+
+export const DEFAULT_GLOBAL_CONTEXT_STRING = "global";  // Context strings are NOT case sensitive.
+
+function isValidContextString(s) {
+    if (s === undefined || s === null || s === "" || s.length > MAX_CONTEXT_NAME_LEN) return false;
+
+    // TODO: Alpha numeric check, no whitespace check
+
+    return true;
+}
+
 // Enumeration object, specifying the possible categories for an item. These will basically dictate where an item
 // appears on the UI, under which board. (PSST): 'Boards' themselves are just a UI-layer concept, so they will not
 // we referred to here.
@@ -84,19 +96,18 @@ export class TaskObjects {
     }
 
     // Creates a parentless task, in a specified category!
-    CreateNewIndependentTask(name, category, timeCreatedUNIX, colourid = DefaultColourId, id = null) {
+    CreateNewIndependentTask(name, category, timeCreatedUNIX, context = DEFAULT_GLOBAL_CONTEXT_STRING, colourid = DefaultColourId, id = null) {
         if (id === null || id === undefined) {
             id = GetNewId();
         }
 
-        let newTask = new Task(id, name, category, null, colourid, timeCreatedUNIX);
+        let newTask = new Task(id, name, category, null, colourid, timeCreatedUNIX, context);
         if (PUT_NEW_TASKS_AT_TOP_OF_LIST) {
             this.tasks.unshift(newTask);
         }
         else {
             this.tasks.push(newTask);
         }
-
         return newTask;
     }
     
@@ -106,7 +117,7 @@ export class TaskObjects {
             id = GetNewId();
         }
 
-        let newTask = new Task(id, name, DowngradeCategory(parent.category), parent, parent.colourid, timeCreatedUNIX);
+        let newTask = new Task(id, name, DowngradeCategory(parent.category), parent, parent.colourid, timeCreatedUNIX, parent.context);
         this.tasks.push(newTask);
         parent.addChild(newTask);
 
@@ -118,7 +129,7 @@ export class TaskObjects {
             id = GetNewId();
         }
 
-        let newTask = new Task(id, name, Category.Daily, parent, parent.colourid, timeCreatedUNIX);
+        let newTask = new Task(id, name, Category.Daily, parent, parent.colourid, timeCreatedUNIX, parent.context);
         this.tasks.push(newTask);
         parent.addChild(newTask);
 
@@ -162,7 +173,7 @@ export class TaskObjects {
         return this.CloseTask(task, ProgressStatus.Completed, this.completedTasks, timeStampUNIX);
     }
 
-    // TODO: Probably just remove this? Not sure if deltion is required.
+    // TODO: Probably just remove this? Not sure if deletion is required.
     DeleteTask(task) {
         // Clear all parent and child links from the deleted task!
         if (task.parent) task.parent.removeChild(task);
@@ -193,7 +204,7 @@ export class TaskObjects {
         let category = asActive ? task.category : Category.Deferred;
         task.progressStatus = ProgressStatus.Reattempted;   // Signal that this task has been revived. We only want to be able to do this once per failure.
         task.eventTimestamps.timeRevived = timeRevivedUNIX;
-        return this.CreateNewIndependentTask(task.name, category, timeRevivedUNIX, task.colourid, id);
+        return this.CreateNewIndependentTask(task.name, category, timeRevivedUNIX, task.context, task.colourid, id);
     }
 }
 
@@ -202,13 +213,15 @@ class Task {
     // It may optionally be passed a parent Task; if none is provided, this task is created without a parent!
     // It may optionally be passed a colourid value; if none is provided, this task is assigned the current default colour.
     // -- NOTE: Any passed colourid will be overridden by a passed parent's colorid; it is enforeced that they match! 
-    constructor(id, name, category, parent, colourid, timeCreatedUNIX) {
+    constructor(id, name, category, parent, colourid, timeCreatedUNIX, context) {
         // Setup the state for this Task.
         if (name.length > MAX_TASK_NAME_LEN) throw new Error("name too long!");
-        this.id = id;   // MUST NEVER CHANGE
+        if (!isValidContextString(context)) throw new Error("Invalid context string: " + context);
+        this.id = id;   // MUST NEVER CHANGE. This is a string representation of a UUID (v4, but any is fine)
         this.name = name;
         this.category = category;
         this.progressStatus = ProgressStatus.NotStarted;
+        this.context = context;
         this.parent = parent;
         this.colourid = colourid;
         this.children = [];     // A newly created task should never have children

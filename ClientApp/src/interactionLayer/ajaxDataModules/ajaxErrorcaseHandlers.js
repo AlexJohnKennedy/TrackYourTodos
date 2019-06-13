@@ -65,5 +65,6 @@ export function handleUnknownError(message) {
 
 // Add failed posts to queue (I.e. on AJAX timeout or some other unknown error)
 export function handleUnknownPostFailure(failedEventData, failedCacheInstance) {
+    if (failedEventData === null || failedEventData === undefined || failedEventData.length === 0) return;
     failedCacheInstance.InsertEventsIntoCache(failedEventData);
 }

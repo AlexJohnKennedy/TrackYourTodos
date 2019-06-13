@@ -3,6 +3,7 @@ import { NewTaskButton } from './TaskButtons.js';
 import { CreationForm } from './CreationForm.js';
 import { ShortCutManager } from '../viewLogic/keyboardShortcutHandler';
 import { TaskList } from './TaskList';
+import { MAX_TASK_NAME_LEN } from '../logicLayer/Task';
 
 // the 'Board' component generically represents an active task list.
 // E.g., each of the three main 'lists' are Board components!
@@ -58,6 +59,7 @@ export class Board extends Component {
                     submitAction={this.toggleFormOff}
                     formStateManager={this.props.formStateManager}
                     formText={this.props.formText}
+                    maxFieldLength={MAX_TASK_NAME_LEN}
                 />
             </div>
         );

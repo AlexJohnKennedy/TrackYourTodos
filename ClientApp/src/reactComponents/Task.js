@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { GetColourMapping, ThemeId, HSLAColour } from '../viewLogic/colourSetManager';
 import { NewTaskButton, CheckBox } from './TaskButtons';
 import { CreationForm } from './CreationForm.js';
-import { Category, ProgressStatus } from '../logicLayer/Task';
+import { Category, ProgressStatus, MAX_TASK_NAME_LEN } from '../logicLayer/Task';
 
 export class Task extends Component {
     constructor(props) {
@@ -112,6 +112,7 @@ export class Task extends Component {
                         showingForm={this.state.showingDailyForm}
                         submitAction={() => this.toggleFormOff(true)}
                         formStateManager={this.props.formStateManager}
+                        maxFieldLength={MAX_TASK_NAME_LEN}
                     />
                     </>
                 }
@@ -124,6 +125,7 @@ export class Task extends Component {
                         showingForm={this.state.showingForm}
                         submitAction={() => this.toggleFormOff(false)}
                         formStateManager={this.props.formStateManager}
+                        maxFieldLength={MAX_TASK_NAME_LEN}
                     />
                     </>
                 }

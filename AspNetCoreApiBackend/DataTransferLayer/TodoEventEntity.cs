@@ -49,6 +49,7 @@ namespace todo_app.DataTransferLayer.Entities {
     }
     internal class NotInTheFutureValidatorAttribute : ValidationAttribute {
         private long clockSkewMilliseconds;     // How many milliseconds either side we are allowing.
+        private const long ageTolerance = 5_000_000_000;
 
         public NotInTheFutureValidatorAttribute(long clockSkew) {
             this.clockSkewMilliseconds = clockSkew;
@@ -57,10 +58,25 @@ namespace todo_app.DataTransferLayer.Entities {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext) {
             long now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
             long timestampToValidate = (long)value;
+            if (timestampToValidate < now - clockSkewMilliseconds - ageTolerance) return new ValidationResult("Timestamp for an event was too old");
             return now + clockSkewMilliseconds >= timestampToValidate ? ValidationResult.Success : new ValidationResult(GetErrorMessage(timestampToValidate));
         }
         private string GetErrorMessage(long illegalTime) {
             return $"Timestamp of {illegalTime} unix epoch milliseconds represented a value in the future; our system doesn't allow events to be saved that have not happened yet";
+        }
+    }
+    internal class AlphaNumericSpacesAllowed : ValidationAttribute {
+        protected override ValidationResult IsValid(object value, ValidationContext validationContext) {
+            string s = (string)value;
+            // If the string is not trimmed, we should reject it. I.e. leading or trailing whitespace is not allowed!
+            if (s == null || s.Length == 0) { return new ValidationResult("Context strings cannot be empty"); }
+            if (!s.Equals(s.Trim())) { return new ValidationResult("Leading or trailing whitespace is not allowed for context strings! Trim them before sending to API."); }
+            foreach (char c in s.ToCharArray()) {
+                if (!char.IsLetterOrDigit(c) && !c.Equals(' ')) {
+                    return new ValidationResult("Only letters, numbers and spaces are allowed in the context string");
+                }
+            }
+            return ValidationResult.Success;
         }
     }
 
@@ -133,7 +149,12 @@ namespace todo_app.DataTransferLayer.Entities {
 
         [Required]
         public int ColourId { get; set; }
-        
+
+        [Required]
+        [StringLength(30, MinimumLength = 1)]
+        //[AlphaNumericSpacesAllowed]   // TODO: Fix this validator. It's causing some whack issues at the moment, and I don't know why
+        public string Context { get; set; }
+
         public Guid? Parent { get; set; }        // Nullable, since some event types do not support this.
         public Guid[] Children { get; set; }
         public Guid? Original { get; set; }      // Nullable, since some event types do not support this.
@@ -142,6 +163,42 @@ namespace todo_app.DataTransferLayer.Entities {
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext) {
             var validationPredicate = EventTypeSpecificValidators.Funcs[EventType] ?? (e => false);
             if (!validationPredicate(this)) yield return new ValidationResult($"Field values were not valid for eventType: {EventType}");
+        }
+    }
+
+    public class GenericTodoEventComparer : EqualityComparer<GenericTodoEvent> {
+        // We say two todo events are duplicates if they have the same 'type' and refer to the same task.
+        // This is true because no event type can be applied to the same task more than once.
+        // Note that in the case of 'duplicates', we should always accept the earlier-occurring event as the true event.
+        public override bool Equals(GenericTodoEvent e1, GenericTodoEvent e2) {
+            if (e1 == null && e2 == null) return true;
+            else if (e1 == null || e2 == null) return false;
+
+            return (e1.Id.Equals(e2.Id) && e1.EventType.Equals(e2.EventType));
+        }
+        public override int GetHashCode(GenericTodoEvent e) {
+            var data = new { e.Id, e.EventType };
+            return data.GetHashCode();
+        }
+    }
+
+    // Defines the data structure which allows us to order events completely, even if they were generated in the same millisecond
+    public class EventOrderingKey {
+        public long Timestamp { get; }
+        public string EventType { get;}
+        public EventOrderingKey(long t, string e) {
+            Timestamp = t;
+            EventType = e;
+        }
+    }
+    public class EventOrderingKeyComparer : Comparer<EventOrderingKey> {
+        public override int Compare(EventOrderingKey x, EventOrderingKey y) {
+            if (x.Timestamp == y.Timestamp) {
+                return EventTypes.PrecedenceOrderingValues[x.EventType].CompareTo(EventTypes.PrecedenceOrderingValues[y.EventType]);
+            }
+            else {
+                return x.Timestamp.CompareTo(y.Timestamp);
+            }
         }
     }
 }

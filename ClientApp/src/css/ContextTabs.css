@@ -1,0 +1,45 @@
+.ContextTabsWrapper {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 3.4rem;
+}
+
+.ContextTabsWrapper .contextSettingsButton {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    padding-top: 0.2rem;
+}
+.ContextTabsWrapper .contextSettingsButton div {
+    background-color: var(--divider-colour-lighter);
+    border-radius: 40%;
+    width: 3rem;
+    height: 3rem;
+    cursor: pointer;
+}
+
+.ContextTabsWrapper .navigation-tabs-container {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    
+    background-color: rgb(0,0,0,0);
+    display: flex;
+    justify-content: flex-start;
+    height: 100%;
+    line-height: 3.4rem;
+    overflow: hidden;
+}
+
+.ContextTabsWrapper .navigation-tabs-container .navigation-tab {
+    /* font size and padding is different depending on screen width. Thus, it's defined in GridLayout.css */
+    flex-shrink: 1;
+    text-align: center;
+    cursor: pointer;
+    background-color: var(--sidebar-background-colour);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ContextTabsWrapper .navigation-tabs-container > .active-navigation-tab {
+    background-color: var(--editor-background-colour);
+}

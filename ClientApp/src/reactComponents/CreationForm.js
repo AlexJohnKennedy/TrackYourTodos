@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { MAX_TASK_NAME_LEN } from '../logicLayer/Task';
 
 export class CreationForm extends Component {
     constructor(props) {
@@ -13,17 +12,25 @@ export class CreationForm extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
     }
-    componentDidUpdate() {
+    componentDidMount() {
         if (this.props.showingForm) {
             this.props.formStateManager.registerCleanUpCallback(this.handleCancel);
             this.textInputRef.current.focus();  // Set the focus automatically, for SPEEEED!
         }
     }
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (this.props.showingForm) {
+            if (!prevProps.showingForm) {
+                this.props.formStateManager.registerCleanUpCallback(this.handleCancel);
+            }
+            this.textInputRef.current.focus();  // Set the focus automatically, for SPEEEED!
+        }
+    }
     handleChange(event) {
         // Do not update if the string is already the max length
-        if (event.target.value != null && event.target.value.length === MAX_TASK_NAME_LEN) {
+        if (event.target.value != null && event.target.value.length === this.props.maxFieldLength) {
             return;
-        } else if (event.target.value && event.target.value.length > MAX_TASK_NAME_LEN) {
+        } else if (event.target.value && event.target.value.length > this.props.maxFieldLength) {
             this.setState({value: ""});     // For now, just reset that shit..
         }
         this.setState({value: event.target.value});

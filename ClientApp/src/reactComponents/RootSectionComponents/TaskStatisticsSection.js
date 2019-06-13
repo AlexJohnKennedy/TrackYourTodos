@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { RadialSummaryBlock } from './RadialSummaryBlock';
-import { SelectableChildrenWithController } from './SelectableChildrenWithController';
-import { ScrollableBarChart } from './ScrollableBarChart';
+import { RadialSummaryBlock } from '../RadialSummaryBlock';
+import { SelectableChildrenWithController } from '../SelectableChildrenWithController';
+import { ScrollableBarChart } from '../ScrollableBarChart';
 
 export class TaskStatisticsSection extends Component {
     constructor(props) {
@@ -50,7 +50,7 @@ export class TaskStatisticsSection extends Component {
         this.adjustRange = this.adjustRange.bind(this);
         this.adjustBarWidth = this.adjustBarWidth.bind(this);
     }
-    componentDidMount() {
+    setupWithNewDataModelInstance() {
         // Register to access and receive updates from the statistics model in the Data-model scope handed to us from our parent.
         this.statisticsModelApi = this.props.dataModelScope.RegisterForStatisticsModel(this.handleChange, this.handleChange);
         this.props.dataModelScope.RegisterForOnInitialDataLoadCallback(() => this.handleChange(null, null));
@@ -59,8 +59,14 @@ export class TaskStatisticsSection extends Component {
         //this.statisticsModelApi = this.statisticsModelApi.bind(this);
         this.handleChange(null, null);
     }
-    componentWillUnmount() {
-        // TODO: IMPLEMENT DE-REGISTER CAPABILITY, AND PERFORM IT HERE!
+    componentDidMount() {
+        this.setupWithNewDataModelInstance();
+    }
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevProps.dataModelScope !== this.props.dataModelScope) {
+            console.log("TaskStatisticsSection got a newly instantiated data-model. We need to refresh our registrations, and re-render!");
+            this.setupWithNewDataModelInstance();
+        }
     }
 
     handleChange(task, tasklist) {

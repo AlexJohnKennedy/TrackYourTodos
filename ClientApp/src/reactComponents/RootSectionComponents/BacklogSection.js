@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { NavigationStateWrapper } from './NavigationTabs';
-import { Category } from '../logicLayer/Task';
-import { TaskList } from './TaskList';
-import { CreationForm } from './CreationForm';
+import { NavigationStateWrapper } from '../NavigationTabs';
+import { Category, MAX_TASK_NAME_LEN  } from '../../logicLayer/Task';
 
-import { ShortCutManager } from '../viewLogic/keyboardShortcutHandler';
-import { ColourIdTracker } from '../viewLogic/colourSetManager';
+import { TaskList } from '../TaskList';
+import { CreationForm } from '../CreationForm';
+
+import { ShortCutManager } from '../../viewLogic/keyboardShortcutHandler';
+import { ColourIdTracker } from '../../viewLogic/colourSetManager';
 
 
 export class BacklogSection extends Component {
@@ -27,19 +28,28 @@ export class BacklogSection extends Component {
         this.toggleFormOn = this.toggleFormOn.bind(this);
         this.toggleFormOff = this.toggleFormOff.bind(this);
     }
-    componentDidMount() {
+    setupWithNewDataModelInstance() {
         // Register to access and recieve updates from the ActiveTaskList from the Data-model instance handed to us.
         this.activeTaskListAPI = this.props.dataModelScope.RegisterToActiveTaskListAPI(this.handleActiveChange);
         this.props.dataModelScope.RegisterForOnInitialDataLoadCallback(this.handleActiveChange);
         this.props.dataModelScope.RegisterForOnDataRefreshCallback(this.handleActiveChange);
 
-        ShortCutManager.registerShiftShortcut("Digit4", this.toggleFormOn);
-
         // Initialise state of this component.
         this.handleActiveChange();
     }
+    componentDidMount() {
+        ShortCutManager.registerShiftShortcut("Digit4", this.toggleFormOn);
+        this.setupWithNewDataModelInstance();
+    }
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevProps.dataModelScope !== this.props.dataModelScope) {
+            console.log("Backlog section got a newly instantiated data-model. We need to refresh our registrations, and re-render!");
+            this.setupWithNewDataModelInstance();
+        }
+    }
+
     componentWillUnmount() {
-        // TODO: IMPLEMENT DE-REGISTER CAPABILITY, AND PERFORM IT HERE!
+        // TODO: Deregister shortcut here?
     }
 
     toggleFormOn() {
@@ -153,6 +163,7 @@ export class BacklogSection extends Component {
                             submitAction={this.toggleFormOff}
                             formStateManager={this.props.formStateManager}
                             formText={this.props.formText}
+                            maxFieldLength={MAX_TASK_NAME_LEN}
                     />
                 </div>
             </div>

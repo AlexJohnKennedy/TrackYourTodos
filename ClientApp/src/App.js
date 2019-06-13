@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import './css/App.css';
 import '../node_modules/react-vis/dist/style.css';
-import { AppPage } from './AppPage';
-import { LoadingPage, ErrorPage } from './LoadingPage';
-import { LoginPage } from './LoginPage';
+import { AppPage } from './reactComponents/PagesAndDataProviders/AppPage';
+import { LoadingPage, ErrorPage } from './reactComponents/PagesAndDataProviders/LoadingPage';
+import { LoginPage } from './reactComponents/PagesAndDataProviders/LoginPage';
 
 // Setters for application-level handlers for AJAX and Network errors. E.g. token expired, GET or POST failure, Authorization failed.
 import { setIdTokenRefreshFunction, setServerFailureAction, setAuthFailureHandler, setUnknownErrorAction } from './interactionLayer/ajaxDataModules/ajaxErrorcaseHandlers';

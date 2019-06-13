@@ -20,7 +20,22 @@ namespace todo_app.DomainLayer.TaskListModel {
         public const string TaskStarted = "taskStarted";
         public static readonly HashSet<string> ValidEventStrings = new HashSet<string>() {
             TaskAdded, ChildTaskAdded, TaskRevived, TaskDeleted, TaskCompleted, TaskFailed, TaskActivated, TaskStarted
-        };         
+        };
+        public static readonly Dictionary<string, int> PrecedenceOrderingValues = new Dictionary<string, int>() {
+            // Task created events must occur before any other action can occur on that event, thus they are the 'earliest' precedence
+            { TaskAdded, 0 },
+            { ChildTaskAdded, 0 },
+            { TaskRevived, 0 },
+            // Tasks cannot be activated after starting, thus activation comes next.
+            { TaskActivated, 1 },
+            // Tasks cannot be started after are deletd, completed or failed, thus started comes next.
+            { TaskStarted, 2},
+            // Tasks cannot be deleted after being close, thus deletion comes next.
+            { TaskDeleted, 3},
+            // Task closure comes next. Lets favour failure over completed, just to be mean.
+            { TaskFailed, 4 },
+            { TaskCompleted, 5 }
+        };
     }
 
     // Define Progress status values to match Client application.

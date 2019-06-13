@@ -36,7 +36,7 @@
 // --- GetActiveTasks().
 // --------------------------------------------------------------------------------
 import { ScheduleEventLogUpdate } from './ajaxDataModules/ajaxDataModelRebuilder.js';
-import { TaskObjects, Category, ProgressStatus } from '../logicLayer/Task';
+import { TaskObjects, Category, ProgressStatus, DEFAULT_GLOBAL_CONTEXT_STRING } from '../logicLayer/Task';
 import { RegisterForFailureChecking } from '../logicLayer/checkForFailure';
 import { StatisticsModel } from '../logicLayer/statisticsModel';
 
@@ -48,8 +48,17 @@ import { StatisticsModel } from '../logicLayer/statisticsModel';
 // the data-model data.
 // When the AppPage root component mounts, which will be after the children finish mounting, it will trigger an AJAX load to the backend.
 // Upon un-mounting, the components must de-register.
-export function InstantiateNewDataModelScope() {
+// The current context string must be passed in here. This string is what context newly created independent tasks will be created with.
+// Since this is specified at scope-instantiation time, we realise that the data-model-scope is designed to be re-instantiated every time
+// there is a context switch! This is sensible, since it means we are not saving out-of-context tasks in memory. This approuch should help
+// to reduce the size of the event log the browser has to manage at a given time; unless they are viewing the global context of course.
+export function InstantiateNewDataModelScope(currContext) {
+    console.log("Instantiating a new data model scope. Context for data-model: " + currContext);
     
+    // default to the global context, defined in the domain layer. Also, trim that sucka, just in case.
+    if (currContext === null || currContext === undefined || currContext === "") { currContext = DEFAULT_GLOBAL_CONTEXT_STRING; }
+    currContext = currContext.trim();
+
     // Instantiate the data model objects. This will serve as the domain-layer data for all users of the returned scope.
     // Note: Whenever data is re-loaded, we re-instantiate a new StatisticsModel on the main thread, because it directly needs to read
     // the current tasklist state in order to construct itself correctly. This is because the GET request does not emit dataevents for the
@@ -90,27 +99,28 @@ export function InstantiateNewDataModelScope() {
         DataEventCallbackHandlers.taskActivatedHandlers.length = 0;
         DataEventCallbackHandlers.taskStartedHandlers.length = 0;
         DataLoadedFromServerCallbacks.length = 0;
+        DataRefreshedFromServerCallbacks.length = 0;
     }
 
     // Exported inner function: Tells the interaction layer to fetch the latest event log from the backend, and apply it to datamodel
     // upon completion. Upon completion, we will trigger the stashed DataLoadedFromServer callbacks. Thus, it is expected that any
     // client object who want to know about the data-load will have already called 'RegisterForDataLoad' before this happens.
-    function TriggerEventLogInitialDataFetch() {
-        ScheduleEventLogUpdate(new TaskObjects(), (rebuiltTaskList) => {
+    function TriggerEventLogInitialDataFetch(visibleContexts) {
+        ScheduleEventLogUpdate(new TaskObjects(), visibleContexts, (rebuiltTaskList, availableContextsArray) => {
             ActiveTaskDataObj = rebuiltTaskList;
             StatisticsModelObj = new StatisticsModel(rebuiltTaskList);
             DataLoadedFromServerCallbacks.forEach(cb => {
-                cb();
+                cb(availableContextsArray);
             });
         });
     }
 
-    function TriggerEventLogDataRefresh() {
-        ScheduleEventLogUpdate(new TaskObjects(), (rebuiltTaskList) => {
+    function TriggerEventLogDataRefresh(visibleContexts) {
+        ScheduleEventLogUpdate(new TaskObjects(), visibleContexts, (rebuiltTaskList, availableContextsArray) => {
             ActiveTaskDataObj = rebuiltTaskList;
             StatisticsModelObj = new StatisticsModel(rebuiltTaskList);
             DataRefreshedFromServerCallbacks.forEach(cb => {
-                cb();
+                cb(availableContextsArray);
             });
         });
     }
@@ -142,7 +152,6 @@ export function InstantiateNewDataModelScope() {
     // recieve view-layer callbacks, and so on.
     function RegisterToActiveTaskListAPI(viewLayerCallbackFunc) {
 
-        const logicLayerFailureChecker = RegisterForFailureChecking(ActiveTaskDataObj);
         ViewLayerCallbacks.push(viewLayerCallbackFunc);
 
         function getActiveTasks() {
@@ -174,10 +183,10 @@ export function InstantiateNewDataModelScope() {
             return function(name) {
                 let newTask;
                 if (colourIdGetterFunc !== null) {
-                    newTask = ActiveTaskDataObj.CreateNewIndependentTask(name, categoryVal, Date.now(), colourIdGetterFunc());
+                    newTask = ActiveTaskDataObj.CreateNewIndependentTask(name, categoryVal, Date.now(), currContext, colourIdGetterFunc());
                 }
                 else {
-                    newTask = ActiveTaskDataObj.CreateNewIndependentTask(name, categoryVal, Date.now());
+                    newTask = ActiveTaskDataObj.CreateNewIndependentTask(name, categoryVal, Date.now(), currContext);
                 }
                 ViewLayerCallbacks.forEach(callback => callback());
                 DataEventCallbackHandlers.taskAddedHandlers.forEach(callback => callback(newTask, ActiveTaskDataObj));
@@ -188,6 +197,7 @@ export function InstantiateNewDataModelScope() {
         // layer update, which then invokes view layer and data event callbacks. The reason that is delayed is to allow the view layer
         // to play an animation
         function performFailureCheck(updateDelayMilliseconds, additionalCallback = null) {
+            const logicLayerFailureChecker = RegisterForFailureChecking(ActiveTaskDataObj);
             window.setTimeout(() => {
                 logicLayerFailureChecker.FailTasks().forEach(task => {
                     if (additionalCallback !== null) additionalCallback(task.id);
