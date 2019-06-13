@@ -5,14 +5,14 @@ import { forceTokenRefresh, handleAuthFailure, handleServerFailure, handleUnknow
 // This will be called whenever the data-model rebuilds itself, and needs handlers with a fresh cache (for example).
 export function BuildDataEventHttpPostHandlers(FailedEventCache) {
     return {
-        taskAddedHandler: (task, list) => postEvent(DataEventSerialisationFuncs.taskAddedEvent(task, list), FailedEventCache, 2, false, true),
-        childTaskAddedHandler: (parent, child, list) => postEvent(DataEventSerialisationFuncs.childTaskAddedEvent(parent, child, list), FailedEventCache, 2, false, true),
-        taskRevivedHandler: (old, clone, list) => postEvent(DataEventSerialisationFuncs.taskRevivedEvent(old, clone, list), FailedEventCache, 2, false, true),
-        taskActivatedHandler: (task, list) => postEvent(DataEventSerialisationFuncs.taskActivatedEvent(task, list), FailedEventCache, 2, false, true),
-        taskDeletedHandler: (task, list) => postEvent(DataEventSerialisationFuncs.taskDeletedEvent(task, list), FailedEventCache, 2, false, true),
-        taskStartedHandler: (task, list) => postEvent(DataEventSerialisationFuncs.taskStartedEvent(task, list), FailedEventCache, 2, false, true),
-        taskCompletedHandler: (task, list) => postEvent(DataEventSerialisationFuncs.taskCompletedEvent(task, list), FailedEventCache, 2, false, true),
-        taskFailedHandler: (task, list) => postEvent(DataEventSerialisationFuncs.taskFailedEvent(task, list), FailedEventCache, 2, false, true)
+        taskAddedHandler: (task, list) => postEvent([DataEventSerialisationFuncs.taskAddedEvent(task, list)], FailedEventCache, 2, false, true),
+        childTaskAddedHandler: (parent, child, list) => postEvent([DataEventSerialisationFuncs.childTaskAddedEvent(parent, child, list)], FailedEventCache, 2, false, true),
+        taskRevivedHandler: (old, clone, list) => postEvent([DataEventSerialisationFuncs.taskRevivedEvent(old, clone, list)], FailedEventCache, 2, false, true),
+        taskActivatedHandler: (task, list) => postEvent([DataEventSerialisationFuncs.taskActivatedEvent(task, list)], FailedEventCache, 2, false, true),
+        taskDeletedHandler: (task, list) => postEvent([DataEventSerialisationFuncs.taskDeletedEvent(task, list)], FailedEventCache, 2, false, true),
+        taskStartedHandler: (task, list) => postEvent([DataEventSerialisationFuncs.taskStartedEvent(task, list)], FailedEventCache, 2, false, true),
+        taskCompletedHandler: (task, list) => postEvent([DataEventSerialisationFuncs.taskCompletedEvent(task, list)], FailedEventCache, 2, false, true),
+        taskFailedHandler: (task, list) => postEvent([DataEventSerialisationFuncs.taskFailedEvent(task, list)], FailedEventCache, 2, false, true)
     };
 }
 
@@ -22,22 +22,18 @@ export function RetryPostingFailedEvents(failureCacheInstance) {
     postEvent("", failureCacheInstance, 0, true, true);
 }
 
-function postEvent(eventText, failureCache, retryCount, logoutOnAuthFailure, sendFromFailureCache) {
+function postEvent(eventArray, failureCache, retryCount, logoutOnAuthFailure, sendFromFailureCache) {
     console.log("Ajax POST request scheduled! Send from failure cache flag = " + sendFromFailureCache);
-    //console.log(eventText);
+    console.log(eventArray);
     
     // Build the message body array, depending on incoming message and failure cache state.
-    let eventArray = [];
-    if (sendFromFailureCache && !failureCache.IsEmpty() && eventText !== null && eventText.length > 0) {
-        eventArray = failureCache.FetchAndPopAll().concat(eventText);
+    if (sendFromFailureCache && !failureCache.IsEmpty() && eventArray !== null && eventArray.length > 0) {
+        eventArray = failureCache.FetchAndPopAll().concat(eventArray);
     }
     else if (sendFromFailureCache && !failureCache.IsEmpty()) {
         eventArray = failureCache.FetchAndPopAll();
     }
-    else if (eventText !== null && eventText.length > 0) {
-        eventArray = [ eventText ];
-    }
-    else {
+    else if (eventArray == null || eventArray.length === 0) {
         return;
     }
 
@@ -55,7 +51,7 @@ function postEvent(eventText, failureCache, retryCount, logoutOnAuthFailure, sen
     httpRequest.setRequestHeader("Authorization", "Bearer " + googleToken); // Specify the 'Bearer' authentication scheme, under Authorization header.
     httpRequest.timeout = 5000;     // We MUST set a timeout otherwise uncaught exceptions will be thrown in scenarios where the browser is unable to complete reqeusts. (e.g. PC is asleep)
     httpRequest.ontimeout = () => {
-        handleUnknownPostFailure(eventText, failureCache);     // In these scenario's, don't try again just yet..
+        handleUnknownPostFailure(eventArray, failureCache);     // In these scenario's, don't try again just yet..
     }
 
     // Assign a response handler function. If we get back a 200, we are done! If it fails with a server error, we will recursively retry,
@@ -67,10 +63,10 @@ function postEvent(eventText, failureCache, retryCount, logoutOnAuthFailure, sen
         else if (httpRequest.readyState === 4 && httpRequest.status === 500) {
             if (retryCount > 0) {
                 console.warn("Server error on POST! Retrying...");
-                postEvent(eventText, retryCount - 1, logoutOnAuthFailure, sendFromFailureCache);
+                postEvent(eventArray, retryCount - 1, logoutOnAuthFailure, sendFromFailureCache);
             }
             else {
-                console.warn("Failed to Post event, ran out of retries on 500 response: " + eventText);
+                console.warn("Failed to Post event, ran out of retries on 500 response: " + eventArray);
                 handleServerFailure("We couldn't save your updates! Our database must be snoozing... I'll blast the techno.");
             }
         }
@@ -82,12 +78,12 @@ function postEvent(eventText, failureCache, retryCount, logoutOnAuthFailure, sen
             }
             else {
                 console.warn("Got an un-authorized 401 error on attempted Event log fetch. Forcing a token refresh, and re-trying..");
-                forceTokenRefresh(() => postEvent(eventText, failureCache, retryCount, true, sendFromFailureCache));
+                forceTokenRefresh(() => postEvent(eventArray, failureCache, retryCount, true, sendFromFailureCache));
             }
         }
         else if (httpRequest.readyState === 4 && httpRequest.status === 409) {
             console.warn("Got a 409 response. This means the data we tried to post is conflicting with the events already saved in the server! I am initiating 409 response handling");
-            handleConflictingDataOccurrance(eventText);
+            handleConflictingDataOccurrance(eventArray);
         }
         else if (httpRequest.readyState === 4) {
             console.warn("Failed to Post event for unknown reason! HTTP Response Code: " + httpRequest.status);
@@ -96,11 +92,5 @@ function postEvent(eventText, failureCache, retryCount, logoutOnAuthFailure, sen
     };
     
     // Send the request, with the serialised event text as the message body.
-    let bodyString = "[";
-    for (let i=0; i < eventArray.length - 1; i++) {
-        bodyString = bodyString + eventArray[i] + ", ";
-    }
-    bodyString = bodyString + eventArray[eventArray.length - 1] + "]";
-
-    httpRequest.send(bodyString);
+    httpRequest.send(JSON.stringify(eventArray));
 }
