@@ -91,7 +91,11 @@ export class AppPage extends Component {
 
     // Passed down to our children, allowing them to switch contexts between the currently available ones.
     switchContext(context) {
+        console.log("Attempting to switch to: " + context);
         context = this.validateContextString(context);
+        console.log("String after validation: " + context);
+        console.log("Currently available contexts:");
+        console.log(this.state.availableContexts);
         if (context === null || !this.state.availableContexts.includes(context)) {
             console.warn("Invalid context passed to context switch! You must pick a context which is already availble. Use 'CreateNewContext' to make a new one. Param was: " + context);
             return;
@@ -125,6 +129,7 @@ export class AppPage extends Component {
 
     // Pased down to our children, allowing them to create new contexts.
     createNewContext(newContext) {
+        console.log("Creating new context!");
         newContext = this.validateContextString(newContext);
         if (newContext === null) { return; }
         if (this.state.availableContexts.includes(newContext) || newContext === DEFAULT_GLOBAL_CONTEXT_STRING) { 
@@ -132,12 +137,13 @@ export class AppPage extends Component {
         }
         else {
             this.state.dataModelScope.ClearAllRegisteredCallbacks();
-            this.setState({
+            this.setState((state, props) => ({
                 currentContext: newContext,
-                visibleContexts: newContext,
-                availableContexts: this.state.availableContexts.concat([newContext]),
+                visibleContexts: [newContext],
+                availableContexts: state.availableContexts.concat([newContext]),
+                selectableContexts: state.selectableContexts.concat([newContext]),
                 dataModelScope: InstantiateNewDataModelScope(newContext)
-            });
+            }));
         }
     }
 
@@ -146,7 +152,7 @@ export class AppPage extends Component {
         if (contextStrings === undefined || contextStrings === null) throw new Error("Cannot parse null contexts to updateAvailableContexts.");
         // converts all strings with validator, filters out the failed ones (null), then build a set out of them to remove duplicats, then place
         // the de-duplicated values back into an array using the spread (...) operator on the set.
-        const validatedStrings = [ ...new Set([DEFAULT_GLOBAL_CONTEXT_STRING].concat(contextStrings).map(s => this.validateContextString(s)).filter(s => s !== null)) ];
+        const validatedStrings = [ ...new Set([DEFAULT_GLOBAL_CONTEXT_STRING].concat(this.state.availableContexts).concat(contextStrings).map(s => this.validateContextString(s)).filter(s => s !== null)) ];
         this.setState({
             availableContexts: validatedStrings
         });
@@ -204,6 +210,7 @@ export class AppPage extends Component {
                             selectableContexts={this.state.selectableContexts}
                             addSelectableContext={this.addSelectableContext}
                             removeSelectableContext={this.removeSelectableContext}
+                            formStateManager={this.formStateManager}
                             maxSelectable={5}
                         />
                     }

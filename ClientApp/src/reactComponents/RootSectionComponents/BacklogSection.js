@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { NavigationStateWrapper } from '../NavigationTabs';
-import { Category } from '../../logicLayer/Task';
+import { Category, MAX_TASK_NAME_LEN  } from '../../logicLayer/Task';
+
 import { TaskList } from '../TaskList';
 import { CreationForm } from '../CreationForm';
 
@@ -162,6 +163,7 @@ export class BacklogSection extends Component {
                             submitAction={this.toggleFormOff}
                             formStateManager={this.props.formStateManager}
                             formText={this.props.formText}
+                            maxFieldLength={MAX_TASK_NAME_LEN}
                     />
                 </div>
             </div>

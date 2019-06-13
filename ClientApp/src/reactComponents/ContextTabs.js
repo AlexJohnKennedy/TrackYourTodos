@@ -11,7 +11,7 @@ export class ContextTabs extends Component {
         
         // Find the index of the 'current context'. This will always be what the 'currActiveIndex' is set to!
         const currActiveIndex = this.props.selectableContexts.findIndex(s => s === this.props.currentContext);
-        if (currActiveIndex < 0 || currActiveIndex > this.props.selectableContexts.length) throw new Error("Invalid current context passed!");
+        if (currActiveIndex < 0 || currActiveIndex > this.props.selectableContexts.length) throw new Error("Invalid current context passed: " + currActiveIndex);
 
         const capitaliseFirstLetter = s => s.charAt(0).toUpperCase() + s.slice(1);
         return (

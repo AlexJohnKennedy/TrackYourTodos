@@ -44,7 +44,21 @@
     padding-bottom: 1.1rem;
     border-bottom: 1px solid var(--divider-colour-lighter);
 }
-.contextManagerPage input {
+
+.contextManagerPage > .creation-form {
+    display: inline-flex;
+    flex-direction: column;
+
+    box-sizing: border-box;
+    width: 40rem;
+    height: 10rem;
+}
+.contextManagerPage > .creation-form h2 {
+    padding-top: 1.5rem;
+    padding-bottom: 1rem;
+}
+
+.contextManagerPage .contextSelectionCheckboxWrapper input {
     position: absolute;
     left: 0.4rem;
     top: 0rem;

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { DEFAULT_GLOBAL_CONTEXT_STRING } from '../../logicLayer/Task';
+import { CreationForm } from '../CreationForm';
+import { DEFAULT_GLOBAL_CONTEXT_STRING, MAX_CONTEXT_NAME_LEN } from '../../logicLayer/Task';
 
 
 export class ContextManagerPage extends Component {
@@ -42,6 +43,14 @@ export class ContextManagerPage extends Component {
                    <h2> Context manangement </h2>
                 </div>
                 <div className="subheading"> You can have up to {this.props.maxSelectable} selected at a time. </div>
+                <CreationForm 
+                    creationFunction={this.props.createNewContext} 
+                    formText="New Context" 
+                    showingForm={true}
+                    submitAction={() => {}}
+                    formStateManager={this.props.formStateManager}
+                    maxFieldLength={MAX_CONTEXT_NAME_LEN}
+                />
                 {checkboxitems}
                 <button onClick={this.props.togglePage}> x </button>
             </div>
