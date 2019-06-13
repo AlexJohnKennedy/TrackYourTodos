@@ -17,6 +17,8 @@ import { setConflictingDataAction } from '../../interactionLayer/ajaxDataModules
 
 import { DEFAULT_GLOBAL_CONTEXT_STRING, MAX_CONTEXT_NAME_LEN } from '../../logicLayer/Task';
 
+// Define a constant which others may want to use.
+export const MAX_SELECTABLE_CONTEXTS = 5;
 
 // A wrapper for the application 'page' itself, which will be rendered by react-router.
 // This basically acts as the subtree-root for the actual todo-app page.
@@ -111,6 +113,7 @@ export class AppPage extends Component {
     // subtree visible as well! But for now, it's either global, or just one.
     performSwitch(context) {
         if (context === DEFAULT_GLOBAL_CONTEXT_STRING) {
+            this.state.dataModelScope.ClearAllRegisteredCallbacks();
             this.setState({
                 currentContext: context,
                 visibleContexts: [],   // Empty means everything is visible.
@@ -118,6 +121,27 @@ export class AppPage extends Component {
             });
         }
         else {
+            // We must ensure that the context we are switching to is acutally contained in the selectable list, otherwise things will break.
+            if (!this.state.selectableContexts.includes(context)) {
+                // Oops! We gotta hotswap it in.
+                this.setState((state, props) => {
+                    // If the selectable contexts list is full, then we will simply replace the last item in the list, sorry bro!
+                    let newSelectables = state.selectableContexts;
+                    if (state.selectableContexts.length === MAX_SELECTABLE_CONTEXTS) {
+                        console.log(newSelectables.length)
+                        newSelectables[newSelectables.length - 1] = context;
+                    }
+                    else {
+                        newSelectables = newSelectables.concat([context]);
+                    }
+                    return {
+                        currentContext: context,
+                        visibleContexts: [context],
+                        selectableContexts: newSelectables,
+                        dataModelScope: InstantiateNewDataModelScope(context)
+                    }
+                });
+            }
             this.state.dataModelScope.ClearAllRegisteredCallbacks();
             this.setState({
                 currentContext: context,
@@ -132,18 +156,29 @@ export class AppPage extends Component {
         console.log("Creating new context!");
         newContext = this.validateContextString(newContext);
         if (newContext === null) { return; }
-        if (this.state.availableContexts.includes(newContext) || newContext === DEFAULT_GLOBAL_CONTEXT_STRING) { 
+        if (this.state.availableContexts.includes(newContext) || newContext === DEFAULT_GLOBAL_CONTEXT_STRING) {
             this.performSwitch(newContext);
         }
         else {
             this.state.dataModelScope.ClearAllRegisteredCallbacks();
-            this.setState((state, props) => ({
-                currentContext: newContext,
-                visibleContexts: [newContext],
-                availableContexts: state.availableContexts.concat([newContext]),
-                selectableContexts: state.selectableContexts.concat([newContext]),
-                dataModelScope: InstantiateNewDataModelScope(newContext)
-            }));
+            this.setState((state, props) => {
+                // If the selectable contexts list is full, then we will simply replace the last item in the list, sorry bro!
+                let newSelectables = state.selectableContexts;
+                if (state.selectableContexts.length === MAX_SELECTABLE_CONTEXTS) {
+                    console.log(newSelectables.length)
+                    newSelectables[newSelectables.length - 1] = newContext;
+                }
+                else {
+                    newSelectables = newSelectables.concat([newContext]);
+                }
+                return {
+                    currentContext: newContext,
+                    visibleContexts: [newContext],
+                    availableContexts: state.availableContexts.concat([newContext]),
+                    selectableContexts: newSelectables,
+                    dataModelScope: InstantiateNewDataModelScope(newContext)
+                }
+            });
         }
     }
 
@@ -222,7 +257,7 @@ export class AppPage extends Component {
                             addSelectableContext={this.addSelectableContext}
                             removeSelectableContext={this.removeSelectableContext}
                             formStateManager={this.formStateManager}
-                            maxSelectable={5}
+                            maxSelectable={MAX_SELECTABLE_CONTEXTS}
                         />
                     }
                     <Footer />
