@@ -122,6 +122,21 @@ function BuildDataEventSerialisationFuncs() {
         };
     }
 
+    function taskEditedEvent(task, tasklist) {
+        return {
+            eventType: EventTypes.taskEdited,
+            timestamp: task.eventTimestamps.taskEdited,
+            id: task.id,
+            name: task.name,
+            category: task.category,
+            progressStatus: task.progressStatus,
+            colourId: task.colourid,
+            context: task.context,
+            parent: task.parent === null ? null : task.parent.id,
+            children: task.children.map(child => child.id)
+        };
+    }
+
     return Object.freeze({
         taskAddedEvent: taskAddedEvent,
         childTaskAddedEvent: childTaskAddedEvent,
@@ -130,6 +145,7 @@ function BuildDataEventSerialisationFuncs() {
         taskDeletedEvent: taskDeletedEvent,
         taskStartedEvent: taskStartedEvent,
         taskCompletedEvent: taskCompletedEvent,
-        taskFailedEvent: taskFailedEvent
+        taskFailedEvent: taskFailedEvent,
+        taskEditedEvent: taskEditedEvent
     });
 }
