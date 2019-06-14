@@ -218,7 +218,8 @@ export class AppPage extends Component {
             this.setState((prevState, prevProps) => ({
                 currentContext: DEFAULT_GLOBAL_CONTEXT_STRING,
                 visibleContexts: [],     // Empty means global
-                selectableContexts: prevState.selectableContexts.filter(s => s !== context)
+                selectableContexts: prevState.selectableContexts.filter(s => s !== context),
+                dataModelScope: InstantiateNewDataModelScope(context)   // Because we are essentially switching contexts in this case.
             }));
         }
         else {
