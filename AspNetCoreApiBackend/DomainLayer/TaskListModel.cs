@@ -163,12 +163,16 @@ namespace todo_app.DomainLayer.TaskListModel {
             int newCategory = reviveAsActive ? original.Category : CategoryVals.Deferred;
             CreateNewIndependentTask(original.Name, newCategory, timeStamp, original.ColourId, id);
         }
+        public void EditTaskText(Task task, string newText, long timestamp) {
+            if (string.IsNullOrWhiteSpace(newText) || timestamp < 0) throw new InvalidOperationException("Illegal renaming arguments: " + newText);
+            task.Name = newText;
+        }
     }
 
     // A Task object containing data.
     public class Task {
         public Guid Id { get; }
-        public string Name { get; }
+        public string Name { get; set; }
         public int Category { get; set; }
         public int ProgressStatus { get; set; }
         public int ColourId { get; }
@@ -205,12 +209,14 @@ namespace todo_app.DomainLayer.TaskListModel {
         public long? TimeStarted { get; set; }
         public long? TimeClosed { get; set; }
         public long? TimeRevived { get; set; }
+        public long? TimeEdited { get; set; }
         public EventTimeStamps() {
             TimeCreated = null;
             TimeActivated = null;
             TimeStarted = null;
             TimeClosed = null;
             TimeRevived = null;
+            TimeEdited = null;
         }
     }
 
@@ -220,7 +226,6 @@ namespace todo_app.DomainLayer.TaskListModel {
             if (!CategoryVals.ValidValues.Contains(category) || string.IsNullOrWhiteSpace(name) || timeCreatedUnix < 0) {
                 throw new InvalidOperationException("Invalid data passed for a New Independent Task. Come on, this is easy to validate mate.");
             }
-            
         }
         public static void TaskIdUniquenessCheck(Guid id, ISet<Guid> existingIds) {
             if (existingIds.Contains(id)) {
