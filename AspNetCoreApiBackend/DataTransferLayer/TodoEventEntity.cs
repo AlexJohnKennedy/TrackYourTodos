@@ -104,6 +104,9 @@ namespace todo_app.DataTransferLayer.Entities {
             // Activated tasks must have a Category of not-deferred, and ProgressStatus of not started.
             { EventTypes.TaskActivated, e => e.Category != CategoryVals.Deferred && e.ProgressStatus == ProgressStatusVals.NotStarted },
 
+            // Task text edited events currently have no additional validation applied
+            { EventTypes.TaskEdited, e => true },
+
             // Deleted tasks currently have no validation applied
             { EventTypes.TaskDeleted, e => true } 
         };
@@ -125,7 +128,7 @@ namespace todo_app.DataTransferLayer.Entities {
         public string UserId { get; set; }
 
         [Required]
-        [StringSetValidator(EventTypes.TaskAdded, EventTypes.ChildTaskAdded, EventTypes.TaskRevived, EventTypes.TaskDeleted, EventTypes.TaskCompleted, EventTypes.TaskFailed, EventTypes.TaskActivated, EventTypes.TaskStarted)]
+        [StringSetValidator(EventTypes.TaskAdded, EventTypes.ChildTaskAdded, EventTypes.TaskRevived, EventTypes.TaskDeleted, EventTypes.TaskCompleted, EventTypes.TaskFailed, EventTypes.TaskActivated, EventTypes.TaskStarted, EventTypes.TaskEdited)]
         public string EventType { get; set; }
 
         [Required]
