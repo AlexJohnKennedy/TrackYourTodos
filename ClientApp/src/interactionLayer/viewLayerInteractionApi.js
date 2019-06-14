@@ -99,6 +99,7 @@ export function InstantiateNewDataModelScope(currContext) {
         DataEventCallbackHandlers.taskFailedHandlers.length = 0;
         DataEventCallbackHandlers.taskActivatedHandlers.length = 0;
         DataEventCallbackHandlers.taskStartedHandlers.length = 0;
+        DataEventCallbackHandlers.taskEditedHandlers.length = 0;
         DataLoadedFromServerCallbacks.length = 0;
         DataRefreshedFromServerCallbacks.length = 0;
     }
