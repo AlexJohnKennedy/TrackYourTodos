@@ -97,5 +97,5 @@ function replayTaskStartedEvent(eventData, tasklist, taskMap) {
     tasklist.StartTask(taskMap.get(eventData.id), eventData.timestamp);
 }
 function replayTaskEditedEvent(eventData, tasklist, taskMap) {
-    tasklist.EditTaskText(taskMap.get(eventData.id), eventData.timestamp);
+    tasklist.EditTaskText(taskMap.get(eventData.id), eventData.name, eventData.timestamp);
 }
