@@ -109,6 +109,12 @@ namespace todo_app.DataTransferLayer.EventReconciliationSystem {
                 else t.ReviveTaskAsClone(original, true, e.Timestamp, e.Id);
                 return t;
             }},
+            { EventTypes.TaskEdited, (e, t) => {
+                Task task = t.AllTaskReader(e.Id);
+                if (task == null) throw new InvalidOperationException("Cannot rename a task we could not find in our task collection");
+                t.EditTaskText(task, e.Name, e.Timestamp);
+                return t;
+            }},
             { EventTypes.TaskDeleted, (e, t) => {
                 throw new NotImplementedException("Validation for Task Deletion events not currently supported, because Deleted Events are not part of app intention at this time.");
             }}

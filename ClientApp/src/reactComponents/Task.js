@@ -14,23 +14,43 @@ export class Task extends Component {
         // Setup state. The only state this component requires is whether we are currently rendering the creation form.
         this.state = {
             showingForm: false,
-            showingDailyForm: false
+            showingDailyForm: false,
+            showingEditForm: false
         };
 
         this.toggleFormOn = this.toggleFormOn.bind(this);
         this.toggleFormOff = this.toggleFormOff.bind(this);
+        this.toggleEditFormOn = this.toggleEditFormOn.bind(this);
+        this.toggleEditFormOff = this.toggleEditFormOff.bind(this);
     }
     
+    toggleEditFormOn() {
+        this.setState({
+            showingEditForm: true,
+            showingDailyForm: false,
+            showingForm: false
+        });
+    }
+    toggleEditFormOff() {
+        this.setState({
+            showingEditForm: false
+        });
+    }
+
     toggleFormOn(daily) {
         this.props.formStateManager.triggerCleanup();
         if (!daily) {
             this.setState({
-                showingForm: true
+                showingForm: true,
+                showingDailyForm: false,
+                showingEditForm: false
             });
         }
         else {
             this.setState({
-                showingDailyForm: true
+                showingDailyForm: true,
+                showingForm: false,
+                showingEditForm: false
             });
         }
     }
@@ -100,9 +120,27 @@ export class Task extends Component {
             style.paddingRight = "2rem";
         }
 
+        // If this is an 'open' task (i.e. not completed or failed), then we will allow double clicks to open the edit text form.
+        // Otherwise, double clicks do nothing.
+        let doubleClickAction = null;
+        if (this.props.taskView.progressStatus <= ProgressStatus.Started) {
+            doubleClickAction = () => this.toggleEditFormOn();
+        }
+
         return (
-            <div className={classstring} style={style} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+            <div className={classstring} style={style} onDoubleClick={doubleClickAction} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
                 <p> { this.props.taskView.name } </p>
+                { this.props.taskView.progressStatus <= ProgressStatus.Started &&
+                    <CreationForm 
+                        creationFunction={this.props.taskView.EditTaskName} 
+                        formText="Edit task text" 
+                        showingForm={this.state.showingEditForm}
+                        submitAction={() => this.toggleEditFormOff()}
+                        formStateManager={this.props.formStateManager}
+                        maxFieldLength={MAX_TASK_NAME_LEN}
+                        initialValue={this.props.taskView.name}
+                    />
+                }
                 { this.props.taskView.category < Category.Weekly && this.props.taskView.progressStatus <= ProgressStatus.Started &&
                     <>
                     <NewTaskButton clickAction={() => this.toggleFormOn(true)} text={'>'}/>

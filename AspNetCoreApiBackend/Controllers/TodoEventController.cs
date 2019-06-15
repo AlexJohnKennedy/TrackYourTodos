@@ -96,23 +96,11 @@ namespace todo_app.Controllers {
             // Remove duplicate events from the incoming event list.
             newEvents = newEvents.OrderBy(e => e.Timestamp).ToHashSet(eventComparer).OrderBy(keySelector, keyComparer).ToList();
 
-            // Detect duplicate events. Duplicates between those which have already been saved, and the new events.
-            var compositeKeyset = newEvents.Select(e => new { e.Id, e.EventType }).ToHashSet();
+            // Detect duplicate events between those which have already been saved, and the new events.
             List<GenericTodoEvent> savedEvents = await dbContext.TodoEvents.Where(e => e.UserId.Equals(userId)).OrderBy(e => e.Timestamp).ToListAsync();
-            IEnumerable<GenericTodoEvent> duplicates = savedEvents.Where(e => compositeKeyset.Contains(new { e.Id, e.EventType }));
-
-            int count = duplicates.Count();
-            if (count == 0) {
-                return await ValidateAndSave(newEvents, savedEvents);
-            }
-            else if (count < newEvents.Count) {
-                var duplicateSet = duplicates.Select(e => new { e.Id, e.EventType }).ToHashSet();
-                var nonDups = newEvents.Where(e => !duplicateSet.Contains(new { e.Id, e.EventType })).ToList();
-                return await ValidateAndSave(nonDups, savedEvents);
-            }
-            else {
-                return Ok(savedEvents);
-            }
+            HashSet<GenericTodoEvent> savedEventSet = savedEvents.ToHashSet(eventComparer); // Create a set of saved events, which uses our custom comparison logic as it's equality checker.
+            var nonDups = newEvents.Where(e => !savedEventSet.Contains(e)).ToList();
+            return await ValidateAndSave(nonDups, savedEvents);
         }
         private async Task<IActionResult> ValidateAndSave(IList<GenericTodoEvent> newEvents, IList<GenericTodoEvent> savedEvents) {
             // Try to validate. If we fail, just save nothing and return a 409 to indicate the client's data is conflicting.

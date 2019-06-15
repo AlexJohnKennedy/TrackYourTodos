@@ -77,7 +77,8 @@ export function InstantiateNewDataModelScope(currContext) {
         taskCompletedHandlers : [],
         taskFailedHandlers : [],
         taskActivatedHandlers : [],
-        taskStartedHandlers : []
+        taskStartedHandlers : [],
+        taskEditedHandlers : []
     };
     const DataLoadedFromServerCallbacks = [];
     const DataRefreshedFromServerCallbacks = [];
@@ -98,6 +99,7 @@ export function InstantiateNewDataModelScope(currContext) {
         DataEventCallbackHandlers.taskFailedHandlers.length = 0;
         DataEventCallbackHandlers.taskActivatedHandlers.length = 0;
         DataEventCallbackHandlers.taskStartedHandlers.length = 0;
+        DataEventCallbackHandlers.taskEditedHandlers.length = 0;
         DataLoadedFromServerCallbacks.length = 0;
         DataRefreshedFromServerCallbacks.length = 0;
     }
@@ -136,6 +138,7 @@ export function InstantiateNewDataModelScope(currContext) {
         DataEventCallbackHandlers.taskFailedHandlers.push(dataEventhandlers.taskFailedHandler);
         DataEventCallbackHandlers.taskActivatedHandlers.push(dataEventhandlers.taskActivatedHandler);
         DataEventCallbackHandlers.taskStartedHandlers.push(dataEventhandlers.taskStartedHandler);
+        DataEventCallbackHandlers.taskEditedHandlers.push(dataEventhandlers.taskEditedHandler);
     }
 
     // Exported inner function: Allows clients to register for callbacks when an INITIAL state-build from server data is completed.
@@ -342,6 +345,12 @@ function BuildNewTaskView(domainTaskObj, activeList, viewLayerCallbackList, data
         dataEventCallbacksLists.taskStartedHandlers.forEach(callback => callback(domainTaskObj, activeList));
     }
 
+    function editTaskName(newText) {
+        activeList.EditTaskText(domainTaskObj, newText, Date.now());
+        viewLayerCallbackList.forEach(callback => callback());
+        dataEventCallbacksLists.taskEditedHandlers.forEach(callback => callback(domainTaskObj, activeList));
+    }
+
     // Return the interface object. Immutable!
     return Object.freeze({
         // State properties
@@ -359,7 +368,8 @@ function BuildNewTaskView(domainTaskObj, activeList, viewLayerCallbackList, data
         DeleteTask : deleteTask,
         ActivateTask : activateTask,
         CompleteTask : completeTask,
-        StartTask : startTask
+        StartTask : startTask,
+        EditTaskName : editTaskName
     });
 }
 

@@ -8,18 +8,17 @@ export class NewTaskButton extends Component {
     
         // This binding is necessary to make `this` work in the callback
         this.handleClick = this.handleClick.bind(this);
-      }
-    
+    }
+    handleClick(e) {
+        e.stopPropagation();
+        this.props.clickAction();
+    }
     render() {
         return (
             <button onClick={this.handleClick}>
                 {this.props.text}
             </button>
         );
-    }
-    
-    handleClick(e) {
-        this.props.clickAction();
     }
 }
 
@@ -54,6 +53,8 @@ export class CheckBox extends Component {
     }
 
     handleClick(e) {
+        e.stopPropagation();
+
         // If this is the first click, that means we are 'starting' the task.
         if (this.state.clicks === 0) {
             this.setState({
@@ -72,7 +73,7 @@ export class CheckBox extends Component {
 
     render() {
         return (
-            <input type="checkbox" className="checkbox" ref={this.CheckboxInputRef} onClick={this.handleClick}/>
+            <input type="checkbox" className="checkbox" ref={this.CheckboxInputRef} onClick={this.handleClick} onDoubleClick={e => e.stopPropagation()}/>
         );
     }
 }

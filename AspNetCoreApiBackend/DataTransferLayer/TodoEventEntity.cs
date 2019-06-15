@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Threading.Tasks;
 
 using todo_app.DomainLayer.TaskListModel;
 
@@ -104,6 +103,9 @@ namespace todo_app.DataTransferLayer.Entities {
             // Activated tasks must have a Category of not-deferred, and ProgressStatus of not started.
             { EventTypes.TaskActivated, e => e.Category != CategoryVals.Deferred && e.ProgressStatus == ProgressStatusVals.NotStarted },
 
+            // Task text edited events currently have no additional validation applied
+            { EventTypes.TaskEdited, e => true },
+
             // Deleted tasks currently have no validation applied
             { EventTypes.TaskDeleted, e => true } 
         };
@@ -125,7 +127,7 @@ namespace todo_app.DataTransferLayer.Entities {
         public string UserId { get; set; }
 
         [Required]
-        [StringSetValidator(EventTypes.TaskAdded, EventTypes.ChildTaskAdded, EventTypes.TaskRevived, EventTypes.TaskDeleted, EventTypes.TaskCompleted, EventTypes.TaskFailed, EventTypes.TaskActivated, EventTypes.TaskStarted)]
+        [StringSetValidator(EventTypes.TaskAdded, EventTypes.ChildTaskAdded, EventTypes.TaskRevived, EventTypes.TaskDeleted, EventTypes.TaskCompleted, EventTypes.TaskFailed, EventTypes.TaskActivated, EventTypes.TaskStarted, EventTypes.TaskEdited)]
         public string EventType { get; set; }
 
         [Required]
@@ -170,11 +172,17 @@ namespace todo_app.DataTransferLayer.Entities {
         // We say two todo events are duplicates if they have the same 'type' and refer to the same task.
         // This is true because no event type can be applied to the same task more than once.
         // Note that in the case of 'duplicates', we should always accept the earlier-occurring event as the true event.
+        // The only exception to this rule is 'taskEdited' events. These events are 'renaming' events, and thus can be
+        // applied multiple times to the same event. For taskEdited events, we will only consider it a duplicate if they
+        // have the same timestamp, name, and type. (We cannot use type+name because this will filter out subsequent renames
+        // which revert back to a previously existing name, which the user might genuinely want).
         public override bool Equals(GenericTodoEvent e1, GenericTodoEvent e2) {
             if (e1 == null && e2 == null) return true;
             else if (e1 == null || e2 == null) return false;
-
-            return (e1.Id.Equals(e2.Id) && e1.EventType.Equals(e2.EventType));
+            else if (!e1.EventType.Equals(e2.EventType)) return false;
+            else if (!e1.Id.Equals(e2.Id)) return false;
+            else if (e1.EventType.Equals(EventTypes.TaskEdited)) return e1.Name.Equals(e2.Name) && e1.Timestamp.Equals(e2.Timestamp);
+            else return true;
         }
         public override int GetHashCode(GenericTodoEvent e) {
             var data = new { e.Id, e.EventType };

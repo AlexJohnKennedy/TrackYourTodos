@@ -19,7 +19,8 @@ const EventReplayFunctions = new Map([
     [EventTypes.taskCompleted, replayTaskCompletedEvent],
     [EventTypes.taskFailed, replayTaskFailedEvent],
     [EventTypes.taskActivated, replayTaskActivatedEvent],
-    [EventTypes.taskStarted, replayTaskStartedEvent]
+    [EventTypes.taskStarted, replayTaskStartedEvent],
+    [EventTypes.taskEdited, replayTaskEditedEvent]
 ]);
 
 // Replays all event in the json log to rebuild the state exactly. It also tracks the largest id it found, which is returned.
@@ -94,4 +95,7 @@ function replayTaskActivatedEvent(eventData, tasklist, taskMap) {
 }
 function replayTaskStartedEvent(eventData, tasklist, taskMap) {
     tasklist.StartTask(taskMap.get(eventData.id), eventData.timestamp);
+}
+function replayTaskEditedEvent(eventData, tasklist, taskMap) {
+    tasklist.EditTaskText(taskMap.get(eventData.id), eventData.name, eventData.timestamp);
 }

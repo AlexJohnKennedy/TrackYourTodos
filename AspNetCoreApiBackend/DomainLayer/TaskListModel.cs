@@ -18,8 +18,9 @@ namespace todo_app.DomainLayer.TaskListModel {
         public const string TaskFailed = "taskFailed";
         public const string TaskActivated = "taskActivated";
         public const string TaskStarted = "taskStarted";
+        public const string TaskEdited = "taskEdited";
         public static readonly HashSet<string> ValidEventStrings = new HashSet<string>() {
-            TaskAdded, ChildTaskAdded, TaskRevived, TaskDeleted, TaskCompleted, TaskFailed, TaskActivated, TaskStarted
+            TaskAdded, ChildTaskAdded, TaskRevived, TaskDeleted, TaskCompleted, TaskFailed, TaskActivated, TaskStarted, TaskEdited
         };
         public static readonly Dictionary<string, int> PrecedenceOrderingValues = new Dictionary<string, int>() {
             // Task created events must occur before any other action can occur on that event, thus they are the 'earliest' precedence
@@ -27,6 +28,7 @@ namespace todo_app.DomainLayer.TaskListModel {
             { ChildTaskAdded, 0 },
             { TaskRevived, 0 },
             // Tasks cannot be activated after starting, thus activation comes next.
+            { TaskEdited, 1 },
             { TaskActivated, 1 },
             // Tasks cannot be started after are deletd, completed or failed, thus started comes next.
             { TaskStarted, 2},
@@ -161,12 +163,16 @@ namespace todo_app.DomainLayer.TaskListModel {
             int newCategory = reviveAsActive ? original.Category : CategoryVals.Deferred;
             CreateNewIndependentTask(original.Name, newCategory, timeStamp, original.ColourId, id);
         }
+        public void EditTaskText(Task task, string newText, long timestamp) {
+            if (string.IsNullOrWhiteSpace(newText) || timestamp < 0) throw new InvalidOperationException("Illegal renaming arguments: " + newText);
+            task.Name = newText;
+        }
     }
 
     // A Task object containing data.
     public class Task {
         public Guid Id { get; }
-        public string Name { get; }
+        public string Name { get; set; }
         public int Category { get; set; }
         public int ProgressStatus { get; set; }
         public int ColourId { get; }
@@ -203,12 +209,14 @@ namespace todo_app.DomainLayer.TaskListModel {
         public long? TimeStarted { get; set; }
         public long? TimeClosed { get; set; }
         public long? TimeRevived { get; set; }
+        public long? TimeEdited { get; set; }
         public EventTimeStamps() {
             TimeCreated = null;
             TimeActivated = null;
             TimeStarted = null;
             TimeClosed = null;
             TimeRevived = null;
+            TimeEdited = null;
         }
     }
 
@@ -218,7 +226,6 @@ namespace todo_app.DomainLayer.TaskListModel {
             if (!CategoryVals.ValidValues.Contains(category) || string.IsNullOrWhiteSpace(name) || timeCreatedUnix < 0) {
                 throw new InvalidOperationException("Invalid data passed for a New Independent Task. Come on, this is easy to validate mate.");
             }
-            
         }
         public static void TaskIdUniquenessCheck(Guid id, ISet<Guid> existingIds) {
             if (existingIds.Contains(id)) {

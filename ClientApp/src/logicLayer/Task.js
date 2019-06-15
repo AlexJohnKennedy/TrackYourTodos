@@ -206,6 +206,15 @@ export class TaskObjects {
         task.eventTimestamps.timeRevived = timeRevivedUNIX;
         return this.CreateNewIndependentTask(task.name, category, timeRevivedUNIX, task.context, task.colourid, id);
     }
+
+    EditTaskText(task, newText, timeEditedUnix) {
+        if (task === null || task === undefined) throw new Error("Task must not be null");
+        if (newText === null || newText === undefined) throw new Error("New task text must not be null");
+        newText = newText.trim();
+        if (newText.length === 0 || newText.length > MAX_TASK_NAME_LEN) throw new Error("Invalid task text: " + newText);
+        task.eventTimestamps.timeEdited = timeEditedUnix;
+        task.name = newText;
+    }
 }
 
 class Task {
@@ -234,7 +243,8 @@ class Task {
             timeActivated: (category <= Category.Daily) ? timeCreatedUNIX : null,
             timeStarted:   null,
             timeClosed:    null,
-            timeRevived:   null
+            timeRevived:   null,
+            timeEdited:    null
         };
     }
 
