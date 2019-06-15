@@ -125,7 +125,7 @@ function BuildDataEventSerialisationFuncs() {
     function taskEditedEvent(task, tasklist) {
         return {
             eventType: EventTypes.taskEdited,
-            timestamp: task.eventTimestamps.taskEdited,
+            timestamp: task.eventTimestamps.timeEdited,
             id: task.id,
             name: task.name,
             category: task.category,

@@ -369,7 +369,7 @@ function BuildNewTaskView(domainTaskObj, activeList, viewLayerCallbackList, data
         ActivateTask : activateTask,
         CompleteTask : completeTask,
         StartTask : startTask,
-        EditeTaskName : editTaskName
+        EditTaskName : editTaskName
     });
 }
 
