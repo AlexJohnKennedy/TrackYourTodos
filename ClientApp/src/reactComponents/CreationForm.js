@@ -16,12 +16,24 @@ export class CreationForm extends Component {
         if (this.props.showingForm) {
             this.props.formStateManager.registerCleanUpCallback(this.handleCancel);
             this.textInputRef.current.focus();  // Set the focus automatically, for SPEEEED!
+            if (this.props.initialValue !== undefined && this.props.initialValue !== null && this.props.initialValue.length > 0) {
+                const action = () => this.textInputRef.current.select();  // Highlight text
+                this.setState({
+                    value: this.props.initialValue
+                }, action); // Tells react to perform 'action' once the state has updated.
+            }
         }
     }
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (this.props.showingForm) {
             if (!prevProps.showingForm) {
                 this.props.formStateManager.registerCleanUpCallback(this.handleCancel);
+                if (this.props.initialValue !== undefined && this.props.initialValue !== null && this.props.initialValue.length > 0) {
+                    const action = () => this.textInputRef.current.select();  // Highlight text
+                    this.setState({
+                        value: this.props.initialValue
+                    }, action);
+                }
             }
             this.textInputRef.current.focus();  // Set the focus automatically, for SPEEEED!
         }

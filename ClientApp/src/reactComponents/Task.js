@@ -185,6 +185,7 @@ export class Task extends Component {
                         submitAction={() => this.toggleEditFormOff()}
                         formStateManager={this.props.formStateManager}
                         maxFieldLength={MAX_TASK_NAME_LEN}
+                        initialValue={this.props.taskView.name}
                     />
                     </>
                 }
