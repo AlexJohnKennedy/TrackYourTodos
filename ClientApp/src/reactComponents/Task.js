@@ -120,9 +120,27 @@ export class Task extends Component {
             style.paddingRight = "2rem";
         }
 
+        // If this is an 'open' task (i.e. not completed or failed), then we will allow double clicks to open the edit text form.
+        // Otherwise, double clicks do nothing.
+        let doubleClickAction = null;
+        if (this.props.taskView.progressStatus <= ProgressStatus.Started) {
+            doubleClickAction = () => this.toggleEditFormOn();
+        }
+
         return (
-            <div className={classstring} style={style} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+            <div className={classstring} style={style} onDoubleClick={doubleClickAction} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
                 <p> { this.props.taskView.name } </p>
+                { this.props.taskView.progressStatus <= ProgressStatus.Started &&
+                    <CreationForm 
+                        creationFunction={this.props.taskView.EditTaskName} 
+                        formText="Edit task text" 
+                        showingForm={this.state.showingEditForm}
+                        submitAction={() => this.toggleEditFormOff()}
+                        formStateManager={this.props.formStateManager}
+                        maxFieldLength={MAX_TASK_NAME_LEN}
+                        initialValue={this.props.taskView.name}
+                    />
+                }
                 { this.props.taskView.category < Category.Weekly && this.props.taskView.progressStatus <= ProgressStatus.Started &&
                     <>
                     <NewTaskButton clickAction={() => this.toggleFormOn(true)} text={'>'}/>
@@ -173,20 +191,6 @@ export class Task extends Component {
                     <>
                     <NewTaskButton clickAction={() => this.props.taskView.ReviveTask(false)} text={'<'}/>
                     <NewTaskButton clickAction={() => this.props.taskView.ReviveTask(true)} text={'<'}/>
-                    </>
-                }
-                { this.props.taskView.progressStatus <= ProgressStatus.Started &&
-                    <>
-                    <NewTaskButton clickAction={() => this.toggleEditFormOn()} text={'E'}/>
-                    <CreationForm 
-                        creationFunction={this.props.taskView.EditTaskName} 
-                        formText="Edit task text" 
-                        showingForm={this.state.showingEditForm}
-                        submitAction={() => this.toggleEditFormOff()}
-                        formStateManager={this.props.formStateManager}
-                        maxFieldLength={MAX_TASK_NAME_LEN}
-                        initialValue={this.props.taskView.name}
-                    />
                     </>
                 }
             </div>
