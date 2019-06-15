@@ -208,9 +208,6 @@ export class TaskObjects {
     }
 
     EditTaskText(task, newText, timeEditedUnix) {
-        console.log("EDITING TEXT");
-        console.log(newText);
-        console.log(timeEditedUnix);
         if (task === null || task === undefined) throw new Error("Task must not be null");
         if (newText === null || newText === undefined) throw new Error("New task text must not be null");
         newText = newText.trim();
