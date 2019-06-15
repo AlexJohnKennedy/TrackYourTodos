@@ -5157,5 +5157,99 @@
       "parent": "d8f46b97-ad1f-43ba-ab6f-eb940db4ddf7",
       "children": [],
       "original": null
+   },
+   {
+      "eventId": 342,
+      "userId": "118113125420969511952",
+      "eventType": "taskEdited",
+      "timestamp": 1560553534759,
+      "id": "d0bb7921-6782-4506-a1b5-46afd1b93943",
+      "name": "Seconday rename, to test the new duplicate logic to allow multi renames",
+      "category": 2,
+      "progressStatus": 2,
+      "colourId": 0,
+      "context": "tytodos development",
+      "parent": "d8f46b97-ad1f-43ba-ab6f-eb940db4ddf7",
+      "children": [],
+      "original": null
+   },
+   {
+      "eventId": 343,
+      "userId": "118113125420969511952",
+      "eventType": "taskEdited",
+      "timestamp": 1560558379080,
+      "id": "d8f46b97-ad1f-43ba-ab6f-eb940db4ddf7",
+      "name": "Add ability to edit task text, and perform action through creation form",
+      "category": 1,
+      "progressStatus": 1,
+      "colourId": 0,
+      "context": "tytodos development",
+      "parent": null,
+      "children": [
+         "d0bb7921-6782-4506-a1b5-46afd1b93943"
+      ],
+      "original": null
+   },
+   {
+      "eventId": 344,
+      "userId": "118113125420969511952",
+      "eventType": "taskEdited",
+      "timestamp": 1560559169024,
+      "id": "d8f46b97-ad1f-43ba-ab6f-eb940db4ddf7",
+      "name": "Add ability to edit task text",
+      "category": 1,
+      "progressStatus": 1,
+      "colourId": 0,
+      "context": "tytodos development",
+      "parent": null,
+      "children": [
+         "d0bb7921-6782-4506-a1b5-46afd1b93943"
+      ],
+      "original": null
+   },
+   {
+      "eventId": 345,
+      "userId": "118113125420969511952",
+      "eventType": "subtaskCreated",
+      "timestamp": 1560559241088,
+      "id": "22d7e0c8-d4e5-433b-a034-320f7c39b859",
+      "name": "Replace the weird 'E' edit button with a double click on the task itself",
+      "category": 2,
+      "progressStatus": 0,
+      "colourId": 0,
+      "context": "tytodos development",
+      "parent": "d8f46b97-ad1f-43ba-ab6f-eb940db4ddf7",
+      "children": null,
+      "original": null
+   },
+   {
+      "eventId": 346,
+      "userId": "118113125420969511952",
+      "eventType": "taskEdited",
+      "timestamp": 1560559757052,
+      "id": "b95fe72e-9708-40de-afc2-f32c4de7da3d",
+      "name": "Add a tooltip which shows bar-value when you hover over it in the lower char",
+      "category": 3,
+      "progressStatus": 0,
+      "colourId": 1,
+      "context": "tytodos development",
+      "parent": null,
+      "children": [],
+      "original": null
+   },
+   {
+      "eventId": 347,
+      "userId": "118113125420969511952",
+      "eventType": "subtaskCreated",
+      "timestamp": 1560559807090,
+      "id": "178e8369-b316-40e2-ab85-6d084858f14a",
+      "name": "Make the edit-text form auto populate (initially) with the current task text, for easier typo correction",
+      "category": 2,
+      "progressStatus": 0,
+      "colourId": 0,
+      "context": "tytodos development",
+      "parent": "d8f46b97-ad1f-43ba-ab6f-eb940db4ddf7",
+      "children": null,
+      "original": null
    }
 ]
