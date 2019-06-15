@@ -14,23 +14,43 @@ export class Task extends Component {
         // Setup state. The only state this component requires is whether we are currently rendering the creation form.
         this.state = {
             showingForm: false,
-            showingDailyForm: false
+            showingDailyForm: false,
+            showingEditForm: false
         };
 
         this.toggleFormOn = this.toggleFormOn.bind(this);
         this.toggleFormOff = this.toggleFormOff.bind(this);
+        this.toggleEditFormOn = this.toggleEditFormOn.bind(this);
+        this.toggleEditFormOff = this.toggleEditFormOff.bind(this);
     }
     
+    toggleEditFormOn() {
+        this.setState({
+            showingEditForm: true,
+            showingDailyForm: false,
+            showingForm: false
+        });
+    }
+    toggleEditFormOff() {
+        this.setState({
+            showingEditForm: false
+        });
+    }
+
     toggleFormOn(daily) {
         this.props.formStateManager.triggerCleanup();
         if (!daily) {
             this.setState({
-                showingForm: true
+                showingForm: true,
+                showingDailyForm: false,
+                showingEditForm: false
             });
         }
         else {
             this.setState({
-                showingDailyForm: true
+                showingDailyForm: true,
+                showingForm: false,
+                showingEditForm: false
             });
         }
     }
@@ -103,6 +123,19 @@ export class Task extends Component {
         return (
             <div className={classstring} style={style} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
                 <p> { this.props.taskView.name } </p>
+                { this.props.taskView.progressStatus <= ProgressStatus.Started &&
+                    <>
+                    <NewTaskButton clickAction={() => this.toggleEditFormOn()} text={'E'}/>
+                    <CreationForm 
+                        creationFunction={this.props.taskView.EditTaskName} 
+                        formText="Edit task text" 
+                        showingForm={this.state.showingEditForm}
+                        submitAction={() => this.toggleEditFormOff()}
+                        formStateManager={this.props.formStateManager}
+                        maxFieldLength={MAX_TASK_NAME_LEN}
+                    />
+                    </>
+                }
                 { this.props.taskView.category < Category.Weekly && this.props.taskView.progressStatus <= ProgressStatus.Started &&
                     <>
                     <NewTaskButton clickAction={() => this.toggleFormOn(true)} text={'>'}/>
