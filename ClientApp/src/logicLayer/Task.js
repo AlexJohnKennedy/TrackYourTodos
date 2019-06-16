@@ -269,9 +269,21 @@ export class TaskObjects {
             return;     // Just do nothing in this case.
         }
         else {
-            task.progressStatus = ProgressStatus.Started
+            task.progressStatus = ProgressStatus.Started;
             task.eventTimestamps.timeStarted = timeStartedUNIX;
         }
+    }
+    UndoStartTask(task) {
+        if (task === null || task === undefined) throw new Error("Null task is invalid to undo operation");
+
+        // If the task is not in a started state, then this undo operation is illegal.
+        if (task.progressStatus !== ProgressStatus.Started) {
+            console.error(task);
+            throw new Error("Cannot undo StartTask() on an event which is not Started. See STDERR for task object log.");
+        }
+
+        task.progressStatus = ProgressStatus.NotStarted;
+        task.eventTimestamps.timeStarted = null;
     }
 
     ReviveTaskAsClone(task, asActive, timeRevivedUNIX, id = null) {
