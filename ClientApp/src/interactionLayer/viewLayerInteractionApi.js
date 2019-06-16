@@ -36,7 +36,7 @@
 // --- GetActiveTasks().
 // --------------------------------------------------------------------------------
 import { ScheduleEventLogUpdate } from './ajaxDataModules/ajaxDataModelRebuilder.js';
-import { TaskObjects, Category, ProgressStatus, DEFAULT_GLOBAL_CONTEXT_STRING } from '../logicLayer/Task';
+import { TaskObjects, Category, ProgressStatus, DEFAULT_GLOBAL_CONTEXT_STRING, UNDO_ACTION_MAX_AGE_MILLISECONDS } from '../logicLayer/Task';
 import { RegisterForFailureChecking } from '../logicLayer/checkForFailure';
 import { StatisticsModel } from '../logicLayer/statisticsModel';
 import { BuildNewUndoStack } from '../logicLayer/undoStackSystem';
@@ -89,6 +89,18 @@ export function InstantiateNewDataModelScope(currContext) {
     DataEventCallbackHandlers.taskCompletedHandlers.push((task, tasklist) => StatisticsModelObj.AddCompletedTask(task));
     DataEventCallbackHandlers.taskFailedHandlers.push((task, tasklist) => StatisticsModelObj.AddFailedTask(task));
 
+    // Undo stack filtering operations. They are automatically performed as part of the view layer callbacks.
+    let scheduledFilteringOperation = null;
+    ViewLayerCallbacks.push(() => {
+        console.log("Performing a periodic forced-viewlayer update! This will filter the undo actions stack!");
+        UndoStackObj.FilterExpiredUndoActions(Date.now());  // Filter the undo stack any time the ui updates
+        window.clearTimeout(scheduledFilteringOperation);
+        scheduledFilteringOperation = window.setTimeout(() => {
+            // Simply force a view-layer update. Since this scheduling is itself a view layer callback, we will always reschedule
+            ViewLayerCallbacks.forEach(cb => cb());
+        }, UNDO_ACTION_MAX_AGE_MILLISECONDS - 5000);
+    });
+
     // Exported inner function: Tells the interaction layer to explicitly CLEAR all the registers callbacks. This should only be done
     // by the 'data model instance owner', i.e. the component which acts as the root for the data-model instace.
     function ClearAllRegisteredCallbacks() {
@@ -104,6 +116,7 @@ export function InstantiateNewDataModelScope(currContext) {
         DataEventCallbackHandlers.taskEditedHandlers.length = 0;
         DataLoadedFromServerCallbacks.length = 0;
         DataRefreshedFromServerCallbacks.length = 0;
+        window.clearTimeout(scheduledFilteringOperation);        
     }
 
     // Exported inner function: Tells the interaction layer to fetch the latest event log from the backend, and apply it to datamodel
@@ -113,6 +126,7 @@ export function InstantiateNewDataModelScope(currContext) {
         ScheduleEventLogUpdate(new TaskObjects(), BuildNewUndoStack(), visibleContexts, (rebuiltTaskList, rebuiltUndoStack, availableContextsArray) => {
             ActiveTaskDataObj = rebuiltTaskList;
             UndoStackObj = rebuiltUndoStack;
+            UndoStackObj.FilterExpiredUndoActions(Date.now());
             StatisticsModelObj = new StatisticsModel(rebuiltTaskList);
             DataLoadedFromServerCallbacks.forEach(cb => {
                 cb(availableContextsArray);
@@ -124,6 +138,7 @@ export function InstantiateNewDataModelScope(currContext) {
         ScheduleEventLogUpdate(new TaskObjects(), BuildNewUndoStack(), visibleContexts, (rebuiltTaskList, rebuiltUndoStack, availableContextsArray) => {
             ActiveTaskDataObj = rebuiltTaskList;
             UndoStackObj = rebuiltUndoStack;
+            UndoStackObj.FilterExpiredUndoActions(Date.now());
             StatisticsModelObj = new StatisticsModel(rebuiltTaskList);
             DataRefreshedFromServerCallbacks.forEach(cb => {
                 cb(availableContextsArray);
@@ -163,14 +178,14 @@ export function InstantiateNewDataModelScope(currContext) {
 
         function getActiveTasks() {
             // Return a big list of TaskView objects from the current Active Task List!
-            return ActiveTaskDataObj.GetActiveTasks().map((task) => BuildNewTaskView(task, ActiveTaskDataObj, ViewLayerCallbacks, DataEventCallbackHandlers));
+            return ActiveTaskDataObj.GetActiveTasks().map((task) => BuildNewTaskView(task, ActiveTaskDataObj, UndoStackObj, ViewLayerCallbacks, DataEventCallbackHandlers));
         }
         function getCompletedTasks() {
             let ret = [];
             ActiveTaskDataObj.GetCompletedTasks().forEach(group => {
                 ret.push({ isSpacer: true, time: group.time });
                 ret = ret.concat(group.tasks.map((task) => {
-                    return BuildNewInactiveTaskView(task, ActiveTaskDataObj, ViewLayerCallbacks, DataEventCallbackHandlers);
+                    return BuildNewInactiveTaskView(task, ActiveTaskDataObj, UndoStackObj, ViewLayerCallbacks, DataEventCallbackHandlers);
                 }));
             });
             return ret;
@@ -180,7 +195,7 @@ export function InstantiateNewDataModelScope(currContext) {
             ActiveTaskDataObj.GetFailedTasks().forEach(group => {
                 ret.push({ isSpacer: true, time: group.time });
                 ret = ret.concat(group.tasks.map((task) => {
-                    return BuildNewInactiveTaskView(task, ActiveTaskDataObj, ViewLayerCallbacks, DataEventCallbackHandlers);
+                    return BuildNewInactiveTaskView(task, ActiveTaskDataObj, UndoStackObj, ViewLayerCallbacks, DataEventCallbackHandlers);
                 }));
             });
             return ret;
@@ -189,12 +204,14 @@ export function InstantiateNewDataModelScope(currContext) {
         function getCreationFunction(categoryVal, colourIdGetterFunc) {
             return function(name) {
                 let newTask;
+                const timestamp = Date.now();
                 if (colourIdGetterFunc !== null) {
-                    newTask = ActiveTaskDataObj.CreateNewIndependentTask(name, categoryVal, Date.now(), currContext, colourIdGetterFunc());
+                    newTask = ActiveTaskDataObj.CreateNewIndependentTask(name, categoryVal, timestamp, currContext, colourIdGetterFunc());
                 }
                 else {
-                    newTask = ActiveTaskDataObj.CreateNewIndependentTask(name, categoryVal, Date.now(), currContext);
+                    newTask = ActiveTaskDataObj.CreateNewIndependentTask(name, categoryVal, timestamp, currContext);
                 }
+                UndoStackObj.PushUndoableCreateNewIndependentTask(newTask, timestamp);
                 ViewLayerCallbacks.forEach(callback => callback());
                 DataEventCallbackHandlers.taskAddedHandlers.forEach(callback => callback(newTask, ActiveTaskDataObj));
             }
@@ -306,51 +323,64 @@ export function InstantiateNewDataModelScope(currContext) {
 // --- the task you call it on has any relatives, i.e. a parent or any children.
 // --- Calling this will instigate an update in the domain model.
 
-function BuildNewTaskView(domainTaskObj, activeList, viewLayerCallbackList, dataEventCallbacksLists) {
+function BuildNewTaskView(domainTaskObj, activeList, undoStack, viewLayerCallbackList, dataEventCallbacksLists) {
 
     function canCreateChildren() {
         return (domainTaskObj.category < Category.Daily && domainTaskObj.progressStatus < ProgressStatus.Completed);
     }
 
     function createChild(name) {
-        let newTask = activeList.CreateNewSubtask(name, domainTaskObj, Date.now());
+        const timestamp = Date.now();
+        let newTask = activeList.CreateNewSubtask(name, domainTaskObj, timestamp);
+        undoStack.PushUndoableCreateNewSubtask(domainTaskObj, timestamp);
         viewLayerCallbackList.forEach(callback => callback());
         dataEventCallbacksLists.childTaskAddedHandlers.forEach(callback => callback(domainTaskObj, newTask, activeList));
     }
 
     function createDailyChild(name) {
-        let newTask = activeList.CreateNewDailySubtask(name, domainTaskObj, Date.now());
+        const timestamp = Date.now();
+        let newTask = activeList.CreateNewDailySubtask(name, domainTaskObj, timestamp);
+        undoStack.PushUndoableCreateNewSubtask(domainTaskObj, timestamp);
         viewLayerCallbackList.forEach(callback => callback());
         dataEventCallbacksLists.childTaskAddedHandlers.forEach(callback => callback(domainTaskObj, newTask, activeList));
     }
 
     function deleteTask() {
+        // Cannot undo deletion events at the moment
         activeList.DeleteTask(domainTaskObj);
         viewLayerCallbackList.forEach(callback => callback());
         dataEventCallbacksLists.taskDeletedHandlers.forEach(callback => callback(domainTaskObj, activeList));
     }
 
     function activateTask(newCategory) {
-        activeList.ActivateTask(domainTaskObj, newCategory, Date.now());
+        const timestamp = Date.now();
+        activeList.ActivateTask(domainTaskObj, newCategory, timestamp);
+        undoStack.PushUndoableActivateTask(domainTaskObj, timestamp);
         viewLayerCallbackList.forEach(callback => callback());
         dataEventCallbacksLists.taskActivatedHandlers.forEach(callback => callback(domainTaskObj, activeList));
     }
 
     function completeTask() {
-        if (activeList.CompleteTask(domainTaskObj, Date.now())) {
+        const timestamp = Date.now();
+        if (activeList.CompleteTask(domainTaskObj, timestamp)) {
+            undoStack.PushUndoableCompleteTask(domainTaskObj, timestamp);
             viewLayerCallbackList.forEach(callback => callback());
             dataEventCallbacksLists.taskCompletedHandlers.forEach(callback => callback(domainTaskObj, activeList));
         }
     }
 
     function startTask() {
-        activeList.StartTask(domainTaskObj, Date.now());
+        const timestamp = Date.now();
+        activeList.StartTask(domainTaskObj, timestamp);
+        undoStack.PushUndoableStartTask(domainTaskObj, timestamp);
         viewLayerCallbackList.forEach(callback => callback());
         dataEventCallbacksLists.taskStartedHandlers.forEach(callback => callback(domainTaskObj, activeList));
     }
 
     function editTaskName(newText) {
-        activeList.EditTaskText(domainTaskObj, newText, Date.now());
+        const timestamp = Date.now();
+        undoStack.PushUndoableEditTask(domainTaskObj, domainTaskObj.name, domainTaskObj.eventTimestamps.timeEdited, timestamp);
+        activeList.EditTaskText(domainTaskObj, newText, timestamp);
         viewLayerCallbackList.forEach(callback => callback());
         dataEventCallbacksLists.taskEditedHandlers.forEach(callback => callback(domainTaskObj, activeList));
     }
@@ -377,9 +407,12 @@ function BuildNewTaskView(domainTaskObj, activeList, viewLayerCallbackList, data
     });
 }
 
-function BuildNewInactiveTaskView(domainTaskObj, tasklistobj, viewLayerCallbackList, dataEventCallbacksLists) {
+function BuildNewInactiveTaskView(domainTaskObj, tasklistobj, undoStack, viewLayerCallbackList, dataEventCallbacksLists) {
+    
     function reviveTask(asActive) {
-        let newTask = tasklistobj.ReviveTaskAsClone(domainTaskObj, asActive, Date.now());
+        const timestamp = Date.now();
+        let newTask = tasklistobj.ReviveTaskAsClone(domainTaskObj, asActive, timestamp);
+        undoStack.PushUndoableReviveTask(newTask, domainTaskObj, timestamp);
         viewLayerCallbackList.forEach(callback => callback());
         dataEventCallbacksLists.taskRevivedHandlers.forEach(callback => callback(domainTaskObj, newTask, tasklistobj));
     }

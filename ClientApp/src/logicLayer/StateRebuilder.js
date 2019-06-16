@@ -35,7 +35,7 @@ export function RebuildState(eventLogAsArray, tasklist, undoStack) {
         latestid = eventObj.id;
         latesttime = eventObj.timestamp;
     });
-    undoStack.FilterExpiredUndoActions(latesttime);
+    //undoStack.FilterExpiredUndoActions(latesttime);
     
     return latestid;
 }
