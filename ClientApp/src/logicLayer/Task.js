@@ -120,7 +120,7 @@ export class TaskObjects {
         }
 
         // Okay. Since this is a legal operation, all we have to do is remove the task from the task collection(s).
-        this.tasks = this.tasks.filter(t => t.id !== task.id);
+        this.tasks = this.tasks.filter(t => t !== task);
     }
     
     // Creates a new child task, in the category one level below the parent's category.
@@ -147,6 +147,19 @@ export class TaskObjects {
 
         return newTask;
     }
+    UndoCreateNewSubtask(task) {
+        if (task === null || task === undefined) throw new Error("Null task is invalid to undo operation");
+
+        // If this task is not in a state where it has JUST been created as a subtask, then this operation is illegal.
+        if (task.progressStatus !== ProgressStatus.NotStarted || task.parent === null || task.children.length > 0) {
+            console.error(task);
+            throw new Error("Cannot undo CreateNewSubtask() for task which is not in a 'just created as child' state. See STDERR for task object log");
+        }
+
+        // Okay. Since this is a legal operation, all we have to do is remove the task from the task collection(s), and remove the task as a child of the parent
+        this.tasks = this.tasks.filter(t => t !== task);
+        task.parent.removeChild(task);
+    }
     
     // Function which modifies the category of a task. This is only allowed if the task does not have any children or parent.
     // This is most likely only used to 'activate' a deferred task and move it into the active Boards.
@@ -157,6 +170,19 @@ export class TaskObjects {
         }
         task.eventTimestamps.timeActivated = timeStampUNIX;
         task.category = newCategory;
+    }
+    UndoActivateTask(task) {
+        if (task === null || task === undefined) throw new Error("Null task is invalid to undo operation");
+
+        // If this task is not in a state where it has JUST been activated, then this operation is illegal.
+        if (task.ProgressStatus !== ProgressStatus.NotStarted || task.Category < Category.Deferred || task.children.length > 0) {
+            console.error(task);
+            throw new Error("Cannot undo ActivateTask() for task which is not in a 'just activated' state. See STDERR for task object log");
+        }
+
+        // Okay. Since this is a legall operation, we just have to move this task back into the backlog, and clear the timestamp
+        task.eventTimestamps.timeActivated = null;
+        task.category = Category.Deferred;
     }
 
     CloseTask(task, progress, list, timeStampUNIX) {
