@@ -13,7 +13,8 @@ export function BuildDataEventHttpPostHandlers(FailedEventCache) {
         taskStartedHandler: (task, list) => postEvent([DataEventSerialisationFuncs.taskStartedEvent(task, list)], FailedEventCache, 2, false, true),
         taskCompletedHandler: (task, list) => postEvent([DataEventSerialisationFuncs.taskCompletedEvent(task, list)], FailedEventCache, 2, false, true),
         taskFailedHandler: (task, list) => postEvent([DataEventSerialisationFuncs.taskFailedEvent(task, list)], FailedEventCache, 2, false, true),
-        taskEditedHandler: (task, list) => postEvent([DataEventSerialisationFuncs.taskEditedEvent(task, list)], FailedEventCache, 2, false, true)
+        taskEditedHandler: (task, list) => postEvent([DataEventSerialisationFuncs.taskEditedEvent(task, list)], FailedEventCache, 2, false, true),
+        undoActionHandler: (data, list) => postEvent([DataEventSerialisationFuncs.undoActionEvent(data, list)], FailedEventCache, 2, false, true)
     };
 }
 

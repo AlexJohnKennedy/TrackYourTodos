@@ -161,6 +161,7 @@ export function InstantiateNewDataModelScope(currContext) {
         DataEventCallbackHandlers.taskActivatedHandlers.push(dataEventhandlers.taskActivatedHandler);
         DataEventCallbackHandlers.taskStartedHandlers.push(dataEventhandlers.taskStartedHandler);
         DataEventCallbackHandlers.taskEditedHandlers.push(dataEventhandlers.taskEditedHandler);
+        DataEventCallbackHandlers.undoActionHandlers.push(dataEventhandlers.undoActionHandler);
     }
 
     // Exported inner function: Allows clients to register for callbacks when an INITIAL state-build from server data is completed.
