@@ -294,6 +294,22 @@ export class TaskObjects {
         task.eventTimestamps.timeRevived = timeRevivedUNIX;
         return this.CreateNewIndependentTask(task.name, category, timeRevivedUNIX, task.context, task.colourid, id);
     }
+    UndoReviveTaskAsClone(newTask, originalTask) {
+        if (newTask === null || newTask === undefined || originalTask === null || originalTask === undefined) throw new Error("Null task is invalid to undo operation");
+
+        // Check if the tasks is in a valid state to be reverted
+        if (newTask.progressStatus !== ProgressStatus.NotStarted || newTask.parent !== null || newTask.children.length > 0
+        ||  originalTask.progressStatus !== ProgressStatus.Reattempted) {
+            console.error(newTask);
+            console.error(originalTask);
+            throw new Error("Illegal state for undo-ing TaskRevived action. See STDERR for task object logs");
+        }
+
+        // Remove the newly created task from our active task collection.
+        this.tasks = this.tasks.filter(t => t !== newTask);
+        originalTask.progressStatus = ProgressStatus.Failed;
+        originalTask.eventTimestamps.timeRevived = null;
+    }
 
     EditTaskText(task, newText, timeEditedUnix) {
         if (task === null || task === undefined) throw new Error("Task must not be null");
