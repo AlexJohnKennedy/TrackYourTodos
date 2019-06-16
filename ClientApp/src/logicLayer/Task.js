@@ -14,6 +14,8 @@ export const MAX_CONTEXT_NAME_LEN = 20;
 
 export const DEFAULT_GLOBAL_CONTEXT_STRING = "global";  // Context strings are NOT case sensitive.
 
+export const UNDO_ACTION_MAX_AGE_MILLISECONDS = 300_000;    // Actions are allowed to be undone for 5 minutes.
+
 function isValidContextString(s) {
     if (s === undefined || s === null || s === "" || s.length > MAX_CONTEXT_NAME_LEN) return false;
 
@@ -318,6 +320,11 @@ export class TaskObjects {
         if (newText.length === 0 || newText.length > MAX_TASK_NAME_LEN) throw new Error("Invalid task text: " + newText);
         task.eventTimestamps.timeEdited = timeEditedUnix;
         task.name = newText;
+    }
+    UndoEditTaskText(task, originalText, previousTimestamp) {
+        if (task === null || task === undefined) throw new Error("Task must not be null");
+        task.eventTimestamps.timeEdited = previousTimestamp;
+        task.name = originalText;
     }
 }
 
