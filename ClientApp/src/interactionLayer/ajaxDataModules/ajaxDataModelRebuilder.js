@@ -8,12 +8,12 @@ import { forceTokenRefresh, handleAuthFailure, handleServerFailure, handleUnknow
 // we are confident that this is only called once per data-model-instance.
 // TODO: Make this idempotent for the same returned log of events. I.e., do a pass through to detect duplicate events.
 // (This might mean we have to store the log in memory.. ? and have the caller pass in all previous logs.. ?)
-export function ScheduleEventLogUpdate(tasklist, visibleContexts, onLoadFunc) {
+export function ScheduleEventLogUpdate(tasklist, undoStack, visibleContexts, onLoadFunc) {
     console.log("Ajax Get request scheduled!");
-    PerformEventLogUpdate(tasklist, visibleContexts, onLoadFunc, 2, false);    
+    PerformEventLogUpdate(tasklist, undoStack, visibleContexts, onLoadFunc, 2, false);    
 }
 
-function PerformEventLogUpdate(tasklist, visibleContexts, onLoadFunc, retryCount, logoutOnAuthFailure) {
+function PerformEventLogUpdate(tasklist, undoStack, visibleContexts, onLoadFunc, retryCount, logoutOnAuthFailure) {
     // We need to be authenticated on our backend using the google JWT. Thus, we must fetch it from our saved location in local storage.
     // The local storage key to place it is written in App.js as of 28th May 2019.
     const googleToken = window.localStorage.getItem("googleIdToken");
@@ -54,13 +54,13 @@ function PerformEventLogUpdate(tasklist, visibleContexts, onLoadFunc, retryCount
 
             const responseData = JSON.parse(httpRequest.responseText);
 
-            SetIdStartVal(RebuildState(responseData.eventLog, tasklist) + 1);
-            onLoadFunc(tasklist, responseData.availableContexts);
+            SetIdStartVal(RebuildState(responseData.eventLog, tasklist, undoStack) + 1);
+            onLoadFunc(tasklist, undoStack, responseData.availableContexts);
         }
         else if (httpRequest.readyState === 4 && httpRequest.status === 500) {
             if (retryCount > 0) {
                 console.warn("Unknown server error on GET! Retrying...");
-                PerformEventLogUpdate(tasklist, visibleContexts, onLoadFunc, retryCount - 1, logoutOnAuthFailure);
+                PerformEventLogUpdate(tasklist, undoStack, visibleContexts, onLoadFunc, retryCount - 1, logoutOnAuthFailure);
             }
             else {
                 console.warn("Failed to Get, ran out of retries on 500 response. Invoking the generic server-failure handler.");
@@ -75,7 +75,7 @@ function PerformEventLogUpdate(tasklist, visibleContexts, onLoadFunc, retryCount
             }
             else {
                 console.warn("Got an un-authorized 401 error on attempted Event log fetch. Forcing a token refresh, and re-trying..");
-                forceTokenRefresh(() => PerformEventLogUpdate(tasklist, visibleContexts, onLoadFunc, retryCount, true));
+                forceTokenRefresh(() => PerformEventLogUpdate(tasklist, undoStack, visibleContexts, onLoadFunc, retryCount, true));
             }
         }
         else if (httpRequest.readyState === 4) {

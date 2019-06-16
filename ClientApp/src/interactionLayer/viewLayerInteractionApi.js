@@ -39,6 +39,7 @@ import { ScheduleEventLogUpdate } from './ajaxDataModules/ajaxDataModelRebuilder
 import { TaskObjects, Category, ProgressStatus, DEFAULT_GLOBAL_CONTEXT_STRING } from '../logicLayer/Task';
 import { RegisterForFailureChecking } from '../logicLayer/checkForFailure';
 import { StatisticsModel } from '../logicLayer/statisticsModel';
+import { BuildNewUndoStack } from '../logicLayer/undoStackSystem';
 
 // This function instantiates a new Data model and Statistics model inside a function scope, and returns and object which
 // can be used to register listeners, access the data in a mutation safe manner, and so on.
@@ -66,6 +67,7 @@ export function InstantiateNewDataModelScope(currContext) {
     // previously-existing events.
     let ActiveTaskDataObj = new TaskObjects();
     let StatisticsModelObj = new StatisticsModel(ActiveTaskDataObj);
+    let UndoStackObj = BuildNewUndoStack();
     
     // Initialise all our callback containers. These are ViewLayerCallbacks, DataEventCallbacks, and OnDataLoadedFromServer callbacks
     const ViewLayerCallbacks = [];
@@ -108,8 +110,9 @@ export function InstantiateNewDataModelScope(currContext) {
     // upon completion. Upon completion, we will trigger the stashed DataLoadedFromServer callbacks. Thus, it is expected that any
     // client object who want to know about the data-load will have already called 'RegisterForDataLoad' before this happens.
     function TriggerEventLogInitialDataFetch(visibleContexts) {
-        ScheduleEventLogUpdate(new TaskObjects(), visibleContexts, (rebuiltTaskList, availableContextsArray) => {
+        ScheduleEventLogUpdate(new TaskObjects(), BuildNewUndoStack(), visibleContexts, (rebuiltTaskList, rebuiltUndoStack, availableContextsArray) => {
             ActiveTaskDataObj = rebuiltTaskList;
+            UndoStackObj = rebuiltUndoStack;
             StatisticsModelObj = new StatisticsModel(rebuiltTaskList);
             DataLoadedFromServerCallbacks.forEach(cb => {
                 cb(availableContextsArray);
@@ -118,8 +121,9 @@ export function InstantiateNewDataModelScope(currContext) {
     }
 
     function TriggerEventLogDataRefresh(visibleContexts) {
-        ScheduleEventLogUpdate(new TaskObjects(), visibleContexts, (rebuiltTaskList, availableContextsArray) => {
+        ScheduleEventLogUpdate(new TaskObjects(), BuildNewUndoStack(), visibleContexts, (rebuiltTaskList, rebuiltUndoStack, availableContextsArray) => {
             ActiveTaskDataObj = rebuiltTaskList;
+            UndoStackObj = rebuiltUndoStack;
             StatisticsModelObj = new StatisticsModel(rebuiltTaskList);
             DataRefreshedFromServerCallbacks.forEach(cb => {
                 cb(availableContextsArray);

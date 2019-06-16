@@ -81,6 +81,7 @@ export function BuildNewUndoStack() {
         // Try to perform the undo operation on the domain-layer object!
         else if (UndoActionFunctions.has(undoableAction.eventType)) {
             UndoActionFunctions.get(undoableAction.eventType)(undoableAction, tasklistObj);
+            return true;
         }
         // Oops. Something went wrong, we did not have a handler for this event type!
         else {
