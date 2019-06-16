@@ -227,25 +227,31 @@ export class TaskObjects {
         // logic as the close-task operation in order to perform this.
         // In order to determine if a child task was completed as part of the same completion action, we can compare the timeClosed timestamps.
         // This will avoid accidentally undo-ing separately-completed subtasks of a parent task, which was completed later.
-        function undoClose(curr, rootTimestamp) {
+        function undoClose(curr, rootTimestamp, activelist, completedCollec) {
+            console.log("SEARCING: Curr = " + curr);
+            console.log(curr);
+            console.log(rootTimestamp);
             // Determine if this child is completed, and should be undone. If NOT, we return false!
             if (curr.category > Category.Daily || curr.progressStatus !== ProgressStatus.Completed || curr.eventTimestamps.timeClosed !== rootTimestamp) return false;
             
+            console.log("Got past check");
+
+            activelist.push(curr);
+            // Filter this task back out of the 'completed tasks' collection.
+            // TODO: ADD THE REMOVETASK OPERATION TO THE GROUPED TASK DATA OBJECT
+            completedCollec.RemoveTask(curr);
+
             // Okay, in order to 'undo' this task, we must set it back to either started or not-started. This will depend on which timestamps are present.
             curr.progressStatus = curr.eventTimestamps.timeStarted === null ? ProgressStatus.NotStarted : curr.progressStatus = ProgressStatus.Started;
             curr.eventTimestamps.timeClosed = null;
-            this.tasks.push(curr);
             
-            curr.children.forEach((curr) => undoClose(curr));
+            curr.children.forEach((curr) => undoClose(curr, rootTimestamp, activelist, completedCollec));
 
-            // Filter this task back out of the 'completed tasks' collection.
-            // TODO: ADD THE REMOVETASK OPERATION TO THE GROUPED TASK DATA OBJECT
-            this.completedTasks.RemoveTask(curr);
             return true;
         }
 
         // Recursively revert tasks.
-        undoClose(task);
+        undoClose(task, task.eventTimestamps.timeClosed, this.tasks, this.completedTasks);
 
         // Sort active task list by time activated to restore the original insertion ordering
         this.tasks.sort((a, b) => a.eventTimestamps.timeActivated - b.eventTimestamps.timeActivated);

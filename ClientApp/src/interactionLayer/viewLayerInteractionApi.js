@@ -279,6 +279,7 @@ export function InstantiateNewDataModelScope(currContext) {
     // Exported inner function: Performs an undo operation, if it is valid to do so. If the undo operation actually is performed, we
     // will trigger a data event for the undo, and trigger a view layer callback.
     function PerformUndo() {
+        console.log("Attempting to perform an undo operation. Current undo stack size: " + UndoStackObj.GetSize());
         const timestamp = Date.now();
         if (UndoStackObj.PerformUndo(timestamp, ActiveTaskDataObj)) {
             // TODO: This should be populated by the return value of UndoStackObj.PerformUndo(), so that we can POST information about the actual event which was undone, for better server side validation.

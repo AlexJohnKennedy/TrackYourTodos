@@ -22,7 +22,10 @@ export class ContextTabs extends Component {
                     currActiveIndex={currActiveIndex}
                 />
                 <div className="contextSettingsButton">
-                    <div onClick={this.props.togglePage}/>
+                    <div onClick={this.props.togglePage}> C </div>
+                </div>
+                <div className="undoButton">
+                    <div onClick={this.props.performUndo}> U </div>
                 </div>
             </div>
         );
