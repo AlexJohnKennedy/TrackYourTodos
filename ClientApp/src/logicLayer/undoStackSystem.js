@@ -88,6 +88,29 @@ export function BuildNewUndoStack() {
         }
     }
 
+    function GetSize() {
+        return UndoStack.length;
+    }
+
+    function FilterExpiredUndoActions(currTime) {
+        UndoStack.filter(a => currTime - a.timestamp < UNDO_ACTION_MAX_AGE_MILLISECONDS);
+    }
+
+    Object.freeze({
+        // Pushing functions
+        PushUndoableCreateNewIndependentTask: PushUndoableCreateNewIndependentTask,
+        PushUndoableCreateNewSubtask: PushUndoableCreateNewSubtask,
+        PushUndoableActivateTask: PushUndoableActivateTask,
+        PushUndoableCompleteTask: PushUndoableCompleteTask,
+        PushUndoableStartTask: PushUndoableStartTask,
+        PushUndoableReviveTask: PushUndoableReviveTask,
+        PushUndoableEditTask: PushUndoableEditTask,
+
+        // Performing undos and modifying stack state.
+        PerformUndo: PerformUndo,
+        GetSize: GetSize,
+        FilterExpiredUndoActions: FilterExpiredUndoActions
+    });
 }
 
 // Store a map of function which handle different types of undo actions
