@@ -180,7 +180,7 @@ export class TaskObjects {
             throw new Error("Cannot undo ActivateTask() for task which is not in a 'just activated' state. See STDERR for task object log");
         }
 
-        // Okay. Since this is a legall operation, we just have to move this task back into the backlog, and clear the timestamp
+        // Okay. Since this is a legal operation, we just have to move this task back into the backlog, and clear the timestamp
         task.eventTimestamps.timeActivated = null;
         task.category = Category.Deferred;
     }
@@ -209,6 +209,44 @@ export class TaskObjects {
     }
     CompleteTask(task, timeStampUNIX) {
         return this.CloseTask(task, ProgressStatus.Completed, this.completedTasks, timeStampUNIX);
+    }
+    UndoCompleteTask(task) {
+        // NOTE: It is not permitted to undo FailTask events. Once they fail, they are finalised.
+        if (task === null || task === undefined) throw new Error("Null task is invalid to undo operation");
+
+        // If the task is not in a completed state, then this undo operation is illegal.
+        if (task.progressStatus !== ProgressStatus.Completed) {
+            console.error(task);
+            throw new Error("Cannot undo CompleteTask() on an event which is not completed. See STDERR for task object log.");
+        }
+
+        // Okay. Set this task back to 'Started' state, and all children back into either 'Not started' or 'started' state, depending on
+        // if the started timestamp is set. Then clear all the 'time closed' timestamp for all of them. We will use the same search algorithm
+        // logic as the close-task operation in order to perform this.
+        // In order to determine if a child task was completed as part of the same completion action, we can compare the timeClosed timestamps.
+        // This will avoid accidentally undo-ing separately-completed subtasks of a parent task, which was completed later.
+        function undoClose(curr, rootTimestamp) {
+            // Determine if this child is completed, and should be undone. If NOT, we return false!
+            if (curr.category > Category.Daily || curr.progressStatus !== ProgressStatus.Completed || curr.eventTimestamps.timeClosed !== rootTimestamp) return false;
+            
+            // Okay, in order to 'undo' this task, we must set it back to either started or not-started. This will depend on which timestamps are present.
+            curr.progressStatus = curr.eventTimestamps.timeStarted === null ? ProgressStatus.NotStarted : curr.progressStatus = ProgressStatus.Started;
+            curr.eventTimestamps.timeClosed = null;
+            this.tasks.push(curr);
+            
+            curr.children.forEach((curr) => undoClose(curr));
+
+            // Filter this task back out of the 'completed tasks' collection.
+            // TODO: ADD THE REMOVETASK OPERATION TO THE GROUPED TASK DATA OBJECT
+            this.completedTasks.RemoveTask(curr);
+            return true;
+        }
+
+        // Recursively revert tasks.
+        undoClose(task);
+
+        // Sort active task list by time activated to restore the original insertion ordering
+        this.tasks.sort((a, b) => a.eventTimestamps.timeActivated - b.eventTimestamps.timeActivated);
     }
 
     // TODO: Probably just remove this? Not sure if deletion is required.
