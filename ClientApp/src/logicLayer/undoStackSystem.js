@@ -92,11 +92,11 @@ export function BuildNewUndoStack() {
 
 // Store a map of function which handle different types of undo actions
 const UndoActionFunctions = new Map([
-    [EventTypes.taskAdded, undoTaskAdded],
-    [EventTypes.childTaskAdded, undoChildTaskAdded],
-    [EventTypes.taskRevived, undoTaskRevived],
-    [EventTypes.taskCompleted, undoTaskCompleted],
-    [EventTypes.taskActivated, undoTaskActivated],
-    [EventTypes.taskStarted, undoTaskStarted],
-    [EventTypes.taskEdited, undoTaskEdited]
+    [EventTypes.taskAdded, (data, tasklist) => tasklist.UndoCreateNewIndependentTask(data.task)],
+    [EventTypes.childTaskAdded, (data, tasklist) => tasklist.UndoCreateNewSubtask(data.task)],
+    [EventTypes.taskActivated, (data, tasklist) => tasklist.UndoActivateTask(data.task)],
+    [EventTypes.taskCompleted, (data, tasklist) => tasklist.UndoCompleteTask(data.task)],
+    [EventTypes.taskStarted, (data, tasklist) => tasklist.UndoStartTask(data.task)],
+    [EventTypes.taskRevived, (data, tasklist) => tasklist.UndoReviveTaskAsClone(data.newTask, data.originalTask)],
+    [EventTypes.taskEdited, (data, tasklist) => tasklist.UndoEditTaskText(data.task, data.originalText, data.originalTimeEdited)]
 ]);

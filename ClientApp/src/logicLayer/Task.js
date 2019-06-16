@@ -14,7 +14,7 @@ export const MAX_CONTEXT_NAME_LEN = 20;
 
 export const DEFAULT_GLOBAL_CONTEXT_STRING = "global";  // Context strings are NOT case sensitive.
 
-export const UNDO_ACTION_MAX_AGE_MILLISECONDS = 300_000;    // Actions are allowed to be undone for 5 minutes.
+export const UNDO_ACTION_MAX_AGE_MILLISECONDS = 300000;    // Actions are allowed to be undone for 5 minutes.
 
 function isValidContextString(s) {
     if (s === undefined || s === null || s === "" || s.length > MAX_CONTEXT_NAME_LEN) return false;
