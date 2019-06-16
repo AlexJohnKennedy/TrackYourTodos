@@ -11,7 +11,7 @@ import { EventTypes } from './dataEventJsonSchema';
 // --- GetSize()                    This simply polls the current size of the stack.
 // --- FilterExpiredUndoActions()   This performs a check, filtering out any tasks which have exceeded the 'undo-window' age, relative to a provided timestamp.
 export function BuildNewUndoStack() {
-    const UndoStack = [];   // This will store the undoable event objects.
+    let UndoStack = [];   // This will store the undoable event objects.
 
     // Exported inner functions: Pushes new data objects onto the stack, so that they can be retrieved later.
     function PushUndoableCreateNewIndependentTask(task, timestamp) {
@@ -94,7 +94,7 @@ export function BuildNewUndoStack() {
     }
 
     function FilterExpiredUndoActions(currTime) {
-        UndoStack.filter(a => currTime - a.timestamp < UNDO_ACTION_MAX_AGE_MILLISECONDS);
+        UndoStack = UndoStack.filter(a => currTime - a.timestamp < UNDO_ACTION_MAX_AGE_MILLISECONDS);
     }
 
     return Object.freeze({

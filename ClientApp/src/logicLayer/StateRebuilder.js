@@ -35,15 +35,8 @@ export function RebuildState(eventLogAsArray, tasklist, undoStack) {
         latestid = eventObj.id;
         latesttime = eventObj.timestamp;
     });
-
-    console.log("Undostack before filtering on time: " + latesttime);
-    console.log(undoStack.GetSize());
-
     undoStack.FilterExpiredUndoActions(latesttime);
-
-    console.log("undostack AFTER filtering: ");
-    console.log(undoStack.GetSize());
-
+    
     return latestid;
 }
 
