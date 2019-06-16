@@ -80,7 +80,8 @@ export function InstantiateNewDataModelScope(currContext) {
         taskFailedHandlers : [],
         taskActivatedHandlers : [],
         taskStartedHandlers : [],
-        taskEditedHandlers : []
+        taskEditedHandlers : [],
+        undoActionHandlers : []
     };
     const DataLoadedFromServerCallbacks = [];
     const DataRefreshedFromServerCallbacks = [];
@@ -114,9 +115,10 @@ export function InstantiateNewDataModelScope(currContext) {
         DataEventCallbackHandlers.taskActivatedHandlers.length = 0;
         DataEventCallbackHandlers.taskStartedHandlers.length = 0;
         DataEventCallbackHandlers.taskEditedHandlers.length = 0;
+        DataEventCallbackHandlers.undoActionHandlers.length = 0;
         DataLoadedFromServerCallbacks.length = 0;
         DataRefreshedFromServerCallbacks.length = 0;
-        window.clearTimeout(scheduledFilteringOperation);        
+        window.clearTimeout(scheduledFilteringOperation);
     }
 
     // Exported inner function: Tells the interaction layer to fetch the latest event log from the backend, and apply it to datamodel
@@ -257,13 +259,36 @@ export function InstantiateNewDataModelScope(currContext) {
         });
     }
 
-    // Exported innder function: Refreshes the Statistics Model object entirely, meaning it will be re-instantiated. This is
+    // Exported inner function: Refreshes the Statistics Model object entirely, meaning it will be re-instantiated. This is
     // required to make day-rollover visible. I.e., if the app is left open over the day boundary, the StatisticsModel instance
     // never knows it needs to shuffle over all of the data one place (since 'today' has moved to 'yesterday', etc.). The easiest
     // way to get around this is to simply rebuild the model periodically/when needed, since this is a once off operation the
     // inefficiency is preferred over the logical complexity.
     function RefreshStatisticsModel() {
         StatisticsModelObj = new StatisticsModel(ActiveTaskDataObj);
+    }
+
+    // Exported inner function: Simply a pass-through to the Undo Stack system, allowing the view layer to query how many undoable
+    // actions are currently in the stack. (Will be used to determine if the undo button should be greyed out, for example).
+    function GetUndoStackSize() {
+        return UndoStackObj.GetSize();
+    }
+
+    // Exported inner function: Performs an undo operation, if it is valid to do so. If the undo operation actually is performed, we
+    // will trigger a data event for the undo, and trigger a view layer callback.
+    function PerformUndo() {
+        const timestamp = Date.now();
+        if (UndoStackObj.PerformUndo(timestamp, ActiveTaskDataObj)) {
+            let dataObj = {};   // TODO: This should be populated by the return value of UndoStackObj.PerformUndo(), so that we can POST information about the actual event which was undone, for better server side validation.
+            // Refresh stats model, incase a completion was undone. TODO: Make this less inefficient.
+            RefreshStatisticsModel();
+            ViewLayerCallbacks.forEach(cb => cb());
+            DataEventCallbackHandlers.undoActionHandlers.forEach(callback => callback(dataObj, ActiveTaskDataObj));
+            return true;
+        }
+        else {
+            return false;   // Undo did not occur
+        }
     }
 
     return Object.freeze({
@@ -275,7 +300,9 @@ export function InstantiateNewDataModelScope(currContext) {
         RegisterToActiveTaskListAPI : RegisterToActiveTaskListAPI,
         RegisterForStatisticsModel : RegisterForStatisticsModel,
         ClearAllRegisteredCallbacks : ClearAllRegisteredCallbacks,
-        RefreshStatisticsModel : RefreshStatisticsModel
+        RefreshStatisticsModel : RefreshStatisticsModel,
+        GetUndoStackSize : GetUndoStackSize,
+        PerformUndo : PerformUndo
     });
 }
 
