@@ -97,7 +97,7 @@ export function BuildNewUndoStack() {
         UndoStack.filter(a => currTime - a.timestamp < UNDO_ACTION_MAX_AGE_MILLISECONDS);
     }
 
-    Object.freeze({
+    return Object.freeze({
         // Pushing functions
         PushUndoableCreateNewIndependentTask: PushUndoableCreateNewIndependentTask,
         PushUndoableCreateNewSubtask: PushUndoableCreateNewSubtask,
