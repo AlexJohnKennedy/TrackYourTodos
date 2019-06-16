@@ -137,6 +137,15 @@ function BuildDataEventSerialisationFuncs() {
         };
     }
 
+    function undoActionEvent(data, tasklist) {
+        // At the moment, the 'data' object is just empty. Later, this will contain verifiable data about the event-which-was-undone, and thus we must serialise that information. For now, just emit a generic undo event
+        return {
+            eventType: EventTypes.undoAction,
+            timestamp: data.timestamp,
+            id: data.id     // WARNING: DOES NOT PERTAIN TO A TASK. UNDO EVENTS HAVE THEIR OWN UNIQUE IDs TO ASSIST DUPLICATE DETECTION!!
+        };
+    }
+
     return Object.freeze({
         taskAddedEvent: taskAddedEvent,
         childTaskAddedEvent: childTaskAddedEvent,
@@ -146,6 +155,7 @@ function BuildDataEventSerialisationFuncs() {
         taskStartedEvent: taskStartedEvent,
         taskCompletedEvent: taskCompletedEvent,
         taskFailedEvent: taskFailedEvent,
-        taskEditedEvent: taskEditedEvent
+        taskEditedEvent: taskEditedEvent,
+        undoActionEvent: undoActionEvent
     });
 }
