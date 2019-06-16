@@ -95,7 +95,7 @@ export class TaskObjects {
         }
     }
 
-    // Creates a parentless task, in a specified category!
+    // Creates a parentless task, in a specified category.
     CreateNewIndependentTask(name, category, timeCreatedUNIX, context = DEFAULT_GLOBAL_CONTEXT_STRING, colourid = DefaultColourId, id = null) {
         if (id === null || id === undefined) {
             id = GetNewId();
@@ -110,8 +110,20 @@ export class TaskObjects {
         }
         return newTask;
     }
+    UndoCreateNewIndependentTask(task) {
+        if (task === null || task === undefined) throw new Error("Null task is invalid to undo operation");
+        
+        // If this task is not in a state where is it has JUST been created, then this operation is illegal.
+        if (task.progressStatus !== ProgressStatus.NotStarted || task.parent !== null || task.children.length > 0) {
+            console.error(task);
+            throw new Error("Cannot undo CreateIndependentTask() for task which is not in a 'just created' state. See STDERR for task object log");
+        }
+
+        // Okay. Since this is a legal operation, all we have to do is remove the task from the task collection(s).
+        this.tasks = this.tasks.filter(t => t.id !== task.id);
+    }
     
-    // Creates a new child task, in the category one level below the parent's category
+    // Creates a new child task, in the category one level below the parent's category.
     CreateNewSubtask(name, parent, timeCreatedUNIX, id = null) {
         if (id === null || id === undefined) {
             id = GetNewId();
