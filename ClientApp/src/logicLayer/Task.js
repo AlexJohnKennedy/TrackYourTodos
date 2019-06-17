@@ -228,14 +228,9 @@ export class TaskObjects {
         // In order to determine if a child task was completed as part of the same completion action, we can compare the timeClosed timestamps.
         // This will avoid accidentally undo-ing separately-completed subtasks of a parent task, which was completed later.
         function undoClose(curr, rootTimestamp, activelist, completedCollec) {
-            console.log("SEARCING: Curr = " + curr);
-            console.log(curr);
-            console.log(rootTimestamp);
             // Determine if this child is completed, and should be undone. If NOT, we return false!
             if (curr.category > Category.Daily || curr.progressStatus !== ProgressStatus.Completed || curr.eventTimestamps.timeClosed !== rootTimestamp) return false;
             
-            console.log("Got past check");
-
             activelist.push(curr);
             // Filter this task back out of the 'completed tasks' collection.
             // TODO: ADD THE REMOVETASK OPERATION TO THE GROUPED TASK DATA OBJECT
@@ -247,7 +242,6 @@ export class TaskObjects {
             
             curr.children.forEach((curr) => undoClose(curr, rootTimestamp, activelist, completedCollec));
 
-            console.log("Completing undo action");
             return true;
         }
 
