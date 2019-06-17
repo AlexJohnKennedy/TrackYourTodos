@@ -282,6 +282,7 @@ export function InstantiateNewDataModelScope(currContext) {
         console.log("Attempting to perform an undo operation. Current undo stack size: " + UndoStackObj.GetSize());
         const timestamp = Date.now();
         if (UndoStackObj.PerformUndo(timestamp, ActiveTaskDataObj)) {
+            console.log("Finished undo action, from UndoStackObj. Now, I will refresh Stats model and send an event");
             // TODO: This should be populated by the return value of UndoStackObj.PerformUndo(), so that we can POST information about the actual event which was undone, for better server side validation.
             let dataObj = {
                 timestamp: timestamp,

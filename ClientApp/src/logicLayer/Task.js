@@ -247,6 +247,7 @@ export class TaskObjects {
             
             curr.children.forEach((curr) => undoClose(curr, rootTimestamp, activelist, completedCollec));
 
+            console.log("Completing undo action");
             return true;
         }
 

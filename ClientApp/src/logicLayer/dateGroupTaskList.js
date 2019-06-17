@@ -64,7 +64,12 @@ class GroupedTaskList {
         if (searchResult < 0) throw new Error("Tried to remove an event from date-group-task lists which was not found!");
         
         // filter out the task group this group
-        this.groups[searchResult].tasks.filter(t => t !== task);
+        console.log(task);
+        console.log(this.groups[searchResult].tasks);
+
+        this.groups[searchResult].tasks = this.groups[searchResult].tasks.filter(t => t !== task);
+
+        console.log(this.groups[searchResult].tasks);
     }
 
     AddTask(task) {
