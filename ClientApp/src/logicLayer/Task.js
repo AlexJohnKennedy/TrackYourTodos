@@ -177,7 +177,7 @@ export class TaskObjects {
         if (task === null || task === undefined) throw new Error("Null task is invalid to undo operation");
 
         // If this task is not in a state where it has JUST been activated, then this operation is illegal.
-        if (task.ProgressStatus !== ProgressStatus.NotStarted || task.Category < Category.Deferred || task.children.length > 0) {
+        if (task.progressStatus !== ProgressStatus.NotStarted || task.category > Category.Daily || task.children.length > 0) {
             console.error(task);
             throw new Error("Cannot undo ActivateTask() for task which is not in a 'just activated' state. See STDERR for task object log");
         }

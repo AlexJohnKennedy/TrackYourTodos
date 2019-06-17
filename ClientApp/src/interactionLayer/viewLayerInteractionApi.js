@@ -366,7 +366,7 @@ function BuildNewTaskView(domainTaskObj, activeList, undoStack, viewLayerCallbac
     function createChild(name) {
         const timestamp = Date.now();
         let newTask = activeList.CreateNewSubtask(name, domainTaskObj, timestamp);
-        undoStack.PushUndoableCreateNewSubtask(domainTaskObj, timestamp);
+        undoStack.PushUndoableCreateNewSubtask(newTask, timestamp);
         viewLayerCallbackList.forEach(callback => callback());
         dataEventCallbacksLists.childTaskAddedHandlers.forEach(callback => callback(domainTaskObj, newTask, activeList));
     }
@@ -374,7 +374,7 @@ function BuildNewTaskView(domainTaskObj, activeList, undoStack, viewLayerCallbac
     function createDailyChild(name) {
         const timestamp = Date.now();
         let newTask = activeList.CreateNewDailySubtask(name, domainTaskObj, timestamp);
-        undoStack.PushUndoableCreateNewSubtask(domainTaskObj, timestamp);
+        undoStack.PushUndoableCreateNewSubtask(newTask, timestamp);
         viewLayerCallbackList.forEach(callback => callback());
         dataEventCallbacksLists.childTaskAddedHandlers.forEach(callback => callback(domainTaskObj, newTask, activeList));
     }
