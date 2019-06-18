@@ -40,6 +40,8 @@ import { TaskObjects, Category, ProgressStatus, DEFAULT_GLOBAL_CONTEXT_STRING, U
 import { RegisterForFailureChecking } from '../logicLayer/checkForFailure';
 import { StatisticsModel } from '../logicLayer/statisticsModel';
 import { BuildNewUndoStack } from '../logicLayer/undoStackSystem';
+import { EventTypes } from './dataEventJsonSchema';
+
 import NewUuid from 'uuid/v4';
 
 // This function instantiates a new Data model and Statistics model inside a function scope, and returns and object which
@@ -310,19 +312,27 @@ export function InstantiateNewDataModelScope(currContext) {
     function PerformUndo() {
         console.log("Attempting to perform an undo operation. Current undo stack size: " + UndoStackObj.GetSize());
 
-
+        // Define a mapping of callback lists, so we can trigger the correct data event depending on what is undone by a given undo action
+        const dataEventHandlerMappers = new Map([
+            [EventTypes.taskAddedUndo, DataEventCallbackHandlers.taskAddedUndoHandlers],
+            [EventTypes.childTaskAddedUndo, DataEventCallbackHandlers.childTaskAddedUndoHandlers],
+            [EventTypes.taskRevivedUndo, DataEventCallbackHandlers.taskRevivedUndoHandlers],
+            [EventTypes.taskDeletedUndo, DataEventCallbackHandlers.taskDeletedUndoHandlers],
+            [EventTypes.taskCompletedUndo, DataEventCallbackHandlers.taskCompletedUndoHandlers],
+            [EventTypes.taskActivatedUndo, DataEventCallbackHandlers.taskActivatedUndoHandlers],
+            [EventTypes.taskStartedUndo, DataEventCallbackHandlers.taskStartedUndoHandlers],
+            [EventTypes.taskEditedUndo, DataEventCallbackHandlers.taskEditedUndoHandlers]
+        ]);
 
         const timestamp = Date.now();
-        if (UndoStackObj.PerformUndo(timestamp, ActiveTaskDataObj)) {
-            // TODO: This should be populated by the return value of UndoStackObj.PerformUndo(), so that we can POST information about the actual event which was undone, for better server side validation.
-            let dataObj = {
-                timestamp: timestamp,
-                id: NewUuid()
-            };
-            // Refresh stats model if a completion was undone. TODO: Make this less inefficient.
-            RefreshStatisticsModel();
+        const undoData = UndoStackObj.PerformUndo(timestamp, ActiveTaskDataObj);
+        if (undoData !== null) {
+            // Refresh stats model if a completion was undone.
+            if (undoData.eventType === EventTypes.taskCompletedUndo) { RefreshStatisticsModel(); }
+            
+            // Invoke data events.
             ViewLayerCallbacks.forEach(cb => cb());
-            DataEventCallbackHandlers.undoActionHandlers.forEach(callback => callback(dataObj, ActiveTaskDataObj));
+            dataEventHandlerMappers[undoData.eventType].forEach(callback => callback(undoData, ActiveTaskDataObj));
             return true;
         }
         else {
