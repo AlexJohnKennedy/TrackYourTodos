@@ -107,8 +107,19 @@ namespace todo_app.DataTransferLayer.Entities {
             { EventTypes.TaskEdited, e => true },
 
             // Deleted tasks currently have no validation applied
-            { EventTypes.TaskDeleted, e => true } 
+            { EventTypes.TaskDeleted, e => true }, 
 
+            // The checks for all undo events (except revived) is that they must have a non-null, non-zero 'revertedEventTimestamp' field.
+            { EventTypes.TaskAddedUndo, e => e.RevertedEventTimestamp.HasValue && e.RevertedEventTimestamp > 0 },
+            { EventTypes.ChildTaskAddedUndo, e => e.RevertedEventTimestamp.HasValue && e.RevertedEventTimestamp > 0 },
+            { EventTypes.TaskActivatedUndo, e => e.RevertedEventTimestamp.HasValue && e.RevertedEventTimestamp > 0 },
+            { EventTypes.TaskCompletedUndo, e => e.RevertedEventTimestamp.HasValue && e.RevertedEventTimestamp > 0 },
+            { EventTypes.TaskStartedUndo, e => e.RevertedEventTimestamp.HasValue && e.RevertedEventTimestamp > 0 },
+            { EventTypes.TaskEditedUndo, e => e.RevertedEventTimestamp.HasValue && e.RevertedEventTimestamp > 0 },
+            { EventTypes.TaskDeletedUndo, e => e.RevertedEventTimestamp.HasValue && e.RevertedEventTimestamp > 0 },
+            
+            // Task revived undo must also have an 'original' id!
+            { EventTypes.TaskRevivedUndo, e => e.RevertedEventTimestamp.HasValue && e.RevertedEventTimestamp > 0 && e.Original != null },
         };
     }
 
