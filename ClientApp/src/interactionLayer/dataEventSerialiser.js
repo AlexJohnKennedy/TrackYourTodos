@@ -147,6 +147,7 @@ function BuildDataEventSerialisationFuncs() {
     }
 
     return Object.freeze({
+        // Normal data events
         taskAddedEvent: taskAddedEvent,
         childTaskAddedEvent: childTaskAddedEvent,
         taskRevivedEvent: taskRevivedEvent,
@@ -156,6 +157,8 @@ function BuildDataEventSerialisationFuncs() {
         taskCompletedEvent: taskCompletedEvent,
         taskFailedEvent: taskFailedEvent,
         taskEditedEvent: taskEditedEvent,
+
+        // Undo data events
         undoActionEvent: undoActionEvent
     });
 }

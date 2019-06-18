@@ -12,6 +12,7 @@ import { EventTypes } from './dataEventJsonSchema';
 import { Category } from './Task';
 
 const EventReplayFunctions = new Map([
+    // Normal data events
     [EventTypes.taskAdded, replayTaskAddedEvent],
     [EventTypes.childTaskAdded, replayChildTaskAddedEvent],
     [EventTypes.taskRevived, replayTaskRevivedEvent],
@@ -20,7 +21,9 @@ const EventReplayFunctions = new Map([
     [EventTypes.taskFailed, replayTaskFailedEvent],
     [EventTypes.taskActivated, replayTaskActivatedEvent],
     [EventTypes.taskStarted, replayTaskStartedEvent],
-    [EventTypes.taskEdited, replayTaskEditedEvent]
+    [EventTypes.taskEdited, replayTaskEditedEvent],
+
+    // TODO: Undo data events
 ]);
 
 // Replays all event in the json log to rebuild the state exactly. It also tracks the largest id it found, which is returned.

@@ -291,7 +291,7 @@ export function InstantiateNewDataModelScope(currContext) {
                 timestamp: timestamp,
                 id: NewUuid()
             };
-            // Refresh stats model, incase a completion was undone. TODO: Make this less inefficient.
+            // Refresh stats model if a completion was undone. TODO: Make this less inefficient.
             RefreshStatisticsModel();
             ViewLayerCallbacks.forEach(cb => cb());
             DataEventCallbackHandlers.undoActionHandlers.forEach(callback => callback(dataObj, ActiveTaskDataObj));
