@@ -198,7 +198,8 @@ namespace todo_app.DataTransferLayer.Entities {
             else if (!e1.EventType.Equals(e2.EventType)) return false;
             else if (!e1.Id.Equals(e2.Id)) return false;
             else if (e1.EventType.Equals(EventTypes.TaskEdited)) return e1.Name.Equals(e2.Name) && e1.Timestamp.Equals(e2.Timestamp);
-            else return true;
+            else if (e1.EventType.Equals(EventTypes.TaskAdded) || e1.EventType.Equals(EventTypes.ChildTaskAdded) || e1.EventType.Equals(EventTypes.TaskRevived)) return true;
+            else return e1.Timestamp.Equals(e2.Timestamp);
         }
         public override int GetHashCode(GenericTodoEvent e) {
             var data = new { e.Id, e.EventType };
