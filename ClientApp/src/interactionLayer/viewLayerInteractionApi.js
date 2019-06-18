@@ -188,7 +188,7 @@ export function InstantiateNewDataModelScope(currContext) {
         DataEventCallbackHandlers.taskCompletedUndoHandlers.push(dataEventhandlers.taskCompletedUndoHandler);
         DataEventCallbackHandlers.taskActivatedUndoHandlers.push(dataEventhandlers.taskActivatedUndoHandler);
         DataEventCallbackHandlers.taskStartedUndoHandlers.push(dataEventhandlers.taskStartedUndoHandler);
-        DataEventCallbackHandlers.taskEditedUndoHandler.push(dataEventhandlers.taskEditedUndoHandler);
+        DataEventCallbackHandlers.taskEditedUndoHandlers.push(dataEventhandlers.taskEditedUndoHandler);
     }
 
     // Exported inner function: Allows clients to register for callbacks when an INITIAL state-build from server data is completed.
@@ -310,7 +310,7 @@ export function InstantiateNewDataModelScope(currContext) {
     function PerformUndo() {
         console.log("Attempting to perform an undo operation. Current undo stack size: " + UndoStackObj.GetSize());
 
-        
+
 
         const timestamp = Date.now();
         if (UndoStackObj.PerformUndo(timestamp, ActiveTaskDataObj)) {
