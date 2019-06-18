@@ -159,6 +159,13 @@ function BuildDataEventSerialisationFuncs() {
         taskEditedEvent: taskEditedEvent,
 
         // Undo data events
-        undoActionEvent: undoActionEvent
+        taskAddedUndoEvent: null,
+        childTaskAddedUndoEvent: null,
+        taskRevivedUndoEvent: null,
+        taskDeletedUndoEvent: null,
+        taskCompletedUndoEvent: null,
+        taskActivatedUndoEvent: null,
+        taskStartedUndoEvent: null,
+        taskEditedUndoEvent: null
     });
 }

@@ -16,8 +16,7 @@ export const EventTypes = {
     taskRevivedUndo : "taskRevivedUndo",
     taskDeletedUndo : "taskDeletedUndo",
     taskCompletedUndo : "taskCompletedUndo",
-    taskFailedUndo : "taskFailedUndo",
     taskActivatedUndo : "taskActivatedUndo",
     taskStartedUndo : "taskStartedUndo",
-    taskEditedUndo : "taskEditedUndo",
+    taskEditedUndo : "taskEditedUndo"
 }

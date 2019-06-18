@@ -82,7 +82,15 @@ export function InstantiateNewDataModelScope(currContext) {
         taskActivatedHandlers : [],
         taskStartedHandlers : [],
         taskEditedHandlers : [],
-        undoActionHandlers : []
+
+        taskAddedUndoHandlers : [],
+        childTaskAddedUndoHandlers : [],
+        taskRevivedUndoHandlers : [],
+        taskDeletedUndoHandlers : [],
+        taskCompletedUndoHandlers : [],
+        taskActivatedUndoHandlers : [],
+        taskStartedUndoHandlers : [],
+        taskEditedUndoHandlers : []
     };
     const DataLoadedFromServerCallbacks = [];
     const DataRefreshedFromServerCallbacks = [];
@@ -117,7 +125,16 @@ export function InstantiateNewDataModelScope(currContext) {
         DataEventCallbackHandlers.taskActivatedHandlers.length = 0;
         DataEventCallbackHandlers.taskStartedHandlers.length = 0;
         DataEventCallbackHandlers.taskEditedHandlers.length = 0;
-        DataEventCallbackHandlers.undoActionHandlers.length = 0;
+
+        DataEventCallbackHandlers.taskAddedUndoHandlers.length = 0;
+        DataEventCallbackHandlers.childTaskAddedUndoHandlers.length = 0;
+        DataEventCallbackHandlers.taskRevivedUndoHandlers.length = 0;
+        DataEventCallbackHandlers.taskDeletedUndoHandlers.length = 0;
+        DataEventCallbackHandlers.taskCompletedUndoHandlers.length = 0;
+        DataEventCallbackHandlers.taskActivatedUndoHandlers.length = 0;
+        DataEventCallbackHandlers.taskStartedUndoHandlers.length = 0;
+        DataEventCallbackHandlers.taskEditedUndoHandler.length = 0;
+
         DataLoadedFromServerCallbacks.length = 0;
         DataRefreshedFromServerCallbacks.length = 0;
         StatisticsModelRefreshCallbacks.length = 0;
@@ -163,7 +180,15 @@ export function InstantiateNewDataModelScope(currContext) {
         DataEventCallbackHandlers.taskActivatedHandlers.push(dataEventhandlers.taskActivatedHandler);
         DataEventCallbackHandlers.taskStartedHandlers.push(dataEventhandlers.taskStartedHandler);
         DataEventCallbackHandlers.taskEditedHandlers.push(dataEventhandlers.taskEditedHandler);
-        DataEventCallbackHandlers.undoActionHandlers.push(dataEventhandlers.undoActionHandler);
+        
+        DataEventCallbackHandlers.taskAddedUndoHandlers.push(dataEventhandlers.taskAddedUndoHandler);
+        DataEventCallbackHandlers.childTaskAddedUndoHandlers.push(dataEventhandlers.childTaskAddedUndoHandler);
+        DataEventCallbackHandlers.taskRevivedUndoHandlers.push(dataEventhandlers.taskRevivedUndoHandler);
+        DataEventCallbackHandlers.taskDeletedUndoHandlers.push(dataEventhandlers.taskDeletedUndoHandler);
+        DataEventCallbackHandlers.taskCompletedUndoHandlers.push(dataEventhandlers.taskCompletedUndoHandler);
+        DataEventCallbackHandlers.taskActivatedUndoHandlers.push(dataEventhandlers.taskActivatedUndoHandler);
+        DataEventCallbackHandlers.taskStartedUndoHandlers.push(dataEventhandlers.taskStartedUndoHandler);
+        DataEventCallbackHandlers.taskEditedUndoHandler.push(dataEventhandlers.taskEditedUndoHandler);
     }
 
     // Exported inner function: Allows clients to register for callbacks when an INITIAL state-build from server data is completed.
@@ -284,6 +309,9 @@ export function InstantiateNewDataModelScope(currContext) {
     // will trigger a data event for the undo, and trigger a view layer callback.
     function PerformUndo() {
         console.log("Attempting to perform an undo operation. Current undo stack size: " + UndoStackObj.GetSize());
+
+        
+
         const timestamp = Date.now();
         if (UndoStackObj.PerformUndo(timestamp, ActiveTaskDataObj)) {
             // TODO: This should be populated by the return value of UndoStackObj.PerformUndo(), so that we can POST information about the actual event which was undone, for better server side validation.
