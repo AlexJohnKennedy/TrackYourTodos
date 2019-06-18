@@ -86,6 +86,7 @@ export function InstantiateNewDataModelScope(currContext) {
     };
     const DataLoadedFromServerCallbacks = [];
     const DataRefreshedFromServerCallbacks = [];
+    const StatisticsModelRefreshCallbacks = [];
 
     // Setup inter-datamodel event callbacks here, since they both exist in the global interaction layer scope.
     DataEventCallbackHandlers.taskCompletedHandlers.push((task, tasklist) => StatisticsModelObj.AddCompletedTask(task));
@@ -119,6 +120,7 @@ export function InstantiateNewDataModelScope(currContext) {
         DataEventCallbackHandlers.undoActionHandlers.length = 0;
         DataLoadedFromServerCallbacks.length = 0;
         DataRefreshedFromServerCallbacks.length = 0;
+        StatisticsModelRefreshCallbacks.length = 0;
         window.clearTimeout(scheduledFilteringOperation);
     }
 
@@ -248,9 +250,10 @@ export function InstantiateNewDataModelScope(currContext) {
 
     // Exported inner function: Interaction API object for the Statistics Model. For now, it simply wraps the statistics 
     // model and hides the internal data structures.
-    function RegisterForStatisticsModel(completedCallback, failedCallback) {
+    function RegisterForStatisticsModel(completedCallback, failedCallback, refreshCallback) {
         DataEventCallbackHandlers.taskCompletedHandlers.push(completedCallback);
         DataEventCallbackHandlers.taskFailedHandlers.push(failedCallback);
+        StatisticsModelRefreshCallbacks.push(refreshCallback);
 
         function GetStatistics(options) {
             return StatisticsModelObj.GetStatistics(options);
@@ -268,6 +271,7 @@ export function InstantiateNewDataModelScope(currContext) {
     // inefficiency is preferred over the logical complexity.
     function RefreshStatisticsModel() {
         StatisticsModelObj = new StatisticsModel(ActiveTaskDataObj);
+        StatisticsModelRefreshCallbacks.forEach(cb => cb());
     }
 
     // Exported inner function: Simply a pass-through to the Undo Stack system, allowing the view layer to query how many undoable
