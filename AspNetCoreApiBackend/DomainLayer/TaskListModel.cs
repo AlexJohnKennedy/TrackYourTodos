@@ -19,24 +19,43 @@ namespace todo_app.DomainLayer.TaskListModel {
         public const string TaskActivated = "taskActivated";
         public const string TaskStarted = "taskStarted";
         public const string TaskEdited = "taskEdited";
+
+        public const string TaskAddedUndo = "taskCreatedUndo";
+        public const string ChildTaskAddedUndo = "subtaskCreatedUndo";
+        public const string TaskRevivedUndo = "taskRevivedUndo";
+        public const string TaskDeletedUndo = "taskDeletedUndo";
+        public const string TaskCompletedUndo = "taskCompletedUndo";
+        public const string TaskActivatedUndo = "taskActivatedUndo";
+        public const string TaskStartedUndo = "taskStartedUndo";
+        public const string TaskEditedUndo = "taskEditedUndo";
+
         public static readonly HashSet<string> ValidEventStrings = new HashSet<string>() {
-            TaskAdded, ChildTaskAdded, TaskRevived, TaskDeleted, TaskCompleted, TaskFailed, TaskActivated, TaskStarted, TaskEdited
+            TaskAdded, ChildTaskAdded, TaskRevived, TaskDeleted, TaskCompleted, TaskFailed, TaskActivated, TaskStarted, TaskEdited,
+            TaskAddedUndo, ChildTaskAddedUndo, TaskRevivedUndo, TaskDeletedUndo, TaskCompletedUndo, TaskActivatedUndo, TaskStartedUndo, TaskEditedUndo
         };
         public static readonly Dictionary<string, int> PrecedenceOrderingValues = new Dictionary<string, int>() {
             // Task created events must occur before any other action can occur on that event, thus they are the 'earliest' precedence
             { TaskAdded, 0 },
             { ChildTaskAdded, 0 },
             { TaskRevived, 0 },
+            { TaskAddedUndo, 1 },
+            { ChildTaskAddedUndo, 1 },
+            { TaskRevivedUndo, 1 },
             // Tasks cannot be activated after starting, thus activation comes next.
-            { TaskEdited, 1 },
-            { TaskActivated, 1 },
+            { TaskEdited, 2 },
+            { TaskActivated, 2 },
+            { TaskEditedUndo, 3 },
+            { TaskActivatedUndo, 3 },
             // Tasks cannot be started after are deletd, completed or failed, thus started comes next.
-            { TaskStarted, 2},
+            { TaskStarted, 4 },
+            { TaskStartedUndo, 5 },
             // Tasks cannot be deleted after being close, thus deletion comes next.
-            { TaskDeleted, 3},
+            { TaskDeleted, 6 },
+            { TaskDeletedUndo, 7 },
             // Task closure comes next. Lets favour failure over completed, just to be mean.
-            { TaskFailed, 4 },
-            { TaskCompleted, 5 }
+            { TaskFailed, 8 },
+            { TaskCompleted, 9 },
+            { TaskCompletedUndo, 10 }
         };
     }
 

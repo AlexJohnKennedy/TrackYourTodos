@@ -108,6 +108,7 @@ namespace todo_app.DataTransferLayer.Entities {
 
             // Deleted tasks currently have no validation applied
             { EventTypes.TaskDeleted, e => true } 
+
         };
     }
 
@@ -160,6 +161,10 @@ namespace todo_app.DataTransferLayer.Entities {
         public Guid? Parent { get; set; }        // Nullable, since some event types do not support this.
         public Guid[] Children { get; set; }
         public Guid? Original { get; set; }      // Nullable, since some event types do not support this.
+
+        // Used in the case of undo events
+        [NotInTheFutureValidator(5000)]
+        public long? RevertedEventTimestamp { get; set; }
 
         // Return a collection of Failed-Validations. An empty IEnumerable means validation was successful
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext) {
