@@ -40,9 +40,7 @@ import { TaskObjects, Category, ProgressStatus, DEFAULT_GLOBAL_CONTEXT_STRING, U
 import { RegisterForFailureChecking } from '../logicLayer/checkForFailure';
 import { StatisticsModel } from '../logicLayer/statisticsModel';
 import { BuildNewUndoStack } from '../logicLayer/undoStackSystem';
-import { EventTypes } from './dataEventJsonSchema';
-
-import NewUuid from 'uuid/v4';
+import { EventTypes } from '../logicLayer/dataEventJsonSchema';
 
 // This function instantiates a new Data model and Statistics model inside a function scope, and returns and object which
 // can be used to register listeners, access the data in a mutation safe manner, and so on.
