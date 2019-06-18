@@ -185,13 +185,10 @@ namespace todo_app.DataTransferLayer.Entities {
     }
 
     public class GenericTodoEventComparer : EqualityComparer<GenericTodoEvent> {
-        // We say two todo events are duplicates if they have the same 'type' and refer to the same task.
-        // This is true because no event type can be applied to the same task more than once.
+        // We say two todo events are duplicates if they have the same 'type' and refer to the same task, and have the same timestamp.
+        // In the case of creation, revival, and failure, we do not check timestamp, since we know this type of event can only be
+        // applied to a given task no-more-than once.
         // Note that in the case of 'duplicates', we should always accept the earlier-occurring event as the true event.
-        // The only exception to this rule is 'taskEdited' events. These events are 'renaming' events, and thus can be
-        // applied multiple times to the same event. For taskEdited events, we will only consider it a duplicate if they
-        // have the same timestamp, name, and type. (We cannot use type+name because this will filter out subsequent renames
-        // which revert back to a previously existing name, which the user might genuinely want).
         public override bool Equals(GenericTodoEvent e1, GenericTodoEvent e2) {
             if (e1 == null && e2 == null) return true;
             else if (e1 == null || e2 == null) return false;
