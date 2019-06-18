@@ -249,7 +249,7 @@ export class TaskObjects {
         undoClose(task, task.eventTimestamps.timeClosed, this.tasks, this.completedTasks);
 
         // Sort active task list by time activated to restore the original insertion ordering
-        this.tasks.sort((a, b) => a.eventTimestamps.timeActivated - b.eventTimestamps.timeActivated);
+        this.tasks.sort((a, b) => a.eventTimestamps.timeCreated - b.eventTimestamps.timeCreated);
     }
 
     // TODO: Probably just remove this? Not sure if deletion is required.
@@ -383,7 +383,7 @@ class Task {
         childTask.parent = this;
     }
     removeChild(task) {
-        this.children.filter((c) => c !== task);
+        this.children = this.children.filter((c) => c !== task);
         task.parent = null;
     }
 }
