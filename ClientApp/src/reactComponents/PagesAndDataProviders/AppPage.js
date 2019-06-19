@@ -245,7 +245,14 @@ export class AppPage extends Component {
                     <div className="HeaderLeftBlock"/>
                     <Header onSignOut={this.props.onSignOut}/>
                     <div className="HeaderRightBlock"/>
-                    <ContextTabs togglePage={() => this.togglePage(true)} switchContext={this.switchContext} currentContext={this.state.currentContext} selectableContexts={this.state.selectableContexts}/>
+                    <ContextTabs 
+                        togglePage={() => this.togglePage(true)} 
+                        switchContext={this.switchContext} 
+                        currentContext={this.state.currentContext} 
+                        selectableContexts={this.state.selectableContexts}
+                        undoActionCount={this.state.dataModelScope.GetUndoStackSize()}
+                        performUndo={this.state.dataModelScope.PerformUndo}
+                    />
                     <BacklogSection dataModelScope={this.state.dataModelScope} formStateManager={this.formStateManager} />
                     <ActiveTaskSection dataModelScope={this.state.dataModelScope} formStateManager={this.formStateManager} />
                     <TaskStatisticsSection dataModelScope={this.state.dataModelScope} formStateManager={this.formStateManager} />

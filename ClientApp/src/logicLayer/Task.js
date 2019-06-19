@@ -14,6 +14,8 @@ export const MAX_CONTEXT_NAME_LEN = 20;
 
 export const DEFAULT_GLOBAL_CONTEXT_STRING = "global";  // Context strings are NOT case sensitive.
 
+export const UNDO_ACTION_MAX_AGE_MILLISECONDS = 300000;    // Actions are allowed to be undone for 5 minutes.
+
 function isValidContextString(s) {
     if (s === undefined || s === null || s === "" || s.length > MAX_CONTEXT_NAME_LEN) return false;
 
@@ -95,7 +97,7 @@ export class TaskObjects {
         }
     }
 
-    // Creates a parentless task, in a specified category!
+    // Creates a parentless task, in a specified category.
     CreateNewIndependentTask(name, category, timeCreatedUNIX, context = DEFAULT_GLOBAL_CONTEXT_STRING, colourid = DefaultColourId, id = null) {
         if (id === null || id === undefined) {
             id = GetNewId();
@@ -110,8 +112,20 @@ export class TaskObjects {
         }
         return newTask;
     }
+    UndoCreateNewIndependentTask(task) {
+        if (task === null || task === undefined) throw new Error("Null task is invalid to undo operation");
+        
+        // If this task is not in a state where is it has JUST been created, then this operation is illegal.
+        if (task.progressStatus !== ProgressStatus.NotStarted || task.parent !== null || task.children.length > 0) {
+            console.error(task);
+            throw new Error("Cannot undo CreateIndependentTask() for task which is not in a 'just created' state. See STDERR for task object log");
+        }
+
+        // Okay. Since this is a legal operation, all we have to do is remove the task from the task collection(s).
+        this.tasks = this.tasks.filter(t => t !== task);
+    }
     
-    // Creates a new child task, in the category one level below the parent's category
+    // Creates a new child task, in the category one level below the parent's category.
     CreateNewSubtask(name, parent, timeCreatedUNIX, id = null) {
         if (id === null || id === undefined) {
             id = GetNewId();
@@ -135,6 +149,19 @@ export class TaskObjects {
 
         return newTask;
     }
+    UndoCreateNewSubtask(task) {
+        if (task === null || task === undefined) throw new Error("Null task is invalid to undo operation");
+
+        // If this task is not in a state where it has JUST been created as a subtask, then this operation is illegal.
+        if (task.progressStatus !== ProgressStatus.NotStarted || task.parent === null || task.children.length > 0) {
+            console.error(task);
+            throw new Error("Cannot undo CreateNewSubtask() for task which is not in a 'just created as child' state. See STDERR for task object log");
+        }
+
+        // Okay. Since this is a legal operation, all we have to do is remove the task from the task collection(s), and remove the task as a child of the parent
+        this.tasks = this.tasks.filter(t => t !== task);
+        task.parent.removeChild(task);
+    }
     
     // Function which modifies the category of a task. This is only allowed if the task does not have any children or parent.
     // This is most likely only used to 'activate' a deferred task and move it into the active Boards.
@@ -145,6 +172,19 @@ export class TaskObjects {
         }
         task.eventTimestamps.timeActivated = timeStampUNIX;
         task.category = newCategory;
+    }
+    UndoActivateTask(task) {
+        if (task === null || task === undefined) throw new Error("Null task is invalid to undo operation");
+
+        // If this task is not in a state where it has JUST been activated, then this operation is illegal.
+        if (task.progressStatus !== ProgressStatus.NotStarted || task.category > Category.Daily || task.children.length > 0) {
+            console.error(task);
+            throw new Error("Cannot undo ActivateTask() for task which is not in a 'just activated' state. See STDERR for task object log");
+        }
+
+        // Okay. Since this is a legal operation, we just have to move this task back into the backlog, and clear the timestamp
+        task.eventTimestamps.timeActivated = null;
+        task.category = Category.Deferred;
     }
 
     CloseTask(task, progress, list, timeStampUNIX) {
@@ -172,6 +212,45 @@ export class TaskObjects {
     CompleteTask(task, timeStampUNIX) {
         return this.CloseTask(task, ProgressStatus.Completed, this.completedTasks, timeStampUNIX);
     }
+    UndoCompleteTask(task) {
+        // NOTE: It is not permitted to undo FailTask events. Once they fail, they are finalised.
+        if (task === null || task === undefined) throw new Error("Null task is invalid to undo operation");
+
+        // If the task is not in a completed state, then this undo operation is illegal.
+        if (task.progressStatus !== ProgressStatus.Completed) {
+            console.error(task);
+            throw new Error("Cannot undo CompleteTask() on an event which is not completed. See STDERR for task object log.");
+        }
+
+        // Okay. Set this task back to 'Started' state, and all children back into either 'Not started' or 'started' state, depending on
+        // if the started timestamp is set. Then clear all the 'time closed' timestamp for all of them. We will use the same search algorithm
+        // logic as the close-task operation in order to perform this.
+        // In order to determine if a child task was completed as part of the same completion action, we can compare the timeClosed timestamps.
+        // This will avoid accidentally undo-ing separately-completed subtasks of a parent task, which was completed later.
+        function undoClose(curr, rootTimestamp, activelist, completedCollec) {
+            // Determine if this child is completed, and should be undone. If NOT, we return false!
+            if (curr.category > Category.Daily || curr.progressStatus !== ProgressStatus.Completed || curr.eventTimestamps.timeClosed !== rootTimestamp) return false;
+            
+            activelist.push(curr);
+            // Filter this task back out of the 'completed tasks' collection.
+            // TODO: ADD THE REMOVETASK OPERATION TO THE GROUPED TASK DATA OBJECT
+            completedCollec.RemoveTask(curr);
+
+            // Okay, in order to 'undo' this task, we must set it back to either started or not-started. This will depend on which timestamps are present.
+            curr.progressStatus = curr.eventTimestamps.timeStarted === null ? ProgressStatus.NotStarted : ProgressStatus.Started;
+            curr.eventTimestamps.timeClosed = null;
+            
+            curr.children.forEach((curr) => undoClose(curr, rootTimestamp, activelist, completedCollec));
+
+            return true;
+        }
+
+        // Recursively revert tasks.
+        undoClose(task, task.eventTimestamps.timeClosed, this.tasks, this.completedTasks);
+
+        // Sort active task list by time activated to restore the original insertion ordering
+        this.tasks.sort((a, b) => a.eventTimestamps.timeCreated - b.eventTimestamps.timeCreated);
+    }
 
     // TODO: Probably just remove this? Not sure if deletion is required.
     DeleteTask(task) {
@@ -193,9 +272,21 @@ export class TaskObjects {
             return;     // Just do nothing in this case.
         }
         else {
-            task.progressStatus = ProgressStatus.Started
+            task.progressStatus = ProgressStatus.Started;
             task.eventTimestamps.timeStarted = timeStartedUNIX;
         }
+    }
+    UndoStartTask(task) {
+        if (task === null || task === undefined) throw new Error("Null task is invalid to undo operation");
+
+        // If the task is not in a started state, then this undo operation is illegal.
+        if (task.progressStatus !== ProgressStatus.Started) {
+            console.error(task);
+            throw new Error("Cannot undo StartTask() on an event which is not Started. See STDERR for task object log.");
+        }
+
+        task.progressStatus = ProgressStatus.NotStarted;
+        task.eventTimestamps.timeStarted = null;
     }
 
     ReviveTaskAsClone(task, asActive, timeRevivedUNIX, id = null) {
@@ -206,6 +297,22 @@ export class TaskObjects {
         task.eventTimestamps.timeRevived = timeRevivedUNIX;
         return this.CreateNewIndependentTask(task.name, category, timeRevivedUNIX, task.context, task.colourid, id);
     }
+    UndoReviveTaskAsClone(newTask, originalTask) {
+        if (newTask === null || newTask === undefined || originalTask === null || originalTask === undefined) throw new Error("Null task is invalid to undo operation");
+
+        // Check if the tasks is in a valid state to be reverted
+        if (newTask.progressStatus !== ProgressStatus.NotStarted || newTask.parent !== null || newTask.children.length > 0
+        ||  originalTask.progressStatus !== ProgressStatus.Reattempted) {
+            console.error(newTask);
+            console.error(originalTask);
+            throw new Error("Illegal state for undo-ing TaskRevived action. See STDERR for task object logs");
+        }
+
+        // Remove the newly created task from our active task collection.
+        this.tasks = this.tasks.filter(t => t !== newTask);
+        originalTask.progressStatus = ProgressStatus.Failed;
+        originalTask.eventTimestamps.timeRevived = null;
+    }
 
     EditTaskText(task, newText, timeEditedUnix) {
         if (task === null || task === undefined) throw new Error("Task must not be null");
@@ -214,6 +321,11 @@ export class TaskObjects {
         if (newText.length === 0 || newText.length > MAX_TASK_NAME_LEN) throw new Error("Invalid task text: " + newText);
         task.eventTimestamps.timeEdited = timeEditedUnix;
         task.name = newText;
+    }
+    UndoEditTaskText(task, originalText, previousTimestamp) {
+        if (task === null || task === undefined) throw new Error("Task must not be null");
+        task.eventTimestamps.timeEdited = previousTimestamp;
+        task.name = originalText;
     }
 }
 
@@ -271,7 +383,7 @@ class Task {
         childTask.parent = this;
     }
     removeChild(task) {
-        this.children.filter((c) => c !== task);
+        this.children = this.children.filter((c) => c !== task);
         task.parent = null;
     }
 }

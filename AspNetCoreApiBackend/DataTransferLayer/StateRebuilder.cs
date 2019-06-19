@@ -117,6 +117,52 @@ namespace todo_app.DataTransferLayer.EventReconciliationSystem {
             }},
             { EventTypes.TaskDeleted, (e, t) => {
                 throw new NotImplementedException("Validation for Task Deletion events not currently supported, because Deleted Events are not part of app intention at this time.");
+            }},
+            { EventTypes.TaskAddedUndo, (e, t) => {
+                Task task = t.ActiveTaskReader(e.Id);
+                if (task == null) throw new InvalidOperationException("Cannot undo-create a task we could not find in our active task collection");
+                t.UndoCreateNewIndependentTask(task);
+                return t;
+            }},
+            { EventTypes.ChildTaskAddedUndo, (e, t) => {
+                Task task = t.ActiveTaskReader(e.Id);
+                if (task == null) throw new InvalidOperationException("Cannot undo-create a task we could not find in our active task collection");
+                t.UndoCreateNewSubtask(task);
+                return t;
+            }},
+            { EventTypes.TaskRevivedUndo, (e, t) => {
+                Task originalTask = t.FailedTaskReader(e.Id);
+                Task newTask = t.ActiveTaskReader(e.Id);
+                if (originalTask == null || newTask == null) throw new InvalidOperationException("Cannot undo revival of tasks we could not find");
+                t.UndoReviveTaskAsClone(newTask, originalTask);
+                return t;
+            }},
+            { EventTypes.TaskDeletedUndo, (e, t) => {
+                throw new NotImplementedException("Validation for Undo-TaskDeletion events not currently supported, because Deleted Events are not part of app intention at this time.");
+            }},
+            { EventTypes.TaskCompletedUndo, (e, t) => {
+                Task task = t.CompletedTaskReader(e.Id);
+                if (task == null) throw new InvalidOperationException("Cannot undo completion, could not find task in completed list");
+                t.UndoCompleteTask(task);
+                return t;
+            }},
+            { EventTypes.TaskActivatedUndo, (e, t) => {
+                Task task = t.ActiveTaskReader(e.Id);
+                if (task == null) throw new InvalidOperationException("Cannot undo activation, could not find task");
+                t.UndoActivateTask(task);
+                return t;
+            }},
+            { EventTypes.TaskStartedUndo, (e, t) => {
+                Task task = t.ActiveTaskReader(e.Id);
+                if (task == null) throw new InvalidOperationException("Cannot undo start task, task was not in active task list");
+                t.UndoStartTask(task);
+                return t;
+            }},
+            { EventTypes.TaskEditedUndo, (e, t) => {
+                Task task = t.AllTaskReader(e.Id);
+                if (task == null) throw new InvalidOperationException("Cannot undo edit of task we could not find in our collection");
+                t.UndoEditTaskText(task, e.Name, e.RevertedEventTimestamp.Value);
+                return t;
             }}
         };
 

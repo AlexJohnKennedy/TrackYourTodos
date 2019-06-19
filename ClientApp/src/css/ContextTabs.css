@@ -1,7 +1,7 @@
 .ContextTabsWrapper {
     width: 100%;
     display: grid;
-    grid-template-columns: 1fr 3.4rem;
+    grid-template-columns: 1fr 3.4rem 3.4rem;
 }
 
 .ContextTabsWrapper .contextSettingsButton {
@@ -9,12 +9,18 @@
     grid-column-end: 3;
     padding-top: 0.2rem;
 }
-.ContextTabsWrapper .contextSettingsButton div {
+.ContextTabsWrapper .contextSettingsButton div, .ContextTabsWrapper .undoButton div {
     background-color: var(--divider-colour-lighter);
     border-radius: 40%;
     width: 3rem;
     height: 3rem;
     cursor: pointer;
+}
+
+.ContextTabsWrapper .undoButton {
+    grid-column-start: 3;
+    grid-column-end: 4;
+    padding-top: 0.2rem;
 }
 
 .ContextTabsWrapper .navigation-tabs-container {

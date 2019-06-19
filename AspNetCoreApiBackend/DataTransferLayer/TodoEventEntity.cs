@@ -107,7 +107,19 @@ namespace todo_app.DataTransferLayer.Entities {
             { EventTypes.TaskEdited, e => true },
 
             // Deleted tasks currently have no validation applied
-            { EventTypes.TaskDeleted, e => true } 
+            { EventTypes.TaskDeleted, e => true }, 
+
+            // The checks for all undo events (except revived) is that they must have a non-null, non-zero 'revertedEventTimestamp' field.
+            { EventTypes.TaskAddedUndo, e => e.RevertedEventTimestamp.HasValue && e.RevertedEventTimestamp > 0 },
+            { EventTypes.ChildTaskAddedUndo, e => e.RevertedEventTimestamp.HasValue && e.RevertedEventTimestamp > 0 },
+            { EventTypes.TaskActivatedUndo, e => e.RevertedEventTimestamp.HasValue && e.RevertedEventTimestamp > 0 },
+            { EventTypes.TaskCompletedUndo, e => e.RevertedEventTimestamp.HasValue && e.RevertedEventTimestamp > 0 },
+            { EventTypes.TaskStartedUndo, e => e.RevertedEventTimestamp.HasValue && e.RevertedEventTimestamp > 0 },
+            { EventTypes.TaskEditedUndo, e => e.RevertedEventTimestamp.HasValue && e.RevertedEventTimestamp > 0 },
+            { EventTypes.TaskDeletedUndo, e => e.RevertedEventTimestamp.HasValue && e.RevertedEventTimestamp > 0 },
+            
+            // Task revived undo must also have an 'original' id!
+            { EventTypes.TaskRevivedUndo, e => e.RevertedEventTimestamp.HasValue && e.RevertedEventTimestamp > 0 && e.Original != null },
         };
     }
 
@@ -127,7 +139,8 @@ namespace todo_app.DataTransferLayer.Entities {
         public string UserId { get; set; }
 
         [Required]
-        [StringSetValidator(EventTypes.TaskAdded, EventTypes.ChildTaskAdded, EventTypes.TaskRevived, EventTypes.TaskDeleted, EventTypes.TaskCompleted, EventTypes.TaskFailed, EventTypes.TaskActivated, EventTypes.TaskStarted, EventTypes.TaskEdited)]
+        [StringSetValidator(EventTypes.TaskAdded, EventTypes.ChildTaskAdded, EventTypes.TaskRevived, EventTypes.TaskDeleted, EventTypes.TaskCompleted, EventTypes.TaskFailed, EventTypes.TaskActivated, EventTypes.TaskStarted, EventTypes.TaskEdited,
+        EventTypes.TaskAddedUndo, EventTypes.ChildTaskAddedUndo, EventTypes.TaskRevivedUndo, EventTypes.TaskDeletedUndo, EventTypes.TaskCompletedUndo, EventTypes.TaskActivatedUndo, EventTypes.TaskStartedUndo, EventTypes.TaskEditedUndo)]
         public string EventType { get; set; }
 
         [Required]
@@ -161,6 +174,9 @@ namespace todo_app.DataTransferLayer.Entities {
         public Guid[] Children { get; set; }
         public Guid? Original { get; set; }      // Nullable, since some event types do not support this.
 
+        // Used in the case of undo events
+        public long? RevertedEventTimestamp { get; set; }
+
         // Return a collection of Failed-Validations. An empty IEnumerable means validation was successful
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext) {
             var validationPredicate = EventTypeSpecificValidators.Funcs[EventType] ?? (e => false);
@@ -169,20 +185,18 @@ namespace todo_app.DataTransferLayer.Entities {
     }
 
     public class GenericTodoEventComparer : EqualityComparer<GenericTodoEvent> {
-        // We say two todo events are duplicates if they have the same 'type' and refer to the same task.
-        // This is true because no event type can be applied to the same task more than once.
+        // We say two todo events are duplicates if they have the same 'type' and refer to the same task, and have the same timestamp.
+        // In the case of creation, revival, and failure, we do not check timestamp, since we know this type of event can only be
+        // applied to a given task no-more-than once.
         // Note that in the case of 'duplicates', we should always accept the earlier-occurring event as the true event.
-        // The only exception to this rule is 'taskEdited' events. These events are 'renaming' events, and thus can be
-        // applied multiple times to the same event. For taskEdited events, we will only consider it a duplicate if they
-        // have the same timestamp, name, and type. (We cannot use type+name because this will filter out subsequent renames
-        // which revert back to a previously existing name, which the user might genuinely want).
         public override bool Equals(GenericTodoEvent e1, GenericTodoEvent e2) {
             if (e1 == null && e2 == null) return true;
             else if (e1 == null || e2 == null) return false;
             else if (!e1.EventType.Equals(e2.EventType)) return false;
             else if (!e1.Id.Equals(e2.Id)) return false;
             else if (e1.EventType.Equals(EventTypes.TaskEdited)) return e1.Name.Equals(e2.Name) && e1.Timestamp.Equals(e2.Timestamp);
-            else return true;
+            else if (e1.EventType.Equals(EventTypes.TaskAdded) || e1.EventType.Equals(EventTypes.ChildTaskAdded) || e1.EventType.Equals(EventTypes.TaskRevived) || e1.EventType.Equals(EventTypes.TaskFailed)) return true;
+            else return e1.Timestamp.Equals(e2.Timestamp);
         }
         public override int GetHashCode(GenericTodoEvent e) {
             var data = new { e.Id, e.EventType };

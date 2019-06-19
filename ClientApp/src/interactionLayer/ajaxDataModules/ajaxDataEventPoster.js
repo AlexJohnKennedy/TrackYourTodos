@@ -13,7 +13,16 @@ export function BuildDataEventHttpPostHandlers(FailedEventCache) {
         taskStartedHandler: (task, list) => postEvent([DataEventSerialisationFuncs.taskStartedEvent(task, list)], FailedEventCache, 2, false, true),
         taskCompletedHandler: (task, list) => postEvent([DataEventSerialisationFuncs.taskCompletedEvent(task, list)], FailedEventCache, 2, false, true),
         taskFailedHandler: (task, list) => postEvent([DataEventSerialisationFuncs.taskFailedEvent(task, list)], FailedEventCache, 2, false, true),
-        taskEditedHandler: (task, list) => postEvent([DataEventSerialisationFuncs.taskEditedEvent(task, list)], FailedEventCache, 2, false, true)
+        taskEditedHandler: (task, list) => postEvent([DataEventSerialisationFuncs.taskEditedEvent(task, list)], FailedEventCache, 2, false, true),
+        
+        taskAddedUndoHandler: (data, list) => postEvent([DataEventSerialisationFuncs.taskAddedUndoEvent(data, list)], FailedEventCache, 2, false, true),
+        childTaskAddedUndoHandler: (data, list) => postEvent([DataEventSerialisationFuncs.childTaskAddedUndoEvent(data, list)], FailedEventCache, 2, false, true),
+        taskRevivedUndoHandler: (data, list) => postEvent([DataEventSerialisationFuncs.taskRevivedUndoEvent(data, list)], FailedEventCache, 2, false, true),
+        taskDeletedUndoHandler: (data, list) => postEvent([DataEventSerialisationFuncs.taskDeletedUndoEvent(data, list)], FailedEventCache, 2, false, true),
+        taskCompletedUndoHandler: (data, list) => postEvent([DataEventSerialisationFuncs.taskCompletedUndoEvent(data, list)], FailedEventCache, 2, false, true),
+        taskActivatedUndoHandler: (data, list) => postEvent([DataEventSerialisationFuncs.taskActivatedUndoEvent(data, list)], FailedEventCache, 2, false, true),
+        taskStartedUndoHandler: (data, list) => postEvent([DataEventSerialisationFuncs.taskStartedUndoEvent(data, list)], FailedEventCache, 2, false, true),
+        taskEditedUndoHandler: (data, list) => postEvent([DataEventSerialisationFuncs.taskEditedUndoEvent(data, list)], FailedEventCache, 2, false, true),
     };
 }
 

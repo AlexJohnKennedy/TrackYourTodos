@@ -1,4 +1,5 @@
 export const EventTypes = {
+    // Normal data events
     taskAdded : "taskCreated",
     childTaskAdded : "subtaskCreated",
     taskRevived : "taskRevived",
@@ -7,5 +8,15 @@ export const EventTypes = {
     taskFailed : "taskFailed",
     taskActivated : "taskActivated",
     taskStarted : "taskStarted",
-    taskEdited : "taskEdited"
+    taskEdited : "taskEdited",
+
+    // Undo data events
+    taskAddedUndo : "taskCreatedUndo",
+    childTaskAddedUndo : "subtaskCreatedUndo",
+    taskRevivedUndo : "taskRevivedUndo",
+    taskDeletedUndo : "taskDeletedUndo",
+    taskCompletedUndo : "taskCompletedUndo",
+    taskActivatedUndo : "taskActivatedUndo",
+    taskStartedUndo : "taskStartedUndo",
+    taskEditedUndo : "taskEditedUndo"
 }

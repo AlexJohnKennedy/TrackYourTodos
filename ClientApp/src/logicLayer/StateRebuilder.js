@@ -12,6 +12,7 @@ import { EventTypes } from './dataEventJsonSchema';
 import { Category } from './Task';
 
 const EventReplayFunctions = new Map([
+    // Normal data events
     [EventTypes.taskAdded, replayTaskAddedEvent],
     [EventTypes.childTaskAdded, replayChildTaskAddedEvent],
     [EventTypes.taskRevived, replayTaskRevivedEvent],
@@ -20,19 +21,33 @@ const EventReplayFunctions = new Map([
     [EventTypes.taskFailed, replayTaskFailedEvent],
     [EventTypes.taskActivated, replayTaskActivatedEvent],
     [EventTypes.taskStarted, replayTaskStartedEvent],
-    [EventTypes.taskEdited, replayTaskEditedEvent]
+    [EventTypes.taskEdited, replayTaskEditedEvent],
+
+    // Undo data events
+    [EventTypes.taskAddedUndo, replayTaskAddedUndoEvent],
+    [EventTypes.childTaskAddedUndo, replayChildTaskAddedUndoEvent],
+    [EventTypes.taskRevivedUndo, replayTaskRevivedUndoEvent],
+    [EventTypes.taskDeletedUndo, replayTaskDeletedUndoEvent],
+    [EventTypes.taskCompletedUndo, replayTaskCompletedUndoEvent],
+    [EventTypes.taskActivatedUndo, replayTaskActivatedUndoEvent],
+    [EventTypes.taskStartedUndo, replayTaskStartedUndoEvent],
+    [EventTypes.taskEditedUndo, replayTaskEditedUndoEvent],
 ]);
 
 // Replays all event in the json log to rebuild the state exactly. It also tracks the largest id it found, which is returned.
 // The return value should therefore be used to tell the logic layer what 'id' to start at to avoid id collisions when new
 // tasks are created by the user.
-export function RebuildState(eventLogAsArray, tasklist) {
+export function RebuildState(eventLogAsArray, tasklist, undoStack) {
     let taskMap = createTaskMap(tasklist);
     let latestid = "";
+    let latesttime = 0;
     eventLogAsArray.forEach(eventObj => {
-        replayEvent(eventObj, tasklist, taskMap);
+        replayEvent(eventObj, tasklist, taskMap, undoStack);
         latestid = eventObj.id;
+        latesttime = eventObj.timestamp;
     });
+    //undoStack.FilterExpiredUndoActions(latesttime);
+    
     return latestid;
 }
 
@@ -44,58 +59,105 @@ function createTaskMap(tasklist) {
     return map;
 }
 
-function replayEvent(event, tasklist, taskMap) {
+function replayEvent(event, tasklist, taskMap, undoStack) {
     if (!EventReplayFunctions.has(event.eventType)) {
         throw new Error("Could not identify the event type of a parsed data event! The invalid event type was: " + event.eventType);
     }
     else {
-        EventReplayFunctions.get(event.eventType)(event, tasklist, taskMap);
+        EventReplayFunctions.get(event.eventType)(event, tasklist, taskMap, undoStack);
     }
 }
 
 // Specific Handlers
-function replayTaskAddedEvent(eventData, tasklist, taskMap) {
+function replayTaskAddedEvent(eventData, tasklist, taskMap, undoStack) {
     if (eventData.parent !== null) throw new Error("Invalid event state: Tried to add a new independent task but event data state the new task already had a parent!");
-    taskMap.set(eventData.id, tasklist.CreateNewIndependentTask(eventData.name, eventData.category, eventData.timestamp, eventData.context, eventData.colourId, eventData.id));
+    const task = tasklist.CreateNewIndependentTask(eventData.name, eventData.category, eventData.timestamp, eventData.context, eventData.colourId, eventData.id);
+    taskMap.set(eventData.id, task);
+    undoStack.PushUndoableCreateNewIndependentTask(task, eventData.timestamp);
 }
-function replayChildTaskAddedEvent(eventData, tasklist, taskMap) {
+function replayChildTaskAddedEvent(eventData, tasklist, taskMap, undoStack) {
     if (eventData.parent === null) throw new Error("Invalid event state: Tried to add a child, but the eventData stated the task had no parent");
     let parentTask = taskMap.get(eventData.parent);
     if (eventData.category === Category.Weekly) {
-        taskMap.set(eventData.id, tasklist.CreateNewSubtask(eventData.name, parentTask, eventData.timestamp, eventData.id));
+        const task = tasklist.CreateNewSubtask(eventData.name, parentTask, eventData.timestamp, eventData.id);
+        taskMap.set(eventData.id, task);
+        undoStack.PushUndoableCreateNewSubtask(task, eventData.timestamp);
     }
     else if (eventData.category === Category.Daily) {
-        taskMap.set(eventData.id, tasklist.CreateNewDailySubtask(eventData.name, parentTask, eventData.timestamp, eventData.id));
+        const task = tasklist.CreateNewDailySubtask(eventData.name, parentTask, eventData.timestamp, eventData.id);
+        taskMap.set(eventData.id, task);
+        undoStack.PushUndoableCreateNewSubtask(task, eventData.timestamp);
     }
     else {
         throw new Error("Illegal category for subtask event!");
     }
 }
-function replayTaskRevivedEvent(eventData, tasklist, taskMap) {
+function replayTaskRevivedEvent(eventData, tasklist, taskMap, undoStack) {
     if (eventData.original === null) throw new Error("Invalid event state: Tried to revive a task, but there was no 'original' id in the eventData");
     let originalTask = taskMap.get(eventData.original);
     if (eventData.category === Category.Deferred) {
-        taskMap.set(eventData.id, tasklist.ReviveTaskAsClone(originalTask, false, eventData.timestamp, eventData.id));
+        const newtask = tasklist.ReviveTaskAsClone(originalTask, false, eventData.timestamp, eventData.id);
+        taskMap.set(eventData.id, newtask);
+        undoStack.PushUndoableReviveTask(newtask, originalTask, eventData.timestamp);
     }
     else {
-        taskMap.set(eventData.id, tasklist.ReviveTaskAsClone(originalTask, true, eventData.timestamp, eventData.id));
+        const newtask = tasklist.ReviveTaskAsClone(originalTask, true, eventData.timestamp, eventData.id);
+        taskMap.set(eventData.id, newtask);
+        undoStack.PushUndoableReviveTask(newtask, originalTask, eventData.timestamp);
     }
 }
-function replayTaskDeletedEvent(eventData, tasklist, taskMap) {
+function replayTaskDeletedEvent(eventData, tasklist, taskMap, undoStack) {
     tasklist.DeleteTask(taskMap.get(eventData.id));
 }
-function replayTaskCompletedEvent(eventData, tasklist, taskMap) {
-    tasklist.CompleteTask(taskMap.get(eventData.id), eventData.timestamp);
+function replayTaskCompletedEvent(eventData, tasklist, taskMap, undoStack) {
+    const task = taskMap.get(eventData.id);
+    tasklist.CompleteTask(task, eventData.timestamp);
+    undoStack.PushUndoableCompleteTask(task, eventData.timestamp);
 }
-function replayTaskFailedEvent(eventData, tasklist, taskMap) {
+function replayTaskFailedEvent(eventData, tasklist, taskMap, undoStack) {
     tasklist.FailTask(taskMap.get(eventData.id), eventData.timestamp);
 }
-function replayTaskActivatedEvent(eventData, tasklist, taskMap) {
-    tasklist.ActivateTask(taskMap.get(eventData.id), eventData.category, eventData.timestamp);
+function replayTaskActivatedEvent(eventData, tasklist, taskMap, undoStack) {
+    const task = taskMap.get(eventData.id);
+    tasklist.ActivateTask(task, eventData.category, eventData.timestamp);
+    undoStack.PushUndoableActivateTask(task, eventData.timestamp);
 }
-function replayTaskStartedEvent(eventData, tasklist, taskMap) {
-    tasklist.StartTask(taskMap.get(eventData.id), eventData.timestamp);
+function replayTaskStartedEvent(eventData, tasklist, taskMap, undoStack) {
+    const task = taskMap.get(eventData.id);
+    tasklist.StartTask(task, eventData.timestamp);
+    undoStack.PushUndoableStartTask(task, eventData.timestamp);
 }
-function replayTaskEditedEvent(eventData, tasklist, taskMap) {
-    tasklist.EditTaskText(taskMap.get(eventData.id), eventData.name, eventData.timestamp);
+function replayTaskEditedEvent(eventData, tasklist, taskMap, undoStack) {
+    const task = taskMap.get(eventData.id);
+    const originalTimeedited = task.eventTimestamps.timeEdited === null ? task.eventTimestamps.timeCreated : task.eventTimestamps.timeEdited;
+    undoStack.PushUndoableEditTask(task, task.name, originalTimeedited, eventData.timestamp);
+    tasklist.EditTaskText(task, eventData.name, eventData.timestamp);
+}
+
+function replayTaskAddedUndoEvent(eventData, tasklist, taskMap, undoStack) {
+    undoStack.PerformUndo(eventData.timestamp, tasklist);
+    taskMap.delete(eventData.id);
+}
+function replayChildTaskAddedUndoEvent(eventData, tasklist, taskMap, undoStack) {
+    undoStack.PerformUndo(eventData.timestamp, tasklist);
+    taskMap.delete(eventData.id);
+}
+function replayTaskRevivedUndoEvent(eventData, tasklist, taskMap, undoStack) {
+    undoStack.PerformUndo(eventData.timestamp, tasklist);
+    taskMap.delete(eventData.id);   // Delete the new clone, but not the original of course.
+}
+function replayTaskDeletedUndoEvent(eventData, tasklist, taskMap, undoStack) {
+    throw new Error("Task Deletion is not yet implemented");
+}
+function replayTaskCompletedUndoEvent(eventData, tasklist, taskMap, undoStack) {
+    undoStack.PerformUndo(eventData.timestamp, tasklist);
+}
+function replayTaskActivatedUndoEvent(eventData, tasklist, taskMap, undoStack) {
+    undoStack.PerformUndo(eventData.timestamp, tasklist);
+}
+function replayTaskStartedUndoEvent(eventData, tasklist, taskMap, undoStack) {
+    undoStack.PerformUndo(eventData.timestamp, tasklist);
+}
+function replayTaskEditedUndoEvent(eventData, tasklist, taskMap, undoStack) {
+    undoStack.PerformUndo(eventData.timestamp, tasklist);
 }

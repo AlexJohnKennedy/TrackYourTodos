@@ -58,24 +58,16 @@ class GroupedTaskList {
         return this.groupingType;
     }
 
+    RemoveTask(task) {
+        // Find group it should be in.
+        let [searchResult, date] = this.findGroupPosition(task);
+        if (searchResult < 0) throw new Error("Tried to remove an event from date-group-task lists which was not found!");
+        this.groups[searchResult].tasks = this.groups[searchResult].tasks.filter(t => t !== task);
+    }
+
     AddTask(task) {
-        let timeStamp = this.taskTimeKeyFunction(task);
-        if (timeStamp === null || timeStamp === undefined) { throw new Error('error is time key func. Returned undefined!'); }
+        let [searchResult, date] = this.findGroupPosition(task);
 
-        let date = this.dateConversionFunction(timeStamp);
-
-        // Okay. We know the groups array is sorted by months, so just cycle that list until we find the correct 'insertion point'.
-        let searchResult = binarySearch(this.groups, date, (date, groupElem) => {
-            if (date.valueOf() > groupElem.time.valueOf()) {
-                return -1;  // Go before (in the array) if our time is more recent, i.e., value is larger
-            }
-            else if (date.valueOf() < groupElem.time.valueOf()) {
-                return 1;   // Go after (in the array) if our time is less recent, i.e., value is smaller
-            }
-            else {
-                return 0;
-            }
-        })
         if (searchResult < 0) {
             // No match was found, thus, we need to add a new 'group' at position (-searchResult - 1)
             this.groups.splice((-searchResult-1), 0, {
@@ -96,6 +88,28 @@ class GroupedTaskList {
                 this.groups[searchResult].tasks.splice(innerSearchResult, 0, task);
             }
         }
+    }
+
+    // Private function for finding the correct group position
+    findGroupPosition(task) {
+        let timeStamp = this.taskTimeKeyFunction(task);
+        if (timeStamp === null || timeStamp === undefined) { throw new Error('Error in time key func. Returned undefined!'); }
+
+        let date = this.dateConversionFunction(timeStamp);
+
+        // Okay. We know the groups array is sorted by months, so just cycle that list until we find the correct 'insertion point'.
+        let searchResult = binarySearch(this.groups, date, (date, groupElem) => {
+            if (date.valueOf() > groupElem.time.valueOf()) {
+                return -1;  // Go before (in the array) if our time is more recent, i.e., value is larger
+            }
+            else if (date.valueOf() < groupElem.time.valueOf()) {
+                return 1;   // Go after (in the array) if our time is less recent, i.e., value is smaller
+            }
+            else {
+                return 0;
+            }
+        });
+        return [searchResult, date];
     }
 
     GetAllGroupedTasks() {

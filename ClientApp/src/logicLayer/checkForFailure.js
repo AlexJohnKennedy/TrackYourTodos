@@ -3,6 +3,8 @@
 // to be 'failed', and one for executing a fail action on all of those tasks.
 import { Category } from './Task';
 
+export const ROLLOVER_HOUR_FOR_DAILY_TASKS = 12;    // Daily tasks created after midday are allowed to be completed the following day.
+
 export function RegisterForFailureChecking(tasklist) {
 
     function PeekTasksToFail() {
@@ -74,10 +76,10 @@ export function RegisterForFailureChecking(tasklist) {
     function checkDaily(task) {
         if (task.eventTimestamps.timeActivated === null) return null;
 
-        // If the task was activated after 5pm, roll it over to the next day before failing it.
+        // If the task was activated after the rollover-hours time, roll it over to the next day before failing it.
         let activationDate = new Date(task.eventTimestamps.timeActivated);
 
-        if (activationDate.getHours() >= 17) {
+        if (activationDate.getHours() >= ROLLOVER_HOUR_FOR_DAILY_TASKS) {
             activationDate.setDate(activationDate.getDate() + 1);   // Increments the date to the next day.
         }
 

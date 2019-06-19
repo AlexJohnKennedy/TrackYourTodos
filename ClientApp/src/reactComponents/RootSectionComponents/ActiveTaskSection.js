@@ -20,8 +20,6 @@ export class ActiveTaskSection extends Component {
             failureAnimIds: [],
         };
         this.highlightedTaskIds = [];
-        this.completionAnimIds = [];
-        this.failureAnimIds = [];
         this.handleChange = this.handleChange.bind(this);
         this.registerForHighlights = this.registerForHighlights.bind(this);
         this.unregisterForHighlights = this.unregisterForHighlights.bind(this);
@@ -107,20 +105,26 @@ export class ActiveTaskSection extends Component {
         let relatives = [id];
         task.children.forEach(childid => this.searchDown(map.get(childid), relatives, map));
         if (completionAnim) {
-            this.completionAnimIds = this.completionAnimIds.concat(relatives);
-            this.setState({ completionAnimIds: this.completionAnimIds });
+            this.setState((state, props) => ({
+                completionAnimIds: state.completionAnimIds.concat({ root: id, relatives: relatives })
+            }));
         }
         else {
-            this.failureAnimIds = this.failureAnimIds.concat(relatives);
-            this.setState({ failureAnimIds: this.failureAnimIds });
+            this.setState((state, props) => ({
+                failureAnimIds: state.failureAnimIds.concat({ root: id, relatives: relatives })
+            }));
         }
     }
     unregisterForAnimation(id, completionAnim) {
         if (completionAnim) {
-            this.completionAnimIds = this.completionAnimIds.filter(curr => curr !== id);
+            this.setState((state, props) => ({
+                completionAnimIds: state.completionAnimIds.filter(obj => obj.root !== id)
+            }));
         }
         else {
-            this.failureAnimIds = this.failureAnimIds.filter(curr => curr !== id);
+            this.setState((state, props) => ({
+                failureAnimIds: state.failureAnimIds.filter(obj => obj.root !== id)
+            }));
         }
     }
     searchUp(t, relatives, map) {
@@ -162,6 +166,11 @@ export class ActiveTaskSection extends Component {
 
     // Render the child elements and pass in the correct callbacks and taskviews from our react-state.
     render() {
+        const completionAnimIdsArray = [];
+        this.state.completionAnimIds.forEach(o => o.relatives.forEach(id => completionAnimIdsArray.push(id)));
+        const failureAnimIdsArray = [];
+        this.state.failureAnimIds.forEach(o => o.relatives.forEach(id => failureAnimIdsArray.push(id)));
+
         return (
             <div className="ActiveTaskSection">
                 <GoalBoard 
@@ -173,8 +182,8 @@ export class ActiveTaskSection extends Component {
                         register: this.registerForHighlights,
                         unregister: this.unregisterForHighlights
                     }}
-                    completionAnimIds={this.state.completionAnimIds}
-                    failureAnimIds={this.state.failureAnimIds}
+                    completionAnimIds={completionAnimIdsArray}
+                    failureAnimIds={failureAnimIdsArray}
                     animTriggerCallbacks={{
                         register: this.registerForAnimation,
                         unregister: this.unregisterForAnimation
@@ -189,8 +198,8 @@ export class ActiveTaskSection extends Component {
                         register: this.registerForHighlights,
                         unregister: this.unregisterForHighlights
                     }}
-                    completionAnimIds={this.state.completionAnimIds}
-                    failureAnimIds={this.state.failureAnimIds}
+                    completionAnimIds={completionAnimIdsArray}
+                    failureAnimIds={failureAnimIdsArray}
                     animTriggerCallbacks={{
                         register: this.registerForAnimation,
                         unregister: this.unregisterForAnimation
@@ -205,8 +214,8 @@ export class ActiveTaskSection extends Component {
                         register: this.registerForHighlights,
                         unregister: this.unregisterForHighlights
                     }}
-                    completionAnimIds={this.state.completionAnimIds}
-                    failureAnimIds={this.state.failureAnimIds}
+                    completionAnimIds={completionAnimIdsArray}
+                    failureAnimIds={failureAnimIdsArray}
                     animTriggerCallbacks={{
                         register: this.registerForAnimation,
                         unregister: this.unregisterForAnimation
