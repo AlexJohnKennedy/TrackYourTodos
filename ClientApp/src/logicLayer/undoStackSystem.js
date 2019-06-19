@@ -85,7 +85,7 @@ export function BuildNewUndoStack() {
         else if (UndoActionFunctions.has(undoableAction.eventType)) {
             try {
                 console.log("calling mapped handler");
-                return UndoActionFunctions.get(undoableAction.eventType)(undoableAction, tasklistObj);
+                return UndoActionFunctions.get(undoableAction.eventType)(currTime, undoableAction, tasklistObj);
             } 
             catch(err) {
                 console.log("CAUGHT ERROR");
@@ -129,77 +129,70 @@ export function BuildNewUndoStack() {
 // Store a map of function which handle different types of undo actions.
 // For each reversion action, we will return the corresponding EventType and timestamp of the event we just 'un-did'.
 const UndoActionFunctions = new Map([
-    [EventTypes.taskAdded, (data, tasklist) => {
-        const taskAddedTimestamp = data.task.eventTimestamps.timeCreated;    // Save the timestamp of the event we are about to undo.
+    [EventTypes.taskAdded, (undoTime, data, tasklist) => {
         tasklist.UndoCreateNewIndependentTask(data.task);
         return {
             eventType: EventTypes.taskAddedUndo,
-            timestamp: data.timestamp,
+            timestamp: undoTime,
             task: data.task,
-            revertedEventTimestamp: taskAddedTimestamp
+            revertedEventTimestamp: data.timestamp
         };
     }],
-    [EventTypes.childTaskAdded, (data, tasklist) => {
-        const subtaskAddedTimestamp = data.task.eventTimestamps.timeCreated;
+    [EventTypes.childTaskAdded, (undoTime, data, tasklist) => {
         tasklist.UndoCreateNewSubtask(data.task);
         return {
             eventType: EventTypes.childTaskAddedUndo,
-            timestamp: data.timestamp,
+            timestamp: undoTime,
             task: data.task,
-            revertedEventTimestamp: subtaskAddedTimestamp
+            revertedEventTimestamp: data.timestamp
         };
     }],
-    [EventTypes.taskActivated, (data, tasklist) => {
-        const revertedEventTimestamp = data.task.eventTimestamps.timeActivated;
+    [EventTypes.taskActivated, (undoTime, data, tasklist) => {
         tasklist.UndoActivateTask(data.task);
         return {
             eventType: EventTypes.taskActivatedUndo,
-            timestamp: data.timestamp,
+            timestamp: undoTime,
             task: data.task,
-            revertedEventTimestamp: revertedEventTimestamp
+            revertedEventTimestamp: data.timestamp
         };
     }],
-    [EventTypes.taskCompleted, (data, tasklist) => {
-        const revertedEventTimestamp = data.task.eventTimestamps.timeClosed;
+    [EventTypes.taskCompleted, (undoTime, data, tasklist) => {
         tasklist.UndoCompleteTask(data.task);
         return {
             eventType: EventTypes.taskCompletedUndo,
-            timestamp: data.timestamp,
+            timestamp: undoTime,
             task: data.task,
-            revertedEventTimestamp: revertedEventTimestamp
+            revertedEventTimestamp: data.timestamp
         };
     }],
-    [EventTypes.taskStarted, (data, tasklist) => { 
-        const revertedEventTimestamp = data.task.eventTimestamps.timeStarted;
+    [EventTypes.taskStarted, (undoTime, data, tasklist) => { 
         tasklist.UndoStartTask(data.task);
         return {
             eventType: EventTypes.taskStartedUndo,
-            timestamp: data.timestamp,
+            timestamp: undoTime,
             task: data.task,
-            revertedEventTimestamp: revertedEventTimestamp
+            revertedEventTimestamp: data.timestamp
         };
     }],
-    [EventTypes.taskRevived, (data, tasklist) => {
-        const revertedEventTimestamp = data.newTask.eventTimestamps.timeCreated;
+    [EventTypes.taskRevived, (undoTime, data, tasklist) => {
         tasklist.UndoReviveTaskAsClone(data.newTask, data.originalTask);
         return {
             eventType: EventTypes.taskRevivedUndo,
-            timestamp: data.timestamp,
+            timestamp: undoTime,
             newTask: data.newTask,
             originalTask: data.originalTask,
-            revertedEventTimestamp: revertedEventTimestamp
+            revertedEventTimestamp: data.timestamp
         };
     }],
-    [EventTypes.taskEdited, (data, tasklist) => {
-        const revertedEventTimestamp = data.task.eventTimestamps.timeEdited;
+    [EventTypes.taskEdited, (undoTime, data, tasklist) => {
         tasklist.UndoEditTaskText(data.task, data.originalText, data.originalTimeEdited);
         return {
             eventType: EventTypes.taskEditedUndo,
-            timestamp: data.timestamp,
+            timestamp: undoTime,
             task: data.task,
             originalText: data.originalText,
             originalTimeEdited: data.originalTimeEdited,
-            revertedEventTimestamp: revertedEventTimestamp
+            revertedEventTimestamp: data.timestamp
         };
     }]
 ]);
