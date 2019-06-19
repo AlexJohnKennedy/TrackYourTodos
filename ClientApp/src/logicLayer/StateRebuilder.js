@@ -23,7 +23,7 @@ const EventReplayFunctions = new Map([
     [EventTypes.taskStarted, replayTaskStartedEvent],
     [EventTypes.taskEdited, replayTaskEditedEvent],
 
-    // TODO: Undo data events
+    // Undo data events
     [EventTypes.taskAddedUndo, replayTaskAddedUndoEvent],
     [EventTypes.childTaskAddedUndo, replayChildTaskAddedUndoEvent],
     [EventTypes.taskRevivedUndo, replayTaskRevivedUndoEvent],

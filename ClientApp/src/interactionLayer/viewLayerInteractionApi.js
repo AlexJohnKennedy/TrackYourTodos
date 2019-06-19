@@ -330,7 +330,7 @@ export function InstantiateNewDataModelScope(currContext) {
             
             // Invoke data events.
             ViewLayerCallbacks.forEach(cb => cb());
-            dataEventHandlerMappers[undoData.eventType].forEach(callback => callback(undoData, ActiveTaskDataObj));
+            dataEventHandlerMappers.get(undoData.eventType).forEach(callback => callback(undoData, ActiveTaskDataObj));
             return true;
         }
         else {
