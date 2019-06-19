@@ -115,6 +115,7 @@ namespace todo_app.DomainLayer.TaskListModel {
             completedTasks = new Dictionary<Guid, Task>();
         }
         
+        // New Independent Tasks.
         public Task CreateNewIndependentTask(string name, int category, long timeCreatedUnix, int coulourId, Guid id) {
             TaskParamValidationHelpers.BasicNewTaskParameterValidation(name, category, timeCreatedUnix, id, allTasks.Keys.ToHashSet());
             Task t = new Task(id, name, category, null, timeCreatedUnix);
@@ -122,6 +123,20 @@ namespace todo_app.DomainLayer.TaskListModel {
             activeTasks.Add(id, t);
             return t;
         }
+        public void UndoCreateNewIndependentTask(Task task) {
+            if (task == null) throw new InvalidOperationException("Cannot undo a task-creation of a task which does not exist");
+            
+            // If this task is not in a state where is it has JUST been created, then this operation is illegal.
+            if (task.ProgressStatus != ProgressStatusVals.NotStarted || task.Parent != null || task.Children.Count > 0) {
+                throw new InvalidOperationException("Cannot undo CreateIndependentTask() for task which is not in a 'just created' state.");
+            }
+
+            // Okay. Since this is a legal operation, all we have to do is remove the task from the task collection(s).
+            this.allTasks.Remove(task.Id);
+            this.activeTasks.Remove(task.Id);
+        }
+
+        // New Subtasks.
         public Task CreateNewSubtask(string name, Task parent, int category, long timeCreatedUnix, Guid id) {
             TaskParamValidationHelpers.BasicNewTaskParameterValidation(name, category, timeCreatedUnix, id, allTasks.Keys.ToHashSet());
             Task t = new Task(id, name, category, parent, timeCreatedUnix);
@@ -130,6 +145,21 @@ namespace todo_app.DomainLayer.TaskListModel {
             activeTasks.Add(id, t);
             return t;
         }
+        public void UndoCreateNewSubtask(Task task) {
+            if (task == null) throw new InvalidOperationException("Cannot undo a task-creation of a task which does not exist");
+
+            // If this task is not in a state where it has JUST been created as a subtask, then this operation is illegal.
+            if (task.ProgressStatus != ProgressStatusVals.NotStarted || task.Parent == null || task.Children.Count > 0) {
+                throw new InvalidOperationException("Cannot undo CreateNewSubtask() for task which is not in a 'just created as child' state.");
+            }
+
+            // Okay. Since this is a legal operation, all we have to do is remove the task from the task collection(s), and remove the task as a child of the parent
+            this.allTasks.Remove(task.Id);
+            this.activeTasks.Remove(task.Id);
+            task.Parent.RemoveChild(task);
+        }
+
+        // Task 'Activation' (adding a task to Goals, Weekly, or Daily board form the backlog).
         public void ActivateTask(Task toActivate, int newCategory, long timeStamp) {
             if (toActivate.Category != CategoryVals.Deferred) throw new InvalidOperationException("Cannot activate a task which is not currently deferred. Task ID: " + toActivate.Id);
             if (newCategory != CategoryVals.Daily && newCategory != CategoryVals.Weekly && newCategory != CategoryVals.Goal) throw new InvalidOperationException("Invalid target category for task-activation: " + newCategory);
@@ -137,6 +167,8 @@ namespace todo_app.DomainLayer.TaskListModel {
             toActivate.EventTimeStamps.TimeActivated = timeStamp;
             toActivate.Category = newCategory;
         }
+
+        // Task Completion.
         public void CompletedTask(Task t, long timeStamp) {
             if (t.ProgressStatus != ProgressStatusVals.Started) throw new InvalidOperationException("Cannot call 'complete' on root task which is not started. Task id: " + t.Id);
             if (t.Category == CategoryVals.Deferred) throw new InvalidOperationException("Cannot call 'complete' on root task which is not activated. Task id: " + t.Id);
