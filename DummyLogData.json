@@ -10,7 +10,8 @@
       "context": "networking",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -23,7 +24,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "subtaskCreated",
@@ -36,7 +38,8 @@
       "context": "tytodos development",
       "parent": "32c2d829-2b38-46ef-b1a4-e78f06ce81eb",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "subtaskCreated",
@@ -49,7 +52,8 @@
       "context": "tytodos development",
       "parent": "32c2d829-2b38-46ef-b1a4-e78f06ce81eb",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "subtaskCreated",
@@ -62,7 +66,8 @@
       "context": "tytodos development",
       "parent": "32c2d829-2b38-46ef-b1a4-e78f06ce81eb",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -75,7 +80,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -88,7 +94,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -101,7 +108,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -114,7 +122,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -127,7 +136,8 @@
       "context": "tech study",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -140,7 +150,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -153,7 +164,8 @@
       "context": "tech study",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -166,7 +178,8 @@
       "context": "tech study",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -179,7 +192,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -192,7 +206,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -205,7 +220,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -218,7 +234,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -231,7 +248,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -244,7 +262,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -257,7 +276,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -270,7 +290,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -283,7 +304,8 @@
       "context": "tech study",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -296,7 +318,8 @@
       "context": "tech study",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -309,7 +332,8 @@
       "context": "tech study",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -322,7 +346,8 @@
       "context": "networking",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -335,7 +360,8 @@
       "context": "networking",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -348,7 +374,8 @@
       "context": "tech study",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -361,7 +388,8 @@
       "context": "tech study",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -374,7 +402,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -387,7 +416,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -400,7 +430,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -413,7 +444,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -426,7 +458,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -439,7 +472,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -452,7 +486,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -465,7 +500,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -478,7 +514,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -491,7 +528,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -504,7 +542,8 @@
       "context": "tech study",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -517,7 +556,8 @@
       "context": "tytodos development",
       "parent": "32c2d829-2b38-46ef-b1a4-e78f06ce81eb",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -530,7 +570,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -543,7 +584,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -556,7 +598,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -569,7 +612,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -582,7 +626,8 @@
       "context": "tytodos development",
       "parent": "32c2d829-2b38-46ef-b1a4-e78f06ce81eb",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -595,7 +640,8 @@
       "context": "tytodos development",
       "parent": "32c2d829-2b38-46ef-b1a4-e78f06ce81eb",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -608,7 +654,8 @@
       "context": "tytodos development",
       "parent": "32c2d829-2b38-46ef-b1a4-e78f06ce81eb",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -621,7 +668,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskFailed",
@@ -634,7 +682,8 @@
       "context": "tytodos development",
       "parent": "32c2d829-2b38-46ef-b1a4-e78f06ce81eb",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskRevived",
@@ -647,7 +696,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": "95fe3000-ea1a-4380-a468-0798f5ca03e3"
+      "original": "95fe3000-ea1a-4380-a468-0798f5ca03e3",
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -660,7 +710,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -673,7 +724,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -686,7 +738,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -699,7 +752,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskFailed",
@@ -712,7 +766,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskFailed",
@@ -725,7 +780,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskFailed",
@@ -738,7 +794,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskFailed",
@@ -751,7 +808,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskFailed",
@@ -764,7 +822,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskFailed",
@@ -777,7 +836,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -794,7 +854,8 @@
          "a5917e2a-a28c-478d-8fba-7c61a908a236",
          "95fe3000-ea1a-4380-a468-0798f5ca03e3"
       ],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -807,7 +868,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskRevived",
@@ -820,7 +882,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": "8d0eab13-0e03-4d79-a48c-c316c5a78b73"
+      "original": "8d0eab13-0e03-4d79-a48c-c316c5a78b73",
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskRevived",
@@ -833,7 +896,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": "e97bbc07-74b5-42df-a9dc-252ee9da9813"
+      "original": "e97bbc07-74b5-42df-a9dc-252ee9da9813",
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskRevived",
@@ -846,7 +910,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": "f817d272-e9a1-4c8a-9088-35e8369fbd67"
+      "original": "f817d272-e9a1-4c8a-9088-35e8369fbd67",
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskRevived",
@@ -859,7 +924,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": "1233e403-3cbb-4a42-82d3-c152e083a010"
+      "original": "1233e403-3cbb-4a42-82d3-c152e083a010",
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskRevived",
@@ -872,7 +938,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": "4e21b0a9-2d59-4ef8-a2e5-c013a041d72c"
+      "original": "4e21b0a9-2d59-4ef8-a2e5-c013a041d72c",
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -885,7 +952,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -898,7 +966,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskActivated",
@@ -911,7 +980,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskActivated",
@@ -924,7 +994,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskActivated",
@@ -937,7 +1008,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskActivated",
@@ -950,7 +1022,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -963,7 +1036,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -976,7 +1050,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -989,7 +1064,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -1002,7 +1078,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -1015,7 +1092,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "subtaskCreated",
@@ -1028,7 +1106,8 @@
       "context": "tytodos development",
       "parent": "32c2d829-2b38-46ef-b1a4-e78f06ce81eb",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "subtaskCreated",
@@ -1041,7 +1120,8 @@
       "context": "tytodos development",
       "parent": "32c2d829-2b38-46ef-b1a4-e78f06ce81eb",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -1054,7 +1134,8 @@
       "context": "tytodos development",
       "parent": "32c2d829-2b38-46ef-b1a4-e78f06ce81eb",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -1067,7 +1148,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -1080,7 +1162,8 @@
       "context": "tytodos development",
       "parent": "32c2d829-2b38-46ef-b1a4-e78f06ce81eb",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -1093,7 +1176,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -1106,7 +1190,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -1119,7 +1204,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -1132,7 +1218,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -1145,7 +1232,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -1158,7 +1246,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -1171,7 +1260,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -1184,7 +1274,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskRevived",
@@ -1197,7 +1288,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": "aeffeaa7-f88e-4c79-8451-4866f031174a"
+      "original": "aeffeaa7-f88e-4c79-8451-4866f031174a",
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskActivated",
@@ -1210,7 +1302,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -1223,7 +1316,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -1236,7 +1330,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -1249,7 +1344,8 @@
       "context": "tytodos development",
       "parent": "32c2d829-2b38-46ef-b1a4-e78f06ce81eb",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -1268,7 +1364,8 @@
          "c92a32db-e8c4-41a4-8461-80b30261e161",
          "2590f7fc-92df-47c5-a19b-b25f31020f2d"
       ],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -1281,7 +1378,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -1294,7 +1392,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -1307,7 +1406,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -1320,7 +1420,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -1333,7 +1434,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -1346,7 +1448,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -1359,7 +1462,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -1372,7 +1476,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskFailed",
@@ -1385,7 +1490,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskFailed",
@@ -1398,7 +1504,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskFailed",
@@ -1411,7 +1518,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskFailed",
@@ -1424,7 +1532,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskFailed",
@@ -1437,7 +1546,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -1450,7 +1560,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -1463,7 +1574,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskRevived",
@@ -1476,7 +1588,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": "edd41b38-1858-47d0-90e5-3e0d87150b26"
+      "original": "edd41b38-1858-47d0-90e5-3e0d87150b26",
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskRevived",
@@ -1489,7 +1602,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": "4f5edc9e-26c0-4037-b9ba-6e610d00012c"
+      "original": "4f5edc9e-26c0-4037-b9ba-6e610d00012c",
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskRevived",
@@ -1502,7 +1616,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": "160364fc-a837-4200-8d72-5314ccc4d887"
+      "original": "160364fc-a837-4200-8d72-5314ccc4d887",
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskRevived",
@@ -1515,7 +1630,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": "cc3763b5-c747-4e26-8d94-be8967c4a659"
+      "original": "cc3763b5-c747-4e26-8d94-be8967c4a659",
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -1528,7 +1644,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -1541,7 +1658,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -1554,7 +1672,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -1567,7 +1686,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -1580,7 +1700,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -1593,7 +1714,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskActivated",
@@ -1606,7 +1728,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -1619,7 +1742,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -1632,7 +1756,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -1645,7 +1770,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskActivated",
@@ -1658,7 +1784,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "subtaskCreated",
@@ -1671,7 +1798,8 @@
       "context": "tytodos development",
       "parent": "945fee66-d3f9-4fe6-8ab5-998dd4a941bb",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "subtaskCreated",
@@ -1684,7 +1812,8 @@
       "context": "tytodos development",
       "parent": "945fee66-d3f9-4fe6-8ab5-998dd4a941bb",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "subtaskCreated",
@@ -1697,7 +1826,8 @@
       "context": "tytodos development",
       "parent": "945fee66-d3f9-4fe6-8ab5-998dd4a941bb",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -1710,7 +1840,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -1723,7 +1854,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -1736,7 +1868,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -1749,7 +1882,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -1762,7 +1896,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -1775,7 +1910,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskFailed",
@@ -1788,7 +1924,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskFailed",
@@ -1801,7 +1938,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "subtaskCreated",
@@ -1814,7 +1952,8 @@
       "context": "tytodos development",
       "parent": "47674cf4-8746-4f24-a512-d11772597f9b",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "subtaskCreated",
@@ -1827,7 +1966,8 @@
       "context": "tytodos development",
       "parent": "47674cf4-8746-4f24-a512-d11772597f9b",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -1840,7 +1980,8 @@
       "context": "tytodos development",
       "parent": "47674cf4-8746-4f24-a512-d11772597f9b",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskFailed",
@@ -1853,7 +1994,8 @@
       "context": "tytodos development",
       "parent": "47674cf4-8746-4f24-a512-d11772597f9b",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskFailed",
@@ -1866,7 +2008,8 @@
       "context": "tytodos development",
       "parent": "47674cf4-8746-4f24-a512-d11772597f9b",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskRevived",
@@ -1879,7 +2022,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": "342b415c-59dc-463a-9325-ab8c02fabfb0"
+      "original": "342b415c-59dc-463a-9325-ab8c02fabfb0",
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -1892,7 +2036,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -1905,7 +2050,8 @@
       "context": "tytodos development",
       "parent": "945fee66-d3f9-4fe6-8ab5-998dd4a941bb",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -1918,7 +2064,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "subtaskCreated",
@@ -1931,7 +2078,8 @@
       "context": "tytodos development",
       "parent": "47674cf4-8746-4f24-a512-d11772597f9b",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -1944,7 +2092,8 @@
       "context": "tytodos development",
       "parent": "47674cf4-8746-4f24-a512-d11772597f9b",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -1957,7 +2106,8 @@
       "context": "tytodos development",
       "parent": "47674cf4-8746-4f24-a512-d11772597f9b",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -1970,7 +2120,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -1983,7 +2134,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "subtaskCreated",
@@ -1996,7 +2148,8 @@
       "context": "tytodos development",
       "parent": "83b7bfa1-146a-423b-8d12-451b6503c985",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskRevived",
@@ -2009,7 +2162,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": "0d9be778-38f0-4ab7-8e34-3dd921e59e49"
+      "original": "0d9be778-38f0-4ab7-8e34-3dd921e59e49",
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -2022,7 +2176,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -2035,7 +2190,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -2052,7 +2208,8 @@
          "0d9be778-38f0-4ab7-8e34-3dd921e59e49",
          "c83ff88e-ec26-4a6a-aacc-5725781aebac"
       ],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -2065,7 +2222,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -2078,7 +2236,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -2091,7 +2250,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -2104,7 +2264,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -2117,7 +2278,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -2130,7 +2292,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -2143,7 +2306,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -2156,7 +2320,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -2169,7 +2334,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -2182,7 +2348,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -2195,7 +2362,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -2208,7 +2376,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "subtaskCreated",
@@ -2221,7 +2390,8 @@
       "context": "tytodos development",
       "parent": "83b7bfa1-146a-423b-8d12-451b6503c985",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "subtaskCreated",
@@ -2234,7 +2404,8 @@
       "context": "tytodos development",
       "parent": "83b7bfa1-146a-423b-8d12-451b6503c985",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -2247,7 +2418,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskFailed",
@@ -2260,7 +2432,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskFailed",
@@ -2273,7 +2446,8 @@
       "context": "tytodos development",
       "parent": "83b7bfa1-146a-423b-8d12-451b6503c985",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskFailed",
@@ -2286,7 +2460,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskFailed",
@@ -2299,7 +2474,8 @@
       "context": "tytodos development",
       "parent": "83b7bfa1-146a-423b-8d12-451b6503c985",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskFailed",
@@ -2312,7 +2488,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskFailed",
@@ -2325,7 +2502,8 @@
       "context": "tytodos development",
       "parent": "83b7bfa1-146a-423b-8d12-451b6503c985",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskRevived",
@@ -2338,7 +2516,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": "0e0de3ca-8aaf-4815-ad42-e418e1060906"
+      "original": "0e0de3ca-8aaf-4815-ad42-e418e1060906",
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskRevived",
@@ -2351,7 +2530,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": "e688397b-e891-4f0f-9aff-fd10a21de142"
+      "original": "e688397b-e891-4f0f-9aff-fd10a21de142",
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -2364,7 +2544,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -2377,7 +2558,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskActivated",
@@ -2390,7 +2572,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -2403,7 +2586,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -2416,7 +2600,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskActivated",
@@ -2429,7 +2614,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -2442,7 +2628,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -2455,7 +2642,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -2468,7 +2656,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -2481,7 +2670,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -2494,7 +2684,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -2507,7 +2698,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -2520,7 +2712,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "subtaskCreated",
@@ -2533,7 +2726,8 @@
       "context": "tytodos development",
       "parent": "b16bc768-33e4-4e7c-9582-443978d9e926",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -2546,7 +2740,8 @@
       "context": "tytodos development",
       "parent": "b16bc768-33e4-4e7c-9582-443978d9e926",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "subtaskCreated",
@@ -2559,7 +2754,8 @@
       "context": "tytodos development",
       "parent": "b16bc768-33e4-4e7c-9582-443978d9e926",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -2572,7 +2768,8 @@
       "context": "tytodos development",
       "parent": "b16bc768-33e4-4e7c-9582-443978d9e926",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -2585,7 +2782,8 @@
       "context": "tytodos development",
       "parent": "b16bc768-33e4-4e7c-9582-443978d9e926",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -2598,7 +2796,8 @@
       "context": "tytodos development",
       "parent": "b16bc768-33e4-4e7c-9582-443978d9e926",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -2611,7 +2810,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -2624,7 +2824,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -2637,7 +2838,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -2650,7 +2852,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -2663,7 +2866,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -2676,7 +2880,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "subtaskCreated",
@@ -2689,7 +2894,8 @@
       "context": "tytodos development",
       "parent": "b16bc768-33e4-4e7c-9582-443978d9e926",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "subtaskCreated",
@@ -2702,7 +2908,8 @@
       "context": "tytodos development",
       "parent": "b16bc768-33e4-4e7c-9582-443978d9e926",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "subtaskCreated",
@@ -2715,7 +2922,8 @@
       "context": "tytodos development",
       "parent": "b16bc768-33e4-4e7c-9582-443978d9e926",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "subtaskCreated",
@@ -2728,7 +2936,8 @@
       "context": "tytodos development",
       "parent": "b16bc768-33e4-4e7c-9582-443978d9e926",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "subtaskCreated",
@@ -2741,7 +2950,8 @@
       "context": "tytodos development",
       "parent": "b16bc768-33e4-4e7c-9582-443978d9e926",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -2754,7 +2964,8 @@
       "context": "tytodos development",
       "parent": "b16bc768-33e4-4e7c-9582-443978d9e926",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -2767,7 +2978,8 @@
       "context": "tytodos development",
       "parent": "b16bc768-33e4-4e7c-9582-443978d9e926",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -2780,7 +2992,8 @@
       "context": "tytodos development",
       "parent": "b16bc768-33e4-4e7c-9582-443978d9e926",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -2793,7 +3006,8 @@
       "context": "tytodos development",
       "parent": "b16bc768-33e4-4e7c-9582-443978d9e926",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -2806,7 +3020,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -2819,7 +3034,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -2832,7 +3048,8 @@
       "context": "tytodos development",
       "parent": "b16bc768-33e4-4e7c-9582-443978d9e926",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -2845,7 +3062,8 @@
       "context": "tytodos development",
       "parent": "b16bc768-33e4-4e7c-9582-443978d9e926",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -2858,7 +3076,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -2871,7 +3090,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -2884,7 +3104,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -2897,7 +3118,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -2910,7 +3132,8 @@
       "context": "tytodos development",
       "parent": "b16bc768-33e4-4e7c-9582-443978d9e926",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "subtaskCreated",
@@ -2923,7 +3146,8 @@
       "context": "tytodos development",
       "parent": "b16bc768-33e4-4e7c-9582-443978d9e926",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "subtaskCreated",
@@ -2936,7 +3160,8 @@
       "context": "tytodos development",
       "parent": "b16bc768-33e4-4e7c-9582-443978d9e926",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "subtaskCreated",
@@ -2949,7 +3174,8 @@
       "context": "tytodos development",
       "parent": "b16bc768-33e4-4e7c-9582-443978d9e926",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -2962,7 +3188,8 @@
       "context": "tytodos development",
       "parent": "b16bc768-33e4-4e7c-9582-443978d9e926",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -2979,7 +3206,8 @@
          "efdfa3b7-731d-4339-a664-ff45593036ac",
          "10a6fd37-180d-4713-8874-5a8e5d88c0df"
       ],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -2996,7 +3224,8 @@
          "efdfa3b7-731d-4339-a664-ff45593036ac",
          "10a6fd37-180d-4713-8874-5a8e5d88c0df"
       ],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -3009,7 +3238,8 @@
       "context": "tytodos development",
       "parent": "b16bc768-33e4-4e7c-9582-443978d9e926",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -3022,7 +3252,8 @@
       "context": "tytodos development",
       "parent": "b16bc768-33e4-4e7c-9582-443978d9e926",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -3035,7 +3266,8 @@
       "context": "tytodos development",
       "parent": "b16bc768-33e4-4e7c-9582-443978d9e926",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -3048,7 +3280,8 @@
       "context": "tytodos development",
       "parent": "b16bc768-33e4-4e7c-9582-443978d9e926",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -3061,7 +3294,8 @@
       "context": "tytodos development",
       "parent": "b16bc768-33e4-4e7c-9582-443978d9e926",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -3074,7 +3308,8 @@
       "context": "tytodos development",
       "parent": "b16bc768-33e4-4e7c-9582-443978d9e926",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskFailed",
@@ -3087,7 +3322,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskFailed",
@@ -3100,7 +3336,8 @@
       "context": "tytodos development",
       "parent": "945fee66-d3f9-4fe6-8ab5-998dd4a941bb",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskFailed",
@@ -3113,7 +3350,8 @@
       "context": "tytodos development",
       "parent": "945fee66-d3f9-4fe6-8ab5-998dd4a941bb",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskFailed",
@@ -3126,7 +3364,8 @@
       "context": "tytodos development",
       "parent": "945fee66-d3f9-4fe6-8ab5-998dd4a941bb",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskFailed",
@@ -3139,7 +3378,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -3152,7 +3392,8 @@
       "context": "tytodos development",
       "parent": "b16bc768-33e4-4e7c-9582-443978d9e926",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -3165,7 +3406,8 @@
       "context": "tytodos development",
       "parent": "b16bc768-33e4-4e7c-9582-443978d9e926",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "subtaskCreated",
@@ -3178,7 +3420,8 @@
       "context": "tytodos development",
       "parent": "b16bc768-33e4-4e7c-9582-443978d9e926",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "subtaskCreated",
@@ -3191,7 +3434,8 @@
       "context": "tytodos development",
       "parent": "b16bc768-33e4-4e7c-9582-443978d9e926",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskActivated",
@@ -3204,7 +3448,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskActivated",
@@ -3217,7 +3462,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskActivated",
@@ -3230,7 +3476,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskActivated",
@@ -3243,7 +3490,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -3256,7 +3504,8 @@
       "context": "global",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -3269,7 +3518,8 @@
       "context": "global",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -3282,7 +3532,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -3295,7 +3546,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -3308,7 +3560,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -3321,7 +3574,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -3334,7 +3588,8 @@
       "context": "tytodos development",
       "parent": "b16bc768-33e4-4e7c-9582-443978d9e926",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -3347,7 +3602,8 @@
       "context": "global",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -3360,7 +3616,8 @@
       "context": "global",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -3373,7 +3630,8 @@
       "context": "global",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -3386,7 +3644,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -3399,7 +3658,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -3412,7 +3672,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskRevived",
@@ -3425,7 +3686,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": "c639260c-c362-46e7-8720-6f5e9cb2884b"
+      "original": "c639260c-c362-46e7-8720-6f5e9cb2884b",
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskActivated",
@@ -3438,7 +3700,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -3451,7 +3714,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -3464,7 +3728,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -3477,7 +3742,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -3490,7 +3756,8 @@
       "context": "global",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -3503,7 +3770,8 @@
       "context": "tytodos development",
       "parent": "b16bc768-33e4-4e7c-9582-443978d9e926",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -3516,7 +3784,8 @@
       "context": "tytodos development",
       "parent": "b16bc768-33e4-4e7c-9582-443978d9e926",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -3529,7 +3798,8 @@
       "context": "global",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -3542,7 +3812,8 @@
       "context": "global",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskFailed",
@@ -3555,7 +3826,8 @@
       "context": "tytodos development",
       "parent": "b16bc768-33e4-4e7c-9582-443978d9e926",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -3568,7 +3840,8 @@
       "context": "global",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskActivated",
@@ -3581,7 +3854,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskActivated",
@@ -3594,7 +3868,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -3607,7 +3882,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskRevived",
@@ -3620,7 +3896,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": "f4d75e1d-3813-45c0-a09a-bf79ba5e7d44"
+      "original": "f4d75e1d-3813-45c0-a09a-bf79ba5e7d44",
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskActivated",
@@ -3633,7 +3910,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -3646,7 +3924,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -3659,7 +3938,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -3672,7 +3952,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -3685,7 +3966,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -3698,7 +3980,8 @@
       "context": "global",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -3711,7 +3994,8 @@
       "context": "global",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -3724,7 +4008,8 @@
       "context": "global",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -3737,7 +4022,8 @@
       "context": "global",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -3750,7 +4036,8 @@
       "context": "global",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -3763,7 +4050,8 @@
       "context": "global",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -3776,7 +4064,8 @@
       "context": "global",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -3789,7 +4078,8 @@
       "context": "global",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskFailed",
@@ -3802,7 +4092,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -3815,7 +4106,8 @@
       "context": "global",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskFailed",
@@ -3828,7 +4120,8 @@
       "context": "global",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskFailed",
@@ -3841,7 +4134,8 @@
       "context": "global",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskRevived",
@@ -3854,7 +4148,8 @@
       "context": "global",
       "parent": null,
       "children": null,
-      "original": "00acd520-57ae-4b64-a353-dedc294778da"
+      "original": "00acd520-57ae-4b64-a353-dedc294778da",
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskActivated",
@@ -3867,7 +4162,8 @@
       "context": "global",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskRevived",
@@ -3880,7 +4176,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": "7fcdfa98-adca-453a-94c6-1f93eb38e4e1"
+      "original": "7fcdfa98-adca-453a-94c6-1f93eb38e4e1",
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskActivated",
@@ -3893,7 +4190,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -3906,7 +4204,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "subtaskCreated",
@@ -3919,7 +4218,8 @@
       "context": "tytodos development",
       "parent": "1fed6c02-1b2e-4640-a1c0-d19539583883",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "subtaskCreated",
@@ -3932,7 +4232,8 @@
       "context": "tytodos development",
       "parent": "1fed6c02-1b2e-4640-a1c0-d19539583883",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "subtaskCreated",
@@ -3945,7 +4246,8 @@
       "context": "tytodos development",
       "parent": "1fed6c02-1b2e-4640-a1c0-d19539583883",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "subtaskCreated",
@@ -3958,7 +4260,8 @@
       "context": "tytodos development",
       "parent": "29bfd7b6-9145-4f61-8c40-dea22b0b03fd",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "subtaskCreated",
@@ -3971,7 +4274,8 @@
       "context": "tytodos development",
       "parent": "b16bc768-33e4-4e7c-9582-443978d9e926",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -3984,7 +4288,8 @@
       "context": "tytodos development",
       "parent": "1fed6c02-1b2e-4640-a1c0-d19539583883",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -3997,7 +4302,8 @@
       "context": "tytodos development",
       "parent": "1fed6c02-1b2e-4640-a1c0-d19539583883",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -4010,7 +4316,8 @@
       "context": "tytodos development",
       "parent": "1fed6c02-1b2e-4640-a1c0-d19539583883",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -4023,7 +4330,8 @@
       "context": "tytodos development",
       "parent": "1fed6c02-1b2e-4640-a1c0-d19539583883",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -4036,7 +4344,8 @@
       "context": "tytodos development",
       "parent": "1fed6c02-1b2e-4640-a1c0-d19539583883",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -4053,7 +4362,8 @@
          "9af59c79-ee66-4aac-9246-a50f92514247",
          "028fe907-3342-4c8e-b200-dba2eba813f0"
       ],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -4070,7 +4380,8 @@
          "9af59c79-ee66-4aac-9246-a50f92514247",
          "028fe907-3342-4c8e-b200-dba2eba813f0"
       ],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskActivated",
@@ -4083,7 +4394,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -4096,7 +4408,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -4109,7 +4422,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -4122,7 +4436,8 @@
       "context": "tytodos development",
       "parent": "b16bc768-33e4-4e7c-9582-443978d9e926",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskActivated",
@@ -4135,7 +4450,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -4148,7 +4464,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -4161,7 +4478,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -4174,7 +4492,8 @@
       "context": "test tasks",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -4187,7 +4506,8 @@
       "context": "test tasks",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -4200,7 +4520,8 @@
       "context": "test tasks",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -4213,7 +4534,8 @@
       "context": "tytodos development",
       "parent": "b16bc768-33e4-4e7c-9582-443978d9e926",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -4240,7 +4562,8 @@
          "4df58ea2-fc74-4639-8f8c-9e00ad8d45a6",
          "7e844045-7024-44b0-9908-e82ae7b3f295"
       ],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -4253,7 +4576,8 @@
       "context": "chores",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -4266,7 +4590,8 @@
       "context": "chores",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -4279,7 +4604,8 @@
       "context": "chores",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -4292,7 +4618,8 @@
       "context": "chores",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -4305,7 +4632,8 @@
       "context": "chores",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskFailed",
@@ -4318,7 +4646,8 @@
       "context": "global",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskFailed",
@@ -4331,7 +4660,8 @@
       "context": "tytodos development",
       "parent": "29bfd7b6-9145-4f61-8c40-dea22b0b03fd",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskFailed",
@@ -4344,7 +4674,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskFailed",
@@ -4357,7 +4688,8 @@
       "context": "chores",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskRevived",
@@ -4370,7 +4702,8 @@
       "context": "chores",
       "parent": null,
       "children": null,
-      "original": "b6f16041-cf97-4129-959a-29002d48a46b"
+      "original": "b6f16041-cf97-4129-959a-29002d48a46b",
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskActivated",
@@ -4383,7 +4716,8 @@
       "context": "chores",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -4396,7 +4730,8 @@
       "context": "chores",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -4409,7 +4744,8 @@
       "context": "chores",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -4422,7 +4758,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "subtaskCreated",
@@ -4435,7 +4772,8 @@
       "context": "tytodos development",
       "parent": "d8f46b97-ad1f-43ba-ab6f-eb940db4ddf7",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -4448,7 +4786,8 @@
       "context": "tytodos development",
       "parent": "d8f46b97-ad1f-43ba-ab6f-eb940db4ddf7",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskEdited",
@@ -4461,7 +4800,8 @@
       "context": "tytodos development",
       "parent": "d8f46b97-ad1f-43ba-ab6f-eb940db4ddf7",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -4474,7 +4814,8 @@
       "context": "tytodos development",
       "parent": "d8f46b97-ad1f-43ba-ab6f-eb940db4ddf7",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskEdited",
@@ -4487,7 +4828,8 @@
       "context": "tytodos development",
       "parent": "d8f46b97-ad1f-43ba-ab6f-eb940db4ddf7",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskEdited",
@@ -4502,7 +4844,8 @@
       "children": [
          "d0bb7921-6782-4506-a1b5-46afd1b93943"
       ],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskEdited",
@@ -4517,7 +4860,8 @@
       "children": [
          "d0bb7921-6782-4506-a1b5-46afd1b93943"
       ],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "subtaskCreated",
@@ -4530,7 +4874,8 @@
       "context": "tytodos development",
       "parent": "d8f46b97-ad1f-43ba-ab6f-eb940db4ddf7",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskEdited",
@@ -4543,7 +4888,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "subtaskCreated",
@@ -4556,7 +4902,8 @@
       "context": "tytodos development",
       "parent": "d8f46b97-ad1f-43ba-ab6f-eb940db4ddf7",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -4569,7 +4916,8 @@
       "context": "tytodos development",
       "parent": "d8f46b97-ad1f-43ba-ab6f-eb940db4ddf7",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskEdited",
@@ -4582,7 +4930,8 @@
       "context": "tytodos development",
       "parent": "d8f46b97-ad1f-43ba-ab6f-eb940db4ddf7",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -4595,7 +4944,8 @@
       "context": "tytodos development",
       "parent": "d8f46b97-ad1f-43ba-ab6f-eb940db4ddf7",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -4608,7 +4958,8 @@
       "context": "tytodos development",
       "parent": "d8f46b97-ad1f-43ba-ab6f-eb940db4ddf7",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "subtaskCreated",
@@ -4621,7 +4972,8 @@
       "context": "tytodos development",
       "parent": "d8f46b97-ad1f-43ba-ab6f-eb940db4ddf7",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -4634,7 +4986,8 @@
       "context": "tytodos development",
       "parent": "d8f46b97-ad1f-43ba-ab6f-eb940db4ddf7",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -4647,7 +5000,8 @@
       "context": "tytodos development",
       "parent": "d8f46b97-ad1f-43ba-ab6f-eb940db4ddf7",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "subtaskCreated",
@@ -4660,7 +5014,8 @@
       "context": "tytodos development",
       "parent": "d8f46b97-ad1f-43ba-ab6f-eb940db4ddf7",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -4673,7 +5028,8 @@
       "context": "tytodos development",
       "parent": "d8f46b97-ad1f-43ba-ab6f-eb940db4ddf7",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -4686,7 +5042,8 @@
       "context": "tytodos development",
       "parent": "d8f46b97-ad1f-43ba-ab6f-eb940db4ddf7",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "subtaskCreated",
@@ -4699,7 +5056,8 @@
       "context": "tytodos development",
       "parent": "d8f46b97-ad1f-43ba-ab6f-eb940db4ddf7",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -4712,7 +5070,8 @@
       "context": "tytodos development",
       "parent": "d8f46b97-ad1f-43ba-ab6f-eb940db4ddf7",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -4725,7 +5084,8 @@
       "context": "tytodos development",
       "parent": "d8f46b97-ad1f-43ba-ab6f-eb940db4ddf7",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "subtaskCreated",
@@ -4738,7 +5098,8 @@
       "context": "tytodos development",
       "parent": "d8f46b97-ad1f-43ba-ab6f-eb940db4ddf7",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -4751,7 +5112,8 @@
       "context": "tytodos development",
       "parent": "d8f46b97-ad1f-43ba-ab6f-eb940db4ddf7",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -4764,7 +5126,8 @@
       "context": "tytodos development",
       "parent": "d8f46b97-ad1f-43ba-ab6f-eb940db4ddf7",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -4785,7 +5148,8 @@
          "12368b42-8d1f-475e-b23b-cea057f122cf",
          "23acf96d-52c8-4a8f-86f0-be987ee07c99"
       ],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "subtaskCreated",
@@ -4798,7 +5162,8 @@
       "context": "tytodos development",
       "parent": "d046fdba-628c-41d0-a136-e62a738b2125",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "subtaskCreated",
@@ -4811,7 +5176,8 @@
       "context": "tytodos development",
       "parent": "d046fdba-628c-41d0-a136-e62a738b2125",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "subtaskCreated",
@@ -4824,7 +5190,8 @@
       "context": "tytodos development",
       "parent": "d046fdba-628c-41d0-a136-e62a738b2125",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "subtaskCreated",
@@ -4837,7 +5204,8 @@
       "context": "tytodos development",
       "parent": "d046fdba-628c-41d0-a136-e62a738b2125",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "subtaskCreated",
@@ -4850,7 +5218,8 @@
       "context": "tytodos development",
       "parent": "d046fdba-628c-41d0-a136-e62a738b2125",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "subtaskCreated",
@@ -4863,7 +5232,8 @@
       "context": "tytodos development",
       "parent": "d046fdba-628c-41d0-a136-e62a738b2125",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -4876,7 +5246,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskEdited",
@@ -4889,7 +5260,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -4902,7 +5274,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -4922,7 +5295,8 @@
          "84e96be4-4f8e-4cd9-9a0c-f9def72d3807",
          "1650ed1c-62a5-4043-b090-f42aef63b215"
       ],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "subtaskCreated",
@@ -4935,7 +5309,8 @@
       "context": "tytodos development",
       "parent": "d046fdba-628c-41d0-a136-e62a738b2125",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskEdited",
@@ -4948,7 +5323,8 @@
       "context": "tytodos development",
       "parent": "d046fdba-628c-41d0-a136-e62a738b2125",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -4961,7 +5337,8 @@
       "context": "tytodos development",
       "parent": "d046fdba-628c-41d0-a136-e62a738b2125",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -4974,7 +5351,8 @@
       "context": "global",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -4987,7 +5365,8 @@
       "context": "tytodos development",
       "parent": "d046fdba-628c-41d0-a136-e62a738b2125",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -5000,7 +5379,8 @@
       "context": "tytodos development",
       "parent": "d046fdba-628c-41d0-a136-e62a738b2125",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -5013,7 +5393,8 @@
       "context": "tytodos development",
       "parent": "d046fdba-628c-41d0-a136-e62a738b2125",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -5026,7 +5407,8 @@
       "context": "global",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -5039,7 +5421,8 @@
       "context": "tytodos development",
       "parent": "d046fdba-628c-41d0-a136-e62a738b2125",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -5052,7 +5435,8 @@
       "context": "tytodos development",
       "parent": "d046fdba-628c-41d0-a136-e62a738b2125",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -5065,7 +5449,8 @@
       "context": "tytodos development",
       "parent": "d046fdba-628c-41d0-a136-e62a738b2125",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -5078,7 +5463,8 @@
       "context": "tytodos development",
       "parent": "d046fdba-628c-41d0-a136-e62a738b2125",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -5091,7 +5477,8 @@
       "context": "tytodos development",
       "parent": "d046fdba-628c-41d0-a136-e62a738b2125",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "subtaskCreated",
@@ -5104,7 +5491,8 @@
       "context": "tytodos development",
       "parent": "d046fdba-628c-41d0-a136-e62a738b2125",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -5117,7 +5505,8 @@
       "context": "tytodos development",
       "parent": "d046fdba-628c-41d0-a136-e62a738b2125",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -5130,7 +5519,8 @@
       "context": "tytodos development",
       "parent": "d046fdba-628c-41d0-a136-e62a738b2125",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -5143,7 +5533,8 @@
       "context": "tytodos development",
       "parent": "d046fdba-628c-41d0-a136-e62a738b2125",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -5156,7 +5547,8 @@
       "context": "tytodos development",
       "parent": "d046fdba-628c-41d0-a136-e62a738b2125",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskFailed",
@@ -5169,7 +5561,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskFailed",
@@ -5182,7 +5575,8 @@
       "context": "global",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskFailed",
@@ -5204,7 +5598,8 @@
          "559b1a5e-6442-4a53-adfd-c8907163e1fd",
          "ada4d2b7-21f1-4eba-acd2-bc0d99f7f90e"
       ],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskFailed",
@@ -5217,7 +5612,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskFailed",
@@ -5232,7 +5628,8 @@
       "children": [
          "50c87119-4203-49b0-ba58-b68e2d7c8180"
       ],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskFailed",
@@ -5245,7 +5642,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskFailed",
@@ -5258,7 +5656,8 @@
       "context": "global",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskRevived",
@@ -5271,7 +5670,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": "e3d4645a-8eed-4580-9d18-b00ff50af11d"
+      "original": "e3d4645a-8eed-4580-9d18-b00ff50af11d",
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskActivated",
@@ -5284,7 +5684,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskRevived",
@@ -5297,7 +5698,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": "8443d10e-0dfa-4486-97b8-670bc93eacf2"
+      "original": "8443d10e-0dfa-4486-97b8-670bc93eacf2",
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskRevived",
@@ -5310,7 +5712,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": "d046fdba-628c-41d0-a136-e62a738b2125"
+      "original": "d046fdba-628c-41d0-a136-e62a738b2125",
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -5323,7 +5726,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskRevived",
@@ -5336,7 +5740,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": "d7d6fe1b-257a-4d93-a540-a1cc476439fa"
+      "original": "d7d6fe1b-257a-4d93-a540-a1cc476439fa",
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskRevived",
@@ -5349,7 +5754,8 @@
       "context": "global",
       "parent": null,
       "children": null,
-      "original": "3f4ade24-5834-4927-a067-b0904a43f96e"
+      "original": "3f4ade24-5834-4927-a067-b0904a43f96e",
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -5362,7 +5768,8 @@
       "context": "global",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -5375,7 +5782,8 @@
       "context": "global",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskRevived",
@@ -5388,7 +5796,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": null,
-      "original": "a98c5c85-bad1-437c-8ce0-a3bed83a9768"
+      "original": "a98c5c85-bad1-437c-8ce0-a3bed83a9768",
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskRevived",
@@ -5401,7 +5810,8 @@
       "context": "global",
       "parent": null,
       "children": null,
-      "original": "d545a9c4-8d75-4409-827d-234de37f7bdd"
+      "original": "d545a9c4-8d75-4409-827d-234de37f7bdd",
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -5414,7 +5824,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -5427,7 +5838,8 @@
       "context": "tytodos development",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "subtaskCreated",
@@ -5440,7 +5852,8 @@
       "context": "tytodos development",
       "parent": "97047865-5054-4e6d-ad5f-d90194fd7156",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "subtaskCreated",
@@ -5453,7 +5866,8 @@
       "context": "tytodos development",
       "parent": "97047865-5054-4e6d-ad5f-d90194fd7156",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "subtaskCreated",
@@ -5466,7 +5880,8 @@
       "context": "tytodos development",
       "parent": "97047865-5054-4e6d-ad5f-d90194fd7156",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -5479,7 +5894,8 @@
       "context": "global",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskActivated",
@@ -5492,7 +5908,8 @@
       "context": "global",
       "parent": null,
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCreated",
@@ -5505,7 +5922,8 @@
       "context": "global",
       "parent": null,
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -5518,7 +5936,8 @@
       "context": "tytodos development",
       "parent": "97047865-5054-4e6d-ad5f-d90194fd7156",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "subtaskCreated",
@@ -5531,7 +5950,8 @@
       "context": "tytodos development",
       "parent": "97047865-5054-4e6d-ad5f-d90194fd7156",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "subtaskCreated",
@@ -5544,7 +5964,8 @@
       "context": "tytodos development",
       "parent": "97047865-5054-4e6d-ad5f-d90194fd7156",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "subtaskCreated",
@@ -5557,7 +5978,8 @@
       "context": "tytodos development",
       "parent": "97047865-5054-4e6d-ad5f-d90194fd7156",
       "children": null,
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -5570,7 +5992,8 @@
       "context": "tytodos development",
       "parent": "97047865-5054-4e6d-ad5f-d90194fd7156",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -5583,7 +6006,8 @@
       "context": "tytodos development",
       "parent": "97047865-5054-4e6d-ad5f-d90194fd7156",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -5596,7 +6020,8 @@
       "context": "tytodos development",
       "parent": "97047865-5054-4e6d-ad5f-d90194fd7156",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -5609,7 +6034,8 @@
       "context": "tytodos development",
       "parent": "97047865-5054-4e6d-ad5f-d90194fd7156",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -5622,7 +6048,8 @@
       "context": "tytodos development",
       "parent": "97047865-5054-4e6d-ad5f-d90194fd7156",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -5635,7 +6062,8 @@
       "context": "tytodos development",
       "parent": "97047865-5054-4e6d-ad5f-d90194fd7156",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -5648,7 +6076,8 @@
       "context": "tytodos development",
       "parent": "97047865-5054-4e6d-ad5f-d90194fd7156",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -5661,7 +6090,8 @@
       "context": "tytodos development",
       "parent": "97047865-5054-4e6d-ad5f-d90194fd7156",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskStarted",
@@ -5674,7 +6104,8 @@
       "context": "tytodos development",
       "parent": "97047865-5054-4e6d-ad5f-d90194fd7156",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
    },
    {
       "eventType": "taskCompleted",
@@ -5687,6 +6118,252 @@
       "context": "tytodos development",
       "parent": "97047865-5054-4e6d-ad5f-d90194fd7156",
       "children": [],
-      "original": null
+      "original": null,
+      "revertedEventTimestamp": null
+   },
+   {
+      "eventType": "taskCompleted",
+      "timestamp": 1560950888968,
+      "id": "2d25c8e2-5189-43b8-afe5-0e19a0337a4d",
+      "name": "Implement support for undo events on backend",
+      "category": 2,
+      "progressStatus": 2,
+      "colourId": 2,
+      "context": "tytodos development",
+      "parent": "97047865-5054-4e6d-ad5f-d90194fd7156",
+      "children": [],
+      "original": null,
+      "revertedEventTimestamp": null
+   },
+   {
+      "eventType": "taskCompleted",
+      "timestamp": 1560950892970,
+      "id": "97047865-5054-4e6d-ad5f-d90194fd7156",
+      "name": "Implement time-restricted 'undo' operation",
+      "category": 1,
+      "progressStatus": 2,
+      "colourId": 2,
+      "context": "tytodos development",
+      "parent": null,
+      "children": [
+         "f6942d21-1016-49d4-a5a2-421cbe3ac92d",
+         "2d25c8e2-5189-43b8-afe5-0e19a0337a4d",
+         "f17f851a-2c3f-4abe-bc8c-106cbc3d3b73",
+         "29e80f0e-edc5-46e4-9a0d-4b13ee4de51e",
+         "b4542d74-3b07-4247-be74-14e0c36d5c75",
+         "0c7647c8-a271-41fd-ad5c-78a7fb5bcdbf"
+      ],
+      "original": null,
+      "revertedEventTimestamp": null
+   },
+   {
+      "eventType": "taskFailed",
+      "timestamp": 1560956400000,
+      "id": "6fadea78-c015-4a50-b847-cbc73127a561",
+      "name": "Update Backend validation to simply IGNORE events if they apply an already-present state, rather than 409",
+      "category": 2,
+      "progressStatus": 4,
+      "colourId": 0,
+      "context": "global",
+      "parent": null,
+      "children": [],
+      "original": null,
+      "revertedEventTimestamp": null
+   },
+   {
+      "eventType": "taskActivated",
+      "timestamp": 1560979624898,
+      "id": "624f4975-17d1-4784-8180-8b4555220c85",
+      "name": "Undo button is 'greyed out' if there are no undoable events in the undoable-events-stack",
+      "category": 2,
+      "progressStatus": 0,
+      "colourId": 2,
+      "context": "tytodos development",
+      "parent": null,
+      "children": [],
+      "original": null,
+      "revertedEventTimestamp": null
+   },
+   {
+      "eventType": "taskRevived",
+      "timestamp": 1560979638382,
+      "id": "caacbe1a-311a-40c5-b146-6926e03d3477",
+      "name": "Update Backend validation to simply IGNORE events if they apply an already-present state, rather than 409",
+      "category": 2,
+      "progressStatus": 0,
+      "colourId": 0,
+      "context": "global",
+      "parent": null,
+      "children": null,
+      "original": "6fadea78-c015-4a50-b847-cbc73127a561",
+      "revertedEventTimestamp": null
+   },
+   {
+      "eventType": "taskCreated",
+      "timestamp": 1560979786520,
+      "id": "96c4ccc7-b352-4af2-97d8-71fde581b0b9",
+      "name": "Undo button hover makes a tooltip inform you of what action will be undone when undo is clicked -> undoStack.peek()",
+      "category": 2,
+      "progressStatus": 0,
+      "colourId": 0,
+      "context": "global",
+      "parent": null,
+      "children": null,
+      "original": null,
+      "revertedEventTimestamp": null
+   },
+   {
+      "eventType": "taskCreated",
+      "timestamp": 1560980203099,
+      "id": "6ea15e4d-92d3-437d-916b-60e15ea73699",
+      "name": "Horizontal hanging pulls",
+      "category": 2,
+      "progressStatus": 0,
+      "colourId": 0,
+      "context": "fitness",
+      "parent": null,
+      "children": null,
+      "original": null,
+      "revertedEventTimestamp": null
+   },
+   {
+      "eventType": "taskCreated",
+      "timestamp": 1560980215984,
+      "id": "a20ed031-7fef-42de-9ac3-9a4b34928fb6",
+      "name": "Bent-over one arm rows",
+      "category": 2,
+      "progressStatus": 0,
+      "colourId": 1,
+      "context": "fitness",
+      "parent": null,
+      "children": null,
+      "original": null,
+      "revertedEventTimestamp": null
+   },
+   {
+      "eventType": "taskCreated",
+      "timestamp": 1560980222750,
+      "id": "e4343336-1d44-4eb3-a51a-7cac8b07357b",
+      "name": "Bicep Curls",
+      "category": 2,
+      "progressStatus": 0,
+      "colourId": 2,
+      "context": "fitness",
+      "parent": null,
+      "children": null,
+      "original": null,
+      "revertedEventTimestamp": null
+   },
+   {
+      "eventType": "taskCreated",
+      "timestamp": 1560980233103,
+      "id": "48d41f30-1839-4caf-9a12-eff09ec7dc69",
+      "name": "Abs routine",
+      "category": 2,
+      "progressStatus": 0,
+      "colourId": 3,
+      "context": "fitness",
+      "parent": null,
+      "children": null,
+      "original": null,
+      "revertedEventTimestamp": null
+   },
+   {
+      "eventType": "taskCreated",
+      "timestamp": 1560980258359,
+      "id": "52427b89-0c64-4517-bbf5-41bc3886f8a3",
+      "name": "Wash all clothes",
+      "category": 2,
+      "progressStatus": 0,
+      "colourId": 0,
+      "context": "chores",
+      "parent": null,
+      "children": null,
+      "original": null,
+      "revertedEventTimestamp": null
+   },
+   {
+      "eventType": "taskCreated",
+      "timestamp": 1560980282818,
+      "id": "f68cfd77-97ab-438a-97a2-37f5e5609211",
+      "name": "Retrieve and fold clothes as soon as they are dried. DO NOT LET SHRIVEL",
+      "category": 1,
+      "progressStatus": 0,
+      "colourId": 1,
+      "context": "chores",
+      "parent": null,
+      "children": null,
+      "original": null,
+      "revertedEventTimestamp": null
+   },
+   {
+      "eventType": "taskCreated",
+      "timestamp": 1560980342869,
+      "id": "4182b433-b524-42b4-a2ea-e83e543acf99",
+      "name": "Add ability to edit context names",
+      "category": 1,
+      "progressStatus": 0,
+      "colourId": 2,
+      "context": "tytodos development",
+      "parent": null,
+      "children": null,
+      "original": null,
+      "revertedEventTimestamp": null
+   },
+   {
+      "eventType": "taskCreated",
+      "timestamp": 1560980444592,
+      "id": "efda8bc4-88af-47ed-a08a-c989742e0930",
+      "name": "Take bins out as soon as you get home",
+      "category": 2,
+      "progressStatus": 0,
+      "colourId": 3,
+      "context": "chores",
+      "parent": null,
+      "children": null,
+      "original": null,
+      "revertedEventTimestamp": null
+   },
+   {
+      "eventType": "taskCreated",
+      "timestamp": 1560980499899,
+      "id": "a8ca47ea-c4e3-41e3-9aaf-9fa040b9624e",
+      "name": "Fix issue where multiple edit-forms can be open at once, when esc is not pressed",
+      "category": 3,
+      "progressStatus": 0,
+      "colourId": 0,
+      "context": "tytodos development",
+      "parent": null,
+      "children": null,
+      "original": null,
+      "revertedEventTimestamp": null
+   },
+   {
+      "eventType": "taskCreated",
+      "timestamp": 1560980520232,
+      "id": "7533dc0d-5be4-4d07-b7da-4f451e6d7b45",
+      "name": "Build a home-accessible Pullup bar outside",
+      "category": 0,
+      "progressStatus": 0,
+      "colourId": 1,
+      "context": "chores",
+      "parent": null,
+      "children": null,
+      "original": null,
+      "revertedEventTimestamp": null
+   },
+   {
+      "eventType": "taskCreated",
+      "timestamp": 1560980547542,
+      "id": "a5dca44f-7004-4dfc-9fc3-588517326fe9",
+      "name": "Acquire Coat-hanger thing to sit next to front door",
+      "category": 3,
+      "progressStatus": 0,
+      "colourId": 2,
+      "context": "chores",
+      "parent": null,
+      "children": null,
+      "original": null,
+      "revertedEventTimestamp": null
    }
 ]
