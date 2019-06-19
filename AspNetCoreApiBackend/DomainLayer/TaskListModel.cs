@@ -266,9 +266,30 @@ namespace todo_app.DomainLayer.TaskListModel {
             int newCategory = reviveAsActive ? original.Category : CategoryVals.Deferred;
             CreateNewIndependentTask(original.Name, newCategory, timeStamp, original.ColourId, id);
         }
+        public void UndoReviveTaskAsClone(Task newTask, Task originalTask) {
+            if (newTask == null || originalTask == null) throw new InvalidOperationException("Cannot undo a revival of tasks, they were not found");
+
+            // Check if the tasks is in a valid state to be reverted
+            if (newTask.ProgressStatus != ProgressStatusVals.NotStarted || newTask.Parent != null || newTask.Children.Count > 0 || originalTask.ProgressStatus != ProgressStatusVals.Reattempted) {
+                throw new InvalidOperationException("Cannot undo a revival, tasks are not in correct state");
+            }
+
+            // Remove the newly created task from our active task collection, and reset the state of the original task.
+            this.allTasks.Remove(newTask.Id);
+            this.activeTasks.Remove(newTask.Id);
+            originalTask.ProgressStatus = ProgressStatusVals.Failed;
+            originalTask.EventTimeStamps.TimeRevived = null;
+        }
+
+        // Editing Task text.
         public void EditTaskText(Task task, string newText, long timestamp) {
             if (string.IsNullOrWhiteSpace(newText) || timestamp < 0) throw new InvalidOperationException("Illegal renaming arguments: " + newText);
             task.Name = newText;
+        }
+        public void UndoEditTaskText(Task task, string originalText, long previousTimestamp) {
+            if (task == null) throw new InvalidOperationException("Task must not be null");
+            task.EventTimeStamps.TimeEdited = previousTimestamp;
+            task.Name = originalText;
         }
     }
 
