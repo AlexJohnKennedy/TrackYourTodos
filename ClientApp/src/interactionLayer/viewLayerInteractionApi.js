@@ -133,7 +133,7 @@ export function InstantiateNewDataModelScope(currContext) {
         DataEventCallbackHandlers.taskCompletedUndoHandlers.length = 0;
         DataEventCallbackHandlers.taskActivatedUndoHandlers.length = 0;
         DataEventCallbackHandlers.taskStartedUndoHandlers.length = 0;
-        DataEventCallbackHandlers.taskEditedUndoHandler.length = 0;
+        DataEventCallbackHandlers.taskEditedUndoHandlers.length = 0;
 
         DataLoadedFromServerCallbacks.length = 0;
         DataRefreshedFromServerCallbacks.length = 0;
