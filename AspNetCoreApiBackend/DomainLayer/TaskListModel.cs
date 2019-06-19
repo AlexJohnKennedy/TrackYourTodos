@@ -167,8 +167,20 @@ namespace todo_app.DomainLayer.TaskListModel {
             toActivate.EventTimeStamps.TimeActivated = timeStamp;
             toActivate.Category = newCategory;
         }
+        public void UndoActivateTask(Task task) {
+            if (task == null) throw new InvalidOperationException("Cannot undo a activation of a task which does not exist");
 
-        // Task Completion.
+            // If this task is not in a state where it has JUST been activated, then this operation is illegal.
+            if (task.ProgressStatus != ProgressStatusVals.NotStarted || task.Category > CategoryVals.Daily || task.Children.Count > 0) {
+                throw new InvalidOperationException("Cannot undo ActivateTask() for task which is not in a 'just activated' state. See STDERR for task object log");
+            }
+
+            // Okay. Since this is a legal operation, we just have to move this task back into the backlog, and clear the timestamp
+            task.EventTimeStamps.TimeActivated = null;
+            task.Category = CategoryVals.Deferred;
+        }
+
+        // Task Closure.
         public void CompletedTask(Task t, long timeStamp) {
             if (t.ProgressStatus != ProgressStatusVals.Started) throw new InvalidOperationException("Cannot call 'complete' on root task which is not started. Task id: " + t.Id);
             if (t.Category == CategoryVals.Deferred) throw new InvalidOperationException("Cannot call 'complete' on root task which is not activated. Task id: " + t.Id);
@@ -199,6 +211,39 @@ namespace todo_app.DomainLayer.TaskListModel {
             // Recurse to children.
             foreach (Task child in t.Children) { CloseTaskAndChildren(child, timeStamp, completed); }
         }
+
+        // Undo of task closure.
+        public void UndoCompleteTask(Task task) {
+            // NOTE: It is not permitted to undo FailTask events. Once they fail, they are finalised.
+            if (task == null) throw new InvalidOperationException("Cannot undo task-completion of a task which does not exist");
+
+            // If the task is not in a completed state, then this undo operation is illegal.
+            if (task.ProgressStatus != ProgressStatusVals.Completed || task.EventTimeStamps.TimeClosed == null) {
+                throw new InvalidOperationException("Cannot undo CompleteTask() on an event which is not completed.");
+            }
+
+            // Recursively revert tasks.
+            undoClose(task, task.EventTimeStamps.TimeClosed.Value);
+        }
+        private bool undoClose(Task curr, long rootTimestamp) {
+            // Determine if this child is completed, and should be undone. If NOT, we return false!
+            if (curr.Category > CategoryVals.Daily || curr.ProgressStatus != ProgressStatusVals.Completed || curr.EventTimeStamps.TimeClosed != rootTimestamp) return false;
+            
+            this.activeTasks.Add(curr.Id, curr);
+            this.completedTasks.Remove(curr.Id);
+
+            // Okay, in order to 'undo' this task, we must set it back to either started or not-started. This will depend on which timestamps are present.
+            curr.ProgressStatus = curr.EventTimeStamps.TimeStarted == null ? ProgressStatusVals.NotStarted : ProgressStatusVals.Started;
+            curr.EventTimeStamps.TimeClosed = null;
+            
+            foreach (Task child in curr.Children) {
+                undoClose(child, rootTimestamp);
+            }
+
+            return true;
+        }
+
+        // Starting Tasks.
         public void StartTask(Task t, long timeStamp) {
             if (t.Category == CategoryVals.Deferred) { throw new InvalidOperationException("Cannot start a task which is currently deferred. Task Id: " + t.Id); }
             if (t.ProgressStatus == ProgressStatusVals.Started) return; // Do nothing.
@@ -206,6 +251,13 @@ namespace todo_app.DomainLayer.TaskListModel {
             t.ProgressStatus = ProgressStatusVals.Started;
             t.EventTimeStamps.TimeStarted = timeStamp;
         }
+        public void UndoStartTask(Task task) {
+            if (task == null || task.ProgressStatus != ProgressStatusVals.Started) throw new InvalidOperationException("Cannot undo 'StartTask' on a task which is not started");
+            task.ProgressStatus = ProgressStatusVals.NotStarted;
+            task.EventTimeStamps.TimeStarted = null;
+        }
+
+        // Task Revival of failed tasks (as a clone).
         public void ReviveTaskAsClone(Task original, bool reviveAsActive, long timeStamp, Guid id) {
             if (original.ProgressStatus != ProgressStatusVals.Failed) throw new InvalidOperationException("Cannot revive a task which is not failed! Task.Id: " + original.Id);
             original.ProgressStatus = ProgressStatusVals.Reattempted;

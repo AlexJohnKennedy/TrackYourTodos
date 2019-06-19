@@ -237,7 +237,7 @@ export class TaskObjects {
             completedCollec.RemoveTask(curr);
 
             // Okay, in order to 'undo' this task, we must set it back to either started or not-started. This will depend on which timestamps are present.
-            curr.progressStatus = curr.eventTimestamps.timeStarted === null ? ProgressStatus.NotStarted : curr.progressStatus = ProgressStatus.Started;
+            curr.progressStatus = curr.eventTimestamps.timeStarted === null ? ProgressStatus.NotStarted : ProgressStatus.Started;
             curr.eventTimestamps.timeClosed = null;
             
             curr.children.forEach((curr) => undoClose(curr, rootTimestamp, activelist, completedCollec));
