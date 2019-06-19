@@ -139,7 +139,8 @@ namespace todo_app.DataTransferLayer.Entities {
         public string UserId { get; set; }
 
         [Required]
-        [StringSetValidator(EventTypes.TaskAdded, EventTypes.ChildTaskAdded, EventTypes.TaskRevived, EventTypes.TaskDeleted, EventTypes.TaskCompleted, EventTypes.TaskFailed, EventTypes.TaskActivated, EventTypes.TaskStarted, EventTypes.TaskEdited)]
+        [StringSetValidator(EventTypes.TaskAdded, EventTypes.ChildTaskAdded, EventTypes.TaskRevived, EventTypes.TaskDeleted, EventTypes.TaskCompleted, EventTypes.TaskFailed, EventTypes.TaskActivated, EventTypes.TaskStarted, EventTypes.TaskEdited,
+        EventTypes.TaskAddedUndo, EventTypes.ChildTaskAddedUndo, EventTypes.TaskRevivedUndo, EventTypes.TaskDeletedUndo, EventTypes.TaskCompletedUndo, EventTypes.TaskActivatedUndo, EventTypes.TaskStartedUndo, EventTypes.TaskEditedUndo)]
         public string EventType { get; set; }
 
         [Required]
