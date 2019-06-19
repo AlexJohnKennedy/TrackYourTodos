@@ -129,7 +129,8 @@ function replayTaskStartedEvent(eventData, tasklist, taskMap, undoStack) {
 }
 function replayTaskEditedEvent(eventData, tasklist, taskMap, undoStack) {
     const task = taskMap.get(eventData.id);
-    undoStack.PushUndoableEditTask(task, task.name, task.eventTimestamps.timeEdited, eventData.timestamp);
+    const originalTimeedited = task.eventTimestamps.timeEdited === null ? task.eventTimestamps.timeCreated : task.eventTimestamps.timeEdited;
+    undoStack.PushUndoableEditTask(task, task.name, originalTimeedited, eventData.timestamp);
     tasklist.EditTaskText(task, eventData.name, eventData.timestamp);
 }
 

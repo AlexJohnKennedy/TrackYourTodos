@@ -453,7 +453,8 @@ function BuildNewTaskView(domainTaskObj, activeList, undoStack, viewLayerCallbac
 
     function editTaskName(newText) {
         const timestamp = Date.now();
-        undoStack.PushUndoableEditTask(domainTaskObj, domainTaskObj.name, domainTaskObj.eventTimestamps.timeEdited, timestamp);
+        const originalTimeEdited = domainTaskObj.eventTimestamps.timeEdited === null ? domainTaskObj.eventTimestamps.timeCreated : domainTaskObj.eventTimestamps.timeEdited;
+        undoStack.PushUndoableEditTask(domainTaskObj, domainTaskObj.name, originalTimeEdited, timestamp);
         activeList.EditTaskText(domainTaskObj, newText, timestamp);
         viewLayerCallbackList.forEach(callback => callback());
         dataEventCallbacksLists.taskEditedHandlers.forEach(callback => callback(domainTaskObj, activeList));
