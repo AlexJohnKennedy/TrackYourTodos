@@ -174,7 +174,6 @@ namespace todo_app.DataTransferLayer.Entities {
         public Guid? Original { get; set; }      // Nullable, since some event types do not support this.
 
         // Used in the case of undo events
-        [NotInTheFutureValidator(5000)]
         public long? RevertedEventTimestamp { get; set; }
 
         // Return a collection of Failed-Validations. An empty IEnumerable means validation was successful
