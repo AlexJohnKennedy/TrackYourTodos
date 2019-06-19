@@ -136,32 +136,32 @@ function replayTaskEditedEvent(eventData, tasklist, taskMap, undoStack) {
 
 function replayTaskAddedUndoEvent(eventData, tasklist, taskMap, undoStack) {
     const task = taskMap.get(eventData.id);
-    tasklist.UndoCreateNewIndependentTask(task);
+    undoStack.PerformUndo(eventData.timestamp, tasklist);
     taskMap.delete(eventData.id);
 }
 function replayChildTaskAddedUndoEvent(eventData, tasklist, taskMap, undoStack) {
     const task = taskMap.get(eventData.id);
-    tasklist.UndoCreateNewSubtask(task);
+    undoStack.PerformUndo(eventData.timestamp, tasklist);
     taskMap.delete(eventData.id);
 }
 function replayTaskRevivedUndoEvent(eventData, tasklist, taskMap, undoStack) {
     const newTask = taskMap.get(eventData.id);
     const originalTask = taskMap.get(eventData.original);
-    tasklist.UndoReviveTaskAsClone(newTask, originalTask);
+    undoStack.PerformUndo(eventData.timestamp, tasklist);
     taskMap.delete(eventData.id);   // Delete the new clone, but not the original of course.
 }
 function replayTaskDeletedUndoEvent(eventData, tasklist, taskMap, undoStack) {
     throw new Error("Task Deletion is not yet implemented");
 }
 function replayTaskCompletedUndoEvent(eventData, tasklist, taskMap, undoStack) {
-    tasklist.UndoCompleteTask(taskMap.get(eventData.id));
+    undoStack.PerformUndo(eventData.timestamp, tasklist);
 }
 function replayTaskActivatedUndoEvent(eventData, tasklist, taskMap, undoStack) {
-    tasklist.UndoActivateTask(taskMap.get(eventData.id));
+    undoStack.PerformUndo(eventData.timestamp, tasklist);
 }
 function replayTaskStartedUndoEvent(eventData, tasklist, taskMap, undoStack) {
-    tasklist.UndoStartTask(taskMap.get(eventData.id));
+    undoStack.PerformUndo(eventData.timestamp, tasklist);
 }
 function replayTaskEditedUndoEvent(eventData, tasklist, taskMap, undoStack) {
-    tasklist.UndoEditTaskText(taskMap.get(eventData.id), eventData.name, eventData.revertedEventTimestamp);
+    undoStack.PerformUndo(eventData.timestamp, tasklist);
 }
