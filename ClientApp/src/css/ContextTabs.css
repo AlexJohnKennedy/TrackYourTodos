@@ -23,6 +23,10 @@
     padding-top: 0.2rem;
 }
 
+.ContextTabsWrapper .greyedOut div {
+    background-color: var(--editor-background-colour);
+}
+
 .ContextTabsWrapper .navigation-tabs-container {
     grid-column-start: 1;
     grid-column-end: 2;

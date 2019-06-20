@@ -67,7 +67,7 @@ export class ContextTabs extends Component {
 
         const capitaliseFirstLetter = s => s.charAt(0).toUpperCase() + s.slice(1);
 
-        const undoButtonClassstring = "undoButton" + (this.state.peekStack === null ? " greyedOut" : "");
+        const undoButtonClassstring = "undoButton" + (this.state.peekStack() === null ? " greyedOut" : "");
 
         return (
             <div className="ContextTabsWrapper">
