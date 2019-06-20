@@ -250,8 +250,7 @@ export class AppPage extends Component {
                         switchContext={this.switchContext} 
                         currentContext={this.state.currentContext} 
                         selectableContexts={this.state.selectableContexts}
-                        undoActionCount={this.state.dataModelScope.GetUndoStackSize()}
-                        performUndo={this.state.dataModelScope.PerformUndo}
+                        dataModelScope={this.state.dataModelScope}
                     />
                     <BacklogSection dataModelScope={this.state.dataModelScope} formStateManager={this.formStateManager} />
                     <ActiveTaskSection dataModelScope={this.state.dataModelScope} formStateManager={this.formStateManager} />
