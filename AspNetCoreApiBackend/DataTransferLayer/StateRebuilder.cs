@@ -39,25 +39,33 @@ namespace todo_app.DataTransferLayer.EventReconciliationSystem {
         // the entire set of incoming new events is rejected. This is more primitive than the search-reconcilitation solution, but is faster and
         // less complicated. So i'm going to implement it this way for now just to get fundamental event validation in place.
         // Returns TRUE if the new events are valid. Returns FALSE for any error case, regardless of which new events caused the error.
-        public bool SimpleFullStateRebuildValidation(IList<GenericTodoEvent> newEvents, out string errorMsg) {
+        public bool SimpleFullStateRebuildValidation(IList<GenericTodoEvent> newEvents, out IList<GenericTodoEvent> acceptedEvents, out string errorMsg) {
             TaskList tasklist = new TaskList();
             IList<GenericTodoEvent> sorted = newEvents.OrderBy(e => e.Timestamp).ToList();
+            acceptedEvents = new List<GenericTodoEvent>();
 
             errorMsg = "";
             
             int i=0, j=0;   // i => index for truth log, j => index for new event log
-            try {
-                while (i < truthLog.Count || j < newEvents.Count) {
+            while (i < truthLog.Count || j < newEvents.Count) {
+                try {
                     // Pick the oldest remaining event, and apply it
                     var nextEvent = (i == truthLog.Count || (j < newEvents.Count && newEvents[j].Timestamp < truthLog[i].Timestamp)) ? newEvents[j++] : truthLog[i++];
                     tasklist = EventReplayer.Replay(nextEvent, tasklist);
+                    acceptedEvents.Add(nextEvent);
+                }
+                // If any 'duplicated event' exceptions are thrown, it means the event is not invalid, but is not required to be saved.
+                catch (DuplicatedEventException e) {
+                    continue;
+                }
+                // If any InvalidOperationExceptions are thrown, that means the events is invalid, and we should return false.
+                catch (InvalidOperationException e) {
+                    acceptedEvents = new List<GenericTodoEvent>();
+                    errorMsg = e.Message;
+                    return false;
                 }
             }
-            // If any InvalidOperationExceptions are thrown, that means the event is invalid, and we should return false.
-            catch (InvalidOperationException e) {
-                errorMsg = e.Message;
-                return false;
-            }
+            
             return true;
         }
     }
@@ -92,13 +100,19 @@ namespace todo_app.DataTransferLayer.EventReconciliationSystem {
             }},
             { EventTypes.TaskCompleted, (e, t) => {
                 Task toComplete = t.ActiveTaskReader(e.Id);
-                if (toComplete == null) throw new InvalidOperationException("Cannot complete a task we could not find in our active task collection");
+                if (toComplete == null) {
+                    if (t.CompletedTaskReader(e.Id) != null) { throw new DuplicatedEventException("Task already completed"); }
+                    else throw new InvalidOperationException("Cannot complete a task we could not find in our active task collection");
+                }
                 t.CompletedTask(toComplete, e.Timestamp);
                 return t;
             }},
             { EventTypes.TaskFailed, (e, t) => {
                 Task toFail = t.ActiveTaskReader(e.Id);
-                if (toFail == null) throw new InvalidOperationException("Cannot fail a task we could not find in our active task collection");
+                if (toFail == null) {
+                    if (t.FailedTaskReader(e.Id) != null) { throw new DuplicatedEventException("Task already failed"); }
+                    else throw new InvalidOperationException("Cannot fail a task we could not find in our active task collection");
+                }
                 t.FailTask(toFail, e.Timestamp);
                 return t;
             }},

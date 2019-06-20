@@ -161,7 +161,7 @@ namespace todo_app.DomainLayer.TaskListModel {
 
         // Task 'Activation' (adding a task to Goals, Weekly, or Daily board form the backlog).
         public void ActivateTask(Task toActivate, int newCategory, long timeStamp) {
-            if (toActivate.Category != CategoryVals.Deferred) throw new InvalidOperationException("Cannot activate a task which is not currently deferred. Task ID: " + toActivate.Id);
+            if (toActivate.Category != CategoryVals.Deferred) throw new DuplicatedEventException("Task already activated");
             if (newCategory != CategoryVals.Daily && newCategory != CategoryVals.Weekly && newCategory != CategoryVals.Goal) throw new InvalidOperationException("Invalid target category for task-activation: " + newCategory);
             if (timeStamp < toActivate.EventTimeStamps.TimeCreated) throw new InvalidOperationException("Cannot activate a task before it was created");
             toActivate.EventTimeStamps.TimeActivated = timeStamp;
@@ -182,12 +182,16 @@ namespace todo_app.DomainLayer.TaskListModel {
 
         // Task Closure.
         public void CompletedTask(Task t, long timeStamp) {
+            // If we are already in this state, just return without changing anything!
+            if (t.ProgressStatus == ProgressStatusVals.Completed) throw new DuplicatedEventException("Task already completed");
             if (t.ProgressStatus != ProgressStatusVals.Started) throw new InvalidOperationException("Cannot call 'complete' on root task which is not started. Task id: " + t.Id);
             if (t.Category == CategoryVals.Deferred) throw new InvalidOperationException("Cannot call 'complete' on root task which is not activated. Task id: " + t.Id);
             if (timeStamp < t.EventTimeStamps.TimeStarted) throw new InvalidOperationException("Cannot complete a task before it was started! Task id: " + t.Id);
             CloseTaskAndChildren(t, timeStamp, true);
         }
         public void FailTask(Task t, long timeStamp) {
+            // If we are already in this state, just return without changing anything!
+            if (t.ProgressStatus == ProgressStatusVals.Failed) throw new DuplicatedEventException("Task already failed");
             if (!ProgressStatusVals.ActiveTaskValues.Contains(t.ProgressStatus)) throw new InvalidOperationException("Cannot call 'fail' on root task which is already closed. Task id: " + t.Id);
             if (t.Category == CategoryVals.Deferred) throw new InvalidOperationException("Cannot call 'fail' on root task which is not activated. Task id: " + t.Id);
             if (timeStamp < t.EventTimeStamps.TimeCreated) throw new InvalidOperationException("Cannot fail a task before it was created! Task id: " + t.Id);
@@ -246,7 +250,7 @@ namespace todo_app.DomainLayer.TaskListModel {
         // Starting Tasks.
         public void StartTask(Task t, long timeStamp) {
             if (t.Category == CategoryVals.Deferred) { throw new InvalidOperationException("Cannot start a task which is currently deferred. Task Id: " + t.Id); }
-            if (t.ProgressStatus == ProgressStatusVals.Started) return; // Do nothing.
+            if (t.ProgressStatus == ProgressStatusVals.Started) throw new DuplicatedEventException("Task already started");
             if (t.ProgressStatus != ProgressStatusVals.NotStarted) { throw new InvalidOperationException("Cannot start a task which is already starts or closed. Task Id: " + t.Id); }
             t.ProgressStatus = ProgressStatusVals.Started;
             t.EventTimeStamps.TimeStarted = timeStamp;
@@ -356,5 +360,9 @@ namespace todo_app.DomainLayer.TaskListModel {
                 throw new InvalidOperationException("Invalid id for new task. This ID is already present!");
             }
         }
+    }
+
+    public class DuplicatedEventException : Exception {
+        public DuplicatedEventException(string message) : base(message) { /* Do nothing */ }
     }
 }

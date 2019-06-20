@@ -106,14 +106,14 @@ namespace todo_app.Controllers {
             // Try to validate. If we fail, just save nothing and return a 409 to indicate the client's data is conflicting.
             EventLogReconciler logReconciler = new EventLogReconciler(savedEvents);
             
-            if (!logReconciler.SimpleFullStateRebuildValidation(newEvents, out string err)) {
+            if (!logReconciler.SimpleFullStateRebuildValidation(newEvents, out IList<GenericTodoEvent> validEvents, out string err)) {
                 // 409 Code indicates to the client that their events are 'in conflict' with the server's state, i.e., these events are not valid.
                 return StatusCode(409, err);
             }
             
-            dbContext.TodoEvents.AddRange(newEvents);
+            dbContext.TodoEvents.AddRange(validEvents);
             await dbContext.SaveChangesAsync();
-            return Ok(savedEvents.Concat(newEvents).OrderBy(e => e.Timestamp));
+            return Ok(savedEvents.Concat(validEvents).OrderBy(e => e.Timestamp));
         }
 
         private void PrintClaimsPrincipal(ClaimsPrincipal userDetails) {
