@@ -305,6 +305,10 @@ export function InstantiateNewDataModelScope(currContext) {
         return UndoStackObj.GetSize();
     }
 
+    function PeekUndoStack() {
+        return UndoStackObj.Peek();
+    }
+
     // Exported inner function: Performs an undo operation, if it is valid to do so. If the undo operation actually is performed, we
     // will trigger a data event for the undo, and trigger a view layer callback.
     function PerformUndo() {
@@ -349,6 +353,7 @@ export function InstantiateNewDataModelScope(currContext) {
         ClearAllRegisteredCallbacks : ClearAllRegisteredCallbacks,
         RefreshStatisticsModel : RefreshStatisticsModel,
         GetUndoStackSize : GetUndoStackSize,
+        PeekUndoStack : PeekUndoStack,
         PerformUndo : PerformUndo
     });
 }

@@ -104,6 +104,9 @@ export function BuildNewUndoStack() {
     function GetSize() {
         return UndoStack.length;
     }
+    function Peek() {
+        return GetSize() === 0 ? null : UndoStack[GetSize()-1]; // Return the data item without popping it from the stack.
+    }
 
     function FilterExpiredUndoActions(currTime) {
         UndoStack = UndoStack.filter(a => currTime - a.timestamp < UNDO_ACTION_MAX_AGE_MILLISECONDS);
@@ -122,7 +125,8 @@ export function BuildNewUndoStack() {
         // Performing undos and modifying stack state.
         PerformUndo: PerformUndo,
         GetSize: GetSize,
-        FilterExpiredUndoActions: FilterExpiredUndoActions
+        FilterExpiredUndoActions: FilterExpiredUndoActions,
+        Peek: Peek
     });
 }
 
