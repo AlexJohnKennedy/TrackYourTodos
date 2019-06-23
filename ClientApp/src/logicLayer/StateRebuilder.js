@@ -9,7 +9,7 @@
 
 // Define the strings to match against in the JSON parsing!
 import { EventTypes } from './dataEventJsonSchema';
-import { Category } from './Task';
+import { Category, ProgressStatus } from './Task';
 
 const EventReplayFunctions = new Map([
     // Normal data events
@@ -32,6 +32,22 @@ const EventReplayFunctions = new Map([
     [EventTypes.taskActivatedUndo, replayTaskActivatedUndoEvent],
     [EventTypes.taskStartedUndo, replayTaskStartedUndoEvent],
     [EventTypes.taskEditedUndo, replayTaskEditedUndoEvent],
+]);
+
+// Mappings which denotes incoming events, per progress state, which are valid with 1 'missing' event link. The returned dictionary
+// denotes which linking events link to the incoming event.
+// (ProgressStatus, (IncomingEventType, LinkingEventType which makes the incoming event valid))
+const IncomingEventsWithLinkingEventProgressStatusMappings = new Map([
+    [ProgressStatus.NotStarted, new Map([
+        [EventTypes.taskCompleted, EventTypes.TaskStarted],
+        [EventTypes.taskRevived, EventTypes.TaskFailed]
+    ])],
+    [ProgressStatus.Started, new Map([
+        [EventTypes.TaskRevived, EventTypes.TaskFailed]
+    ])],
+    [ProgressStatus.Completed, new Map([ /* None */ ])],
+    [ProgressStatus.Failed, new Map([ /* None */ ])],
+    [ProgressStatus.Reattempted, new Map([ /* None */ ])]
 ]);
 
 // Replays all event in the json log to rebuild the state exactly. It also tracks the largest id it found, which is returned.
@@ -63,8 +79,46 @@ function replayEvent(event, tasklist, taskMap, undoStack) {
     if (!EventReplayFunctions.has(event.eventType)) {
         throw new Error("Could not identify the event type of a parsed data event! The invalid event type was: " + event.eventType);
     }
+    
+    let task = taskMap.get(event.id);
+    if (task === undefined || task === null) {
+        // Handle cases where the associated task does not exist yet.
+        // If the event is a creation event, this is expected.
+        if (event.eventType === EventTypes.taskAdded || event.eventType === EventTypes.childTaskAdded || event.eventType === EventTypes.taskRevived) {
+            EventReplayFunctions.get(event.eventType)(event, tasklist, taskMap, undoStack);
+            return;
+        }
+        // In these cases, we must implicitly create the task first, to 'join' the missing link.
+        else if (event.eventType === EventTypes.taskActivated || event.eventType === EventTypes.taskStarted) {
+            // If the task does not exist yet, we are happy to create it implicitly.
+            if (event.parent !== null && event.parent !== undefined) { EventReplayFunctions.get(EventTypes.childTaskAdded)(event, tasklist, taskMap, undoStack); }
+            else { EventReplayFunctions.get(EventTypes.taskAdded)(event, tasklist, taskMap, undoStack); }
+        }
+        else {
+            throw new Error("Could not find a valid action for event regarding non-existant task. The invalid event was: " + event.toString());
+        }
+    }
+    else if (task.category === Category.Deferred) {
+        // In these cases, we must implicitly activate the task first, to jump the 'missing event' gap.
+        if (event.eventType === EventTypes.taskStarted || event.eventType === EventTypes.TaskFailed) {
+            tasklist.ActivateTask(task, event.category, event.timestamp);
+            undoStack.PushUndoableActivateTask(task, event.timestamp);
+            EventReplayFunctions.get(event.eventType)(event, tasklist, taskMap, undoStack);
+            return;
+        }
+        else {
+            EventReplayFunctions.get(event.eventType)(event, tasklist, taskMap, undoStack);
+            return;
+        }
+    }
+    else if (IncomingEventsWithLinkingEventProgressStatusMappings.get(task.progressStatus).has(event.eventType)) {
+        EventReplayFunctions.get(IncomingEventsWithLinkingEventProgressStatusMappings.get(task.progressStatus).get(event.eventType))(event, tasklist, taskMap, undoStack);
+        EventReplayFunctions.get(event.eventType)(event, tasklist, taskMap, undoStack);
+        return;
+    }
     else {
         EventReplayFunctions.get(event.eventType)(event, tasklist, taskMap, undoStack);
+        return;
     }
 }
 
