@@ -132,7 +132,7 @@ namespace todo_app.DataTransferLayer.EventReconciliationSystem {
             { EventTypes.ChildTaskAddedUndo, (e, t) => {
                 Task task = t.ActiveTaskReader(e.Id);
                 if (task == null) throw new InvalidOperationException("Cannot undo-create a task we could not find in our active task collection");
-                if (undoStack.Count == 0 || undoStack.Peek().EventType != EventTypes.TaskAdded || undoStack.Peek().Id != e.Id) throw new InvalidOperationException("Invalid undo: Undo event wanted to undo an action which was not the latest ocurring action");
+                if (undoStack.Count == 0 || undoStack.Peek().EventType != EventTypes.ChildTaskAdded || undoStack.Peek().Id != e.Id) throw new InvalidOperationException("Invalid undo: Undo event wanted to undo an action which was not the latest ocurring action");
                 undoStack.Pop();
                 t.UndoCreateNewSubtask(task);
                 return t;
@@ -141,7 +141,7 @@ namespace todo_app.DataTransferLayer.EventReconciliationSystem {
                 Task originalTask = t.FailedTaskReader(e.Original.Value);
                 Task newTask = t.ActiveTaskReader(e.Id);
                 if (originalTask == null || newTask == null) throw new InvalidOperationException("Cannot undo revival of tasks we could not find");
-                if (undoStack.Count == 0 || undoStack.Peek().EventType != EventTypes.TaskAdded || undoStack.Peek().Id != e.Id) throw new InvalidOperationException("Invalid undo: Undo event wanted to undo an action which was not the latest ocurring action");
+                if (undoStack.Count == 0 || undoStack.Peek().EventType != EventTypes.TaskRevived || undoStack.Peek().Id != e.Id) throw new InvalidOperationException("Invalid undo: Undo event wanted to undo an action which was not the latest ocurring action");
                 undoStack.Pop();
                 t.UndoReviveTaskAsClone(newTask, originalTask);
                 return t;
@@ -152,7 +152,7 @@ namespace todo_app.DataTransferLayer.EventReconciliationSystem {
             { EventTypes.TaskCompletedUndo, (e, t) => {
                 Task task = t.CompletedTaskReader(e.Id);
                 if (task == null) throw new InvalidOperationException("Cannot undo completion, could not find task in completed list");
-                if (undoStack.Count == 0 || undoStack.Peek().EventType != EventTypes.TaskAdded || undoStack.Peek().Id != e.Id) throw new InvalidOperationException("Invalid undo: Undo event wanted to undo an action which was not the latest ocurring action");
+                if (undoStack.Count == 0 || undoStack.Peek().EventType != EventTypes.TaskCompleted || undoStack.Peek().Id != e.Id) throw new InvalidOperationException("Invalid undo: Undo event wanted to undo an action which was not the latest ocurring action");
                 undoStack.Pop();
                 t.UndoCompleteTask(task);
                 return t;
@@ -160,7 +160,7 @@ namespace todo_app.DataTransferLayer.EventReconciliationSystem {
             { EventTypes.TaskActivatedUndo, (e, t) => {
                 Task task = t.ActiveTaskReader(e.Id);
                 if (task == null) throw new InvalidOperationException("Cannot undo activation, could not find task");
-                if (undoStack.Count == 0 || undoStack.Peek().EventType != EventTypes.TaskAdded || undoStack.Peek().Id != e.Id) throw new InvalidOperationException("Invalid undo: Undo event wanted to undo an action which was not the latest ocurring action");
+                if (undoStack.Count == 0 || undoStack.Peek().EventType != EventTypes.TaskActivated || undoStack.Peek().Id != e.Id) throw new InvalidOperationException("Invalid undo: Undo event wanted to undo an action which was not the latest ocurring action");
                 undoStack.Pop();
                 t.UndoActivateTask(task);
                 return t;
@@ -168,7 +168,7 @@ namespace todo_app.DataTransferLayer.EventReconciliationSystem {
             { EventTypes.TaskStartedUndo, (e, t) => {
                 Task task = t.ActiveTaskReader(e.Id);
                 if (task == null) throw new InvalidOperationException("Cannot undo start task, task was not in active task list");
-                if (undoStack.Count == 0 || undoStack.Peek().EventType != EventTypes.TaskAdded || undoStack.Peek().Id != e.Id) throw new InvalidOperationException("Invalid undo: Undo event wanted to undo an action which was not the latest ocurring action");
+                if (undoStack.Count == 0 || undoStack.Peek().EventType != EventTypes.TaskStarted || undoStack.Peek().Id != e.Id) throw new InvalidOperationException("Invalid undo: Undo event wanted to undo an action which was not the latest ocurring action");
                 undoStack.Pop();
                 t.UndoStartTask(task);
                 return t;
@@ -176,7 +176,7 @@ namespace todo_app.DataTransferLayer.EventReconciliationSystem {
             { EventTypes.TaskEditedUndo, (e, t) => {
                 Task task = t.ActiveTaskReader(e.Id);
                 if (task == null) throw new InvalidOperationException("Cannot undo edit of task we could not find in our collection");
-                if (undoStack.Count == 0 || undoStack.Peek().EventType != EventTypes.TaskAdded || undoStack.Peek().Id != e.Id) throw new InvalidOperationException("Invalid undo: Undo event wanted to undo an action which was not the latest ocurring action");
+                if (undoStack.Count == 0 || undoStack.Peek().EventType != EventTypes.TaskEdited || undoStack.Peek().Id != e.Id) throw new InvalidOperationException("Invalid undo: Undo event wanted to undo an action which was not the latest ocurring action");
                 undoStack.Pop();
                 t.UndoEditTaskText(task, e.Name, e.RevertedEventTimestamp.Value);
                 return t;
