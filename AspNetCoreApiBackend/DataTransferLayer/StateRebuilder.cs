@@ -186,6 +186,25 @@ namespace todo_app.DataTransferLayer.EventReconciliationSystem {
             }}
         };
 
+        // WARNING! ONLY APPLICABLE IF NOT DEFERRED!
+        private static readonly Dictionary<int, HashSet<string>> IncomingEventsWhichTriggerRefreshForProgressStatusMappings = new Dictionary<int, HashSet<string>>() {
+            { ProgressStatusVals.NotStarted, new HashSet<string>() {
+                /* None */
+            }},
+            { ProgressStatusVals.Started, new HashSet<string>() {
+                EventTypes.TaskAdded, EventTypes.ChildTaskAdded, EventTypes.TaskActivated
+            }},
+            { ProgressStatusVals.Completed, new HashSet<string>() {
+                EventTypes.TaskAdded, EventTypes.ChildTaskAdded, EventTypes.TaskActivated, EventTypes.TaskStarted
+            }},
+            { ProgressStatusVals.Failed, new HashSet<string>() {
+                EventTypes.TaskAdded, EventTypes.ChildTaskAdded, EventTypes.TaskActivated, EventTypes.TaskStarted
+            }},
+            { ProgressStatusVals.Reattempted, new HashSet<string>() {
+                EventTypes.TaskAdded, EventTypes.ChildTaskAdded, EventTypes.TaskActivated, EventTypes.TaskStarted, EventTypes.TaskFailed
+            }}
+        };
+
         public static TaskList Replay(GenericTodoEvent e, TaskList tasklist, out bool saveEvent, out bool triggerRefresh) {
             saveEvent = true;
             triggerRefresh = false;
