@@ -19,6 +19,8 @@ import { DEFAULT_GLOBAL_CONTEXT_STRING, MAX_CONTEXT_NAME_LEN } from '../../logic
 
 // Define a constant which others may want to use.
 export const MAX_SELECTABLE_CONTEXTS = 5;
+export const CONTEXT_STATE_LOCAL_STORAGE_KEY = "prev-context-state";    // User id + this key will be the local storage key we search for.
+export const GetContextStateLocalStorageKey = userId => userId + CONTEXT_STATE_LOCAL_STORAGE_KEY;
 
 // A wrapper for the application 'page' itself, which will be rendered by react-router.
 // This basically acts as the subtree-root for the actual todo-app page.
@@ -188,6 +190,17 @@ export class AppPage extends Component {
         // converts all strings with validator, filters out the failed ones (null), then build a set out of them to remove duplicats, then place
         // the de-duplicated values back into an array using the spread (...) operator on the set.
         const validatedStrings = [ ...new Set([DEFAULT_GLOBAL_CONTEXT_STRING].concat(this.state.availableContexts).concat(contextStrings).map(s => this.validateContextString(s)).filter(s => s !== null)) ];
+
+        // Now, lookup (for the current user id) any saved selectable-contexts and current contexts from local storage, so that the state remains for the
+        // user after reloads.
+        const prevContextStateData = window.localStorage.getItem(GetContextStateLocalStorageKey(this.props.userId));
+        if (prevContextStateData !== null) {
+            // If there was saved information, then parse it, and add the selectable contexts and current context state, provided they exist in the loaded
+            // availableContexts!
+            const parsedData = JSON.parse(prevContextStateData);
+            
+        }
+
         this.setState({
             availableContexts: validatedStrings
         });
