@@ -7009,5 +7009,61 @@
       "children": [],
       "original": null,
       "revertedEventTimestamp": null
+   },
+   {
+      "eventType": "taskCompleted",
+      "timestamp": 1561293286751,
+      "id": "18f4027d-96fd-4850-a7d0-294c95c063e4",
+      "name": "Handle out-of-order event arrival w/o rejecting events which MIGHT become valid if another e arrives w/ earlier time",
+      "category": 1,
+      "progressStatus": 2,
+      "colourId": 3,
+      "context": "tytodos development",
+      "parent": null,
+      "children": [],
+      "original": null,
+      "revertedEventTimestamp": null
+   },
+   {
+      "eventType": "taskStarted",
+      "timestamp": 1561293306394,
+      "id": "a8ca47ea-c4e3-41e3-9aaf-9fa040b9624e",
+      "name": "Fix issue where multiple edit-forms can be open at once, when esc is not pressed",
+      "category": 2,
+      "progressStatus": 1,
+      "colourId": 0,
+      "context": "tytodos development",
+      "parent": null,
+      "children": [],
+      "original": null,
+      "revertedEventTimestamp": null
+   },
+   {
+      "eventType": "taskCompleted",
+      "timestamp": 1561293495663,
+      "id": "a8ca47ea-c4e3-41e3-9aaf-9fa040b9624e",
+      "name": "Fix issue where multiple edit-forms can be open at once, when esc is not pressed",
+      "category": 2,
+      "progressStatus": 2,
+      "colourId": 0,
+      "context": "tytodos development",
+      "parent": null,
+      "children": [],
+      "original": null,
+      "revertedEventTimestamp": null
+   },
+   {
+      "eventType": "taskStarted",
+      "timestamp": 1561293497576,
+      "id": "682b9c08-6144-43cf-826c-0e0e67cdef9d",
+      "name": "Make the App remember the chosen 'selected contexts' which the user last used, so they dont have to reselect every time",
+      "category": 1,
+      "progressStatus": 1,
+      "colourId": 1,
+      "context": "global",
+      "parent": null,
+      "children": [],
+      "original": null,
+      "revertedEventTimestamp": null
    }
 ]
