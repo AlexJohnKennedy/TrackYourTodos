@@ -64,7 +64,7 @@ namespace todo_app.DataTransferLayer.EventReconciliationSystem {
         private static bool refresh;
 
         // Define a map of handler funcs.
-        public static readonly Dictionary<string, EventReplayFunc> Handlers = new Dictionary<string, EventReplayFunc>() {
+        private static readonly Dictionary<string, EventReplayFunc> Handlers = new Dictionary<string, EventReplayFunc>() {
             { EventTypes.TaskAdded, (e, t) => {
                 t.CreateNewIndependentTask(e.Name, e.Category, e.Timestamp, e.ColourId, e.Id);
                 return t;
@@ -77,7 +77,11 @@ namespace todo_app.DataTransferLayer.EventReconciliationSystem {
             }},
             { EventTypes.TaskActivated, (e, t) => {
                 Task toActivate = t.AllTaskReader(e.Id);
-                if (toActivate == null) throw new InvalidOperationException("Cannot activate a task we could not find");
+                // If the task does not exist yet, we are happy to create it implicitly.
+                if (toActivate == null) {
+                    if (e.Parent.HasValue) {  toActivate = t.CreateNewSubtask(e.Name, t.AllTaskReader(e.Parent.Value), e.Category, e.Timestamp, e.Id); }
+                    else { toActivate = t.CreateNewIndependentTask(e.Name, e.Category, e.Timestamp, e.ColourId, e.Id); }
+                }
                 t.ActivateTask(toActivate, e.Category, e.Timestamp);
                 return t;
             }},
@@ -163,8 +167,27 @@ namespace todo_app.DataTransferLayer.EventReconciliationSystem {
             }}
         };
 
+        // WARNING! ONLY APPLICABLE IF NOT DEFERRED!
+        private static readonly Dictionary<int, HashSet<string>> IncomingEventsToIgnoreForProgressStatusMappings = new Dictionary<int, HashSet<string>>() {
+            { ProgressStatusVals.NotStarted, new HashSet<string>() {
+                EventTypes.TaskAdded, EventTypes.ChildTaskAdded, EventTypes.TaskActivated, EventTypes.TaskStartedUndo
+            }},
+            { ProgressStatusVals.Started, new HashSet<string>() {
+                EventTypes.TaskAdded, EventTypes.ChildTaskAdded, EventTypes.TaskActivated, EventTypes.TaskStarted, EventTypes.TaskCompletedUndo
+            }},
+            { ProgressStatusVals.Completed, new HashSet<string>() {
+                EventTypes.TaskAdded, EventTypes.ChildTaskAdded, EventTypes.TaskActivated, EventTypes.TaskStarted, EventTypes.TaskCompleted
+            }},
+            { ProgressStatusVals.Failed, new HashSet<string>() {
+                EventTypes.TaskAdded, EventTypes.ChildTaskAdded, EventTypes.TaskActivated, EventTypes.TaskStarted, EventTypes.TaskFailed, EventTypes.TaskRevivedUndo
+            }},
+            { ProgressStatusVals.Reattempted, new HashSet<string>() {
+                EventTypes.TaskAdded, EventTypes.ChildTaskAdded, EventTypes.TaskActivated, EventTypes.TaskStarted, EventTypes.TaskFailed, EventTypes.TaskRevived
+            }}
+        };
+
         public static TaskList Replay(GenericTodoEvent e, TaskList tasklist, out bool saveEvent, out bool triggerRefresh) {
-            saveEvent = false;
+            saveEvent = true;
             triggerRefresh = false;
 
             var toRet = Handlers[e.EventType](e, tasklist);
