@@ -25,6 +25,7 @@ export class Task extends Component {
     }
     
     toggleEditFormOn() {
+        this.props.formStateManager.triggerCleanup();
         this.setState({
             showingEditForm: true,
             showingDailyForm: false,
