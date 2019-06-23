@@ -152,7 +152,7 @@ namespace todo_app.DataTransferLayer.EventReconciliationSystem {
                 return t;
             }},
             { EventTypes.TaskEditedUndo, (e, t) => {
-                Task task = t.AllTaskReader(e.Id);
+                Task task = t.ActiveTaskReader(e.Id);
                 if (task == null) throw new InvalidOperationException("Cannot undo edit of task we could not find in our collection");
                 t.UndoEditTaskText(task, e.Name, e.RevertedEventTimestamp.Value);
                 return t;
@@ -224,7 +224,7 @@ namespace todo_app.DataTransferLayer.EventReconciliationSystem {
             // If the event is an 'undo' of a creation event, then we can safely dispose of the event, since it would just erase the expected task anyway.
             // If the event is a 'Task activated' or 'Task Started' or 'Task Edited' event, then we will create the event implicitly, since we can do so with no harm done.
             if (task == null) {
-                if (e.EventType == EventTypes.TaskAdded || e.EventType == EventTypes.ChildTaskAdded) {
+                if (e.EventType == EventTypes.TaskAdded || e.EventType == EventTypes.ChildTaskAdded || e.EventType == EventTypes.TaskRevived) {
                     return Handlers[e.EventType](e, tasklist);
                 }
                 else if (e.EventType == EventTypes.TaskAddedUndo || e.EventType == EventTypes.ChildTaskAddedUndo) {
