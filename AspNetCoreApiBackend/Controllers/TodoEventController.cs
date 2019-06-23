@@ -37,7 +37,7 @@ namespace todo_app.Controllers {
         
         // Define functions to use to determine event log ordering. Timestamp, and break ties based on event type precedence. (I.e. Created always preceedes started)        
         private static readonly Func<GenericTodoEvent, EventOrderingKey> keySelector = e => new EventOrderingKey(e.Timestamp, e.EventType);
-        private static readonly EventOrderingKeyComparer keyComparer = new EventOrderingKeyComparer();
+        private static readonly Comparer<EventOrderingKey> keyComparer = new EventOrderingKeyComparer();
 
         private ILogger logger;
         private TodoEventContext dbContext;
@@ -104,16 +104,23 @@ namespace todo_app.Controllers {
         }
         private async Task<IActionResult> ValidateAndSave(IList<GenericTodoEvent> newEvents, IList<GenericTodoEvent> savedEvents) {
             // Try to validate. If we fail, just save nothing and return a 409 to indicate the client's data is conflicting.
-            EventLogReconciler logReconciler = new EventLogReconciler(savedEvents);
-            
-            if (!logReconciler.SimpleFullStateRebuildValidation(newEvents, out string err)) {
-                // 409 Code indicates to the client that their events are 'in conflict' with the server's state, i.e., these events are not valid.
+            EventLogReconciler logReconciler = new EventLogReconciler(savedEvents, keySelector, keyComparer, eventComparer);
+            logReconciler.SimpleFullStateRebuildValidation(newEvents, out IList<GenericTodoEvent> acceptedEvents, out bool eventsRejected, out bool shouldTriggerRefresh, out string err);
+
+            if (eventsRejected) {
                 return StatusCode(409, err);
             }
-            
-            dbContext.TodoEvents.AddRange(newEvents);
-            await dbContext.SaveChangesAsync();
-            return Ok(savedEvents.Concat(newEvents).OrderBy(e => e.Timestamp));
+            else if (acceptedEvents.Count > 0) {
+                dbContext.TodoEvents.AddRange(acceptedEvents);
+                await dbContext.SaveChangesAsync();
+                return Ok(savedEvents.Concat(acceptedEvents).OrderBy(keySelector, keyComparer));
+            }
+            else if (shouldTriggerRefresh) {
+                return StatusCode(409);
+            }
+            else {
+                return Ok(savedEvents.OrderBy(keySelector, keyComparer));
+            }
         }
 
         private void PrintClaimsPrincipal(ClaimsPrincipal userDetails) {

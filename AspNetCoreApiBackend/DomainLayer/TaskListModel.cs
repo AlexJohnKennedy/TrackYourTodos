@@ -161,14 +161,14 @@ namespace todo_app.DomainLayer.TaskListModel {
 
         // Task 'Activation' (adding a task to Goals, Weekly, or Daily board form the backlog).
         public void ActivateTask(Task toActivate, int newCategory, long timeStamp) {
-            if (toActivate.Category != CategoryVals.Deferred) throw new InvalidOperationException("Cannot activate a task which is not currently deferred. Task ID: " + toActivate.Id);
+            if (toActivate.Category != CategoryVals.Deferred) return;
             if (newCategory != CategoryVals.Daily && newCategory != CategoryVals.Weekly && newCategory != CategoryVals.Goal) throw new InvalidOperationException("Invalid target category for task-activation: " + newCategory);
             if (timeStamp < toActivate.EventTimeStamps.TimeCreated) throw new InvalidOperationException("Cannot activate a task before it was created");
             toActivate.EventTimeStamps.TimeActivated = timeStamp;
             toActivate.Category = newCategory;
         }
         public void UndoActivateTask(Task task) {
-            if (task == null) throw new InvalidOperationException("Cannot undo a activation of a task which does not exist");
+            if (task == null) throw new InvalidOperationException("Cannot undo activation of a task which does not exist");
 
             // If this task is not in a state where it has JUST been activated, then this operation is illegal.
             if (task.ProgressStatus != ProgressStatusVals.NotStarted || task.Category > CategoryVals.Daily || task.Children.Count > 0) {
