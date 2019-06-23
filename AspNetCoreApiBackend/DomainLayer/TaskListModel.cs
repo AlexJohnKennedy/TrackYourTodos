@@ -168,7 +168,7 @@ namespace todo_app.DomainLayer.TaskListModel {
             toActivate.Category = newCategory;
         }
         public void UndoActivateTask(Task task) {
-            if (task == null) throw new InvalidOperationException("Cannot undo a activation of a task which does not exist");
+            if (task == null) throw new InvalidOperationException("Cannot undo activation of a task which does not exist");
 
             // If this task is not in a state where it has JUST been activated, then this operation is illegal.
             if (task.ProgressStatus != ProgressStatusVals.NotStarted || task.Category > CategoryVals.Daily || task.Children.Count > 0) {

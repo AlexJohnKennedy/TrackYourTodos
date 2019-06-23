@@ -60,9 +60,6 @@ namespace todo_app.DataTransferLayer.EventReconciliationSystem {
         // Define a function signature type which represents a function which can apply an event to a tasklist model object.
         public delegate TaskList EventReplayFunc(GenericTodoEvent e, TaskList tasklist);
 
-        private static bool save;
-        private static bool refresh;
-
         // Define a map of handler funcs.
         private static readonly Dictionary<string, EventReplayFunc> Handlers = new Dictionary<string, EventReplayFunc>() {
             { EventTypes.TaskAdded, (e, t) => {
@@ -77,11 +74,6 @@ namespace todo_app.DataTransferLayer.EventReconciliationSystem {
             }},
             { EventTypes.TaskActivated, (e, t) => {
                 Task toActivate = t.AllTaskReader(e.Id);
-                // If the task does not exist yet, we are happy to create it implicitly.
-                if (toActivate == null) {
-                    if (e.Parent.HasValue) {  toActivate = t.CreateNewSubtask(e.Name, t.AllTaskReader(e.Parent.Value), e.Category, e.Timestamp, e.Id); }
-                    else { toActivate = t.CreateNewIndependentTask(e.Name, e.Category, e.Timestamp, e.ColourId, e.Id); }
-                }
                 t.ActivateTask(toActivate, e.Category, e.Timestamp);
                 return t;
             }},
@@ -132,7 +124,7 @@ namespace todo_app.DataTransferLayer.EventReconciliationSystem {
                 return t;
             }},
             { EventTypes.TaskRevivedUndo, (e, t) => {
-                Task originalTask = t.FailedTaskReader(e.Id);
+                Task originalTask = t.FailedTaskReader(e.Original.Value);
                 Task newTask = t.ActiveTaskReader(e.Id);
                 if (originalTask == null || newTask == null) throw new InvalidOperationException("Cannot undo revival of tasks we could not find");
                 t.UndoReviveTaskAsClone(newTask, originalTask);
@@ -205,16 +197,94 @@ namespace todo_app.DataTransferLayer.EventReconciliationSystem {
             }}
         };
 
+        // Mappings which denotes incoming events, per progress state, which are valid with 1 'missing' event link. The returned dictionary
+        // denotes which linking events link to the incoming event.
+        // (ProgressStatus, (IncomingEventType, LinkingEventType which makes the incoming event valid))
+        private static readonly Dictionary<int, Dictionary<string, string>> IncomingEventsWithLinkingEventProgressStatusMappings = new Dictionary<int, Dictionary<string, string>>() {
+            { ProgressStatusVals.NotStarted, new Dictionary<string, string>() {
+                { EventTypes.TaskCompleted, EventTypes.TaskStarted },
+                { EventTypes.TaskRevived, EventTypes.TaskFailed }
+            }},
+            { ProgressStatusVals.Started, new Dictionary<string, string>() {
+                { EventTypes.TaskRevived, EventTypes.TaskFailed }
+            }},
+            { ProgressStatusVals.Completed, new Dictionary<string, string>() { /* None */} },
+            { ProgressStatusVals.Failed, new Dictionary<string, string>() { /* None */} },
+            { ProgressStatusVals.Reattempted, new Dictionary<string, string>() { /* None */} }
+        };
+
         public static TaskList Replay(GenericTodoEvent e, TaskList tasklist, out bool saveEvent, out bool triggerRefresh) {
             saveEvent = true;
             triggerRefresh = false;
 
-            var toRet = Handlers[e.EventType](e, tasklist);
-            
-            saveEvent = save;
-            triggerRefresh = refresh;
-            
-            return toRet;
+            // Acquire the task from the global task list, to determine it's current state.
+            Task task = tasklist.AllTaskReader(e.Id);
+           
+            // Handle cases where the task does not yet exist. If the event is a creation event, then this is obviously expected.
+            // If the event is an 'undo' of a creation event, then we can safely dispose of the event, since it would just erase the expected task anyway.
+            // If the event is a 'Task activated' or 'Task Started' or 'Task Edited' event, then we will create the event implicitly, since we can do so with no harm done.
+            if (task == null) {
+                if (e.EventType == EventTypes.TaskAdded || e.EventType == EventTypes.ChildTaskAdded) {
+                    return Handlers[e.EventType](e, tasklist);
+                }
+                else if (e.EventType == EventTypes.TaskAddedUndo || e.EventType == EventTypes.ChildTaskAddedUndo) {
+                    // Throw this event away, it is harmless and uneeded in this case.
+                    saveEvent = false;
+                    triggerRefresh = false;
+                    return tasklist;
+                }
+                else if (e.EventType == EventTypes.TaskActivated || e.EventType == EventTypes.TaskStarted) {
+                    // If the task does not exist yet, we are happy to create it implicitly.
+                    if (e.Parent.HasValue) { tasklist.CreateNewSubtask(e.Name, tasklist.AllTaskReader(e.Parent.Value), e.Category, e.Timestamp, e.Id); }
+                    else { tasklist.CreateNewIndependentTask(e.Name, e.Category, e.Timestamp, e.ColourId, e.Id); }
+                    return Handlers[e.EventType](e, tasklist);
+                }
+                else if (e.EventType == EventTypes.TaskEdited) {
+                    // If the task does not exist yet, we are happy to create it implicitly, but we won't save the edit event.
+                    if (e.Parent.HasValue) { tasklist.CreateNewSubtask(e.Name, tasklist.AllTaskReader(e.Parent.Value), e.Category, e.Timestamp, e.Id); }
+                    else { tasklist.CreateNewIndependentTask(e.Name, e.Category, e.Timestamp, e.ColourId, e.Id); }
+                    saveEvent = false;
+                    triggerRefresh = false;
+                    return tasklist;
+                }
+                else {
+                    throw new InvalidOperationException("Illegal event applied to a task id with no-corresponding-existing task. Eventtype: " + e.EventType);
+                }
+            }
+            // Handle cases where the task is deferred.
+            // If the event is a creation event or an undo-activation event, we can safely dispose of the event.
+            // If the event is a 'start task' or 'fail task', we are happy to fill in the implicit activation action.
+            else if (task.Category == CategoryVals.Deferred) {
+                if (e.EventType == EventTypes.TaskAdded || e.EventType == EventTypes.ChildTaskAdded || e.EventType == EventTypes.TaskActivatedUndo) {
+                    // Throw this event away, it is harmless and uneeded in this case.
+                    saveEvent = false;
+                    triggerRefresh = false;
+                    return tasklist;
+                }
+                else if (e.EventType == EventTypes.TaskStarted || e.EventType == EventTypes.TaskFailed) {
+                    tasklist.ActivateTask(task, e.Category, e.Timestamp);
+                    return Handlers[e.EventType](e, tasklist);
+                }
+                else {
+                    return Handlers[e.EventType](e, tasklist);
+                }
+            }
+            // Handle the cases where the state is denoted by progress status of the task (the only remaining option)
+            else {
+                if (IncomingEventsWhichTriggerRefreshForProgressStatusMappings[task.ProgressStatus].Contains(e.EventType)) {
+                    triggerRefresh = true;
+                }
+                if (IncomingEventsToIgnoreForProgressStatusMappings[task.ProgressStatus].Contains(e.EventType)) {
+                    saveEvent = false;
+                    return tasklist;
+                }
+                if (IncomingEventsWithLinkingEventProgressStatusMappings[task.ProgressStatus].ContainsKey(e.EventType)) {
+                    // This is a valid incoming event type, but we must 'link' it by executing the implicit event which is currently missing.
+                    Handlers[IncomingEventsWithLinkingEventProgressStatusMappings[task.ProgressStatus][e.EventType]](e, tasklist);
+                }
+
+                return Handlers[e.EventType](e, tasklist);
+            }
         } 
     }
 }
