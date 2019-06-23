@@ -39,11 +39,11 @@ const EventReplayFunctions = new Map([
 // (ProgressStatus, (IncomingEventType, LinkingEventType which makes the incoming event valid))
 const IncomingEventsWithLinkingEventProgressStatusMappings = new Map([
     [ProgressStatus.NotStarted, new Map([
-        [EventTypes.taskCompleted, EventTypes.TaskStarted],
-        [EventTypes.taskRevived, EventTypes.TaskFailed]
+        [EventTypes.taskCompleted, EventTypes.taskStarted],
+        [EventTypes.taskRevived, EventTypes.taskFailed]
     ])],
     [ProgressStatus.Started, new Map([
-        [EventTypes.TaskRevived, EventTypes.TaskFailed]
+        [EventTypes.taskRevived, EventTypes.taskFailed]
     ])],
     [ProgressStatus.Completed, new Map([ /* None */ ])],
     [ProgressStatus.Failed, new Map([ /* None */ ])],
@@ -93,6 +93,8 @@ function replayEvent(event, tasklist, taskMap, undoStack) {
             // If the task does not exist yet, we are happy to create it implicitly.
             if (event.parent !== null && event.parent !== undefined) { EventReplayFunctions.get(EventTypes.childTaskAdded)(event, tasklist, taskMap, undoStack); }
             else { EventReplayFunctions.get(EventTypes.taskAdded)(event, tasklist, taskMap, undoStack); }
+            EventReplayFunctions.get(event.eventType)(event, tasklist, taskMap, undoStack);
+            return;
         }
         else {
             throw new Error("Could not find a valid action for event regarding non-existant task. The invalid event was: " + event.toString());
