@@ -8,63 +8,60 @@ using todo_app.DataTransferLayer.Entities;
 namespace todo_app.DataTransferLayer.EventReconciliationSystem {
     
     public class EventLogReconciler {
+        // Define functions to use to determine event log ordering. Timestamp, and break ties based on event type precedence. (I.e. Created always preceedes started)        
+        private readonly Func<GenericTodoEvent, EventOrderingKey> keySelector;
+        private readonly Comparer<EventOrderingKey> keyComparer;
+        private readonly IEqualityComparer<GenericTodoEvent> eventComparer;
+
         private IList<GenericTodoEvent> truthLog;   // Represents the 'official' event log, i.e., the log which is already saved in the database.
 
-        public EventLogReconciler() {
-            this.truthLog = new List<GenericTodoEvent>();
-        }
-        public EventLogReconciler(IList<GenericTodoEvent> truthLog) {
-            this.truthLog = truthLog;   // Must be sorted.
+        public EventLogReconciler(IList<GenericTodoEvent> truthLog, Func<GenericTodoEvent, EventOrderingKey> keySelector, Comparer<EventOrderingKey> keyComparer, IEqualityComparer<GenericTodoEvent> eventComparer) {
+            this.keyComparer = keyComparer;
+            this.keySelector = keySelector;
+            this.eventComparer = eventComparer;
+            this.truthLog = truthLog;
         }
 
-        // Method which reconciles incoming events (which are considered possibly invalid), with the current state
-        // truth log. If new events create invalid states, it will reject them, except it will attempt to reconcile 
-        // the logs such that it can keep as many of the new events as it can, whilst:
-        //  a) Maintaining a valid state
-        //  b) Keeping all of the original events
-        //
-        // Any new events which are successfully reconciled will subsequently become part of the truth log and update
-        // this object's state, such that they are part of the truth log the next time this method is called.
-        public void ReconcileNewEvents(IList<GenericTodoEvent> newEvents, out IList<GenericTodoEvent> acceptedEvents, out IList<GenericTodoEvent> rejectedEvents) {
+        // Validation algorithm. Replays events, and depending on circumstances, sets flags which inform the caller how to save/reject/respond to the incoming
+        // events.
+        public void SimpleFullStateRebuildValidation(IList<GenericTodoEvent> newEvents, out IList<GenericTodoEvent> acceptedEvents, out bool rejected, out bool shouldTriggerRefresh, out string errorMsg) {
             TaskList tasklist = new TaskList();
-            IList<GenericTodoEvent> sorted = newEvents.OrderBy(e => e.Timestamp).ToList();
-            
-            // TODO: Recursive reconciliation algorithm. However, this requires UNDO operations to be implemented!
-
-            acceptedEvents = new List<GenericTodoEvent>();
-            rejectedEvents = new List<GenericTodoEvent>();
-        }
-
-        // This method is the simple solution: It will simply attempt to merge ALL the incoming events, and if any failures arise, at all, then
-        // the entire set of incoming new events is rejected. This is more primitive than the search-reconcilitation solution, but is faster and
-        // less complicated. So i'm going to implement it this way for now just to get fundamental event validation in place.
-        // Returns TRUE if the new events are valid. Returns FALSE for any error case, regardless of which new events caused the error.
-        public bool SimpleFullStateRebuildValidation(IList<GenericTodoEvent> newEvents, out string errorMsg) {
-            TaskList tasklist = new TaskList();
-            IList<GenericTodoEvent> sorted = newEvents.OrderBy(e => e.Timestamp).ToList();
-
+            ISet<GenericTodoEvent> newEventSet = newEvents.ToHashSet(eventComparer);
             errorMsg = "";
-            
-            int i=0, j=0;   // i => index for truth log, j => index for new event log
+            acceptedEvents = new List<GenericTodoEvent>(newEvents.Count);
+            shouldTriggerRefresh = false;
+            rejected = false;
+
+            // Create the full event log. We will attempt to execute these events in order, validating the state each time.
+            IList<GenericTodoEvent> fullEventLog = truthLog.Concat(newEvents).OrderBy(keySelector, keyComparer).ToList();
+
             try {
-                while (i < truthLog.Count || j < newEvents.Count) {
-                    // Pick the oldest remaining event, and apply it
-                    var nextEvent = (i == truthLog.Count || (j < newEvents.Count && newEvents[j].Timestamp < truthLog[i].Timestamp)) ? newEvents[j++] : truthLog[i++];
-                    tasklist = EventReplayer.Replay(nextEvent, tasklist);
+                foreach (GenericTodoEvent currEvent in fullEventLog) {
+                    // Try to apply the event, and examine the validation results.
+                    tasklist = EventReplayer.Replay(currEvent, tasklist, out bool saveIfNewEvent, out bool demandsRefresh);
+                    
+                    // Only save the event if the event replay does not want to skip it, AND the event has not already been saved (i.e. is 'new')
+                    if (saveIfNewEvent && newEventSet.Contains(currEvent)) { acceptedEvents.Add(currEvent); }
+                    if (demandsRefresh) { shouldTriggerRefresh = true; }
                 }
             }
-            // If any InvalidOperationExceptions are thrown, that means the event is invalid, and we should return false.
+            // If any InvalidOperationExceptions are thrown, that means the eventlog as a whole is invalid, and nothing should be saved.
+            // This is our response if we deem that the posted events are so out-of-sync and inherently incompatible with the truth log, that
+            // it would be dangerous to attempt any kind of saving from these events.
             catch (InvalidOperationException e) {
                 errorMsg = e.Message;
-                return false;
+                rejected = true;
+                shouldTriggerRefresh = true;
             }
-            return true;
         }
     }
 
     public static class EventReplayer {
         // Define a function signature type which represents a function which can apply an event to a tasklist model object.
         public delegate TaskList EventReplayFunc(GenericTodoEvent e, TaskList tasklist);
+
+        private static bool save;
+        private static bool refresh;
 
         // Define a map of handler funcs.
         public static readonly Dictionary<string, EventReplayFunc> Handlers = new Dictionary<string, EventReplayFunc>() {
@@ -166,9 +163,16 @@ namespace todo_app.DataTransferLayer.EventReconciliationSystem {
             }}
         };
 
-        public static TaskList Replay(GenericTodoEvent e, TaskList tasklist) {
-            // Should never not be present, since the ModelBinding validation should be only allowing correct event type strings to here!
-            return Handlers[e.EventType](e, tasklist);
+        public static TaskList Replay(GenericTodoEvent e, TaskList tasklist, out bool saveEvent, out bool triggerRefresh) {
+            saveEvent = false;
+            triggerRefresh = false;
+
+            var toRet = Handlers[e.EventType](e, tasklist);
+            
+            saveEvent = save;
+            triggerRefresh = refresh;
+            
+            return toRet;
         } 
     }
 }
