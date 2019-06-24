@@ -25,6 +25,7 @@ export class Task extends Component {
     }
     
     toggleEditFormOn() {
+        this.props.formStateManager.triggerCleanup();
         this.setState({
             showingEditForm: true,
             showingDailyForm: false,
@@ -143,7 +144,7 @@ export class Task extends Component {
                 }
                 { this.props.taskView.category < Category.Weekly && this.props.taskView.progressStatus <= ProgressStatus.Started &&
                     <>
-                    <NewTaskButton clickAction={() => this.toggleFormOn(true)} text={'>'}/>
+                    <NewTaskButton clickAction={() => this.toggleFormOn(true)} text={'>'} tooltipText="Creat a daily subtask"/>
                     <CreationForm 
                         creationFunction={this.props.taskView.CreateDailyChild} 
                         formText="New daily subtask" 
@@ -156,7 +157,7 @@ export class Task extends Component {
                 }
                 { this.props.taskView.category < Category.Daily && this.props.taskView.progressStatus <= ProgressStatus.Started &&
                     <>
-                    <NewTaskButton clickAction={() => this.toggleFormOn(false)} text={'>'}/>
+                    <NewTaskButton clickAction={() => this.toggleFormOn(false)} text={'>'} tooltipText="Create a subtask"/>
                     <CreationForm 
                         creationFunction={this.props.taskView.CreateChild} 
                         formText="New subtask" 
@@ -182,15 +183,15 @@ export class Task extends Component {
                 }
                 { this.props.taskView.category === Category.Deferred &&
                     <>
-                    <NewTaskButton clickAction={() => this.props.taskView.ActivateTask(Category.Daily)} text={'D'}/>
-                    <NewTaskButton clickAction={() => this.props.taskView.ActivateTask(Category.Weekly)} text={'W'}/>
-                    <NewTaskButton clickAction={() => this.props.taskView.ActivateTask(Category.Goal)} text={'G'}/>
+                    <NewTaskButton clickAction={() => this.props.taskView.ActivateTask(Category.Daily)} text={'D'} tooltipText="Activate as daily task"/>
+                    <NewTaskButton clickAction={() => this.props.taskView.ActivateTask(Category.Weekly)} text={'W'} tooltipText="Activate as weekly task"/>
+                    <NewTaskButton clickAction={() => this.props.taskView.ActivateTask(Category.Goal)} text={'G'} tooltipText="Activate as goal task"/>
                     </>
                 }
                 { this.props.taskView.progressStatus === ProgressStatus.Failed &&
                     <>
-                    <NewTaskButton clickAction={() => this.props.taskView.ReviveTask(false)} text={'<'}/>
-                    <NewTaskButton clickAction={() => this.props.taskView.ReviveTask(true)} text={'<'}/>
+                    <NewTaskButton clickAction={() => this.props.taskView.ReviveTask(false)} text={'<'} tooltipText="Retry task and send to backlog"/>
+                    <NewTaskButton clickAction={() => this.props.taskView.ReviveTask(true)} text={'<'} tooltipText="Retry task. You can do it this time!"/>
                     </>
                 }
             </div>

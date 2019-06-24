@@ -18,7 +18,9 @@ import { setConflictingDataAction } from '../../interactionLayer/ajaxDataModules
 import { DEFAULT_GLOBAL_CONTEXT_STRING, MAX_CONTEXT_NAME_LEN } from '../../logicLayer/Task';
 
 // Define a constant which others may want to use.
-export const MAX_SELECTABLE_CONTEXTS = 5;
+export const MAX_SELECTABLE_CONTEXTS = 7;
+export const CONTEXT_STATE_LOCAL_STORAGE_KEY = "prev-context-state";    // User id + this key will be the local storage key we search for.
+export const GetContextStateLocalStorageKey = userId => userId + CONTEXT_STATE_LOCAL_STORAGE_KEY;
 
 // A wrapper for the application 'page' itself, which will be rendered by react-router.
 // This basically acts as the subtree-root for the actual todo-app page.
@@ -45,6 +47,7 @@ export class AppPage extends Component {
         this.togglePage = this.togglePage.bind(this);
         this.addSelectableContext = this.addSelectableContext.bind(this);
         this.removeSelectableContext = this.removeSelectableContext.bind(this);
+        this.updateSelectableContextsInLocalStorage = this.updateSelectableContextsInLocalStorage.bind(this);
     }
     setupInitialDataFetch() {
         const conflictingDataAction = () => this.state.dataModelScope.TriggerEventLogDataRefresh(this.state.visibleContexts);
@@ -120,28 +123,28 @@ export class AppPage extends Component {
                 dataModelScope: InstantiateNewDataModelScope(context)
             });
         }
+        else if (!this.state.selectableContexts.includes(context)) {
+            // Oops! We gotta hotswap it in. Remember to update the localStorage state to reflect the new selectable-contexts list...
+            this.setState((state, props) => {
+                // If the selectable contexts list is full, then we will simply replace the last item in the list, sorry bro!
+                let newSelectables = state.selectableContexts;
+                if (state.selectableContexts.length === MAX_SELECTABLE_CONTEXTS) {
+                    console.log(newSelectables.length)
+                    newSelectables[newSelectables.length - 1] = context;
+                }
+                else {
+                    newSelectables = newSelectables.concat([context]);
+                }
+                this.updateSelectableContextsInLocalStorage(newSelectables);
+                return {
+                    currentContext: context,
+                    visibleContexts: [context],
+                    selectableContexts: newSelectables,
+                    dataModelScope: InstantiateNewDataModelScope(context)
+                }
+            });
+        }
         else {
-            // We must ensure that the context we are switching to is acutally contained in the selectable list, otherwise things will break.
-            if (!this.state.selectableContexts.includes(context)) {
-                // Oops! We gotta hotswap it in.
-                this.setState((state, props) => {
-                    // If the selectable contexts list is full, then we will simply replace the last item in the list, sorry bro!
-                    let newSelectables = state.selectableContexts;
-                    if (state.selectableContexts.length === MAX_SELECTABLE_CONTEXTS) {
-                        console.log(newSelectables.length)
-                        newSelectables[newSelectables.length - 1] = context;
-                    }
-                    else {
-                        newSelectables = newSelectables.concat([context]);
-                    }
-                    return {
-                        currentContext: context,
-                        visibleContexts: [context],
-                        selectableContexts: newSelectables,
-                        dataModelScope: InstantiateNewDataModelScope(context)
-                    }
-                });
-            }
             this.state.dataModelScope.ClearAllRegisteredCallbacks();
             this.setState({
                 currentContext: context,
@@ -163,14 +166,16 @@ export class AppPage extends Component {
             this.state.dataModelScope.ClearAllRegisteredCallbacks();
             this.setState((state, props) => {
                 // If the selectable contexts list is full, then we will simply replace the last item in the list, sorry bro!
+                console.log("MEMEING REAL HARD RIGHT NOW");
+                console.log(state.selectableContexts.length);
                 let newSelectables = state.selectableContexts;
                 if (state.selectableContexts.length === MAX_SELECTABLE_CONTEXTS) {
-                    console.log(newSelectables.length)
                     newSelectables[newSelectables.length - 1] = newContext;
                 }
                 else {
                     newSelectables = newSelectables.concat([newContext]);
                 }
+                this.updateSelectableContextsInLocalStorage(newSelectables);
                 return {
                     currentContext: newContext,
                     visibleContexts: [newContext],
@@ -188,9 +193,24 @@ export class AppPage extends Component {
         // converts all strings with validator, filters out the failed ones (null), then build a set out of them to remove duplicats, then place
         // the de-duplicated values back into an array using the spread (...) operator on the set.
         const validatedStrings = [ ...new Set([DEFAULT_GLOBAL_CONTEXT_STRING].concat(this.state.availableContexts).concat(contextStrings).map(s => this.validateContextString(s)).filter(s => s !== null)) ];
-        this.setState({
-            availableContexts: validatedStrings
-        });
+
+        // Now, lookup (for the current user id) any saved selectable-contexts and current contexts from local storage, so that the state remains for the
+        // user after reloads.
+        const prevContextStateData = window.localStorage.getItem(GetContextStateLocalStorageKey(this.props.userId));
+        if (prevContextStateData !== null) {
+            // If there was saved information, then parse it, and add the selectable contexts and current context state, provided they exist in the loaded availableContexts!
+            const parsedData = JSON.parse(prevContextStateData);
+            const prevSelectableContexts = [ ...new Set([DEFAULT_GLOBAL_CONTEXT_STRING].concat(parsedData).map(s => this.validateContextString(s)).filter(s => s !== null && validatedStrings.includes(s))) ];
+            this.setState({
+                availableContexts: validatedStrings,
+                selectableContexts: prevSelectableContexts
+            });
+        }
+        else {
+            this.setState({
+                availableContexts: validatedStrings
+            });
+        }
     }
 
     togglePage(isSettings) {
@@ -205,28 +225,44 @@ export class AppPage extends Component {
     addSelectableContext(context) {
         context = this.validateContextString(context);
         if (context === null || this.state.selectableContexts.includes(context)) return;
-        this.setState((prevState, prevProps) => ({
-            selectableContexts: prevState.selectableContexts.concat(context)
-        }));
+        this.setState((prevState, prevProps) => {
+            const newSelectableContexts = prevState.selectableContexts.concat(context);
+            this.updateSelectableContextsInLocalStorage(newSelectableContexts);
+            return {
+                selectableContexts: newSelectableContexts
+            }
+        });
     }
     removeSelectableContext(context) {
         context = this.validateContextString(context);
         if (context === null || !this.state.selectableContexts.includes(context)) return;
 
         // If the context we are removing is also the currently selected context, then we will simply default back to the global context.
-        if (context === this.state.currentContext){
-            this.setState((prevState, prevProps) => ({
-                currentContext: DEFAULT_GLOBAL_CONTEXT_STRING,
-                visibleContexts: [],     // Empty means global
-                selectableContexts: prevState.selectableContexts.filter(s => s !== context),
-                dataModelScope: InstantiateNewDataModelScope(context)   // Because we are essentially switching contexts in this case.
-            }));
+        if (context === this.state.currentContext) {
+            this.setState((prevState, prevProps) => {
+                const newSelectableContexts = prevState.selectableContexts.filter(s => s !== context);
+                this.updateSelectableContextsInLocalStorage(newSelectableContexts);
+                return {
+                    currentContext: DEFAULT_GLOBAL_CONTEXT_STRING,
+                    visibleContexts: [],     // Empty means global
+                    selectableContexts: newSelectableContexts,
+                    dataModelScope: InstantiateNewDataModelScope(context)   // Because we are essentially switching contexts in this case.
+                }
+            });
         }
         else {
-            this.setState((prevState, prevProps) => ({
-                selectableContexts: prevState.selectableContexts.filter(s => s !== context)
-            }));
+            this.setState((prevState, prevProps) => {
+                const newSelectableContexts = prevState.selectableContexts.filter(s => s !== context);
+                this.updateSelectableContextsInLocalStorage(newSelectableContexts);
+                return {
+                    selectableContexts: newSelectableContexts
+                };
+            });
         }
+    }
+    updateSelectableContextsInLocalStorage(newSelectableContextsArray) {
+        // Takes an array of strings, and save it in local storage, overwriting whatever was there before.
+        window.localStorage.setItem(GetContextStateLocalStorageKey(this.props.userId), JSON.stringify(newSelectableContextsArray));
     }
 
     validateContextString(context) {

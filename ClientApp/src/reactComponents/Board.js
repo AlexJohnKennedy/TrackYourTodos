@@ -42,7 +42,7 @@ export class Board extends Component {
             <div className="board" key={this.props.category}>
                 <div className="board-title-container"> 
                     <h2> {this.props.boardTitle} </h2>
-                    <NewTaskButton clickAction={this.toggleFormOn} text={'+'}/>
+                    <NewTaskButton clickAction={this.toggleFormOn} tooltipText={this.props.newTaskButtonTooltipText} text={'+'}/>
                 </div>
                 <TaskList
                     tasks={this.props.tasks}
@@ -71,6 +71,7 @@ export class GoalBoard extends Component {
         return <Board
             category="Goal"
             boardTitle="Goals"
+            newTaskButtonTooltipText="Create new goal task"
             tasks={this.props.tasks}
             creationFunction={this.props.creationFunction}
             formText="New goal"
@@ -89,6 +90,7 @@ export class WeeklyBoard extends Component {
         return <Board
             category="Weekly"
             boardTitle="Weekly Tasks"
+            newTaskButtonTooltipText="Create new weekly task"
             tasks={this.props.tasks}
             creationFunction={this.props.creationFunction}
             formText="New weekly task"
@@ -107,6 +109,7 @@ export class DailyBoard extends Component {
         return <Board
             category="Daily"
             boardTitle="Daily Tasks"
+            newTaskButtonTooltipText="Create new daily task"
             tasks={this.props.tasks}
             creationFunction={this.props.creationFunction}
             formText="New daily task"

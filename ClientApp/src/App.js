@@ -143,7 +143,8 @@ class App extends Component {
     this.setState({
       googleAuthApiLoaded: true,
       googleUserIsLoggedIn: true,
-      ajaxFailedEventCacheInstance: ajaxFailedEventCacheInstance
+      ajaxFailedEventCacheInstance: ajaxFailedEventCacheInstance,
+      userId: GoogleUserObj.getBasicProfile().getId() // Used by the app page to save selected and available contexts into localstorage, for temp consistency
     });
   }
 
@@ -204,7 +205,7 @@ class App extends Component {
       />;
     }
     else {
-      PageToRender = <AppPage onSignOut={this.signUserOut} failedEventCacheInstance={this.state.ajaxFailedEventCacheInstance}/>;
+      PageToRender = <AppPage userId={this.state.userId} onSignOut={this.signUserOut} failedEventCacheInstance={this.state.ajaxFailedEventCacheInstance}/>;
     }
 
     return (

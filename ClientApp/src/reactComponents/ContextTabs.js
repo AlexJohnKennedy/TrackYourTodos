@@ -77,7 +77,7 @@ export class ContextTabs extends Component {
                     currActiveIndex={currActiveIndex}
                 />
                 <div className="contextSettingsButton">
-                    <div onClick={this.props.togglePage}> C </div>
+                    <div onClick={this.props.togglePage} title="Manage current contexts (Change what appears on these selectable tabs!)"> C </div>
                 </div>
                 <div className={undoButtonClassstring}>
                     <div onClick={this.state.performUndo} title={this.state.tooltipText}> U </div>
