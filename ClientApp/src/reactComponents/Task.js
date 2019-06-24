@@ -186,6 +186,7 @@ export class Task extends Component {
                     <NewTaskButton clickAction={() => this.props.taskView.ActivateTask(Category.Daily)} text={'D'} tooltipText="Activate as daily task"/>
                     <NewTaskButton clickAction={() => this.props.taskView.ActivateTask(Category.Weekly)} text={'W'} tooltipText="Activate as weekly task"/>
                     <NewTaskButton clickAction={() => this.props.taskView.ActivateTask(Category.Goal)} text={'G'} tooltipText="Activate as goal task"/>
+                    <NewTaskButton clickAction={() => this.props.taskView.AbandonTask()} text={'X'} tooltipText="Abandon this backlog task"/>
                     </>
                 }
                 { this.props.taskView.progressStatus === ProgressStatus.Failed &&

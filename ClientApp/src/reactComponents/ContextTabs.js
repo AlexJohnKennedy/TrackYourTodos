@@ -54,6 +54,7 @@ export class ContextTabs extends Component {
         if (undoAction.eventType === EventTypes.taskStarted) { return "Undo Start-task"; }
         if (undoAction.eventType === EventTypes.taskRevived) { return "Undo Retry-task"; }
         if (undoAction.eventType === EventTypes.taskEdited) { return "Undo Edit-task-text"; }
+        if (undoAction.eventType === EventTypes.taskDeleted) { return "Undo Abandon backlog task"; }
         return "Nothing to undo!";
     }
 

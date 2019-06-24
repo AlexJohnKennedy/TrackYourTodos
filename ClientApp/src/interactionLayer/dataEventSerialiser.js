@@ -62,10 +62,10 @@ function BuildDataEventSerialisationFuncs() {
         };
     }
 
-    function taskDeletedEvent(task, tasklist) {
+    function taskDeletedEvent(task, timestamp, tasklist) {
         return {
             eventType: EventTypes.taskDeleted,
-            timestamp: null,    /* TODO: ??? */
+            timestamp: timestamp,
             id: task.id,
             name: task.name,
             category: task.category,
@@ -225,6 +225,23 @@ function BuildDataEventSerialisationFuncs() {
         };
     }
 
+    function taskDeletedUndoEvent(data, tasklist) {
+        const task = data.task;
+        return {
+            eventType: data.eventType,
+            timestamp: data.timestamp,
+            revertedEventTimestamp: data.revertedEventTimestamp,
+            id: task.id,
+            name: task.name,
+            category: task.category,
+            progressStatus: task.progressStatus,
+            colourId: task.colourid,
+            context: task.context,
+            parent: null,
+            children: null
+        };
+    }
+
     function taskStartedUndoEvent(data, tasklist) {
         const task = data.task;
         return {
@@ -275,7 +292,7 @@ function BuildDataEventSerialisationFuncs() {
         taskAddedUndoEvent: taskAddedUndoEvent,
         childTaskAddedUndoEvent: childTaskAddedUndoEvent,
         taskRevivedUndoEvent: taskRevivedUndoEvent,
-        taskDeletedUndoEvent: null, /* TODO ?? */
+        taskDeletedUndoEvent: taskDeletedUndoEvent,
         taskCompletedUndoEvent: taskCompletedUndoEvent,
         taskActivatedUndoEvent: taskActivatedUndoEvent,
         taskStartedUndoEvent: taskStartedUndoEvent,

@@ -425,10 +425,12 @@ function BuildNewTaskView(domainTaskObj, activeList, undoStack, viewLayerCallbac
     }
 
     function deleteTask() {
-        // Cannot undo deletion events at the moment
-        activeList.DeleteTask(domainTaskObj);
+        console.log("deleting task");
+        const timestamp = Date.now();
+        activeList.AbandonTask(domainTaskObj);
+        undoStack.PushUndoableDeleteTask(domainTaskObj, timestamp);
         viewLayerCallbackList.forEach(callback => callback());
-        dataEventCallbacksLists.taskDeletedHandlers.forEach(callback => callback(domainTaskObj, activeList));
+        dataEventCallbacksLists.taskDeletedHandlers.forEach(callback => callback(domainTaskObj, timestamp, activeList));
     }
 
     function activateTask(newCategory) {
@@ -479,7 +481,7 @@ function BuildNewTaskView(domainTaskObj, activeList, undoStack, viewLayerCallbac
         CanCreateChildren : canCreateChildren,
         CreateChild : createChild,
         CreateDailyChild : createDailyChild,
-        DeleteTask : deleteTask,
+        AbandonTask : deleteTask,
         ActivateTask : activateTask,
         CompleteTask : completeTask,
         StartTask : startTask,

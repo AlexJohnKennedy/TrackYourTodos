@@ -64,6 +64,12 @@ namespace todo_app.DataTransferLayer.EventReconciliationSystem {
             Id = id;
         }
     }
+    public class UndoDeletionAction : UndoAction {
+        public Task Task { get; }
+        public UndoDeletionAction(Guid id, Task task) : base(EventTypes.TaskDeleted, id) {
+            Task = task;
+        }
+    }
 
     public static class EventReplayer {
         // Define a function signature type which represents a function which can apply an event to a tasklist model object.
@@ -128,7 +134,11 @@ namespace todo_app.DataTransferLayer.EventReconciliationSystem {
                 return t;
             }},
             { EventTypes.TaskDeleted, (e, t) => {
-                throw new NotImplementedException("Validation for Task Deletion events not currently supported, because Deleted Events are not part of app intention at this time.");
+                Task task = t.AllTaskReader(e.Id);
+                if (task == null) throw new InvalidOperationException("Cannot delete a task we could not find in our task collection");
+                t.AbandonTask(task);
+                undoStack.Push(new UndoDeletionAction(e.Id, task));
+                return t;
             }},
             { EventTypes.TaskAddedUndo, (e, t) => {
                 Task task = t.ActiveTaskReader(e.Id);
@@ -156,7 +166,12 @@ namespace todo_app.DataTransferLayer.EventReconciliationSystem {
                 return t;
             }},
             { EventTypes.TaskDeletedUndo, (e, t) => {
-                throw new NotImplementedException("Validation for Undo-TaskDeletion events not currently supported, because Deleted Events are not part of app intention at this time.");
+                if (undoStack.Count == 0 || undoStack.Peek().EventType != EventTypes.TaskDeleted || undoStack.Peek().Id != e.Id) throw new InvalidOperationException("Invalid undo: Undo event wanted to undo an action which was not the latest ocurring action");
+                if (!(undoStack.Peek() is UndoDeletionAction)) throw new InvalidCastException("UndoAction with TaskDeleted type should always be an UndoDeletionAction sub-type!!");
+                Task task = ((UndoDeletionAction)undoStack.Pop()).Task;
+                if (task == null) throw new InvalidOperationException("Cannot undo deletion of task which was not created to begin with");
+                t.UndoAbandonTask(task);
+                return t;
             }},
             { EventTypes.TaskCompletedUndo, (e, t) => {
                 Task task = t.CompletedTaskReader(e.Id);
@@ -253,14 +268,14 @@ namespace todo_app.DataTransferLayer.EventReconciliationSystem {
             // Acquire the task from the global task list, to determine it's current state.
             Task task = tasklist.AllTaskReader(e.Id);
            
-            // Handle cases where the task does not yet exist. If the event is a creation event, then this is obviously expected.
+            // Handle cases where the task does not yet exist. If the event is a creation event, (or undo deletion event) then this is obviously expected.
             // If the event is an 'undo' of a creation event, then we can safely dispose of the event, since it would just erase the expected task anyway.
             // If the event is a 'Task activated' or 'Task Started' or 'Task Edited' event, then we will create the event implicitly, since we can do so with no harm done.
             if (task == null) {
-                if (e.EventType == EventTypes.TaskAdded || e.EventType == EventTypes.ChildTaskAdded || e.EventType == EventTypes.TaskRevived) {
+                if (e.EventType == EventTypes.TaskAdded || e.EventType == EventTypes.ChildTaskAdded || e.EventType == EventTypes.TaskRevived || e.EventType == EventTypes.TaskDeletedUndo) {
                     return Handlers[e.EventType](e, tasklist);
                 }
-                else if (e.EventType == EventTypes.TaskAddedUndo || e.EventType == EventTypes.ChildTaskAddedUndo || e.EventType == EventTypes.TaskEdited) {
+                else if (e.EventType == EventTypes.TaskAddedUndo || e.EventType == EventTypes.ChildTaskAddedUndo || e.EventType == EventTypes.TaskEdited || e.EventType == EventTypes.TaskDeleted) {
                     // Throw this event away, it is harmless and uneeded in this case.
                     saveEvent = false;
                     triggerRefresh = false;
@@ -277,10 +292,10 @@ namespace todo_app.DataTransferLayer.EventReconciliationSystem {
                 }
             }
             // Handle cases where the task is deferred.
-            // If the event is a creation event or an undo-activation event, we can safely dispose of the event.
+            // If the event is a creation event, undo-activation event, or undo-deletion event, we can safely dispose of the event.
             // If the event is a 'start task' or 'fail task', we are happy to fill in the implicit activation action.
             else if (task.Category == CategoryVals.Deferred) {
-                if (e.EventType == EventTypes.TaskAdded || e.EventType == EventTypes.ChildTaskAdded || e.EventType == EventTypes.TaskActivatedUndo) {
+                if (e.EventType == EventTypes.TaskAdded || e.EventType == EventTypes.ChildTaskAdded || e.EventType == EventTypes.TaskActivatedUndo || e.EventType == EventTypes.TaskDeletedUndo) {
                     // Throw this event away, it is harmless and uneeded in this case.
                     saveEvent = false;
                     triggerRefresh = false;

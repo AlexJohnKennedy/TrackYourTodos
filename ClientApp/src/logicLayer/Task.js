@@ -252,15 +252,21 @@ export class TaskObjects {
         this.tasks.sort((a, b) => a.eventTimestamps.timeCreated - b.eventTimestamps.timeCreated);
     }
 
-    // TODO: Probably just remove this? Not sure if deletion is required.
-    DeleteTask(task) {
-        // Clear all parent and child links from the deleted task!
-        if (task.parent) task.parent.removeChild(task);
-        for (let child in task.children) {
-            task.removeChild(child);
+    AbandonTask(task) {
+        // We can only abandon goals or deferred tasks
+        if (task === null || task.progressStatus > ProgressStatus.Started || task.category !== Category.Deferred) {
+            throw new Error("Cannot abandon a task which is not a deferred task");
         }
+        if (task.parent !== null || task.children.length > 0) throw new Error("Cannot abandon task with relatives");
+
         // Remove it from our list, and invoke!
-        this.tasks.filter((t) => t !== task);
+        this.tasks = this.tasks.filter((t) => t !== task);
+    }
+    UndoAbandonTask(task) {
+        if (task.category !== Category.Deferred) throw new Error("Cannot undo-abandon of a task which is not deferred");
+
+        // Simply add the task back into our list, since it's state has not changed.
+        this.tasks = this.tasks.concat([task]).sort((a, b) => a.eventTimestamps.timeCreated - b.eventTimestamps.timeCreated);
     }
 
     StartTask(task, timeStartedUNIX) {

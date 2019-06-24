@@ -88,6 +88,13 @@
     right: 3.6rem;
     top: 0.4rem;
 }
+/* Make the fourth button down in the bottom right. */
+.task button ~ button ~ button ~ button {
+    position: absolute;
+    top: unset;
+    right: 0.4rem;
+    bottom: 0.4rem;
+}
 
 .task .checkbox {
     position: absolute;

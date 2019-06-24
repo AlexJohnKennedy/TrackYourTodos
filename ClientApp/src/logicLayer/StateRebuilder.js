@@ -83,8 +83,8 @@ function replayEvent(event, tasklist, taskMap, undoStack) {
     let task = taskMap.get(event.id);
     if (task === undefined || task === null) {
         // Handle cases where the associated task does not exist yet.
-        // If the event is a creation event, this is expected.
-        if (event.eventType === EventTypes.taskAdded || event.eventType === EventTypes.childTaskAdded || event.eventType === EventTypes.taskRevived) {
+        // If the event is a creation event or undo-deletion event, this is expected.
+        if (event.eventType === EventTypes.taskAdded || event.eventType === EventTypes.childTaskAdded || event.eventType === EventTypes.taskRevived || event.eventType === EventTypes.taskDeletedUndo) {
             EventReplayFunctions.get(event.eventType)(event, tasklist, taskMap, undoStack);
             return;
         }
@@ -163,7 +163,10 @@ function replayTaskRevivedEvent(eventData, tasklist, taskMap, undoStack) {
     }
 }
 function replayTaskDeletedEvent(eventData, tasklist, taskMap, undoStack) {
-    tasklist.DeleteTask(taskMap.get(eventData.id));
+    const task = taskMap.get(eventData.id);
+    tasklist.AbandonTask(task);
+    undoStack.PushUndoableDeleteTask(task, eventData.timestamp);
+    taskMap.delete(eventData.id);
 }
 function replayTaskCompletedEvent(eventData, tasklist, taskMap, undoStack) {
     const task = taskMap.get(eventData.id);
@@ -203,7 +206,10 @@ function replayTaskRevivedUndoEvent(eventData, tasklist, taskMap, undoStack) {
     taskMap.delete(eventData.id);   // Delete the new clone, but not the original of course.
 }
 function replayTaskDeletedUndoEvent(eventData, tasklist, taskMap, undoStack) {
-    throw new Error("Task Deletion is not yet implemented");
+    const data = undoStack.PerformUndo(eventData.timestamp, tasklist);
+    console.log("LOGGING RESULT OF TASK UNDO EVENT:");
+    console.log(data);
+    taskMap.set(eventData.id, data.task);
 }
 function replayTaskCompletedUndoEvent(eventData, tasklist, taskMap, undoStack) {
     undoStack.PerformUndo(eventData.timestamp, tasklist);

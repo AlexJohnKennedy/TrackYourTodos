@@ -66,6 +66,13 @@ export function BuildNewUndoStack() {
             timestamp: timestamp
         });
     }
+    function PushUndoableDeleteTask(task, timestamp) {
+        UndoStack.push({
+            eventType: EventTypes.taskDeleted,
+            task: task,
+            timestamp: timestamp
+        });
+    }
 
     // Exported inner function: Perform undo operation, and return information which will allow the view layer interaction api to
     // serialise and post data corresponding to the correct 'undo' data event.
@@ -121,6 +128,7 @@ export function BuildNewUndoStack() {
         PushUndoableStartTask: PushUndoableStartTask,
         PushUndoableReviveTask: PushUndoableReviveTask,
         PushUndoableEditTask: PushUndoableEditTask,
+        PushUndoableDeleteTask: PushUndoableDeleteTask,
 
         // Performing undos and modifying stack state.
         PerformUndo: PerformUndo,
@@ -196,6 +204,15 @@ const UndoActionFunctions = new Map([
             task: data.task,
             originalText: data.originalText,
             originalTimeEdited: data.originalTimeEdited,
+            revertedEventTimestamp: data.timestamp
+        };
+    }],
+    [EventTypes.taskDeleted, (undoTime, data, tasklist) => {
+        tasklist.UndoAbandonTask(data.task);
+        return {
+            eventType: EventTypes.taskDeletedUndo,
+            timestamp: undoTime,
+            task: data.task,
             revertedEventTimestamp: data.timestamp
         };
     }]
