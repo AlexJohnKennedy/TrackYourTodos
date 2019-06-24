@@ -18,7 +18,7 @@ import { setConflictingDataAction } from '../../interactionLayer/ajaxDataModules
 import { DEFAULT_GLOBAL_CONTEXT_STRING, MAX_CONTEXT_NAME_LEN } from '../../logicLayer/Task';
 
 // Define a constant which others may want to use.
-export const MAX_SELECTABLE_CONTEXTS = 5;
+export const MAX_SELECTABLE_CONTEXTS = 7;
 export const CONTEXT_STATE_LOCAL_STORAGE_KEY = "prev-context-state";    // User id + this key will be the local storage key we search for.
 export const GetContextStateLocalStorageKey = userId => userId + CONTEXT_STATE_LOCAL_STORAGE_KEY;
 
@@ -166,9 +166,10 @@ export class AppPage extends Component {
             this.state.dataModelScope.ClearAllRegisteredCallbacks();
             this.setState((state, props) => {
                 // If the selectable contexts list is full, then we will simply replace the last item in the list, sorry bro!
+                console.log("MEMEING REAL HARD RIGHT NOW");
+                console.log(state.selectableContexts.length);
                 let newSelectables = state.selectableContexts;
                 if (state.selectableContexts.length === MAX_SELECTABLE_CONTEXTS) {
-                    console.log(newSelectables.length)
                     newSelectables[newSelectables.length - 1] = newContext;
                 }
                 else {

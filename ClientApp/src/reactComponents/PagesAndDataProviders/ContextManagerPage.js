@@ -23,7 +23,7 @@ export class ContextManagerPage extends Component {
                     );
                 }
                 // If it's not selected, and the selection list is not at max capacity, allow the users to toggle them on. Plus one because the global context does not count!
-                else if (this.props.selectableContexts.length < this.props.maxSelectable + 1) {
+                else if (this.props.selectableContexts.length < this.props.maxSelectable) {
                     checkboxitems.push(
                         <ContextSelectionCheckbox key={context} name={context} isSelected={false} isDisabled={false} toggleCheckbox={() => this.props.addSelectableContext(context)}/>                        
                     );
@@ -42,7 +42,7 @@ export class ContextManagerPage extends Component {
                 <div className="titleText">
                    <h2> Context manangement </h2>
                 </div>
-                <div className="subheading"> You can have up to {this.props.maxSelectable} selected at a time. </div>
+                <div className="subheading"> You can have up to {this.props.maxSelectable - 1} selected at a time. </div>
                 <CreationForm 
                     creationFunction={this.props.createNewContext} 
                     formText="New Context" 
