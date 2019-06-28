@@ -40,9 +40,10 @@ export class ScrollableBarChart extends Component {
                 <FlexibleHeightXYPlot width={this.props.barWidth * numBars} margin={{left: 0, right: 0, top: 5, bottom: 2}} xDomain={[0, numBars-1]} yDomain={[0, max]}>
                     <VerticalBarSeries
                         yRange={[93, 0]}
-                        color='green'
+                        color="#006e04"
                         data={completedData}
                         barWidth={0.95}
+                        colorType='literal'
                     />
                     <XAxis hideLine orientation="bottom" tickSize={3} tickValues={centralTickVals}/>
                 </FlexibleHeightXYPlot>
@@ -54,6 +55,7 @@ export class ScrollableBarChart extends Component {
                         color='red'
                         data={failedData}
                         barWidth={0.95}
+                        opacity={0.7}
                     />
                     <XAxis hideLine orientation="top" tickSize={3} tickValues={centralTickVals}/>
                     <XAxis hideLine tickSize={0} tickPadding={-10} tickFormat={(index) => tickFormatter(this.props.startIndex + index, this.props.tickFormatFunc, this.props.barWidth)}/>

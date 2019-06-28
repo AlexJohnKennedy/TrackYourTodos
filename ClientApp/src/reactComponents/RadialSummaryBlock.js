@@ -17,7 +17,7 @@ export class RadialSummaryBlock extends Component {
         }
 
         const data = [
-            {angle0: 0, angle: angle, opacity: 0.5, radius: 70, radius0: 35, color: "#169c1b"},
+            {angle0: 0, angle: angle, opacity: 1, radius: 70, radius0: 35, color: "#006e04"},
             {angle0: angle, angle: 2*Math.PI, opacity: 1, radius: 70, radius0: 35, color: "#333333"}
         ];
 
@@ -37,7 +37,7 @@ export class RadialSummaryBlock extends Component {
                             xDomain={[-87.5, 87.5]} 
                             yDomain={[-87.5, 87.5]}
                             colorDomain={[0, 2*Math.PI]}
-                            color="#169c1b">
+                        >
                         <ArcSeries
                             animation
                             radiusType={'literal'}
