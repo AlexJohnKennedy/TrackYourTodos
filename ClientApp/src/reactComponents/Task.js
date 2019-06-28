@@ -4,6 +4,9 @@ import { NewTaskButton, CheckBox } from './TaskButtons';
 import { CreationForm } from './CreationForm.js';
 import { Category, ProgressStatus, MAX_TASK_NAME_LEN } from '../logicLayer/Task';
 
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
+
 export class Task extends Component {
     constructor(props) {
         super(props);
@@ -22,8 +25,9 @@ export class Task extends Component {
         this.toggleFormOff = this.toggleFormOff.bind(this);
         this.toggleEditFormOn = this.toggleEditFormOn.bind(this);
         this.toggleEditFormOff = this.toggleEditFormOff.bind(this);
+        this.renderAreYouSure = this.renderAreYouSure.bind(this);
     }
-    
+
     toggleEditFormOn() {
         this.props.formStateManager.triggerCleanup();
         this.setState({
@@ -94,6 +98,32 @@ export class Task extends Component {
         }
     }
 
+    // Function which triggers the 'react-confirm-alert' library I am using. See: https://www.npmjs.com/package/react-confirm-alert for usage.
+    // I am using this when you click to 'abandon' an activated task. Since that action is not undoable, we will prompt with an 'are you sure?' warning.
+    renderAreYouSure() {
+        confirmAlert({
+            title: 'Are you sure?',
+            message: 'You have already commited to this task. Giving up on it will be permanently logged as a failure. You cannot undo this action',
+            buttons: [
+                {
+                    label: 'Yes. I accept my fate as a failure',
+                    // Use the 'VoluntarilyFailTask()' taskView operation to fail this task after the appropriate animation delay.
+                    onClick: () => {
+                        window.setTimeout(() => {
+                            this.props.animTriggerCallbacks.unregister(this.props.taskView.id, false);
+                            this.props.taskView.VoluntarilyFailTask();
+                        }, 800);
+                        this.props.animTriggerCallbacks.register(this.props.taskView.id, false);
+                    }
+                },
+                {
+                    label: "Actually, I'll give it another go",
+                    onClick: () => {}   // Do nothing, just return back to the app screen.
+                }
+            ]
+        });
+    };
+
     // For now, just represent a task as a div with text in it!
     render() {
         // Determine if this task should be highlighted, by determining if our id is in the highlight list.
@@ -110,7 +140,7 @@ export class Task extends Component {
             animClassname = " failureAnim";
         }
         let classstring = "task" + (highlight.length === 0 ? "" : " highlighted") + (animClassname === null ? " entranceAnim" : animClassname);
-        
+
         // Attain background colour programmatically, and apply side padding iff the checkbox is present.
         let processedColour = this.processColour(GetColourMapping(this.context.themeId).get(this.props.taskView.colourid), completion.length > 0, failure.length > 0);
         const style = {
@@ -130,11 +160,11 @@ export class Task extends Component {
 
         return (
             <div className={classstring} style={style} onDoubleClick={doubleClickAction} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-                <p> { this.props.taskView.name } </p>
-                { this.props.taskView.progressStatus <= ProgressStatus.Started &&
-                    <CreationForm 
-                        creationFunction={this.props.taskView.EditTaskName} 
-                        formText="Edit task text" 
+                <p> {this.props.taskView.name} </p>
+                {this.props.taskView.progressStatus <= ProgressStatus.Started &&
+                    <CreationForm
+                        creationFunction={this.props.taskView.EditTaskName}
+                        formText="Edit task text"
                         showingForm={this.state.showingEditForm}
                         submitAction={() => this.toggleEditFormOff()}
                         formStateManager={this.props.formStateManager}
@@ -142,60 +172,60 @@ export class Task extends Component {
                         initialValue={this.props.taskView.name}
                     />
                 }
-                { this.props.taskView.category < Category.Weekly && this.props.taskView.progressStatus <= ProgressStatus.Started &&
+                {this.props.taskView.category < Category.Weekly && this.props.taskView.progressStatus <= ProgressStatus.Started &&
                     <>
-                    <NewTaskButton clickAction={() => this.toggleFormOn(true)} text={'>'} tooltipText="Creat a daily subtask"/>
-                    <CreationForm 
-                        creationFunction={this.props.taskView.CreateDailyChild} 
-                        formText="New daily subtask" 
-                        showingForm={this.state.showingDailyForm}
-                        submitAction={() => this.toggleFormOff(true)}
-                        formStateManager={this.props.formStateManager}
-                        maxFieldLength={MAX_TASK_NAME_LEN}
-                    />
+                        <NewTaskButton clickAction={() => this.toggleFormOn(true)} text={'>'} tooltipText="Creat a daily subtask" />
+                        <CreationForm
+                            creationFunction={this.props.taskView.CreateDailyChild}
+                            formText="New daily subtask"
+                            showingForm={this.state.showingDailyForm}
+                            submitAction={() => this.toggleFormOff(true)}
+                            formStateManager={this.props.formStateManager}
+                            maxFieldLength={MAX_TASK_NAME_LEN}
+                        />
                     </>
                 }
-                { this.props.taskView.category < Category.Daily && this.props.taskView.progressStatus <= ProgressStatus.Started &&
+                {this.props.taskView.category < Category.Daily && this.props.taskView.progressStatus <= ProgressStatus.Started &&
                     <>
-                    <NewTaskButton clickAction={() => this.toggleFormOn(false)} text={'>'} tooltipText="Create a subtask"/>
-                    <CreationForm 
-                        creationFunction={this.props.taskView.CreateChild} 
-                        formText="New subtask" 
-                        showingForm={this.state.showingForm}
-                        submitAction={() => this.toggleFormOff(false)}
-                        formStateManager={this.props.formStateManager}
-                        maxFieldLength={MAX_TASK_NAME_LEN}
-                    />
+                        <NewTaskButton clickAction={() => this.toggleFormOn(false)} text={'>'} tooltipText="Create a subtask" />
+                        <CreationForm
+                            creationFunction={this.props.taskView.CreateChild}
+                            formText="New subtask"
+                            showingForm={this.state.showingForm}
+                            submitAction={() => this.toggleFormOff(false)}
+                            formStateManager={this.props.formStateManager}
+                            maxFieldLength={MAX_TASK_NAME_LEN}
+                        />
                     </>
                 }
-                { this.props.taskView.category <= Category.Daily && this.props.taskView.progressStatus <= ProgressStatus.Started &&
+                {this.props.taskView.category <= Category.Daily && this.props.taskView.progressStatus <= ProgressStatus.Started &&
                     <>
-                    <CheckBox 
-                        currClicks={completion.length > 0 ? 2 : this.props.taskView.progressStatus}
-                        firstClickAction={() => this.props.taskView.StartTask()}
-                        secondClickAction={() => {
-                            this.props.animTriggerCallbacks.register(this.props.taskView.id, true);
-                            window.setTimeout(() => {
-                                this.props.animTriggerCallbacks.unregister(this.props.taskView.id, true);
-                                this.props.taskView.CompleteTask();
-                            }, 699);
-                        }}
-                    />
-                    <NewTaskButton clickAction={() => alert("MEMES")} text={'X'} tooltipText="Abandon this backlog task" className="deleteButton"/>
+                        <CheckBox
+                            currClicks={completion.length > 0 ? 2 : this.props.taskView.progressStatus}
+                            firstClickAction={() => this.props.taskView.StartTask()}
+                            secondClickAction={() => {
+                                this.props.animTriggerCallbacks.register(this.props.taskView.id, true);
+                                window.setTimeout(() => {
+                                    this.props.animTriggerCallbacks.unregister(this.props.taskView.id, true);
+                                    this.props.taskView.CompleteTask();
+                                }, 699);
+                            }}
+                        />
+                        <NewTaskButton clickAction={this.renderAreYouSure} text={'X'} tooltipText="Abandon this backlog task" className="deleteButton" />
                     </>
                 }
-                { this.props.taskView.category === Category.Deferred &&
+                {this.props.taskView.category === Category.Deferred &&
                     <>
-                    <NewTaskButton clickAction={() => this.props.taskView.ActivateTask(Category.Daily)} text={'D'} tooltipText="Activate as daily task"/>
-                    <NewTaskButton clickAction={() => this.props.taskView.ActivateTask(Category.Weekly)} text={'W'} tooltipText="Activate as weekly task"/>
-                    <NewTaskButton clickAction={() => this.props.taskView.ActivateTask(Category.Goal)} text={'G'} tooltipText="Activate as goal task"/>
-                    <NewTaskButton clickAction={() => this.props.taskView.AbandonTask()} text={'X'} tooltipText="Abandon this backlog task" className="deleteButton"/>
+                        <NewTaskButton clickAction={() => this.props.taskView.ActivateTask(Category.Daily)} text={'D'} tooltipText="Activate as daily task" />
+                        <NewTaskButton clickAction={() => this.props.taskView.ActivateTask(Category.Weekly)} text={'W'} tooltipText="Activate as weekly task" />
+                        <NewTaskButton clickAction={() => this.props.taskView.ActivateTask(Category.Goal)} text={'G'} tooltipText="Activate as goal task" />
+                        <NewTaskButton clickAction={() => this.props.taskView.AbandonTask()} text={'X'} tooltipText="Abandon this backlog task" className="deleteButton" />
                     </>
                 }
-                { this.props.taskView.progressStatus === ProgressStatus.Failed &&
+                {this.props.taskView.progressStatus === ProgressStatus.Failed &&
                     <>
-                    <NewTaskButton clickAction={() => this.props.taskView.ReviveTask(false)} text={'<'} tooltipText="Retry task and send to backlog"/>
-                    <NewTaskButton clickAction={() => this.props.taskView.ReviveTask(true)} text={'<'} tooltipText="Retry task. You can do it this time!"/>
+                        <NewTaskButton clickAction={() => this.props.taskView.ReviveTask(false)} text={'<'} tooltipText="Retry task and send to backlog" />
+                        <NewTaskButton clickAction={() => this.props.taskView.ReviveTask(true)} text={'<'} tooltipText="Retry task. You can do it this time!" />
                     </>
                 }
             </div>

@@ -77,9 +77,10 @@
     height: 1.4rem;
 
     transition-property: opacity;
-    transition-duration: 100ms;
+    transition-duration: 150ms;
 
-    opacity: 0;
+    /* Set to 1 by default to disable fade-in and fade-out effect. We can easily re-enable by tweaking this CSS */
+    opacity: 1;
 }
 .task:hover button {
     opacity: 1;
