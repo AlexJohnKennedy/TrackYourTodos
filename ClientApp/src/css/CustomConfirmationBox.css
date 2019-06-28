@@ -34,5 +34,8 @@
     border: 1px solid var(--divider-colour-lighter);    
 }
 .customConfirmationBox .button:hover {
+    background-color: var(--editor-background-colour-red-tint);
+}
+.customConfirmationBox .button ~ .button:hover {
     background-color: var(--editor-background-colour);
 }

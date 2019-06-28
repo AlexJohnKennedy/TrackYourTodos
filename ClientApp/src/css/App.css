@@ -16,6 +16,7 @@
 :root {
   /* colours */
   --editor-background-colour: #1E1E1E;
+  --editor-background-colour-red-tint: #3a0000;
   --middle-tone-background-colour: #252526;
   --sidebar-background-colour: #333333;
   --text-colour: #ADADAD;
