@@ -351,6 +351,34 @@ class SelectionController extends Component {
 
         return (
             <div className="groupingControllerBlock">
+                <div className="button" onClick={() => this.props.indexToggleFunc(0)}> Days </div>
+                <div className="button" onClick={() => this.props.indexToggleFunc(1)}> Weeks </div>
+                <div className="button" onClick={() => this.props.indexToggleFunc(2)}> Months </div>
+                <Slider min={this.props.minBarWidth} max={this.props.maxBarWidth} value={this.props.barWidth} step={1} onChange={this.props.handleBarWidthChange} text="Zoom" />
+            </div>
+        );
+    }
+}
+
+class SelectionControllerOLD extends Component {
+    render() {
+        let startText;
+        let endText;
+        if (this.props.currentIndex === 0) {
+            startText = "Start day";
+            endText = "End day"
+        }
+        else if (this.props.currentIndex === 1) {
+            startText = "Start week";
+            endText = "End week";
+        }
+        else {
+            startText = "Start month";
+            endText = "End month";
+        }
+
+        return (
+            <div className="groupingControllerBlock">
                 <div className="title"> Group by: </div>
                 <button onClick={() => this.props.indexToggleFunc(0)}> Day </button>
                 <button onClick={() => this.props.indexToggleFunc(1)}> Week </button>
