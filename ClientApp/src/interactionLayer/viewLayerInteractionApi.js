@@ -256,6 +256,7 @@ export function InstantiateNewDataModelScope(currContext) {
             window.setTimeout(() => {
                 logicLayerFailureChecker.FailTasks().forEach(task => {
                     if (additionalCallback !== null) additionalCallback(task.id);
+                    UndoStackObj.ClearStack();
                     DataEventCallbackHandlers.taskFailedHandlers.forEach(callback => callback(task, ActiveTaskDataObj));
                 });
                 ViewLayerCallbacks.forEach(callback => callback());
@@ -434,6 +435,7 @@ function BuildNewTaskView(domainTaskObj, activeList, undoStack, viewLayerCallbac
 
     function voluntarilyFailTask() {
         activeList.FailTask(domainTaskObj, Date.now());
+        undoStack.ClearStack();
         viewLayerCallbackList.forEach(callback => callback());
         dataEventCallbacksLists.taskFailedHandlers.forEach(callback => callback(domainTaskObj, activeList));
     }

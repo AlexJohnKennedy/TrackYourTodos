@@ -117,6 +117,11 @@ export function BuildNewUndoStack() {
         UndoStack = UndoStack.filter(a => currTime - a.timestamp < UNDO_ACTION_MAX_AGE_MILLISECONDS);
     }
 
+    // Used to explicitly clear the undo stack. We should do this whenever a task is failed, so that the user does not think they can undo the failure.
+    function ClearStack() {
+        UndoStack = [];
+    }
+
     return Object.freeze({
         // Pushing functions
         PushUndoableCreateNewIndependentTask: PushUndoableCreateNewIndependentTask,
@@ -132,7 +137,8 @@ export function BuildNewUndoStack() {
         PerformUndo: PerformUndo,
         GetSize: GetSize,
         FilterExpiredUndoActions: FilterExpiredUndoActions,
-        Peek: Peek
+        Peek: Peek,
+        ClearStack: ClearStack
     });
 }
 

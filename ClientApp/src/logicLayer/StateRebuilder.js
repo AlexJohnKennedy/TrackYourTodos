@@ -175,6 +175,7 @@ function replayTaskCompletedEvent(eventData, tasklist, taskMap, undoStack) {
 }
 function replayTaskFailedEvent(eventData, tasklist, taskMap, undoStack) {
     tasklist.FailTask(taskMap.get(eventData.id), eventData.timestamp);
+    undoStack.ClearStack();
 }
 function replayTaskActivatedEvent(eventData, tasklist, taskMap, undoStack) {
     const task = taskMap.get(eventData.id);
