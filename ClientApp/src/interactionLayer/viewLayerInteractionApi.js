@@ -106,10 +106,12 @@ export function InstantiateNewDataModelScope(currContext) {
         console.log("Performing a periodic forced-viewlayer update! This will filter the undo actions stack!");
         UndoStackObj.FilterExpiredUndoActions(Date.now());  // Filter the undo stack any time the ui updates
         window.clearTimeout(scheduledFilteringOperation);
-        scheduledFilteringOperation = window.setTimeout(() => {
-            // Simply force a view-layer update. Since this scheduling is itself a view layer callback, we will always reschedule
-            ViewLayerCallbacks.forEach(cb => cb());
-        }, UNDO_ACTION_MAX_AGE_MILLISECONDS - 5000);
+        if (UndoStackObj.GetSize() > 0) {
+            scheduledFilteringOperation = window.setTimeout(() => {
+                // Simply force a view-layer update. Since this scheduling is itself a view layer callback, we will always reschedule
+                ViewLayerCallbacks.forEach(cb => cb());
+            }, UNDO_ACTION_MAX_AGE_MILLISECONDS - 5000);
+        }
     });
 
     // Exported inner function: Tells the interaction layer to explicitly CLEAR all the registers callbacks. This should only be done
