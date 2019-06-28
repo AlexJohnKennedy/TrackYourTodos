@@ -104,23 +104,14 @@ export class Task extends Component {
         confirmAlert({
             title: 'Are you sure?',
             message: 'You have already commited to this task. Giving up on it will be permanently logged as a failure. You cannot undo this action',
-            buttons: [
-                {
-                    label: 'Yes. I accept my fate as a failure',
-                    // Use the 'VoluntarilyFailTask()' taskView operation to fail this task after the appropriate animation delay.
-                    onClick: () => {
-                        window.setTimeout(() => {
-                            this.props.animTriggerCallbacks.unregister(this.props.taskView.id, false);
-                            this.props.taskView.VoluntarilyFailTask();
-                        }, 800);
-                        this.props.animTriggerCallbacks.register(this.props.taskView.id, false);
-                    }
-                },
-                {
-                    label: "Actually, I'll give it another go",
-                    onClick: () => {}   // Do nothing, just return back to the app screen.
-                }
-            ]
+            customUI: ({ onClose }) => <CustomConfirmationBox onClose={onClose} clickAction={() => {
+                window.setTimeout(() => {
+                    this.props.animTriggerCallbacks.unregister(this.props.taskView.id, false);
+                    this.props.taskView.VoluntarilyFailTask();
+                }, 800);
+                this.props.animTriggerCallbacks.register(this.props.taskView.id, false);
+                onClose();
+            }}/>
         });
     };
 
@@ -233,3 +224,16 @@ export class Task extends Component {
     }
 }
 Task.contextType = ThemeId;
+
+class CustomConfirmationBox extends Component {
+    render() {
+        return (
+            <div className="customConfirmationBox">
+                <h1>Are you sure?</h1>
+                <p>You have already commited to this task. Giving up on it will be permanently logged as a failure. You cannot undo this action</p>
+                <button onClick={this.props.clickAction}>Yes. I accept my fate as a failure</button>
+                <button onClick={this.props.onClose}>Actually, I'll give it another go</button>
+            </div>
+        );
+    }
+}

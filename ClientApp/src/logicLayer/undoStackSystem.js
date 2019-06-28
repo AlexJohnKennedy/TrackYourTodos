@@ -89,16 +89,7 @@ export function BuildNewUndoStack() {
         }
         // Try to perform the undo operation on the domain-layer object!
         else if (UndoActionFunctions.has(undoableAction.eventType)) {
-            try {
-                return UndoActionFunctions.get(undoableAction.eventType)(currTime, undoableAction, tasklistObj);
-            } 
-            catch(err) {
-                // This means the undo action is not valid to perform! This is actually a valid state of affairs: E.g. Tried to undo 'start' on a task which just failed.
-                // Hence, we catch the error, log the message, and return false
-                console.warn("CAUGHT ERROR");
-                console.warn(err.message);
-                return null;
-            }
+            return UndoActionFunctions.get(undoableAction.eventType)(currTime, undoableAction, tasklistObj);
         }
         // Oops. Something went wrong, we did not have a handler for this event type!
         else {
