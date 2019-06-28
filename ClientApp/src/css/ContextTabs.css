@@ -16,6 +16,9 @@
     padding-top: 0.3rem;
     cursor: pointer;
 }
+.ContextTabsWrapper .contextSettingsButton .settingsIcon:hover, .ContextTabsWrapper .undoButton .undoIcon:hover {
+    fill: var(--dull-text-colour);
+}
 
 .ContextTabsWrapper .undoButton {
     grid-column-start: 3;
@@ -24,6 +27,9 @@
 }
 
 .ContextTabsWrapper .greyedOut .undoIcon {
+    fill: var(--editor-background-colour);
+}
+.ContextTabsWrapper .greyedOut .undoIcon:hover {
     fill: var(--editor-background-colour);
 }
 

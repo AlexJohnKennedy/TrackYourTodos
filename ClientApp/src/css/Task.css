@@ -92,7 +92,7 @@
     font-weight: 500;
 }
 .task .button:hover {
-    background-color: var(--editor-background-colour);
+    background-color: var(--dull-text-colour);
 }
 
 /* Make the second button even further over. */
@@ -116,7 +116,7 @@
 }
 
 .task .iconButton:hover {
-    fill: var(--editor-background-colour);
+    fill: var(--dull-text-colour);
 }
 
 .task .checkbox {

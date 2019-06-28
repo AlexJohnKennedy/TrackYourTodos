@@ -48,4 +48,8 @@
     width: 1.8rem;
     height: 1.8rem;
     cursor: pointer;
+    fill: var(--text-colour);
+}
+.board-title-container .button:hover {
+    fill: var(--dull-text-colour);
 }
