@@ -19,8 +19,9 @@
 @media (min-width: 1270px) {
     #appPageRoot {
         display: grid;
+        min-height: 100vh;
         grid-template-columns: 1fr 0.8rem minmax(auto, 115rem) var(--divider-column-width) minmax(var(--backlog-tasks-total-width-squashed), var(--backlog-tasks-total-width)) 0.8rem 1fr;
-        grid-template-rows: 3.4rem 3.4rem auto auto auto;
+        grid-template-rows: 3.4rem 3.4rem 1fr auto auto;
     }
     .Header {
         grid-column-start: 3;
@@ -58,8 +59,7 @@
         grid-row-start: 3;
         grid-row-end: 4;
 
-        min-height: 35rem;
-        max-height: 50rem;
+        height: 100%;
 
         width: 100%;
         min-width: var(--active-tasks-min-total-width);
@@ -77,9 +77,7 @@
 
         box-sizing: border-box;
         width: 100%;
-
-        min-height: 0;
-        max-height: 94.1rem;
+        height: 100%;
 
         border-left: 1px solid var(--divider-colour);
         display: inline-flex;
@@ -141,8 +139,9 @@
 @media (max-width: 1270px) {
     #appPageRoot {
         display: grid;
+        min-height: 100vh;
         grid-template-columns: 1fr 0.8rem minmax(auto, 115rem) 0.8rem 1fr;
-        grid-template-rows: 3.4rem 3.4rem auto auto auto;
+        grid-template-rows: 3.4rem 3.4rem 1fr auto auto;
     }
     .Header {
         grid-column-start: 3;
@@ -180,12 +179,11 @@
         grid-row-start: 3;
         grid-row-end: 4;
 
-        min-height: 35rem;
-        max-height: 50rem;
+        height: 100%;
+        width: 100%;
+
         padding-left: var(--board-spacing-amount);
         padding-right: var(--board-spacing-amount);
-
-        width: 100%;
 
         display: inline-flex;
         justify-content: space-between;
@@ -287,12 +285,13 @@
         grid-row-start: 3;
         grid-row-end: 4;
 
+        height: unset;
+        width: 100%;
+
         min-height: 0rem;
         max-height: 1000rem;
         padding-left: 0rem;
         padding-right: 0rem;
-
-        width: 100%;
 
         display: inline-flex;
         justify-content: space-between;
