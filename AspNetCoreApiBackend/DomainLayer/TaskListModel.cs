@@ -41,21 +41,22 @@ namespace todo_app.DomainLayer.TaskListModel {
             { TaskAddedUndo, 1 },
             { ChildTaskAddedUndo, 1 },
             { TaskRevivedUndo, 1 },
-            // Tasks cannot be activated after starting, thus activation comes next.
+            // Tasks can be edited immediately after creation
             { TaskEdited, 2 },
-            { TaskActivated, 2 },
             { TaskEditedUndo, 3 },
-            { TaskActivatedUndo, 3 },
+            // Tasks cannot be deleted after being Activated, thus deletion comes next.
+            { TaskDeleted, 4 },
+            { TaskDeletedUndo, 5 },
+            // Tasks cannot be activated after starting, thus activation comes next.
+            { TaskActivated, 6 },
+            { TaskActivatedUndo, 7 },
             // Tasks cannot be started after are deletd, completed or failed, thus started comes next.
-            { TaskStarted, 4 },
-            { TaskStartedUndo, 5 },
-            // Tasks cannot be deleted after being close, thus deletion comes next.
-            { TaskDeleted, 6 },
-            { TaskDeletedUndo, 7 },
+            { TaskStarted, 8 },
+            { TaskStartedUndo, 9 },
             // Task closure comes next. Lets favour failure over completed, just to be mean.
-            { TaskFailed, 8 },
-            { TaskCompleted, 9 },
-            { TaskCompletedUndo, 10 }
+            { TaskFailed, 10 },
+            { TaskCompleted, 11 },
+            { TaskCompletedUndo, 12 }
         };
     }
 
@@ -241,6 +242,26 @@ namespace todo_app.DomainLayer.TaskListModel {
             }
 
             return true;
+        }
+
+        // Abandoning deferred tasks without activating them.
+        public void AbandonTask(Task task) {
+            // We can only abandon goals or deferred tasks
+            if (task == null || task.ProgressStatus > ProgressStatusVals.Started || task.Category != CategoryVals.Deferred) {
+                throw new InvalidOperationException("Cannot abandon a task which is not a deferred task");
+            }
+            if (task.Parent != null || task.Children.Count > 0) throw new InvalidOperationException("Cannot abandon task with relatives");
+
+            // Remove it from our list, and invoke!
+            this.activeTasks.Remove(task.Id);
+            this.allTasks.Remove(task.Id);
+        }
+        public void UndoAbandonTask(Task task) {
+            if (task.Category != CategoryVals.Deferred) throw new InvalidOperationException("Cannot undo-abandon of a task which is not deferred");
+
+            // Simply add the task back into our list, since it's state has not changed.
+            this.activeTasks.Add(task.Id, task);
+            this.allTasks.Add(task.Id, task);
         }
 
         // Starting Tasks.

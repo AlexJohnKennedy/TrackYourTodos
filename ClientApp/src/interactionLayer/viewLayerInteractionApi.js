@@ -256,6 +256,7 @@ export function InstantiateNewDataModelScope(currContext) {
             window.setTimeout(() => {
                 logicLayerFailureChecker.FailTasks().forEach(task => {
                     if (additionalCallback !== null) additionalCallback(task.id);
+                    UndoStackObj.ClearStack();
                     DataEventCallbackHandlers.taskFailedHandlers.forEach(callback => callback(task, ActiveTaskDataObj));
                 });
                 ViewLayerCallbacks.forEach(callback => callback());
@@ -425,10 +426,18 @@ function BuildNewTaskView(domainTaskObj, activeList, undoStack, viewLayerCallbac
     }
 
     function deleteTask() {
-        // Cannot undo deletion events at the moment
-        activeList.DeleteTask(domainTaskObj);
+        const timestamp = Date.now();
+        activeList.AbandonTask(domainTaskObj);
+        undoStack.PushUndoableDeleteTask(domainTaskObj, timestamp);
         viewLayerCallbackList.forEach(callback => callback());
-        dataEventCallbacksLists.taskDeletedHandlers.forEach(callback => callback(domainTaskObj, activeList));
+        dataEventCallbacksLists.taskDeletedHandlers.forEach(callback => callback(domainTaskObj, timestamp, activeList));
+    }
+
+    function voluntarilyFailTask() {
+        activeList.FailTask(domainTaskObj, Date.now());
+        undoStack.ClearStack();
+        viewLayerCallbackList.forEach(callback => callback());
+        dataEventCallbacksLists.taskFailedHandlers.forEach(callback => callback(domainTaskObj, activeList));
     }
 
     function activateTask(newCategory) {
@@ -479,7 +488,8 @@ function BuildNewTaskView(domainTaskObj, activeList, undoStack, viewLayerCallbac
         CanCreateChildren : canCreateChildren,
         CreateChild : createChild,
         CreateDailyChild : createDailyChild,
-        DeleteTask : deleteTask,
+        AbandonTask : deleteTask,
+        VoluntarilyFailTask: voluntarilyFailTask,
         ActivateTask : activateTask,
         CompleteTask : completeTask,
         StartTask : startTask,

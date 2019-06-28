@@ -1,0 +1,41 @@
+.customConfirmationBox {
+    background-color: var(--sidebar-background-colour);
+    padding-left: 2rem;
+    padding-right: 2rem;
+    padding-top: 2.5rem;
+    padding-bottom: 1rem;
+    margin-left: 0.8rem;
+    margin-right: 0.8rem;
+    margin-bottom: 5rem;
+
+    box-shadow: 0rem 3rem 6rem 2rem rgba(0, 0, 0, 0.25);
+
+    min-height: 22rem;
+    max-width: 50rem;
+    border-radius: 2px;
+}
+
+.customConfirmationBox .flexwrapper {
+    display: inline-flex;
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.customConfirmationBox .button {
+    width: 14rem;
+    height: 5rem;
+    font-size: 1.6rem;
+    text-align: center;
+    vertical-align: center;
+    cursor: pointer;
+    margin: 1rem;
+    padding: 1rem;
+    border: 1px solid var(--divider-colour-lighter);    
+}
+.customConfirmationBox .button:hover {
+    background-color: var(--editor-background-colour-red-tint);
+}
+.customConfirmationBox .button ~ .button:hover {
+    background-color: var(--editor-background-colour);
+}

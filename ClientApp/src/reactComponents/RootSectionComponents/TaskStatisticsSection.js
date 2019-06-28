@@ -42,7 +42,7 @@ export class TaskStatisticsSection extends Component {
             statsObject: emptyStatsObj,
             historyStats: emptyStatsObj,
             startIndex: 0,
-            stopIndex: 30,
+            stopIndex: 60,
             barWidth: 60
         };
 

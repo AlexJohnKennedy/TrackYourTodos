@@ -75,7 +75,17 @@
     
     width: 1.4rem;
     height: 1.4rem;
+
+    transition-property: opacity;
+    transition-duration: 150ms;
+
+    /* Set to 1 by default to disable fade-in and fade-out effect. We can easily re-enable by tweaking this CSS */
+    opacity: 1;
 }
+.task:hover button {
+    opacity: 1;
+}
+
 /* Make the second button even further over. */
 .task button ~ button {
     position: absolute;
@@ -87,6 +97,13 @@
     position: absolute;
     right: 3.6rem;
     top: 0.4rem;
+}
+/* Make the fourth button down in the bottom right. */
+.task .deleteButton {
+    position: absolute;
+    top: unset;
+    right: 0.4rem;
+    bottom: 0.4rem;
 }
 
 .task .checkbox {
