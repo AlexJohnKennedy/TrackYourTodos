@@ -68,32 +68,41 @@
     }
 }
 
-.task button {
+.task .button, .task .iconButton {
     position: absolute;
     right: 0.4rem;
     top: 0.4rem;
-    
+    cursor: pointer;    
     width: 1.4rem;
     height: 1.4rem;
+    fill: var(--text-colour);
 
     transition-property: opacity;
-    transition-duration: 150ms;
+    transition-duration: 0ms;
 
-    /* Set to 1 by default to disable fade-in and fade-out effect. We can easily re-enable by tweaking this CSS */
+    opacity: 0;
+}
+.task:hover .button, .task:hover .iconButton {
     opacity: 1;
 }
-.task:hover button {
-    opacity: 1;
+
+.task .button {
+    font-size: 1.2rem;
+    line-height: 100%;
+    font-weight: 500;
+}
+.task .button:hover {
+    background-color: var(--editor-background-colour);
 }
 
 /* Make the second button even further over. */
-.task button ~ button {
+.task .button ~ .button, .task .subtaskButton ~ .subtaskButton {
     position: absolute;
     right: 2rem;
     top: 0.4rem;
 }
 /* Make the third button even FURTHER over. */
-.task button ~ button ~ button {
+.task .button ~ .button ~ .button {
     position: absolute;
     right: 3.6rem;
     top: 0.4rem;
@@ -104,6 +113,10 @@
     top: unset;
     right: 0.4rem;
     bottom: 0.4rem;
+}
+
+.task .iconButton:hover {
+    fill: var(--editor-background-colour);
 }
 
 .task .checkbox {

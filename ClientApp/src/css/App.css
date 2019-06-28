@@ -56,7 +56,7 @@ body {
   color: var(--bright-text-colour);
   background-color: var(--sidebar-background-colour);
   background-size: cover;
-  /* overflow-y: scroll; */
+  overflow-y: scroll;
 }
 h1, h2 {
   display: inline-block;

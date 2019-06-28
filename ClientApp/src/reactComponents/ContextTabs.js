@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { NavigationTabs } from './NavigationTabs';
 import { EventTypes } from '../logicLayer/dataEventJsonSchema';
 
+import { ReactComponent as SettingsIcon } from '../icons/settings-button.svg';
+import { ReactComponent as UndoIcon } from '../icons/undo-arrow.svg';
+
 // Wrapper around some context tabs, which is passed some callbacks from the root AppPage
 // allowing us to specify the navigation-tabs callback to switch the current context.
 // We are handed a list of strings which specifies the contexts we are allowed to show.
@@ -78,10 +81,10 @@ export class ContextTabs extends Component {
                     currActiveIndex={currActiveIndex}
                 />
                 <div className="contextSettingsButton">
-                    <div onClick={this.props.togglePage} title="Manage current contexts (Change what appears on these selectable tabs!)"> C </div>
+                    <SettingsIcon className="settingsIcon" onClick={this.props.togglePage}/>
                 </div>
-                <div className={undoButtonClassstring}>
-                    <div onClick={this.state.performUndo} title={this.state.tooltipText}> U </div>
+                <div className={undoButtonClassstring} title={this.state.tooltipText}>
+                    <UndoIcon className="undoIcon" onClick={this.state.performUndo}/>
                 </div>
             </div>
         );

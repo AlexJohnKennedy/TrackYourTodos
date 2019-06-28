@@ -9,11 +9,11 @@
     grid-column-end: 3;
     padding-top: 0.2rem;
 }
-.ContextTabsWrapper .contextSettingsButton div, .ContextTabsWrapper .undoButton div {
-    background-color: var(--divider-colour-lighter);
-    border-radius: 40%;
-    width: 3rem;
-    height: 3rem;
+.ContextTabsWrapper .contextSettingsButton .settingsIcon, .ContextTabsWrapper .undoButton .undoIcon {
+    fill: var(--text-colour);
+    width: 2.4rem;
+    height: 2.4rem;
+    padding-top: 0.3rem;
     cursor: pointer;
 }
 
@@ -23,8 +23,8 @@
     padding-top: 0.2rem;
 }
 
-.ContextTabsWrapper .greyedOut div {
-    background-color: var(--editor-background-colour);
+.ContextTabsWrapper .greyedOut .undoIcon {
+    fill: var(--editor-background-colour);
 }
 
 .ContextTabsWrapper .navigation-tabs-container {
