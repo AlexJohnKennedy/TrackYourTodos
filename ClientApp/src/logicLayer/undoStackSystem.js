@@ -77,13 +77,12 @@ export function BuildNewUndoStack() {
     // Exported inner function: Perform undo operation, and return information which will allow the view layer interaction api to
     // serialise and post data corresponding to the correct 'undo' data event.
     function PerformUndo(currTime, tasklistObj) {
-        console.log("Performing undo, in undoStackSystem");
         if (UndoStack.length === 0) { return null; }
         const undoableAction = UndoStack.pop();
 
         // Only perform the undo if the action has not expired
         if (currTime - undoableAction.timestamp > UNDO_ACTION_MAX_AGE_MILLISECONDS) {
-            console.log("top of stack undo item is expired. Returning false");
+            console.warn("top of stack undo item is expired. Returning false");
             // Clear the entire stack, since the latest of them is expired.
             UndoStack.length = 0;
             return null;
@@ -91,13 +90,12 @@ export function BuildNewUndoStack() {
         // Try to perform the undo operation on the domain-layer object!
         else if (UndoActionFunctions.has(undoableAction.eventType)) {
             try {
-                console.log("calling mapped handler");
                 return UndoActionFunctions.get(undoableAction.eventType)(currTime, undoableAction, tasklistObj);
             } 
             catch(err) {
-                console.log("CAUGHT ERROR");
                 // This means the undo action is not valid to perform! This is actually a valid state of affairs: E.g. Tried to undo 'start' on a task which just failed.
                 // Hence, we catch the error, log the message, and return false
+                console.warn("CAUGHT ERROR");
                 console.warn(err.message);
                 return null;
             }

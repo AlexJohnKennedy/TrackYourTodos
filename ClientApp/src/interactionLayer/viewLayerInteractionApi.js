@@ -425,12 +425,17 @@ function BuildNewTaskView(domainTaskObj, activeList, undoStack, viewLayerCallbac
     }
 
     function deleteTask() {
-        console.log("deleting task");
         const timestamp = Date.now();
         activeList.AbandonTask(domainTaskObj);
         undoStack.PushUndoableDeleteTask(domainTaskObj, timestamp);
         viewLayerCallbackList.forEach(callback => callback());
         dataEventCallbacksLists.taskDeletedHandlers.forEach(callback => callback(domainTaskObj, timestamp, activeList));
+    }
+
+    function voluntarilyFailTask() {
+        activeList.FailTask(domainTaskObj, Date.now());
+        viewLayerCallbackList.forEach(callback => callback());
+        dataEventCallbacksLists.taskFailedHandlers.forEach(callback => callback(domainTaskObj, activeList));
     }
 
     function activateTask(newCategory) {
@@ -482,6 +487,7 @@ function BuildNewTaskView(domainTaskObj, activeList, undoStack, viewLayerCallbac
         CreateChild : createChild,
         CreateDailyChild : createDailyChild,
         AbandonTask : deleteTask,
+        VoluntarilyFailTask: voluntarilyFailTask,
         ActivateTask : activateTask,
         CompleteTask : completeTask,
         StartTask : startTask,
