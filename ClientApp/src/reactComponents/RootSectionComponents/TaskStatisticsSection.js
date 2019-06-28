@@ -334,21 +334,6 @@ function monthTickFormatter(index, barWidth) {
 
 class SelectionController extends Component {
     render() {
-        let startText;
-        let endText;
-        if (this.props.currentIndex === 0) {
-            startText = "Start day";
-            endText = "End day"
-        }
-        else if (this.props.currentIndex === 1) {
-            startText = "Start week";
-            endText = "End week";
-        }
-        else {
-            startText = "Start month";
-            endText = "End month";
-        }
-
         return (
             <div className="groupingControllerBlock">
                 <div className="button" onClick={() => this.props.indexToggleFunc(0)}> Days </div>
@@ -360,52 +345,52 @@ class SelectionController extends Component {
     }
 }
 
-class SelectionControllerOLD extends Component {
-    render() {
-        let startText;
-        let endText;
-        if (this.props.currentIndex === 0) {
-            startText = "Start day";
-            endText = "End day"
-        }
-        else if (this.props.currentIndex === 1) {
-            startText = "Start week";
-            endText = "End week";
-        }
-        else {
-            startText = "Start month";
-            endText = "End month";
-        }
+//class SelectionControllerOLD extends Component {
+//    render() {
+//        let startText;
+//        let endText;
+//        if (this.props.currentIndex === 0) {
+//            startText = "Start day";
+//            endText = "End day"
+//        }
+//        else if (this.props.currentIndex === 1) {
+//            startText = "Start week";
+//            endText = "End week";
+//        }
+//        else {
+//            startText = "Start month";
+//            endText = "End month";
+//        }
+//
+//        return (
+//            <div className="groupingControllerBlock">
+//                <div className="title"> Group by: </div>
+//                <button onClick={() => this.props.indexToggleFunc(0)}> Day </button>
+//                <button onClick={() => this.props.indexToggleFunc(1)}> Week </button>
+//                <button onClick={() => this.props.indexToggleFunc(2)}> Month </button>
+//                <div className="rangeSelectors">
+//                    <RangeSelectionBlock text={startText} value={this.props.startIndex} increment={this.props.startincrement} decrement={this.props.startdecrement} />
+//                    <RangeSelectionBlock text={endText} value={this.props.stopIndex} increment={this.props.stopincrement} decrement={this.props.stopdecrement} />
+//                </div>
+//                <Slider min={this.props.minBarWidth} max={this.props.maxBarWidth} value={this.props.barWidth} step={1} onChange={this.props.handleBarWidthChange} text="Zoom" />
+//            </div>
+//        );
+//    }
+//}
 
-        return (
-            <div className="groupingControllerBlock">
-                <div className="title"> Group by: </div>
-                <button onClick={() => this.props.indexToggleFunc(0)}> Day </button>
-                <button onClick={() => this.props.indexToggleFunc(1)}> Week </button>
-                <button onClick={() => this.props.indexToggleFunc(2)}> Month </button>
-                <div className="rangeSelectors">
-                    <RangeSelectionBlock text={startText} value={this.props.startIndex} increment={this.props.startincrement} decrement={this.props.startdecrement} />
-                    <RangeSelectionBlock text={endText} value={this.props.stopIndex} increment={this.props.stopincrement} decrement={this.props.stopdecrement} />
-                </div>
-                <Slider min={this.props.minBarWidth} max={this.props.maxBarWidth} value={this.props.barWidth} step={1} onChange={this.props.handleBarWidthChange} text="Zoom" />
-            </div>
-        );
-    }
-}
-
-class RangeSelectionBlock extends Component {
-    render() {
-        return (
-            // TODO: Make the button look less shit, and implement a 'hold down' rapid increment and decrement ability
-            <div>
-                <button onClick={this.props.increment}> + </button>
-                <div> {this.props.value} </div>
-                <button onClick={this.props.decrement}> - </button>
-                <div className="text"> {this.props.text} </div>
-            </div>
-        );
-    }
-}
+//class RangeSelectionBlock extends Component {
+//    render() {
+//        return (
+//            // TODO: Make the button look less shit, and implement a 'hold down' rapid increment and decrement ability
+//            <div>
+//                <button onClick={this.props.increment}> + </button>
+//                <div> {this.props.value} </div>
+//                <button onClick={this.props.decrement}> - </button>
+//                <div className="text"> {this.props.text} </div>
+//            </div>
+//        );
+//    }
+//}
 
 class Slider extends Component {
     render() {
