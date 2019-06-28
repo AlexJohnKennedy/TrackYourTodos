@@ -59,9 +59,9 @@
         grid-row-start: 3;
         grid-row-end: 4;
 
-        height: 100%;
-
+        max-height: 100%;
         width: 100%;
+
         min-width: var(--active-tasks-min-total-width);
         padding-left: var(--board-spacing-amount);
         padding-right: var(--board-spacing-amount);
@@ -246,6 +246,7 @@
 @media (max-width: 800px) {
     #appPageRoot {
         display: grid;
+        height: unset;
         grid-template-columns: 1fr 0.4rem minmax(var(--active-tasks-single-board-min-width), var(--active-tasks-single-board-max-width)) 0.4rem 1fr;
         grid-template-rows: 3.4rem 3.4rem auto auto auto;
     }

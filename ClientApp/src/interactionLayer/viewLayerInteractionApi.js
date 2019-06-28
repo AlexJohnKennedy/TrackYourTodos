@@ -41,6 +41,7 @@ import { RegisterForFailureChecking } from '../logicLayer/checkForFailure';
 import { StatisticsModel } from '../logicLayer/statisticsModel';
 import { BuildNewUndoStack } from '../logicLayer/undoStackSystem';
 import { EventTypes } from '../logicLayer/dataEventJsonSchema';
+import { mapToClosedTasklistWithSpacers } from './closedTaskListSpacerAlgorithm';
 
 // This function instantiates a new Data model and Statistics model inside a function scope, and returns and object which
 // can be used to register listeners, access the data in a mutation safe manner, and so on.
@@ -214,24 +215,10 @@ export function InstantiateNewDataModelScope(currContext) {
             return ActiveTaskDataObj.GetActiveTasks().map((task) => BuildNewTaskView(task, ActiveTaskDataObj, UndoStackObj, ViewLayerCallbacks, DataEventCallbackHandlers));
         }
         function getCompletedTasks() {
-            let ret = [];
-            ActiveTaskDataObj.GetCompletedTasks().forEach(group => {
-                ret.push({ isSpacer: true, time: group.time });
-                ret = ret.concat(group.tasks.map((task) => {
-                    return BuildNewInactiveTaskView(task, ActiveTaskDataObj, UndoStackObj, ViewLayerCallbacks, DataEventCallbackHandlers);
-                }));
-            });
-            return ret;
+            return mapToClosedTasklistWithSpacers(ActiveTaskDataObj.GetCompletedTasks(), task => BuildNewInactiveTaskView(task, ActiveTaskDataObj, UndoStackObj, ViewLayerCallbacks, DataEventCallbackHandlers));
         }
         function getFailedTasks() { 
-            let ret = [];
-            ActiveTaskDataObj.GetFailedTasks().forEach(group => {
-                ret.push({ isSpacer: true, time: group.time });
-                ret = ret.concat(group.tasks.map((task) => {
-                    return BuildNewInactiveTaskView(task, ActiveTaskDataObj, UndoStackObj, ViewLayerCallbacks, DataEventCallbackHandlers);
-                }));
-            });
-            return ret;
+            return mapToClosedTasklistWithSpacers(ActiveTaskDataObj.GetFailedTasks(), task => BuildNewInactiveTaskView(task, ActiveTaskDataObj, UndoStackObj, ViewLayerCallbacks, DataEventCallbackHandlers));
         }
 
         function getCreationFunction(categoryVal, colourIdGetterFunc) {
