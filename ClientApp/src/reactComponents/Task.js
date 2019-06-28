@@ -7,6 +7,9 @@ import { Category, ProgressStatus, MAX_TASK_NAME_LEN } from '../logicLayer/Task'
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 
+import { ReactComponent as BinIcon } from '../icons/rubbish-bin-delete-button.svg';
+import { ReactComponent as SubtaskIcon } from '../icons/subtask-arrow-button.svg';
+
 export class Task extends Component {
     constructor(props) {
         super(props);
@@ -166,7 +169,7 @@ export class Task extends Component {
                 }
                 {this.props.taskView.category < Category.Weekly && this.props.taskView.progressStatus <= ProgressStatus.Started &&
                     <>
-                        <NewTaskButton clickAction={() => this.toggleFormOn(true)} text={'>'} tooltipText="Creat a daily subtask" />
+                        <SubtaskIcon className="iconButton subtaskButton" onClick={e => { e.stopPropagation(); this.toggleFormOn(true); }}/>
                         <CreationForm
                             creationFunction={this.props.taskView.CreateDailyChild}
                             formText="New daily subtask"
@@ -179,7 +182,7 @@ export class Task extends Component {
                 }
                 {this.props.taskView.category < Category.Daily && this.props.taskView.progressStatus <= ProgressStatus.Started &&
                     <>
-                        <NewTaskButton clickAction={() => this.toggleFormOn(false)} text={'>'} tooltipText="Create a subtask" />
+                        <SubtaskIcon className="iconButton subtaskButton" onClick={e => { e.stopPropagation(); this.toggleFormOn(false); }}/>
                         <CreationForm
                             creationFunction={this.props.taskView.CreateChild}
                             formText="New subtask"
@@ -203,7 +206,7 @@ export class Task extends Component {
                                 }, 699);
                             }}
                         />
-                        <NewTaskButton clickAction={this.renderAreYouSure} text={'X'} tooltipText="Abandon this backlog task" className="deleteButton" />
+                        <BinIcon className="iconButton deleteButton" onClick={e => { e.stopPropagation(); this.renderAreYouSure(); }}/>
                     </>
                 }
                 {this.props.taskView.category === Category.Deferred &&
@@ -211,7 +214,7 @@ export class Task extends Component {
                         <NewTaskButton clickAction={() => this.props.taskView.ActivateTask(Category.Daily)} text={'D'} tooltipText="Activate as daily task" />
                         <NewTaskButton clickAction={() => this.props.taskView.ActivateTask(Category.Weekly)} text={'W'} tooltipText="Activate as weekly task" />
                         <NewTaskButton clickAction={() => this.props.taskView.ActivateTask(Category.Goal)} text={'G'} tooltipText="Activate as goal task" />
-                        <NewTaskButton clickAction={() => this.props.taskView.AbandonTask()} text={'X'} tooltipText="Abandon this backlog task" className="deleteButton" />
+                        <BinIcon className="iconButton deleteButton" onClick={e => { e.stopPropagation(); this.props.taskView.AbandonTask(); }}/>
                     </>
                 }
                 {this.props.taskView.progressStatus === ProgressStatus.Failed &&

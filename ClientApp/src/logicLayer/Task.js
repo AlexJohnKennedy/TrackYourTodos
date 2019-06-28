@@ -14,7 +14,7 @@ export const MAX_CONTEXT_NAME_LEN = 20;
 
 export const DEFAULT_GLOBAL_CONTEXT_STRING = "global";  // Context strings are NOT case sensitive.
 
-export const UNDO_ACTION_MAX_AGE_MILLISECONDS = 300000;    // Actions are allowed to be undone for 5 minutes.
+export const UNDO_ACTION_MAX_AGE_MILLISECONDS = 3600000;    // Actions are allowed to be undone for 60 minutes.
 
 function isValidContextString(s) {
     if (s === undefined || s === null || s === "" || s.length > MAX_CONTEXT_NAME_LEN) return false;
@@ -26,7 +26,7 @@ function isValidContextString(s) {
 
 // Enumeration object, specifying the possible categories for an item. These will basically dictate where an item
 // appears on the UI, under which board. (PSST): 'Boards' themselves are just a UI-layer concept, so they will not
-// we referred to here.
+// be referred to here.
 export const Category = Object.freeze({
     Goal : 0,
     Weekly : 1,

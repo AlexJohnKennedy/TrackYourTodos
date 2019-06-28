@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { NewTaskButton } from './TaskButtons.js';
 import { CreationForm } from './CreationForm.js';
 import { ShortCutManager } from '../viewLogic/keyboardShortcutHandler';
 import { TaskList } from './TaskList';
 import { MAX_TASK_NAME_LEN } from '../logicLayer/Task';
+
+import { ReactComponent as AddIcon } from '../icons/add-filled-cross-sign.svg';
 
 // the 'Board' component generically represents an active task list.
 // E.g., each of the three main 'lists' are Board components!
@@ -42,7 +43,7 @@ export class Board extends Component {
             <div className="board" key={this.props.category}>
                 <div className="board-title-container"> 
                     <h2> {this.props.boardTitle} </h2>
-                    <NewTaskButton clickAction={this.toggleFormOn} tooltipText={this.props.newTaskButtonTooltipText} text={'+'}/>
+                    <AddIcon className="button" onClick={this.toggleFormOn}/>
                 </div>
                 <TaskList
                     tasks={this.props.tasks}

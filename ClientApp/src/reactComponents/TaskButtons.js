@@ -15,9 +15,9 @@ export class NewTaskButton extends Component {
     }
     render() {
         return (
-            <button className={this.props.className} onClick={this.handleClick} title={this.props.tooltipText}>
+            <div className="button" onClick={this.handleClick} title={this.props.tooltipText}>
                 {this.props.text}
-            </button>
+            </div>
         );
     }
 }

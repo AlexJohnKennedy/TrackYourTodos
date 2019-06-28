@@ -48,30 +48,39 @@
 }
 
 .TaskStatisticsSection .historyBarChartWrapper .groupingControllerBlock {
-    width: 14rem;
-    padding-left: 0.1rem;
+    width: 10rem;
+    padding-left: 1rem;
     padding-right: 0rem;
+    padding-top: 1.6rem;
     flex-grow: 0;
     flex-shrink: 0;
-}
-.TaskStatisticsSection .historyBarChartWrapper .groupingControllerBlock .title {
-    padding-top: 0.1rem;
-    padding-bottom: 0.5rem;
-}
-.TaskStatisticsSection .historyBarChartWrapper .groupingControllerBlock button {
-    width: 3.4rem;
-    margin-left: 0.1rem;
-}
-.TaskStatisticsSection .historyBarChartWrapper .groupingControllerBlock .rangeSelectors {
-    margin-top: 1rem;
-    width: 100%;
     display: inline-flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-    padding-bottom: 1rem;
+    flex-direction: column;
+    align-items: center;
 }
-.TaskStatisticsSection .historyBarChartWrapper .groupingControllerBlock .text {
-    font-size: 1rem;
+.TaskStatisticsSection .historyBarChartWrapper .slider {
+    margin-top: 1.6rem;
+}
+.TaskStatisticsSection .historyBarChartWrapper .slider .text {
+    font-size: 1.2rem;
+}
+
+.TaskStatisticsSection .historyBarChartWrapper input {
+    width: 9rem;
+}
+
+.TaskStatisticsSection .historyBarChartWrapper .groupingControllerBlock .button {
+    width: 8rem;
+    height: 2rem;
+    padding-top: 0.2rem;
+    padding-bottom: 0.2rem;
+    margin-bottom: 0.6rem;
+    cursor: pointer;
+    border: 1px solid var(--sidebar-background-colour);
+    line-height: 100%;
+}
+.TaskStatisticsSection .historyBarChartWrapper .groupingControllerBlock .button:hover {
+    background-color: var(--sidebar-background-colour);
 }
 
 .TaskStatisticsSection .historyBarChartWrapper .axisContainer {

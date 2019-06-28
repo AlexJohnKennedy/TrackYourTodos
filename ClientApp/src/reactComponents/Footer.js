@@ -3,8 +3,7 @@ import React, { Component } from 'react';
 export class Footer extends Component {
     render() {
         return <div className="Footer">
-            <div>Hungrybox is lame and puff carries him. Which is saying something, if you've seen the size of Hbox.</div>
-            <div>This is random placeholder footer text for the sake of seeing what it looks like.</div>
+            <div>Icons made by <a href="https://www.flaticon.com/authors/google" title="Google">Google</a>, <a href="https://www.freepik.com/" title="Freepik">Freepik</a> and <a href="https://www.flaticon.com/authors/egor-rumyantsev" title="Egor Rumyantsev">Egor Rumyantsev</a> from <a href="https://www.flaticon.com/"                 title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/"                 title="Creative Commons BY 3.0">CC 3.0 BY</a></div>
         </div>;
     }
 }

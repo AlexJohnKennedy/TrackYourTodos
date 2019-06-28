@@ -56,13 +56,10 @@ const IncomingEventsWithLinkingEventProgressStatusMappings = new Map([
 export function RebuildState(eventLogAsArray, tasklist, undoStack) {
     let taskMap = createTaskMap(tasklist);
     let latestid = "";
-    let latesttime = 0;
     eventLogAsArray.forEach(eventObj => {
         replayEvent(eventObj, tasklist, taskMap, undoStack);
         latestid = eventObj.id;
-        latesttime = eventObj.timestamp;
     });
-    //undoStack.FilterExpiredUndoActions(latesttime);
     
     return latestid;
 }

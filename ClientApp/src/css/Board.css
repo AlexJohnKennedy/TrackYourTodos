@@ -41,10 +41,15 @@
     text-align: left;
 }
 
-.board-title-container button {
+.board-title-container .button {
     position: absolute;
     right: 0.4rem;
     top: 0.8rem;
     width: 1.8rem;
     height: 1.8rem;
+    cursor: pointer;
+    fill: var(--text-colour);
+}
+.board-title-container .button:hover {
+    fill: var(--dull-text-colour);
 }
