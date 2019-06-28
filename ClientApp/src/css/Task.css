@@ -75,7 +75,16 @@
     
     width: 1.4rem;
     height: 1.4rem;
+
+    transition-property: opacity;
+    transition-duration: 100ms;
+
+    opacity: 0;
 }
+.task:hover button {
+    opacity: 1;
+}
+
 /* Make the second button even further over. */
 .task button ~ button {
     position: absolute;
@@ -89,7 +98,7 @@
     top: 0.4rem;
 }
 /* Make the fourth button down in the bottom right. */
-.task button ~ button ~ button ~ button {
+.task .deleteButton {
     position: absolute;
     top: unset;
     right: 0.4rem;

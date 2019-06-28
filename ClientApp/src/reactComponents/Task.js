@@ -169,6 +169,7 @@ export class Task extends Component {
                     </>
                 }
                 { this.props.taskView.category <= Category.Daily && this.props.taskView.progressStatus <= ProgressStatus.Started &&
+                    <>
                     <CheckBox 
                         currClicks={completion.length > 0 ? 2 : this.props.taskView.progressStatus}
                         firstClickAction={() => this.props.taskView.StartTask()}
@@ -180,13 +181,15 @@ export class Task extends Component {
                             }, 699);
                         }}
                     />
+                    <NewTaskButton clickAction={() => alert("MEMES")} text={'X'} tooltipText="Abandon this backlog task" className="deleteButton"/>
+                    </>
                 }
                 { this.props.taskView.category === Category.Deferred &&
                     <>
                     <NewTaskButton clickAction={() => this.props.taskView.ActivateTask(Category.Daily)} text={'D'} tooltipText="Activate as daily task"/>
                     <NewTaskButton clickAction={() => this.props.taskView.ActivateTask(Category.Weekly)} text={'W'} tooltipText="Activate as weekly task"/>
                     <NewTaskButton clickAction={() => this.props.taskView.ActivateTask(Category.Goal)} text={'G'} tooltipText="Activate as goal task"/>
-                    <NewTaskButton clickAction={() => this.props.taskView.AbandonTask()} text={'X'} tooltipText="Abandon this backlog task"/>
+                    <NewTaskButton clickAction={() => this.props.taskView.AbandonTask()} text={'X'} tooltipText="Abandon this backlog task" className="deleteButton"/>
                     </>
                 }
                 { this.props.taskView.progressStatus === ProgressStatus.Failed &&
