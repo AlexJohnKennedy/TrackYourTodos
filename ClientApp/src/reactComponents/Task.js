@@ -101,6 +101,7 @@ export class Task extends Component {
     // Function which triggers the 'react-confirm-alert' library I am using. See: https://www.npmjs.com/package/react-confirm-alert for usage.
     // I am using this when you click to 'abandon' an activated task. Since that action is not undoable, we will prompt with an 'are you sure?' warning.
     renderAreYouSure() {
+        this.props.formStateManager.triggerCleanup();
         confirmAlert({
             title: 'Are you sure?',
             message: 'You have already commited to this task. Giving up on it will be permanently logged as a failure. You cannot undo this action',
@@ -230,9 +231,12 @@ class CustomConfirmationBox extends Component {
         return (
             <div className="customConfirmationBox">
                 <h1>Are you sure?</h1>
-                <p>You have already commited to this task. Giving up on it will be permanently logged as a failure. You cannot undo this action</p>
-                <button onClick={this.props.clickAction}>Yes. I accept my fate as a failure</button>
-                <button onClick={this.props.onClose}>Actually, I'll give it another go</button>
+                <p>You have already commited to this task. Giving up on it will be permanently logged as a failure.</p>
+                <p>You cannot undo this action.</p>
+                <div className="flexwrapper">
+                    <div className="button" onClick={this.props.clickAction}>Yes. I accept my fate as a failure</div>
+                    <div className="button" onClick={this.props.onClose}>Actually, I'll give it another go</div>
+                </div>
             </div>
         );
     }
