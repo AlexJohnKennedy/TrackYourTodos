@@ -60,7 +60,7 @@ class GroupedTaskList {
 
     RemoveTask(task) {
         // Find group it should be in.
-        let [searchResult, date] = this.findGroupPosition(task);
+        let [searchResult] = this.findGroupPosition(task);
         if (searchResult < 0) throw new Error("Tried to remove an event from date-group-task lists which was not found!");
         this.groups[searchResult].tasks = this.groups[searchResult].tasks.filter(t => t !== task);
     }
