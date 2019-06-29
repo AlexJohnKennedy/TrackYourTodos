@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { GetColourMapping, ThemeId, HSLAColour } from '../viewLogic/colourSetManager';
-import { NewTaskButton, CheckBox } from './TaskButtons';
+import { NewTaskButton, CheckBox, SvgIconWrapper } from './TaskButtons';
 import { CreationForm } from './CreationForm.js';
 import { Category, ProgressStatus, MAX_TASK_NAME_LEN } from '../logicLayer/Task';
 
@@ -169,7 +169,9 @@ export class Task extends Component {
                 }
                 {this.props.taskView.category < Category.Weekly && this.props.taskView.progressStatus <= ProgressStatus.Started &&
                     <>
-                        <SubtaskIcon className="iconButton subtaskButton" onClick={e => { e.stopPropagation(); this.toggleFormOn(true); }}/>
+                        <SvgIconWrapper className="iconWrapper subtaskButton" clickAction={() => this.toggleFormOn(true)} title="Create a daily subtask">
+                            <SubtaskIcon className="iconButton"/>
+                        </SvgIconWrapper>
                         <CreationForm
                             creationFunction={this.props.taskView.CreateDailyChild}
                             formText="New daily subtask"
@@ -182,7 +184,9 @@ export class Task extends Component {
                 }
                 {this.props.taskView.category < Category.Daily && this.props.taskView.progressStatus <= ProgressStatus.Started &&
                     <>
-                        <SubtaskIcon className="iconButton subtaskButton" onClick={e => { e.stopPropagation(); this.toggleFormOn(false); }}/>
+                        <SvgIconWrapper className="iconWrapper subtaskButton" clickAction={() => this.toggleFormOn(false)} title="Create a subtask">                        
+                            <SubtaskIcon className="iconButton"/>
+                        </SvgIconWrapper>
                         <CreationForm
                             creationFunction={this.props.taskView.CreateChild}
                             formText="New subtask"
@@ -206,7 +210,9 @@ export class Task extends Component {
                                 }, 699);
                             }}
                         />
-                        <BinIcon className="iconButton deleteButton" onClick={e => { e.stopPropagation(); this.renderAreYouSure(); }}/>
+                        <SvgIconWrapper className="iconWrapper deleteButton" clickAction={() => this.renderAreYouSure()} title="Give up on this task. This will count as a failed task!">
+                            <BinIcon className="iconButton"/>
+                        </SvgIconWrapper>
                     </>
                 }
                 {this.props.taskView.category === Category.Deferred &&
@@ -214,7 +220,9 @@ export class Task extends Component {
                         <NewTaskButton clickAction={() => this.props.taskView.ActivateTask(Category.Daily)} text={'D'} tooltipText="Activate as daily task" />
                         <NewTaskButton clickAction={() => this.props.taskView.ActivateTask(Category.Weekly)} text={'W'} tooltipText="Activate as weekly task" />
                         <NewTaskButton clickAction={() => this.props.taskView.ActivateTask(Category.Goal)} text={'G'} tooltipText="Activate as goal task" />
-                        <BinIcon className="iconButton deleteButton" onClick={e => { e.stopPropagation(); this.props.taskView.AbandonTask(); }}/>
+                        <SvgIconWrapper className="iconWrapper deleteButton" clickAction={() => this.props.taskView.AbandonTask()} title="Abandon this task. This will NOT count as a failed task!">
+                            <BinIcon className="iconButton"/>
+                        </SvgIconWrapper>
                     </>
                 }
                 {this.props.taskView.progressStatus === ProgressStatus.Failed &&
