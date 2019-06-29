@@ -88,7 +88,7 @@ export class GoalBoard extends Component {
             completionAnimIds={this.props.completionAnimIds}
             failureAnimIds={this.props.failureAnimIds}
             animTriggerCallbacks={this.props.animTriggerCallbacks}>
-            <SvgIconWrapper className="iconWrapper goalIcon">
+            <SvgIconWrapper clickAction={() => {}} className="iconWrapper goalIcon">
                 <TrophyIcon className="icon"/>
             </SvgIconWrapper>
         </Board>;
@@ -110,7 +110,7 @@ export class WeeklyBoard extends Component {
             completionAnimIds={this.props.completionAnimIds}
             failureAnimIds={this.props.failureAnimIds}
             animTriggerCallbacks={this.props.animTriggerCallbacks}>
-            <SvgIconWrapper className="iconWrapper weekIcon">
+            <SvgIconWrapper clickAction={() => {}} className="iconWrapper weekIcon">
                 <WeekIcon className="icon" />
             </SvgIconWrapper>
         </Board>;
@@ -132,7 +132,7 @@ export class DailyBoard extends Component {
             completionAnimIds={this.props.completionAnimIds}
             failureAnimIds={this.props.failureAnimIds}
             animTriggerCallbacks={this.props.animTriggerCallbacks}>
-            <SvgIconWrapper className="iconWrapper dayIcon">
+            <SvgIconWrapper clickAction={() => {}} className="iconWrapper dayIcon">
                 <DailyCheckMarkIcon className="icon"/>
             </SvgIconWrapper>
         </Board>;

@@ -9,6 +9,7 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 
 import { ReactComponent as BinIcon } from '../icons/rubbish-bin-delete-button.svg';
 import { ReactComponent as SubtaskIcon } from '../icons/subtask-arrow-button.svg';
+import { ReactComponent as ReviveArrowIcon } from '../icons/revive-arrow-button.svg';
 import { ReactComponent as TrophyIcon } from '../icons/trophy.svg';
 import { ReactComponent as WeekIcon } from '../icons/calendar.svg';
 import { ReactComponent as DailyCheckMarkIcon } from '../icons/DailyCheckMark.svg';
@@ -89,10 +90,13 @@ export class Task extends Component {
     processColour(hslacol, completionOverride, failureOverride) {
         if (completionOverride || this.props.taskView.progressStatus === ProgressStatus.Completed) {
             //return new HSLAColour(hslacol.hue, hslacol.sat, hslacol.light * 0.75, 100);
-            return new HSLAColour(122, 75, 35, 100);
+            return new HSLAColour(122, 75, 33, 100);
+        }
+        else if (this.props.taskView.progressStatus === ProgressStatus.Reattempted) {
+            return new HSLAColour(0, 0, 21, 100);
         }
         else if (failureOverride || this.props.taskView.progressStatus >= ProgressStatus.Failed) {
-            return new HSLAColour(hslacol.hue, hslacol.sat * 0.025, hslacol.light * 0.4, 100);
+            return new HSLAColour(hslacol.hue, hslacol.sat * 0.3, hslacol.light * 0.75, 100);
         }
         else if (this.props.taskView.category === Category.Deferred) {
             // Deferred tasks should be slightly desaturated, and slightly transparent!
@@ -236,9 +240,22 @@ export class Task extends Component {
                 }
                 {this.props.taskView.progressStatus === ProgressStatus.Failed &&
                     <>
-                        <NewTaskButton clickAction={() => this.props.taskView.ReviveTask(false)} text={'<'} tooltipText="Retry task and send to backlog" />
-                        <NewTaskButton clickAction={() => this.props.taskView.ReviveTask(true)} text={'<'} tooltipText="Retry task. You can do it this time!" />
+                        <SvgIconWrapper className="iconWrapper subtaskButton" clickAction={() => this.props.taskView.ReviveTask(false)}  title="Retry task and send to backlog">
+                            <ReviveArrowIcon className="iconButton"/>
+                        </SvgIconWrapper>
+                        <SvgIconWrapper className="iconWrapper subtaskButton" clickAction={() => this.props.taskView.ReviveTask(true)}   title="Retry task. You can do it this time!">
+                            <ReviveArrowIcon className="iconButton"/>
+                        </SvgIconWrapper>
                     </>
+                }
+                {this.props.taskView.progressStatus === ProgressStatus.Completed && this.props.taskView.category === Category.Goal &&
+                    <TrophyIcon className="completionIcon"/>
+                }
+                {this.props.taskView.progressStatus === ProgressStatus.Completed && this.props.taskView.category === Category.Weekly &&
+                    <WeekIcon className="completionIcon"/>
+                }
+                {this.props.taskView.progressStatus === ProgressStatus.Completed && this.props.taskView.category === Category.Daily &&
+                    <DailyCheckMarkIcon className="completionIcon"/>
                 }
             </div>
         );
