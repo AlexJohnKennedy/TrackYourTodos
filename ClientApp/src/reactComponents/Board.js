@@ -2,9 +2,13 @@ import React, { Component } from 'react';
 import { CreationForm } from './CreationForm.js';
 import { ShortCutManager } from '../viewLogic/keyboardShortcutHandler';
 import { TaskList } from './TaskList';
+import { SvgIconWrapper } from './TaskButtons';
 import { MAX_TASK_NAME_LEN } from '../logicLayer/Task';
 
 import { ReactComponent as AddIcon } from '../icons/add-filled-cross-sign.svg';
+import { ReactComponent as TrophyIcon } from '../icons/trophy.svg';
+import { ReactComponent as WeekIcon } from '../icons/calendar.svg';
+import { ReactComponent as DailyCheckMarkIcon } from '../icons/DailyCheckMark.svg';
 
 // the 'Board' component generically represents an active task list.
 // E.g., each of the three main 'lists' are Board components!
@@ -23,7 +27,7 @@ export class Board extends Component {
     componentDidMount() {
         ShortCutManager.registerShiftShortcut(this.props.shortcutkey, this.toggleFormOn);
     }
-    
+
     toggleFormOn() {
         this.props.formStateManager.triggerCleanup();
         this.setState({
@@ -41,9 +45,10 @@ export class Board extends Component {
         // The bubble thing has children; for the board, we want a title, an add task button, following by a list of tasks.
         return (
             <div className="board" key={this.props.category}>
-                <div className="board-title-container"> 
+                <div className="board-title-container">
+                    {this.props.children}
                     <h2> {this.props.boardTitle} </h2>
-                    <AddIcon className="button" onClick={this.toggleFormOn}/>
+                    <AddIcon className="button" onClick={this.toggleFormOn} />
                 </div>
                 <TaskList
                     tasks={this.props.tasks}
@@ -54,8 +59,8 @@ export class Board extends Component {
                     animTriggerCallbacks={this.props.animTriggerCallbacks}
                     formStateManager={this.props.formStateManager}
                 />
-                <CreationForm 
-                    creationFunction={this.props.creationFunction} 
+                <CreationForm
+                    creationFunction={this.props.creationFunction}
                     showingForm={this.state.showingForm}
                     submitAction={this.toggleFormOff}
                     formStateManager={this.props.formStateManager}
@@ -82,8 +87,11 @@ export class GoalBoard extends Component {
             hightlightEventCallbacks={this.props.hightlightEventCallbacks}
             completionAnimIds={this.props.completionAnimIds}
             failureAnimIds={this.props.failureAnimIds}
-            animTriggerCallbacks={this.props.animTriggerCallbacks}
-        />;
+            animTriggerCallbacks={this.props.animTriggerCallbacks}>
+            <SvgIconWrapper className="iconWrapper goalIcon">
+                <TrophyIcon className="icon"/>
+            </SvgIconWrapper>
+        </Board>;
     }
 }
 export class WeeklyBoard extends Component {
@@ -101,8 +109,11 @@ export class WeeklyBoard extends Component {
             hightlightEventCallbacks={this.props.hightlightEventCallbacks}
             completionAnimIds={this.props.completionAnimIds}
             failureAnimIds={this.props.failureAnimIds}
-            animTriggerCallbacks={this.props.animTriggerCallbacks}
-        />;
+            animTriggerCallbacks={this.props.animTriggerCallbacks}>
+            <SvgIconWrapper className="iconWrapper weekIcon">
+                <WeekIcon className="icon" />
+            </SvgIconWrapper>
+        </Board>;
     }
 }
 export class DailyBoard extends Component {
@@ -120,7 +131,10 @@ export class DailyBoard extends Component {
             hightlightEventCallbacks={this.props.hightlightEventCallbacks}
             completionAnimIds={this.props.completionAnimIds}
             failureAnimIds={this.props.failureAnimIds}
-            animTriggerCallbacks={this.props.animTriggerCallbacks}
-        />;
+            animTriggerCallbacks={this.props.animTriggerCallbacks}>
+            <SvgIconWrapper className="iconWrapper dayIcon">
+                <DailyCheckMarkIcon className="icon"/>
+            </SvgIconWrapper>
+        </Board>;
     }
 }

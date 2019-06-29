@@ -9,6 +9,9 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 
 import { ReactComponent as BinIcon } from '../icons/rubbish-bin-delete-button.svg';
 import { ReactComponent as SubtaskIcon } from '../icons/subtask-arrow-button.svg';
+import { ReactComponent as TrophyIcon } from '../icons/trophy.svg';
+import { ReactComponent as WeekIcon } from '../icons/calendar.svg';
+import { ReactComponent as DailyCheckMarkIcon } from '../icons/DailyCheckMark.svg';
 
 export class Task extends Component {
     constructor(props) {
@@ -217,9 +220,15 @@ export class Task extends Component {
                 }
                 {this.props.taskView.category === Category.Deferred &&
                     <>
-                        <NewTaskButton clickAction={() => this.props.taskView.ActivateTask(Category.Daily)} text={'D'} tooltipText="Activate as daily task" />
-                        <NewTaskButton clickAction={() => this.props.taskView.ActivateTask(Category.Weekly)} text={'W'} tooltipText="Activate as weekly task" />
-                        <NewTaskButton clickAction={() => this.props.taskView.ActivateTask(Category.Goal)} text={'G'} tooltipText="Activate as goal task" />
+                        <SvgIconWrapper className="iconWrapper activationButton" clickAction={() => this.props.taskView.ActivateTask(Category.Daily)} title="Activate as daily task">
+                            <DailyCheckMarkIcon className="iconButton"/>
+                        </SvgIconWrapper>
+                        <SvgIconWrapper className="iconWrapper activationButton" clickAction={() => this.props.taskView.ActivateTask(Category.Weekly)} title="Activate as weekly task">
+                            <WeekIcon className="iconButton"/>
+                        </SvgIconWrapper>
+                        <SvgIconWrapper className="iconWrapper activationButton" clickAction={() => this.props.taskView.ActivateTask(Category.Goal)} title="Activate as goal task">
+                            <TrophyIcon className="iconButton"/>
+                        </SvgIconWrapper>
                         <SvgIconWrapper className="iconWrapper deleteButton" clickAction={() => this.props.taskView.AbandonTask()} title="Abandon this task. This will NOT count as a failed task!">
                             <BinIcon className="iconButton"/>
                         </SvgIconWrapper>
