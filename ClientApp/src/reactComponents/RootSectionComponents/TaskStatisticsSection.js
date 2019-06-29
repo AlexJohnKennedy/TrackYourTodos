@@ -336,9 +336,9 @@ class SelectionController extends Component {
     render() {
         return (
             <div className="groupingControllerBlock">
-                <div className="button" onClick={() => this.props.indexToggleFunc(0)}> Days </div>
-                <div className="button" onClick={() => this.props.indexToggleFunc(1)}> Weeks </div>
-                <div className="button" onClick={() => this.props.indexToggleFunc(2)}> Months </div>
+                <div className="button" title="Group chart by day" onClick={() => this.props.indexToggleFunc(0)}> Days </div>
+                <div className="button" title="Group chart by week" onClick={() => this.props.indexToggleFunc(1)}> Weeks </div>
+                <div className="button" title="Group chart by month" onClick={() => this.props.indexToggleFunc(2)}> Months </div>
                 <Slider min={this.props.minBarWidth} max={this.props.maxBarWidth} value={this.props.barWidth} step={1} onChange={this.props.handleBarWidthChange} text="Zoom" />
             </div>
         );
