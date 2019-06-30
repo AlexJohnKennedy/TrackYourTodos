@@ -15,10 +15,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 using todo_app.DataTransferLayer.DatabaseContext;
 using todo_app.JwtTestCode;
@@ -57,7 +53,7 @@ namespace todo_app {
             services.AddCors(corsOptions => {
                 corsOptions.AddPolicy("UserFacingApplications", builder => {    // TODO: Move CORS policy names to a Configurations Service binding.
                     // TODO: For production, we should NOT allow CORS requests from HTTP, only HTTPS!
-                    builder.WithOrigins("https://localhost:3000", "http://localhost:3000").AllowAnyHeader().AllowAnyMethod();
+                    builder.WithOrigins("https://localhost:3000", "http://localhost:3000", "https://tytodosreactapp.z26.web.core.windows.net").AllowAnyHeader().AllowAnyMethod();
                 });
                 corsOptions.AddPolicy("AdminApplications", builder => {
                     builder.WithOrigins("https://some-admin-domain.com").AllowAnyHeader().AllowAnyMethod();
@@ -77,9 +73,20 @@ namespace todo_app {
             })
             .AddJwtBearer(o.OptionsFunc);
 
-            services.AddDbContext<TodoEventContext>(optionsObj => {
-                optionsObj.UseInMemoryDatabase("TestTodoEventStorage");
-            });
+            // Configure EFCore Database settings. If we are in production (Azure), then use Azure SQL Database. Otherwise, just use a test
+            // in-memory database for now.
+            // NOTE: This environment variable must be set in the Azure target environment, in Azure App Services!
+            // The Connection string must ALSO be configured in Azure, which contains the secret details of how to connect to the database.
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production") {
+                services.AddDbContext<TodoEventContext>(optionsObj => {
+                    optionsObj.UseSqlServer(Configuration.GetConnectionString("AzureSqlConnectionString"));
+                });
+            }
+            else {
+                services.AddDbContext<TodoEventContext>(optionsObj => {
+                    optionsObj.UseInMemoryDatabase("TestTodoEventStorage");
+                });
+            }
             
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
