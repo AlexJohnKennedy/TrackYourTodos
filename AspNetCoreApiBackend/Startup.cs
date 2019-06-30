@@ -87,9 +87,6 @@ namespace todo_app {
                     optionsObj.UseInMemoryDatabase("TestTodoEventStorage");
                 });
             }
-
-            // Automatically perform database migration
-            services.BuildServiceProvider().GetService<TodoEventContext>().Database.Migrate();
             
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
