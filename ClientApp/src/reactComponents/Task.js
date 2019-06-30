@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { GetColourMapping, ThemeId, HSLAColour } from '../viewLogic/colourSetManager';
-import { NewTaskButton, CheckBox, SvgIconWrapper } from './TaskButtons';
+import { CheckBox, SvgIconWrapper } from './TaskButtons';
 import { CreationForm } from './CreationForm.js';
 import { Category, ProgressStatus, MAX_TASK_NAME_LEN } from '../logicLayer/Task';
 
