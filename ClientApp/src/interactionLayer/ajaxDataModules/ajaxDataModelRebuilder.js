@@ -25,7 +25,7 @@ function PerformEventLogUpdate(tasklist, undoStack, visibleContexts, onLoadFunc,
     let httpRequest = new XMLHttpRequest();
 
     // Construct GET query string. This is the base URL + visible contexts as query-string values as 'contexts'.
-    const baseUrl = 'https://localhost:5001/todoevents';
+    const baseUrl = 'https://track-your-todos-api.azurewebsites.net/todoevents';
     let contructedUrl;
     if (visibleContexts === undefined || visibleContexts === null || visibleContexts.length === 0) {
         contructedUrl = baseUrl;
