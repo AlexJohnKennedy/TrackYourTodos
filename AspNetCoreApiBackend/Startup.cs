@@ -53,7 +53,7 @@ namespace todo_app {
             services.AddCors(corsOptions => {
                 corsOptions.AddPolicy("UserFacingApplications", builder => {    // TODO: Move CORS policy names to a Configurations Service binding.
                     // TODO: For production, we should NOT allow CORS requests from HTTP, only HTTPS!
-                    builder.WithOrigins("https://localhost:3000", "http://localhost:3000", "https://tytodosreactapp.z26.web.core.windows.net").AllowAnyHeader().AllowAnyMethod();
+                    builder.WithOrigins("https://tytodosreactapp.z26.web.core.windows.net").AllowAnyHeader().AllowAnyMethod();
                 });
                 corsOptions.AddPolicy("AdminApplications", builder => {
                     builder.WithOrigins("https://some-admin-domain.com").AllowAnyHeader().AllowAnyMethod();
