@@ -77,7 +77,7 @@ namespace todo_app {
             // in-memory database for now.
             // NOTE: This environment variable must be set in the Azure target environment, in Azure App Services!
             // The Connection string must ALSO be configured in Azure, which contains the secret details of how to connect to the database.
-            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production") {
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production" && false /* TESTING SOME SHIT! */) {
                 services.AddDbContext<TodoEventContext>(optionsObj => {
                     optionsObj.UseSqlServer(Configuration.GetConnectionString("AzureSqlConnectionString"));
                 });
