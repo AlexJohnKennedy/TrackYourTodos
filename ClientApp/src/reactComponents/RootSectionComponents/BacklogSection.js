@@ -66,7 +66,7 @@ export class BacklogSection extends Component {
     }
 
     handleActiveChange() {
-        let deferredTaskViews = this.activeTaskListAPI.GetActiveTasks().filter((task) => task.category === Category.Deferred);
+        let deferredTaskViews = this.activeTaskListAPI.GetActiveTasks().filter((task) => task.category === Category.Deferred).sort((a, b) => b.eventTimestamps.timeCreated - a.eventTimestamps.timeCreated);
 
         // Update this component's state; which will re-render everything!
         this.setState({
