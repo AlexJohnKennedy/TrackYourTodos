@@ -52,7 +52,7 @@ namespace todo_app {
             // only allow the appropriate origins for each particular API end-point.
             services.AddCors(corsOptions => {
                 corsOptions.AddPolicy("UserFacingApplications", builder => {    // TODO: Move CORS policy names to a Configurations Service binding.
-                    builder.WithOrigins("https://tytodosreactapp.z26.web.core.windows.net").AllowAnyHeader().AllowAnyMethod();
+                    builder.WithOrigins("http://localhost:3000", "https://tytodosreactapp.z26.web.core.windows.net").AllowAnyHeader().AllowAnyMethod();
                 });
                 corsOptions.AddPolicy("AdminApplications", builder => {
                     builder.WithOrigins("https://some-admin-domain.com").AllowAnyHeader().AllowAnyMethod();
