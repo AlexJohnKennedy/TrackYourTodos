@@ -35,16 +35,17 @@
     padding-top: 1.6rem;
 }
 
-.creation-form .button {
+.board .creation-form .button {
     position: absolute;
-    right: 1rem;
-    top: 0.8rem;
-    margin: 0;
-    padding: 0;
+    right: 0.5rem;
+    top: 1.2rem;
     width: 1.6rem;
     height: 1.6rem;
+    margin: 0;
+    padding: 0;
     cursor: pointer;
 }
+
 .creation-form .iconButton {
     position: absolute;
     top: 0px;
