@@ -174,7 +174,7 @@ export class Task extends Component {
                         initialValue={this.props.taskView.name}
                     />
                 }
-                {this.props.taskView.category < Category.Weekly && this.props.taskView.progressStatus <= ProgressStatus.Started &&
+                {this.props.taskView.category === Category.Goal && this.props.taskView.progressStatus <= ProgressStatus.Started &&
                     <>
                         <SvgIconWrapper className="iconWrapper subtaskButton" clickAction={() => this.toggleFormOn(true)} title="Create a daily subtask">
                             <SubtaskIcon className="iconButton"/>
@@ -187,16 +187,27 @@ export class Task extends Component {
                             formStateManager={this.props.formStateManager}
                             maxFieldLength={MAX_TASK_NAME_LEN}
                         />
+                        <SvgIconWrapper className="iconWrapper subtaskButton" clickAction={() => this.toggleFormOn(false)} title="Create a subtask">                        
+                            <SubtaskIcon className="iconButton"/>
+                        </SvgIconWrapper>
+                        <CreationForm
+                            creationFunction={this.props.taskView.CreateChild}
+                            formText="New weekly subtask"
+                            showingForm={this.state.showingForm}
+                            submitAction={() => this.toggleFormOff(false)}
+                            formStateManager={this.props.formStateManager}
+                            maxFieldLength={MAX_TASK_NAME_LEN}
+                        />
                     </>
                 }
-                {this.props.taskView.category < Category.Daily && this.props.taskView.progressStatus <= ProgressStatus.Started &&
+                {this.props.taskView.category === Category.Weekly && this.props.taskView.progressStatus <= ProgressStatus.Started &&
                     <>
                         <SvgIconWrapper className="iconWrapper subtaskButton" clickAction={() => this.toggleFormOn(false)} title="Create a subtask">                        
                             <SubtaskIcon className="iconButton"/>
                         </SvgIconWrapper>
                         <CreationForm
                             creationFunction={this.props.taskView.CreateChild}
-                            formText="New subtask"
+                            formText="New daily subtask"
                             showingForm={this.state.showingForm}
                             submitAction={() => this.toggleFormOff(false)}
                             formStateManager={this.props.formStateManager}

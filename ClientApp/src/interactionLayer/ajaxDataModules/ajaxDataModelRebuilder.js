@@ -40,8 +40,9 @@ function PerformEventLogUpdate(tasklist, undoStack, visibleContexts, onLoadFunc,
     httpRequest.setRequestHeader("Authorization", "Bearer " + googleToken);
 
     // Setup AJAX timeout action. We MUST set a timeout otherwise uncaught exceptions will be thrown in scenarios where the browser is unable to complete reqeusts. (e.g. PC is asleep)
-    httpRequest.timeout = 5000;
+    httpRequest.timeout = 15000;
     httpRequest.ontimeout = () => {
+        console.error("GET request timed out!");
         handleUnknownGetFailure("Oh dear. Was your PC snoozing? Maybe a nice, refreshing refresh will freshen up your refreshed computer");
     }
 
