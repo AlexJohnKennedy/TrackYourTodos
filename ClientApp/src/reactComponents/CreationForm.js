@@ -82,6 +82,7 @@ export class CreationForm extends Component {
                     <input type="text" value={this.state.value} onChange={this.handleChange} ref={this.textInputRef}/>
                     <input type="submit" value="Submit"/>
                 </form>
+                {this.props.children}
             </div>
         );
     }
