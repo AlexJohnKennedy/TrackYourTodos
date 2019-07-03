@@ -1,6 +1,7 @@
 import { SetIdStartVal } from '../../logicLayer/Task';
 import { RebuildState } from '../../logicLayer/StateRebuilder';
 import { forceTokenRefresh, handleAuthFailure, handleServerFailure, handleUnknownGetFailure } from './ajaxErrorcaseHandlers';
+import { API_ENDPOINT } from './apiEndpointConfiguration';
 
 // This function sends an HTTP request to fetch the latest data-log, and applies the returned logs onto the state object.
 // For now, we are just going to blindly apply the returned logs to the state! This means that calling this twice on the
@@ -25,7 +26,7 @@ function PerformEventLogUpdate(tasklist, undoStack, visibleContexts, onLoadFunc,
     let httpRequest = new XMLHttpRequest();
 
     // Construct GET query string. This is the base URL + visible contexts as query-string values as 'contexts'.
-    const baseUrl = 'https://track-your-todos-api.azurewebsites.net/todoevents';
+    const baseUrl = API_ENDPOINT;
     let contructedUrl;
     if (visibleContexts === undefined || visibleContexts === null || visibleContexts.length === 0) {
         contructedUrl = baseUrl;

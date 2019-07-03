@@ -1,5 +1,6 @@
 import { DataEventSerialisationFuncs } from '../dataEventSerialiser';
 import { forceTokenRefresh, handleAuthFailure, handleServerFailure, handleUnknownPostFailure, handleConflictingDataOccurrance } from './ajaxErrorcaseHandlers';
+import { API_ENDPOINT } from './apiEndpointConfiguration';
 
 // Builds a set of data event handlers, which post data using the the passed-in ajaxFailedEventCache instance as a failure cache.
 // This will be called whenever the data-model rebuilds itself, and needs handlers with a fresh cache (for example).
@@ -56,7 +57,7 @@ function postEvent(eventArray, failureCache, retryCount, logoutOnAuthFailure, se
 
     // Setup a request 
     let httpRequest = new XMLHttpRequest();
-    httpRequest.open('POST', 'https://track-your-todos-api.azurewebsites.net/todoevents', true); // Define a GET to our API endpoint, true marks asynchronous.
+    httpRequest.open('POST', API_ENDPOINT, true); // Define a GET to our API endpoint, true marks asynchronous.
     httpRequest.setRequestHeader("Content-type", "application/json");    // Inform the reciever that the format is JSON.
     httpRequest.setRequestHeader("Authorization", "Bearer " + googleToken); // Specify the 'Bearer' authentication scheme, under Authorization header.
     httpRequest.timeout = 15000;     // We MUST set a timeout otherwise uncaught exceptions will be thrown in scenarios where the browser is unable to complete reqeusts. (e.g. PC is asleep)

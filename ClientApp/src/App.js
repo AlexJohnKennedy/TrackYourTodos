@@ -14,6 +14,8 @@ class App extends Component {
   constructor(props) {
     super(props);
 
+    console.log("Hello! I am the App :) I am running in " + process.env.NODE_ENV + " mode on your browser! <3");
+
     // Setup state which we will use for session-based routing.
     // If the google authentication library is not loaded yet, we will route to a 'loading' screen with some animation or something.
     // If the google authentication library IS loaded, but the user is not logged in, then we will route to a sign up page which just displas the google sign in button
