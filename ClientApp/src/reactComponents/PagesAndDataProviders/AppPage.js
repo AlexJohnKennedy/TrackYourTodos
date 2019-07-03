@@ -96,11 +96,7 @@ export class AppPage extends Component {
 
     // Passed down to our children, allowing them to switch contexts between the currently available ones.
     switchContext(context) {
-        console.log("Attempting to switch to: " + context);
         context = this.validateContextString(context);
-        console.log("String after validation: " + context);
-        console.log("Currently available contexts:");
-        console.log(this.state.availableContexts);
         if (context === null || !this.state.availableContexts.includes(context)) {
             console.warn("Invalid context passed to context switch! You must pick a context which is already availble. Use 'CreateNewContext' to make a new one. Param was: " + context);
             return;
@@ -156,7 +152,6 @@ export class AppPage extends Component {
 
     // Pased down to our children, allowing them to create new contexts.
     createNewContext(newContext) {
-        console.log("Creating new context!");
         newContext = this.validateContextString(newContext);
         if (newContext === null) { return; }
         if (this.state.availableContexts.includes(newContext) || newContext === DEFAULT_GLOBAL_CONTEXT_STRING) {
@@ -166,8 +161,6 @@ export class AppPage extends Component {
             this.state.dataModelScope.ClearAllRegisteredCallbacks();
             this.setState((state, props) => {
                 // If the selectable contexts list is full, then we will simply replace the last item in the list, sorry bro!
-                console.log("MEMEING REAL HARD RIGHT NOW");
-                console.log(state.selectableContexts.length);
                 let newSelectables = state.selectableContexts;
                 if (state.selectableContexts.length === MAX_SELECTABLE_CONTEXTS) {
                     newSelectables[newSelectables.length - 1] = newContext;

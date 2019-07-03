@@ -127,17 +127,16 @@ class App extends Component {
       refreshUserToken(GoogleUserObj, (throwAwayAuthResponse) => onCompleted());
     });
     setAuthFailureHandler((message) => {
-      console.warn(message);
+      console.warn("Authentication Failure occurred.");
       this.signUserOut();
     });
     setServerFailureAction((message) => {
-      console.warn(message);
-      this.signUserOut();
+      console.warn("Server failure action invoked.");
       this.setErrorPage(message);
     });
     setUnknownErrorAction(() => {
-      console.warn("App is triggering the 'unknown error' action. For now, this will simply log the user out to force a refresh");
-      this.signUserOut();
+      console.warn("App is triggering the 'unknown error' action. Often this is a timeout occurrance.");
+      this.setErrorPage("Hmm... things don't seem to be working. Maybe... try turning it off and on again?");
     });
 
     this.setState({

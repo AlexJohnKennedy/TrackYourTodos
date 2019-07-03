@@ -62,7 +62,7 @@ function postEvent(eventArray, failureCache, retryCount, logoutOnAuthFailure, se
     httpRequest.timeout = 15000;     // We MUST set a timeout otherwise uncaught exceptions will be thrown in scenarios where the browser is unable to complete reqeusts. (e.g. PC is asleep)
     httpRequest.ontimeout = () => {
         console.error("POST request timed out!");
-        handleUnknownPostFailure(eventArray, failureCache);     // In these scenario's, don't try again just yet..
+        handleUnknownPostFailure(eventArray, failureCache);     // In these scenarios, don't try again just yet..
     }
 
     // Assign a response handler function. If we get back a 200, we are done! If it fails with a server error, we will recursively retry,
