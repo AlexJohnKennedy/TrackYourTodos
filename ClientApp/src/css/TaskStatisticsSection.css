@@ -94,6 +94,8 @@
     overflow-x: scroll;
     overflow-y: hidden;
 }
+
+/* Scroll bars */
 .TaskStatisticsSection .historyBarChartWrapper .barChartWrapper::-webkit-scrollbar {
     width: 0rem;  /* Width of vertical scrollbars */
     height: 0.8rem; /* Height of horizontal scrollbars */
@@ -101,6 +103,11 @@
     background-color: var(--editor-background-colour); 
     opacity: 1;
 }
+.TaskStatisticsSection .historyBarChartWrapper .barChartWrapper {
+    scrollbar-width: 0.8rem;
+    scrollbar-color: var(--editor-background-colour) var(--sidebar-background-colour);
+}
+
 .TaskStatisticsSection .historyBarChartWrapper .barChartWrapper::-webkit-scrollbar-thumb {
     background-color: var(--sidebar-background-colour);
     opacity: 0.5;
