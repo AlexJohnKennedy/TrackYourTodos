@@ -12,7 +12,8 @@ import { ShortCutManager } from '../../viewLogic/keyboardShortcutHandler';
 import { ThemeId, currThemeId } from '../../viewLogic/colourSetManager';
 
 import { InstantiateNewDataModelScope } from '../../interactionLayer/viewLayerInteractionApi';
-import { BuildDataEventHttpPostHandlers } from '../../interactionLayer/ajaxDataModules/ajaxDataEventPoster';
+import { BuildDataEventHttpPostHandlers, RetryPostingFailedEvents } from '../../interactionLayer/ajaxDataModules/ajaxDataEventPoster';
+
 import { setConflictingDataAction } from '../../interactionLayer/ajaxDataModules/ajaxErrorcaseHandlers';
 
 import { DEFAULT_GLOBAL_CONTEXT_STRING, MAX_CONTEXT_NAME_LEN } from '../../logicLayer/Task';
@@ -111,6 +112,10 @@ export class AppPage extends Component {
     // If we end up implemented nested contexts, then for a given current context, we would search and make the current's entire
     // subtree visible as well! But for now, it's either global, or just one.
     performSwitch(context) {
+        if (!this.props.failedEventCacheInstance.IsEmpty()) {
+            RetryPostingFailedEvents(this.props.ajaxFailedEventCacheInstance);
+        }
+
         if (context === DEFAULT_GLOBAL_CONTEXT_STRING) {
             this.state.dataModelScope.ClearAllRegisteredCallbacks();
             this.setState({
@@ -158,6 +163,10 @@ export class AppPage extends Component {
             this.performSwitch(newContext);
         }
         else {
+            if (!this.props.failedEventCacheInstance.IsEmpty()) {
+                RetryPostingFailedEvents(this.props.ajaxFailedEventCacheInstance);
+            }
+            
             this.state.dataModelScope.ClearAllRegisteredCallbacks();
             this.setState((state, props) => {
                 // If the selectable contexts list is full, then we will simply replace the last item in the list, sorry bro!

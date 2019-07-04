@@ -30,7 +30,7 @@ export function BuildDataEventHttpPostHandlers(FailedEventCache) {
 // Exported function for simply triggering a global retry; I.e., 'try to send all the failed events, but I dont have any new events'
 export function RetryPostingFailedEvents(failureCacheInstance) {
     // Empty event data will mean it doesn't add anything.
-    postEvent("", failureCacheInstance, 0, true, true);
+    postEvent("", failureCacheInstance, 0, false, true);
 }
 
 function postEvent(eventArray, failureCache, retryCount, logoutOnAuthFailure, sendFromFailureCache) {

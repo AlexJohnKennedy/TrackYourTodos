@@ -54,8 +54,10 @@ input[type=submit] {
     padding-top: 0.2rem;
     padding-bottom: 0.2rem;
     cursor: pointer;
-    border: 1px solid var(--sidebar-background-colour);
+    border: 1px solid var(--text-colour);
     line-height: 100%;
+    margin-left: 0.2rem;
+    margin-right: 0.2rem;
 }
 input[type=text] {
     border-radius: 0%;
@@ -63,8 +65,17 @@ input[type=text] {
     height: 2.35rem;
     padding-top: 0.2rem;
     padding-bottom: 0.2rem;
-    border: 1px solid var(--sidebar-background-colour);
+    border: 1px solid var(--text-colour);
     line-height: 100%;
+}
+
+.board > .creation-form input[type=submit], .wrapper > .creation-form input[type=submit], .contextManagerPage > .creation-form input[type=submit] {
+    background-color: rgba(0,0,0,0);
+    border: 1px solid var(--sidebar-background-colour);
+    color: var(--text-colour);
+}
+.board > .creation-form input[type=submit]:hover, .wrapper > .creation-form input[type=submit]:hover, .contextManagerPage > .creation-form input[type=submit]:hover {
+    background-color: var(--sidebar-background-colour);
 }
 
 .creation-form .iconButton {
