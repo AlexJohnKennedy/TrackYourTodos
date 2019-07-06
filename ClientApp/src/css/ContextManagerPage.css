@@ -11,6 +11,9 @@
     /* Relative position, so that the back button can be positions absolutely, with respect to this element */
     position: relative;
     z-index: 2;
+
+    /* Firefox scrollbar */
+    scrollbar-width: none;
 }
 .contextManagerPage .titleText {
     margin-top: 0.8rem;
@@ -33,6 +36,9 @@
     flex-direction: column;
     align-items: center;
     padding-bottom: 2rem;
+
+    /* Firefox scrollbar */
+    scrollbar-width: none;
 }
 
 .contextSelectionCheckboxWrapper {
