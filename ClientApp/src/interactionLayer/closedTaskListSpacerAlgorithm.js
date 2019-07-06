@@ -53,6 +53,43 @@ export function mapToClosedTasklistWithSpacers(groupArray, buildTaskViewFunc) {
     return toRet;
 }
 
+export function mapBacklogTasklistWithSpacers(taskArray, buildTaskViewFunc) {
+    if (taskArray.length === 0) return [];
+
+    let toRet = [];   // We will populate this list with taskViews and spacer objects, which the view layer will render.
+    let currDaysAgo = 0;
+    const maxDaysAgo = 60;
+    const timenow = Date.now();    
+    let i = 0;
+
+    // Find the time of the newest Backlog task.
+    const topTaskTime = taskArray[0].eventTimestamps.timeCreated;
+    while (!isNDaysAgo(topTaskTime, timenow, currDaysAgo) && currDaysAgo < maxDaysAgo) {
+        currDaysAgo++;
+    }
+    let needsSpacer = true;
+    while (i < taskArray.length && currDaysAgo < maxDaysAgo) {
+        if (isNDaysAgo(taskArray[i].eventTimestamps.timeCreated, timenow, currDaysAgo)) {
+            if (needsSpacer) toRet.push({ isSpacer: true, showDay: true, time: getNDaysAgoTime(timenow, currDaysAgo) });
+            toRet.push(buildTaskViewFunc(taskArray[i]));
+            i++;
+            needsSpacer = false;
+        }
+        else {
+            needsSpacer = true;
+            currDaysAgo++;
+        }
+    }
+    if (i < taskArray.length) {
+        toRet.push({isSpacer: true, showDay: false , time: getNDaysAgoTime(timenow, currDaysAgo) });
+    }
+    while (i < taskArray.length) {
+        toRet.push(buildTaskViewFunc(taskArray[i]));
+        i++;
+    }
+    return toRet;
+}
+
 function isNDaysAgo(time, timenow, daysAgo) {
     let startOfDay = getNDaysAgoTime(timenow, daysAgo);
     return time > startOfDay.valueOf();

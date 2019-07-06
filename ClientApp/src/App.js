@@ -14,6 +14,8 @@ class App extends Component {
   constructor(props) {
     super(props);
 
+    console.log("Hello! I am the App :) I am running in " + process.env.NODE_ENV + " mode on your browser! <3");
+
     // Setup state which we will use for session-based routing.
     // If the google authentication library is not loaded yet, we will route to a 'loading' screen with some animation or something.
     // If the google authentication library IS loaded, but the user is not logged in, then we will route to a sign up page which just displas the google sign in button
@@ -127,17 +129,16 @@ class App extends Component {
       refreshUserToken(GoogleUserObj, (throwAwayAuthResponse) => onCompleted());
     });
     setAuthFailureHandler((message) => {
-      console.warn(message);
+      console.warn("Authentication Failure occurred.");
       this.signUserOut();
     });
     setServerFailureAction((message) => {
-      console.warn(message);
-      this.signUserOut();
+      console.warn("Server failure action invoked.");
       this.setErrorPage(message);
     });
     setUnknownErrorAction(() => {
-      console.warn("App is triggering the 'unknown error' action. For now, this will simply log the user out to force a refresh");
-      this.signUserOut();
+      console.warn("App is triggering the 'unknown error' action. Often this is a timeout occurrance.");
+      this.setErrorPage("Hmm... things don't seem to be working. Maybe... try turning it off and on again?");
     });
 
     this.setState({

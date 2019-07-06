@@ -9,6 +9,8 @@ import { ReactComponent as AddIcon } from '../icons/add-filled-cross-sign.svg';
 import { ReactComponent as TrophyIcon } from '../icons/trophy.svg';
 import { ReactComponent as WeekIcon } from '../icons/calendar.svg';
 import { ReactComponent as DailyCheckMarkIcon } from '../icons/DailyCheckMark.svg';
+import { ReactComponent as CrossIcon } from '../icons/close-button.svg';
+
 
 // the 'Board' component generically represents an active task list.
 // E.g., each of the three main 'lists' are Board components!
@@ -66,7 +68,11 @@ export class Board extends Component {
                     formStateManager={this.props.formStateManager}
                     formText={this.props.formText}
                     maxFieldLength={MAX_TASK_NAME_LEN}
-                />
+                >
+                    <SvgIconWrapper className="button" clickAction={this.toggleFormOff} title="Close form">
+                        <CrossIcon className="iconButton"/>
+                    </SvgIconWrapper>
+                </CreationForm>
             </div>
         );
     }

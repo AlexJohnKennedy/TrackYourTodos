@@ -38,8 +38,11 @@
     padding-right: 0.8rem;
     overflow: auto;
     position: relative;
+
+    /* Scrollbar for firefox */
+    scrollbar-width: none;
 }
 
-.wrapper::-webkit-scrollbar {
+.BacklogSection .wrapper::-webkit-scrollbar {
     width: 0rem;        /* MAKE THE SCROLLBAR INVISIBLE LIKE A SEXY MOFO */
 }

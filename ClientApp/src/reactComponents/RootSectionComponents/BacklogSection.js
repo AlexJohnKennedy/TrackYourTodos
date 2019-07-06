@@ -2,11 +2,14 @@ import React, { Component } from 'react';
 import { NavigationStateWrapper } from '../NavigationTabs';
 import { Category, MAX_TASK_NAME_LEN  } from '../../logicLayer/Task';
 
+import { SvgIconWrapper } from '../TaskButtons';
 import { TaskList } from '../TaskList';
 import { CreationForm } from '../CreationForm';
 
 import { ShortCutManager } from '../../viewLogic/keyboardShortcutHandler';
 import { ColourIdTracker } from '../../viewLogic/colourSetManager';
+
+import { ReactComponent as CrossIcon } from '../../icons/close-button.svg';
 
 
 export class BacklogSection extends Component {
@@ -66,7 +69,7 @@ export class BacklogSection extends Component {
     }
 
     handleActiveChange() {
-        let deferredTaskViews = this.activeTaskListAPI.GetActiveTasks().filter((task) => task.category === Category.Deferred);
+        let deferredTaskViews = this.activeTaskListAPI.GetDeferredTasks();
 
         // Update this component's state; which will re-render everything!
         this.setState({
@@ -158,12 +161,12 @@ export class BacklogSection extends Component {
                         />
                     }
                     <CreationForm
-                            creationFunction={this.state.deferredTaskCreationFunc} 
-                            showingForm={this.state.showingForm}
-                            submitAction={this.toggleFormOff}
-                            formStateManager={this.props.formStateManager}
-                            formText={this.props.formText}
-                            maxFieldLength={MAX_TASK_NAME_LEN}
+                        creationFunction={this.state.deferredTaskCreationFunc} 
+                        showingForm={this.state.showingForm}
+                        submitAction={this.toggleFormOff}
+                        formStateManager={this.props.formStateManager}
+                        formText={this.props.formText}
+                        maxFieldLength={MAX_TASK_NAME_LEN}
                     />
                 </div>
             </div>

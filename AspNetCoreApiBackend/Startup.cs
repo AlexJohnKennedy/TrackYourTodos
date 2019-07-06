@@ -51,9 +51,16 @@ namespace todo_app {
             // app (which currently does not exist) which comes from a different domain from the SPA. This will allow us to
             // only allow the appropriate origins for each particular API end-point.
             services.AddCors(corsOptions => {
-                corsOptions.AddPolicy("UserFacingApplications", builder => {    // TODO: Move CORS policy names to a Configurations Service binding.
-                    builder.WithOrigins("https://tytodosreactapp.z26.web.core.windows.net").AllowAnyHeader().AllowAnyMethod();
-                });
+                if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production") {
+                    corsOptions.AddPolicy("UserFacingApplications", builder => {    // TODO: Move CORS policy names to a Configurations Service binding.
+                        builder.WithOrigins("https://tytodosreactapp.z26.web.core.windows.net").AllowAnyHeader().AllowAnyMethod();
+                    });
+                }
+                else {
+                    corsOptions.AddPolicy("UserFacingApplications", builder => {
+                        builder.WithOrigins("http://localhost:3000", "https://localhost:3000", "https://tytodosreactapp.z26.web.core.windows.net").AllowAnyHeader().AllowAnyMethod();
+                    });
+                }
                 corsOptions.AddPolicy("AdminApplications", builder => {
                     builder.WithOrigins("https://some-admin-domain.com").AllowAnyHeader().AllowAnyMethod();
                 });

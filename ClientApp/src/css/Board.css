@@ -31,9 +31,15 @@
     margin-bottom: 0.8rem;
 }
 
+
+/* MAKE THE SCROLLBAR INVISIBLE LIKE A SEXY MOFO */
 .task-list-container::-webkit-scrollbar {
-    width: 0rem;        /* MAKE THE SCROLLBAR INVISIBLE LIKE A SEXY MOFO */
+    width: 0rem;    /* Chrome, Safari */
 }
+.task-list-container {
+    scrollbar-width: none;
+}
+
 .task-list-container .dateSpacer {
     padding-top: 0.4rem;
     padding-bottom: 0.9rem;
