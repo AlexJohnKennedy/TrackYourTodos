@@ -40,6 +40,7 @@
 }
 
 .TaskStatisticsSection .historyBarChartWrapper {
+    width: 100%;
     padding-right: 0.8rem;
     padding-bottom: 0.2rem;
     display: inline-flex;
@@ -104,7 +105,6 @@
     opacity: 1;
 }
 .TaskStatisticsSection .historyBarChartWrapper .barChartWrapper {
-    scrollbar-width: 0.8rem;
     scrollbar-color: var(--editor-background-colour) var(--sidebar-background-colour);
 }
 
