@@ -69,7 +69,8 @@ stages:
       artifact: reactAppBuild
     - bash: ls
     - bash: pwd
-    - bash: ls ..
+    - bash: ls
+      workingDirectory: $(Pipeline.Workspace)/reactAppBuild
 
 # This stage will run a 'dotnet build' command, to ensure the project can build successfully. If it passes, we will
 # deploy to kudu using the kudu rest API, in a later stage.
