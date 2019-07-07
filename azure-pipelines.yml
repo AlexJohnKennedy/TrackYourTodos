@@ -31,6 +31,17 @@ stages:
   displayName: Build and bundle React app with 'npm run-script build'  # name to display in the UI
   dependsOn: [] # Specifies stages (by name) which this stage must run AFTER. Controls parallelism of stage operation
   jobs:
+  - job: npm_install
+    displayName: npm install
+    continueOnError: false
+    pool:
+      vmImage: 'ubuntu-latest'
+    workspace:
+      clean: outputs
+    steps:
+    # Execute the 'npm run-script build' command in the React-app directory
+    - bash: npm install
+      workingDirectory: ClientApp
   - job: create_react_app_build
     displayName: create-react-app build
     continueOnError: false
@@ -41,6 +52,17 @@ stages:
     steps:
     # Execute the 'npm run-script build' command in the React-app directory
     - bash: npm run-script build
+      workingDirectory: ClientApp
+  - job: confirm_build
+    displayName: confirm build directory is not empty
+    continueOnError: false
+    pool:
+      vmImage: 'ubuntu-latest'
+    workspace:
+      clean: outputs
+    steps:
+    # Execute the 'npm run-script build' command in the React-app directory
+    - bash: ls
       workingDirectory: ClientApp
 
 
