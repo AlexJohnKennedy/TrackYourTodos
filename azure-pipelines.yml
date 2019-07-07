@@ -16,11 +16,13 @@ name: $(Date:yyyyMMdd)$(Rev:.r)
 # Specify any pipeline-level variables to use. These may be hardcoded values or references.
 # variables: ## NOTHING AT THE MOMENT ##
 
-# Specify to trigger this CI pipeline whenever changes are pushed to the 'release' branch.
-trigger: release
+# Specify to trigger this CI pipeline whenever changes are pushed to the master branch. TODO: Make 'release' version later!
+trigger: 
+- master
 
 # Specify triggers for pull-requests. I don't want this to occur at this point in time.
-pr: none
+pr: 
+- none
 
 # Define the 'stages' of this pipeline. A stage is a high level 'operation' that form the biggest building blocks
 # of a pipeline, and are usually conducted sequentially.
