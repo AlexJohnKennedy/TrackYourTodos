@@ -40,7 +40,7 @@ stages:
       clean: outputs
     steps:
     # Execute the 'npm run-script build' command in the React-app directory
-    - bash: ls
+    - bash: npm run-script build
       workingDirectory: ClientApp
 
 
