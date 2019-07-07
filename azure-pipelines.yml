@@ -1,17 +1,129 @@
-# ASP.NET Core
-# Build and test ASP.NET Core projects targeting .NET Core.
-# Add steps that run tests, create a NuGet package, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+# Attempt at a custom Azure-pipelines CI/CD pipeline definition. This is a YAML file which
+# defines the stages/jobs/steps to take as part of the pipeline; basically like the Jenkinsfile
+# one would use if they were using Jenkins!
 
-trigger:
+# Reference
+# #########
+# YAML Schema:      https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops 
+# Built-in 'tasks': https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/?view=azure-devops
+# Quickstart guide: https://docs.microsoft.com/en-us/azure/devops/pipelines/customize-pipeline?view=azure-devops
+
+
+# Specifies the name formatting for this pipeline as a whole. I.e., the formatting of the name for each
+# 'run' of this pipeline.
+name: $(Date:yyyyMMdd)$(Rev:.r)
+
+# Specify any pipeline-level variables to use. These may be hardcoded values or references.
+# variables: ## NOTHING AT THE MOMENT ##
+
+# Specify to trigger this CI pipeline whenever changes are pushed to the master branch. TODO: Make 'release' version later!
+trigger: 
 - master
 
-pool:
-  vmImage: 'ubuntu-latest'
+# Specify triggers for pull-requests. I don't want this to occur at this point in time.
+pr: 
+- none
 
-variables:
-  buildConfiguration: 'Release'
+# Define the 'stages' of this pipeline. A stage is a high level 'operation' that form the biggest building blocks
+# of a pipeline, and are usually conducted sequentially.
+stages:
+- stage: buildReactApp  # name of the stage
+  displayName: Build and bundle React app with 'npm run-script build'  # name to display in the UI
+  dependsOn: [] # Specifies stages (by name) which this stage must run AFTER. Controls parallelism of stage operation
+  jobs:
+  - job: create_react_app_build
+    displayName: create-react-app build
+    continueOnError: false
+    pool:
+      vmImage: 'ubuntu-latest'
+    workspace:
+      clean: outputs
+    steps:
+    - bash: npm install
+      workingDirectory: ClientApp
+    # Execute the 'npm run-script build' command in the React-app directory
+    - bash: npm run-script build
+      workingDirectory: ClientApp
+    # The previous command will have generated a 'build' folder which contains the compiled, deployable react-app content.
+    # In order for our subsequent deployment stage to access this, we must use the 'publish' step. This publishes a "pipeline artifact"
+    # So that it can be accessed later. We will use this to later access the build directory and publish it to the
+    # appropriate $web blob container acting as our static web-server for the React Application.
+    - publish: ClientApp/build
+      # provide a name for this artifact
+      artifact: reactAppBuild
 
-steps:
-- script: dotnet build --configuration $(buildConfiguration)
-  displayName: 'dotnet build $(buildConfiguration)'
+- stage: deployReactApp
+  displayName: Deploy reactApp build artifacts to Azure Storage
+  dependsOn: [buildReactApp]
+  jobs:
+  - job: deployReactApp
+    displayName: Download React build Artifact and copy to Azure Storage
+    continueOnError: false
+    pool:
+      vmImage: 'windows-2019'   # We must use Windows agents for this job, because the Azure File Copy task only supports windows atm :(
+    workspace:
+      clean: outputs
+    steps:
+    # download the previously publish build artifacts, since they are what we need to upload to Storage!
+    - download: current   # Specifies that the artifact we want to download was published from the current pipeline run.
+      artifact: reactAppBuild
+    # Use 'Azure File Copy' task to copy into the $web blob in the Storage account, which is acting as our static server
+    - task: AzureFileCopy@3
+      inputs:
+        SourcePath: '$(Pipeline.Workspace)/reactAppBuild'
+        azureSubscription: 'Free Trial(38d34816-abf3-47c2-9437-b6f04bc61324)'
+        Destination: 'AzureBlob'
+        storage: 'tytodosreactapp'
+        ContainerName: '$web'
+    
+# This stage will run a 'dotnet build' command, to ensure the project can build successfully. If it passes, we will
+# deploy to kudu using the kudu rest API, in a later stage.
+- stage: buildDotNetCoreApp
+  displayName: Build the backend api
+  dependsOn: [] # Can run in parallel with React App deployment, since they are independent applications 
+  jobs:
+  - job: dotnetbuild
+    displayName: dotnet build job
+    continueOnError: false  # fail the pipeline if this step fails
+    pool:
+      vmImage: 'ubuntu-latest'
+    workspace:
+      clean: outputs
+    steps:
+    # Use the DotNetCoreCLI@2 built-in task to perform a simple build
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'build'
+        projects: AspNetCoreApiBackend/AspNetCoreApiBackend.csproj
+
+# This stages uses kudu rest API commands to explicitly deploy the api app to Azure app-service. This only runs
+# if the .net-core build stage passed, to make sure we don't deploy broken code. 
+# once the initial publish completes, we remotely run 'dotnet ef database update' to ensure EF-Migrations are applied
+# to our Azure SQL Database. This command can be executed on the target machine using the /api/command Kudu REST Api
+# endpoint
+- stage: publishDotNetCoreToKudu
+  displayName: Publishes API to Kudu on App Services
+  dependsOn: [buildDotNetCoreApp]
+  jobs:
+  - job: deployViaRest
+    displayName: Deploy .NET Core app using /deploy kudu endpoint
+    continueOnError: false  # fail the pipeline if this step fails
+    variables:
+    - group: kudu-deployment-account-credentials  # Use the credentials defined in this variable group, linked from Azure vault
+    pool:
+      vmImage: 'ubuntu-latest'
+    workspace:
+      clean: outputs
+    steps:
+    # Sends a /deploy request using the Deployment account credentials
+    - bash: curl -H "Content-Type:application/json" --user ${DEPLOYUSER}:${DEPLOYPASS} -X POST ${ENDPOINT}/deploy -d '{"format":"basic","url":"https://github.com/AlexJohnKennedy/TrackYourTodos.git"}'
+      env:
+        DEPLOYUSER: $(track-your-todos-api-deployment-account-username)
+        DEPLOYPASS: $(track-your-todos-api-deployment-account-password)
+        ENDPOINT: $(track-your-todos-api-kudu-deployment-endpoint)
+    # Sends a command to kudu, which in turn executes another bash command on the virtual machine kudu deployed to, which invokes ef database update
+    - bash: curl -H "Content-Type:application/json" --user ${DEPLOYUSER}:${DEPLOYPASS} -X POST ${ENDPOINT}/api/command -d '{"command":"dotnet ef database update","dir":"site\\repository/AspNetCoreApiBackend"}'
+      env:
+        DEPLOYUSER: $(track-your-todos-api-deployment-account-username)
+        DEPLOYPASS: $(track-your-todos-api-deployment-account-password)
+        ENDPOINT: $(track-your-todos-api-kudu-deployment-endpoint)
