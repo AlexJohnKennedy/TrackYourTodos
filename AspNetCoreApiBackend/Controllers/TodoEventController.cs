@@ -73,8 +73,7 @@ namespace todo_app.Controllers {
             // Return the context-specific event log(s) and the set of all available contexts
             return Ok(new {
                 eventLog = eventLog,
-                availableContexts = allContextsNoDups,
-                meme = "This is a meme"
+                availableContexts = allContextsNoDups
             });
         }
 
