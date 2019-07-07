@@ -115,21 +115,8 @@ stages:
     workspace:
       clean: outputs
     steps:
-    - bash: echo ${ENDPOINT}
+    - bash: curl -H "Content-Type:application/json" --user ${DEPLOYUSER}:${DEPLOYPASS} -X POST ${ENDPOINT}/deploy -d '{"format":"basic","url":"https://github.com/AlexJohnKennedy/TrackYourTodos.git"}'
       env:
+        DEPLOYUSER: $(track-your-todos-api-deployment-account-username)
+        DEPLOYPASS: $(track-your-todos-api-deployment-account-password)
         ENDPOINT: $(track-your-todos-api-kudu-deployment-endpoint)
-    - bash: echo ${TESTUSER}:${TESTPASS}
-      env:
-        TESTUSER: "meme"
-        TESTPASS: "user"
-        endpoint: $(track-your-todos-api-kudu-deployment-endpoint)
-    - bash: curl -H "Content-Type:application/json" --user ${USER}:${PASS} -X POST ${ENDPOINT}/deploy -d '{"format":"basic","url":"https://github.com/AlexJohnKennedy/TrackYourTodos.git"}'
-      env:
-        user: $(track-your-todos-api-deployment-account-username)
-        pass: $(track-your-todos-api-deployment-account-password)
-        endpoint: $(track-your-todos-api-kudu-deployment-endpoint)
-    - bash: echo ${ENDPOINT}
-      env:
-        user: $(track-your-todos-api-deployment-account-username)
-        pass: $(track-your-todos-api-deployment-account-password)
-        endpoint: $(track-your-todos-api-kudu-deployment-endpoint)
