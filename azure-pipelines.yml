@@ -115,16 +115,8 @@ stages:
     workspace:
       clean: outputs
     steps:
-    - task: AzureRmWebAppDeployment@4
-      inputs:
-        ConnectionType: 'AzureRM'
-        azureSubscription: 'Free Trial (38d34816-abf3-47c2-9437-b6f04bc61324)'
-        appType: 'webApp'
-        WebAppName: 'track-your-todos-api'
-        packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
-        ScriptType: 'Inline Script'
-        InlineScript: 'dotnet ef database update'
-        enableCustomDeployment: true
-        DeploymentType: 'webDeploy'
-        TakeAppOfflineFlag: false
-    
+    - bash: curl -H "Content-Type: application/json" --user $USER:$PASS -X POST $ENDPOINT/deploy -d '{"format":"basic","url":"https://github.com/AlexJohnKennedy/TrackYourTodos.git"}'
+      env:
+        user: $(track-your-todos-api-deployment-account-username)
+        pass: $(track-your-todos-api-deployment-account-password)
+        endpoint: $(track-your-todos-api-kudu-deployment-endpoint)
