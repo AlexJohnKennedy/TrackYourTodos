@@ -44,7 +44,13 @@ stages:
     # Execute the 'npm run-script build' command in the React-app directory
     - bash: npm run-script build
       workingDirectory: ClientApp
-    - bash: ls ClientApp/build
+    # The previous command will have generated a 'build' folder which contains the compiled, deployable react-app content.
+    # In order for our subsequent deployment stage to access this, we must use the 'publish' step. This publishes a "pipeline artifact"
+    # So that it can be accessed later. We will use this to later access the build directory and publish it to the
+    # appropriate $web blob container acting as our static web-server for the React Application.
+    - publish: ClientApp/build
+      # provide a name for this artifact
+      artifact: reactAppBuild
 
 
 
