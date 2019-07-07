@@ -27,9 +27,9 @@ pr:
 # Define the 'stages' of this pipeline. A stage is a high level 'operation' that form the biggest building blocks
 # of a pipeline, and are usually conducted sequentially.
 stages:
-- stage: buildReactApp  # name of the stage
-  displayName: Build and bundle React app with 'npm run-script build'  # name to display in the UI
-  dependsOn: [] # Specifies stages (by name) which this stage must run AFTER. Controls parallelism of stage operation
+#- stage: buildReactApp  # name of the stage
+#  displayName: Build and bundle React app with 'npm run-script build'  # name to display in the UI
+#  dependsOn: [] # Specifies stages (by name) which this stage must run AFTER. Controls parallelism of stage operation
 
 
 # This stage will run a 'dotnet build' command, to ensure the project can build successfully. If it passes, we will
@@ -57,6 +57,6 @@ stages:
 # once the initial publish completes, we remotely run 'dotnet ef database update' to ensure EF-Migrations are applied
 # to our Azure SQL Database. This command can be executed on the target machine using the /api/command Kudu REST Api
 # endpoint
-- stage: publishDotNetCoreToKudu
-  displayName: Publishes API to Kudu on App Services
-  dependsOn: [buildDotNetCoreApp] 
+#- stage: publishDotNetCoreToKudu
+#  displayName: Publishes API to Kudu on App Services
+#  dependsOn: [buildDotNetCoreApp] 
