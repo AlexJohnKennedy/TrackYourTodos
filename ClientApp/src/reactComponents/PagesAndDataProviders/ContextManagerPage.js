@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { CreationForm } from '../CreationForm';
 import { DEFAULT_GLOBAL_CONTEXT_STRING, MAX_CONTEXT_NAME_LEN } from '../../logicLayer/Task';
-
+import { SvgIconWrapper } from '../TaskButtons';
+import { ReactComponent as CrossIcon } from '../../icons/close-button.svg';
 
 export class ContextManagerPage extends Component {
     // For now, this page is just a big, selectable checklist of all the available contexts, displayed in 'most frequently used' order.
@@ -54,7 +55,9 @@ export class ContextManagerPage extends Component {
                 <div className="checklistWrapper">
                     {checkboxitems} 
                 </div>
-                <button onClick={this.props.togglePage}> x </button>
+                <SvgIconWrapper className="button" clickAction={this.props.togglePage}   title="Close settings menu">
+                    <CrossIcon className="iconButton"/>
+                </SvgIconWrapper>
             </div>
         );
     }

@@ -118,6 +118,11 @@
     bottom: 0.4rem;
 }
 
+.task .closeButton {
+    top: 0.5rem;
+    right: 0.5rem;
+}
+
 .task .iconButton {
     position: absolute;
     top: 0px;

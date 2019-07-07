@@ -41,7 +41,7 @@ import { RegisterForFailureChecking } from '../logicLayer/checkForFailure';
 import { StatisticsModel } from '../logicLayer/statisticsModel';
 import { BuildNewUndoStack } from '../logicLayer/undoStackSystem';
 import { EventTypes } from '../logicLayer/dataEventJsonSchema';
-import { mapToClosedTasklistWithSpacers } from './closedTaskListSpacerAlgorithm';
+import { mapToClosedTasklistWithSpacers, mapBacklogTasklistWithSpacers } from './closedTaskListSpacerAlgorithm';
 
 // This function instantiates a new Data model and Statistics model inside a function scope, and returns and object which
 // can be used to register listeners, access the data in a mutation safe manner, and so on.
@@ -214,6 +214,10 @@ export function InstantiateNewDataModelScope(currContext) {
             // Return a big list of TaskView objects from the current Active Task List!
             return ActiveTaskDataObj.GetActiveTasks().map((task) => BuildNewTaskView(task, ActiveTaskDataObj, UndoStackObj, ViewLayerCallbacks, DataEventCallbackHandlers));
         }
+        function getDeferredTasks() {
+            const backlogtasks = ActiveTaskDataObj.GetActiveTasks().filter(t => t.category === Category.Deferred).sort((a, b) => b.eventTimestamps.timeCreated - a.eventTimestamps.timeCreated);
+            return mapBacklogTasklistWithSpacers(backlogtasks, task => BuildNewTaskView(task, ActiveTaskDataObj, UndoStackObj, ViewLayerCallbacks, DataEventCallbackHandlers));
+        }
         function getCompletedTasks() {
             return mapToClosedTasklistWithSpacers(ActiveTaskDataObj.GetCompletedTasks(), task => BuildNewInactiveTaskView(task, ActiveTaskDataObj, UndoStackObj, ViewLayerCallbacks, DataEventCallbackHandlers));
         }
@@ -256,6 +260,7 @@ export function InstantiateNewDataModelScope(currContext) {
         // Return the interface object. Note that for interfaces, we always return immutable objects.
         return Object.freeze({
             GetActiveTasks : getActiveTasks,
+            GetDeferredTasks: getDeferredTasks,
             GetCompletedTasks : getCompletedTasks,
             GetFailedTasks : getFailedTasks,
             GetCreationFunction : getCreationFunction,

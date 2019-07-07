@@ -12,7 +12,8 @@ import { ShortCutManager } from '../../viewLogic/keyboardShortcutHandler';
 import { ThemeId, currThemeId } from '../../viewLogic/colourSetManager';
 
 import { InstantiateNewDataModelScope } from '../../interactionLayer/viewLayerInteractionApi';
-import { BuildDataEventHttpPostHandlers } from '../../interactionLayer/ajaxDataModules/ajaxDataEventPoster';
+import { BuildDataEventHttpPostHandlers, RetryPostingFailedEvents } from '../../interactionLayer/ajaxDataModules/ajaxDataEventPoster';
+
 import { setConflictingDataAction } from '../../interactionLayer/ajaxDataModules/ajaxErrorcaseHandlers';
 
 import { DEFAULT_GLOBAL_CONTEXT_STRING, MAX_CONTEXT_NAME_LEN } from '../../logicLayer/Task';
@@ -96,11 +97,7 @@ export class AppPage extends Component {
 
     // Passed down to our children, allowing them to switch contexts between the currently available ones.
     switchContext(context) {
-        console.log("Attempting to switch to: " + context);
         context = this.validateContextString(context);
-        console.log("String after validation: " + context);
-        console.log("Currently available contexts:");
-        console.log(this.state.availableContexts);
         if (context === null || !this.state.availableContexts.includes(context)) {
             console.warn("Invalid context passed to context switch! You must pick a context which is already availble. Use 'CreateNewContext' to make a new one. Param was: " + context);
             return;
@@ -115,6 +112,10 @@ export class AppPage extends Component {
     // If we end up implemented nested contexts, then for a given current context, we would search and make the current's entire
     // subtree visible as well! But for now, it's either global, or just one.
     performSwitch(context) {
+        if (!this.props.failedEventCacheInstance.IsEmpty()) {
+            RetryPostingFailedEvents(this.props.ajaxFailedEventCacheInstance);
+        }
+
         if (context === DEFAULT_GLOBAL_CONTEXT_STRING) {
             this.state.dataModelScope.ClearAllRegisteredCallbacks();
             this.setState({
@@ -156,18 +157,19 @@ export class AppPage extends Component {
 
     // Pased down to our children, allowing them to create new contexts.
     createNewContext(newContext) {
-        console.log("Creating new context!");
         newContext = this.validateContextString(newContext);
         if (newContext === null) { return; }
         if (this.state.availableContexts.includes(newContext) || newContext === DEFAULT_GLOBAL_CONTEXT_STRING) {
             this.performSwitch(newContext);
         }
         else {
+            if (!this.props.failedEventCacheInstance.IsEmpty()) {
+                RetryPostingFailedEvents(this.props.ajaxFailedEventCacheInstance);
+            }
+            
             this.state.dataModelScope.ClearAllRegisteredCallbacks();
             this.setState((state, props) => {
                 // If the selectable contexts list is full, then we will simply replace the last item in the list, sorry bro!
-                console.log("MEMEING REAL HARD RIGHT NOW");
-                console.log(state.selectableContexts.length);
                 let newSelectables = state.selectableContexts;
                 if (state.selectableContexts.length === MAX_SELECTABLE_CONTEXTS) {
                     newSelectables[newSelectables.length - 1] = newContext;
