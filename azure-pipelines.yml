@@ -115,7 +115,7 @@ stages:
     workspace:
       clean: outputs
     steps:
-    - bash: curl -H "Content-Type: application/json" --user $USER:$PASS -X POST $ENDPOINT/deploy -d '{"format":"basic","url":"https://github.com/AlexJohnKennedy/TrackYourTodos.git"}'
+    - bash: curl -H "Content-Type:application/json" --user $USER:$PASS -X POST $ENDPOINT/deploy -d '{"format":"basic","url":"https://github.com/AlexJohnKennedy/TrackYourTodos.git"}'
       env:
         user: $(track-your-todos-api-deployment-account-username)
         pass: $(track-your-todos-api-deployment-account-password)
