@@ -57,7 +57,7 @@ stages:
   dependsOn: [buildReactApp]
   jobs:
   - job: deployReactApp
-    displayName: do the deployment
+    displayName: Download React build Artifact and copy to Azure Storage
     continueOnError: false
     pool:
       vmImage: 'windows-2019'   # We must use Windows agents for this job, because the Azure File Copy task only supports windows atm :(
@@ -76,7 +76,6 @@ stages:
         storage: 'tytodosreactapp'
         ContainerName: '$web'
     
-
 # This stage will run a 'dotnet build' command, to ensure the project can build successfully. If it passes, we will
 # deploy to kudu using the kudu rest API, in a later stage.
 - stage: buildDotNetCoreApp
