@@ -35,6 +35,20 @@ stages:
 - stage: buildDotNetCoreApp
   displayName: Build the backend api
   dependsOn: [] # Can run in parallel with React App deployment, since they are independent applications 
+  jobs:
+  - job: dotnetbuild
+    displayName: dotnet build job
+    continueOnError: false  # fail the pipeline if this step fails
+    pool:
+      vmImage: 'ubuntu-latest'
+    workspace:
+      clean: outputs
+    steps:
+    # Use the DotNetCoreCLI@2 built-in task to perform a simple build
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'build'
+        projects: AspNetCoreApiBackend/AspNetCoreApiBackend.csproj
 
 # This stages uses kudu rest API commands to explicitly deploy the api app to Azure app-service. This only runs
 # if the .net-core build stage passed, to make sure we don't deploy broken code. 
@@ -44,18 +58,3 @@ stages:
 - stage: publishDotNetCoreToKudu
   displayName: Publishes API to Kudu on App Services
   dependsOn: [buildDotNetCoreApp] 
-
-
-
-
-
-
-pool:
-  vmImage: 'ubuntu-latest'
-
-variables:
-  buildConfiguration: 'Release'
-
-steps:
-- script: dotnet build --configuration $(buildConfiguration)
-  displayName: 'dotnet build $(buildConfiguration)'
