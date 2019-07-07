@@ -68,7 +68,8 @@ stages:
     - download: current   # Specifies that the artifact we want to download was published from the current pipeline run.
       artifact: reactAppBuild
     - bash: ls
-    - bash: ls reactAppBuild
+    - bash: pwd
+    - bash: ls ..
 
 # This stage will run a 'dotnet build' command, to ensure the project can build successfully. If it passes, we will
 # deploy to kudu using the kudu rest API, in a later stage.
