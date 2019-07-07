@@ -117,13 +117,11 @@ stages:
     steps:
     - bash: echo ${ENDPOINT}
       env:
-        user: $(track-your-todos-api-deployment-account-username)
-        pass: $(track-your-todos-api-deployment-account-password)
-        endpoint: $(track-your-todos-api-kudu-deployment-endpoint)
-    - bash: echo ${USER}:${PASS}
+        ENDPOINT: $(track-your-todos-api-kudu-deployment-endpoint)
+    - bash: echo ${TESTUSER}:${TESTPASS}
       env:
-        user: meme
-        pass: user
+        TESTUSER: "meme"
+        TESTPASS: "user"
         endpoint: $(track-your-todos-api-kudu-deployment-endpoint)
     - bash: curl -H "Content-Type:application/json" --user ${USER}:${PASS} -X POST ${ENDPOINT}/deploy -d '{"format":"basic","url":"https://github.com/AlexJohnKennedy/TrackYourTodos.git"}'
       env:
