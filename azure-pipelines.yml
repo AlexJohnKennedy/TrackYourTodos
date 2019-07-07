@@ -101,6 +101,16 @@ stages:
 # once the initial publish completes, we remotely run 'dotnet ef database update' to ensure EF-Migrations are applied
 # to our Azure SQL Database. This command can be executed on the target machine using the /api/command Kudu REST Api
 # endpoint
-#- stage: publishDotNetCoreToKudu
-#  displayName: Publishes API to Kudu on App Services
-#  dependsOn: [buildDotNetCoreApp] 
+- stage: publishDotNetCoreToKudu
+  displayName: Publishes API to Kudu on App Services
+  dependsOn: [buildDotNetCoreApp]
+  jobs:
+  - job: deployViaRest
+    displayName: Deploy .NET Core app using /deploy kudu endpoint
+    continueOnError: false  # fail the pipeline if this step fails
+    pool:
+      vmImage: 'ubuntu-latest'
+    workspace:
+      clean: outputs
+    steps:
+    
