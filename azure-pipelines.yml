@@ -44,7 +44,7 @@ stages:
     # Execute the 'npm run-script build' command in the React-app directory
     - bash: npm run-script build
       workingDirectory: ClientApp
-    - bash: ls ClientApp
+    - bash: ls ClientApp/build
 
 
 
