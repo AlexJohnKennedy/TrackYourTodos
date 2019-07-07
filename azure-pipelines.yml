@@ -34,7 +34,8 @@ stages:
   - job: create_react_app_build
     displayName: create-react-app build
     continueOnError: false
-    pool: vmImage
+    pool:
+      vmImage: 'ubuntu-latest'
     workspace:
       clean: outputs
     steps:
