@@ -108,9 +108,23 @@ stages:
   - job: deployViaRest
     displayName: Deploy .NET Core app using /deploy kudu endpoint
     continueOnError: false  # fail the pipeline if this step fails
+    variables:
+    - group: kudu-deployment-account-credentials  # Use the credentials defined in this variable group, linked from Azure vault
     pool:
       vmImage: 'ubuntu-latest'
     workspace:
       clean: outputs
     steps:
+    - task: AzureRmWebAppDeployment@4
+      inputs:
+        ConnectionType: 'AzureRM'
+        azureSubscription: 'Free Trial (38d34816-abf3-47c2-9437-b6f04bc61324)'
+        appType: 'webApp'
+        WebAppName: 'track-your-todos-api'
+        packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+        ScriptType: 'Inline Script'
+        InlineScript: 'dotnet ef database update'
+        enableCustomDeployment: true
+        DeploymentType: 'webDeploy'
+        TakeAppOfflineFlag: false
     
