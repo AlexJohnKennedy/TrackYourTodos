@@ -52,7 +52,21 @@ stages:
       # provide a name for this artifact
       artifact: reactAppBuild
 
-
+- stage: deployReactApp
+  displayName: Deploy reactApp build artifacts to Azure Storage
+  dependsOn: [buildReactApp]
+  jobs:
+  - job: deployReactApp
+    displayName: do the deployment
+    continueOnError: false
+    pool:
+      vmImage: 'ubuntu-latest'
+    workspace:
+      clean: outputs
+    steps:
+    # download the previously publish build artifacts, since they are what we need to upload to Storage!
+    - download: current   # Specifies that the artifact we want to download was published from the current pipeline run.
+      artifact: reactAppBuild
 
 # This stage will run a 'dotnet build' command, to ensure the project can build successfully. If it passes, we will
 # deploy to kudu using the kudu rest API, in a later stage.
