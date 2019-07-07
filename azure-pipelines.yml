@@ -60,7 +60,7 @@ stages:
     displayName: do the deployment
     continueOnError: false
     pool:
-      vmImage: 'ubuntu-latest'
+      vmImage: 'windows-2019'   # We must use Windows agents for this job, because the Azure File Copy task only supports windows atm :(
     workspace:
       clean: outputs
     steps:
