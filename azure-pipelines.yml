@@ -67,10 +67,15 @@ stages:
     # download the previously publish build artifacts, since they are what we need to upload to Storage!
     - download: current   # Specifies that the artifact we want to download was published from the current pipeline run.
       artifact: reactAppBuild
-    - bash: ls
-    - bash: pwd
-    - bash: ls
-      workingDirectory: $(Pipeline.Workspace)/reactAppBuild
+    # Use 'Azure File Copy' task to copy into the $web blob in the Storage account, which is acting as our static server
+    - task: AzureFileCopy@3
+      inputs:
+        SourcePath: '$(Pipeline.Workspace)/reactAppBuild'
+        azureSubscription: 'Free Trial(38d34816-abf3-47c2-9437-b6f04bc61324)'
+        Destination: 'AzureBlob'
+        storage: 'tytodosreactapp'
+        ContainerName: '$web'
+    
 
 # This stage will run a 'dotnet build' command, to ensure the project can build successfully. If it passes, we will
 # deploy to kudu using the kudu rest API, in a later stage.
