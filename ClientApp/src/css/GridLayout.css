@@ -59,7 +59,7 @@
         grid-row-start: 3;
         grid-row-end: 4;
 
-        max-height: 80rem;
+        max-height: max(80rem, 100vh - 61rem);
         width: 100%;
 
         min-width: var(--active-tasks-min-total-width);
@@ -179,7 +179,7 @@
         grid-row-start: 3;
         grid-row-end: 4;
 
-        max-height: 80rem;
+        max-height: max(80rem, 100vh - 61rem);
         height: 100%;
         width: 100%;
 
