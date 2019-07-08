@@ -19,7 +19,7 @@
 @media (min-width: 1270px) {
     #appPageRoot {
         display: grid;
-        height: 100vh;
+        height: min(100vh, 180rem);
         grid-template-columns: 1fr 0.8rem minmax(auto, 115rem) var(--divider-column-width) minmax(var(--backlog-tasks-total-width-squashed), var(--backlog-tasks-total-width)) 0.8rem 1fr;
         grid-template-rows: 3.4rem 3.4rem 1fr auto auto;
     }
@@ -59,7 +59,7 @@
         grid-row-start: 3;
         grid-row-end: 4;
 
-        max-height: max(80rem, 100vh - 61rem);
+        /* max-height: max(80rem, calc(100vh - 52rem)); DOESN'T WORK */
         width: 100%;
 
         min-width: var(--active-tasks-min-total-width);
@@ -139,7 +139,7 @@
 @media (max-width: 1270px) {
     #appPageRoot {
         display: grid;
-        height: 100vh;
+        height: min(100vh, 180rem);
         grid-template-columns: 1fr 0.8rem minmax(auto, 115rem) 0.8rem 1fr;
         grid-template-rows: 3.4rem 3.4rem 1fr auto auto;
     }
@@ -179,7 +179,7 @@
         grid-row-start: 3;
         grid-row-end: 4;
 
-        max-height: max(80rem, 100vh - 61rem);
+        /* max-height: max(80rem, 100vh - 52rem); Doesn't work :( */
         height: 100%;
         width: 100%;
 
