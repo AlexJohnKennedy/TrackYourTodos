@@ -91,5 +91,6 @@ function PerformEventLogUpdate(tasklist, undoStack, visibleContexts, onLoadFunc,
     };
     
     // Send the request
+    console.log("Sending GET request: " + contructedUrl);
     httpRequest.send();
 }

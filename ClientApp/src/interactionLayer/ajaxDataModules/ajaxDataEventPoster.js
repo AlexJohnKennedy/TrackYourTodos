@@ -33,7 +33,12 @@ export function RetryPostingFailedEvents(failureCacheInstance) {
     postEvent([], failureCacheInstance, 0, false, true);
 }
 
+// For logging and debugging purposes, we will track an id for each request our client makes.
+let postRequestNumber = 0;
+const getPostRequestNumber = () => postRequestNumber++;
+
 function postEvent(eventArray, failureCache, retryCount, logoutOnAuthFailure, sendFromFailureCache) {
+    const reqNum = getPostRequestNumber();  // For logging
     
     // Build the message body array, depending on incoming message and failure cache state.
     if (sendFromFailureCache && !failureCache.IsEmpty() && eventArray !== null && eventArray.length > 0) {
@@ -61,11 +66,11 @@ function postEvent(eventArray, failureCache, retryCount, logoutOnAuthFailure, se
     httpRequest.timeout = 10000;     // We MUST set a timeout otherwise uncaught exceptions will be thrown in scenarios where the browser is unable to complete reqeusts. (e.g. PC is asleep)
     httpRequest.ontimeout = () => {
         if (retryCount > 0) {
-            console.log("POST request timed out. Retrying: " + eventArray.map(e => ({ task: e.name, event:e.eventType })));
+            console.log("POST #" + reqNum + " request timed out. Retrying: " + toEventString(eventArray));
             postEvent(eventArray, failureCache, retryCount - 1, logoutOnAuthFailure, sendFromFailureCache);
         }
         else {
-            console.log("POST request timed out. Ran out of retries. Saving failed events to failure cache.");
+            console.log("POST #" + reqNum + " request timed out. Ran out of retries. Saving failed events to failure cache.");
             handleUnknownPostFailure(eventArray, failureCache);     // In these scenarios, don't try again just yet..
         }
     }
@@ -74,40 +79,46 @@ function postEvent(eventArray, failureCache, retryCount, logoutOnAuthFailure, se
     // unless our retry count is 0.
     httpRequest.onreadystatechange = () => {
         if (httpRequest.readyState === 4 && httpRequest.status === 200) {
-            console.log("POST was successful: " + eventArray.map(e => ({ task: e.name, event:e.eventType })));
+            console.log("POST #" + reqNum + " was successful: " + toEventString(eventArray));
         }
         else if (httpRequest.readyState === 4 && httpRequest.status === 500) {
             if (retryCount > 0) {
-                console.log("Server error on POST (500). Retrying: " + eventArray.map(e => ({ task: e.name, event:e.eventType })));
+                console.log("Server error on POST #" + reqNum + " (500). Retrying: " + toEventString(eventArray));
                 postEvent(eventArray, failureCache, retryCount - 1, logoutOnAuthFailure, sendFromFailureCache);
             }
             else {
-                console.log("Server error on POST (500). No more retries remaining. Invoking 'Server Error' handler.");
+                console.log("Server error on POST #" + reqNum + " (500). No more retries remaining. Invoking 'Server Error' handler.");
                 handleServerFailure("We couldn't save your updates! Our database must be snoozing... I'll blast the techno.");
             }
         }
         else if (httpRequest.readyState === 4 && httpRequest.status === 401) {
             // Authentication error. Try to force an id_token token refresh and then try again, or just handle auth failure.
             if (logoutOnAuthFailure) {
-                console.log("Authentication failure on POST (401). No more retries remaining. Invoking 'Auth Error' handler.");
+                console.log("Authentication failure on POST #" + reqNum + " (401). No more retries remaining. Invoking 'Auth Error' handler.");
                 handleAuthFailure("We are having trouble accessing your Google account at the moment. It's probably their fault... probably. Please try again later!");
             }
             else {
-                console.log("Authentication failure on POST (401). Forcing a token refresh, and retrying: " + eventArray.map(e => ({ task: e.name, event:e.eventType })));
+                console.log("Authentication failure on POST #" + reqNum + " (401). Forcing a token refresh, and retrying: " + toEventString(eventArray));
                 forceTokenRefresh(() => postEvent(eventArray, failureCache, retryCount, true, sendFromFailureCache));
             }
         }
         else if (httpRequest.readyState === 4 && httpRequest.status === 409) {
-            console.log("State Conflict (409) for events: " + eventArray.map(e => ({ task: e.name, event:e.eventType })) + ". This means the data we tried to post is conflicting with the events already saved in the server! I am initiating 409 response handling");
+            console.log("State Conflict on POST #" + reqNum + " (409) for events: " + toEventString(eventArray) + ". This means the data we tried to post is conflicting with the events already saved in the server! I am initiating 409 response handling");
             handleConflictingDataOccurrance(eventArray);
         }
         else if (httpRequest.readyState === 4) {
-            console.log("Unknown error on POST (" + httpRequest.status + "). For events " + eventArray.map(e => ({ task: e.name, event:e.eventType })));
+            console.log("Unknown error on POST #" + reqNum + " (" + httpRequest.status + "). For events " + toEventString(eventArray));
             handleUnknownPostFailure(eventArray, failureCache);
         }
     };
     
     // Send the request, with the serialised event text as the message body.
-    console.log("Sending POST event: " + eventArray.map(e => ({ task: e.name, event:e.eventType })));
+    console.log("Sending POST #" + reqNum + ": " + toEventString(eventArray));
     httpRequest.send(JSON.stringify(eventArray));
+}
+
+function toEventString(eventArray) {
+    let s = "[";
+    eventArray.map(e => ({ task: e.name, event:e.eventType })).forEach(e => s = s + "{" + e.event + ": " + e.task + "}, ");
+    return s.substring(0, s.length-2) + "]";
 }
