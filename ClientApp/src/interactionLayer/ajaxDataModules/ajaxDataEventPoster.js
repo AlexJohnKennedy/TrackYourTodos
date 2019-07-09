@@ -30,12 +30,10 @@ export function BuildDataEventHttpPostHandlers(FailedEventCache) {
 // Exported function for simply triggering a global retry; I.e., 'try to send all the failed events, but I dont have any new events'
 export function RetryPostingFailedEvents(failureCacheInstance) {
     // Empty event data will mean it doesn't add anything.
-    postEvent("", failureCacheInstance, 0, false, true);
+    postEvent([], failureCacheInstance, 0, false, true);
 }
 
 function postEvent(eventArray, failureCache, retryCount, logoutOnAuthFailure, sendFromFailureCache) {
-    console.log("Ajax POST request scheduled! Send from failure cache flag = " + sendFromFailureCache);
-    console.debug(eventArray);
     
     // Build the message body array, depending on incoming message and failure cache state.
     if (sendFromFailureCache && !failureCache.IsEmpty() && eventArray !== null && eventArray.length > 0) {
@@ -60,49 +58,56 @@ function postEvent(eventArray, failureCache, retryCount, logoutOnAuthFailure, se
     httpRequest.open('POST', API_ENDPOINT, true); // Define a GET to our API endpoint, true marks asynchronous.
     httpRequest.setRequestHeader("Content-type", "application/json");    // Inform the reciever that the format is JSON.
     httpRequest.setRequestHeader("Authorization", "Bearer " + googleToken); // Specify the 'Bearer' authentication scheme, under Authorization header.
-    httpRequest.timeout = 15000;     // We MUST set a timeout otherwise uncaught exceptions will be thrown in scenarios where the browser is unable to complete reqeusts. (e.g. PC is asleep)
+    httpRequest.timeout = 10000;     // We MUST set a timeout otherwise uncaught exceptions will be thrown in scenarios where the browser is unable to complete reqeusts. (e.g. PC is asleep)
     httpRequest.ontimeout = () => {
-        console.error("POST request timed out!");
-        handleUnknownPostFailure(eventArray, failureCache);     // In these scenarios, don't try again just yet..
+        if (retryCount > 0) {
+            console.log("POST request timed out. Retrying: " + eventArray.map(e => ({ task: e.name, event:e.eventType })));
+            postEvent(eventArray, failureCache, retryCount - 1, logoutOnAuthFailure, sendFromFailureCache);
+        }
+        else {
+            console.log("POST request timed out. Ran out of retries. Saving failed events to failure cache.");
+            handleUnknownPostFailure(eventArray, failureCache);     // In these scenarios, don't try again just yet..
+        }
     }
 
     // Assign a response handler function. If we get back a 200, we are done! If it fails with a server error, we will recursively retry,
     // unless our retry count is 0.
     httpRequest.onreadystatechange = () => {
         if (httpRequest.readyState === 4 && httpRequest.status === 200) {
-            console.log("POST was successful!");
+            console.log("POST was successful: " + eventArray.map(e => ({ task: e.name, event:e.eventType })));
         }
         else if (httpRequest.readyState === 4 && httpRequest.status === 500) {
             if (retryCount > 0) {
-                console.warn("Server error on POST! Retrying...");
+                console.log("Server error on POST (500). Retrying: " + eventArray.map(e => ({ task: e.name, event:e.eventType })));
                 postEvent(eventArray, failureCache, retryCount - 1, logoutOnAuthFailure, sendFromFailureCache);
             }
             else {
-                console.warn("Failed to Post event, ran out of retries on 500 response: " + eventArray);
+                console.log("Server error on POST (500). No more retries remaining. Invoking 'Server Error' handler.");
                 handleServerFailure("We couldn't save your updates! Our database must be snoozing... I'll blast the techno.");
             }
         }
         else if (httpRequest.readyState === 4 && httpRequest.status === 401) {
             // Authentication error. Try to force an id_token token refresh and then try again, or just handle auth failure.
             if (logoutOnAuthFailure) {
-                console.warn("Got an un-authorized 401 error on attempted Event log fetch. Telling application to handler an auth failure.");
+                console.log("Authentication failure on POST (401). No more retries remaining. Invoking 'Auth Error' handler.");
                 handleAuthFailure("We are having trouble accessing your Google account at the moment. It's probably their fault... probably. Please try again later!");
             }
             else {
-                console.warn("Got an un-authorized 401 error on attempted Event log fetch. Forcing a token refresh, and re-trying..");
+                console.log("Authentication failure on POST (401). Forcing a token refresh, and retrying: " + eventArray.map(e => ({ task: e.name, event:e.eventType })));
                 forceTokenRefresh(() => postEvent(eventArray, failureCache, retryCount, true, sendFromFailureCache));
             }
         }
         else if (httpRequest.readyState === 4 && httpRequest.status === 409) {
-            console.warn("Got a 409 response. This means the data we tried to post is conflicting with the events already saved in the server! I am initiating 409 response handling");
+            console.log("State Conflict (409) for events: " + eventArray.map(e => ({ task: e.name, event:e.eventType })) + ". This means the data we tried to post is conflicting with the events already saved in the server! I am initiating 409 response handling");
             handleConflictingDataOccurrance(eventArray);
         }
         else if (httpRequest.readyState === 4) {
-            console.warn("Failed to Post event for unknown reason! HTTP Response Code: " + httpRequest.status);
+            console.log("Unknown error on POST (" + httpRequest.status + "). For events " + eventArray.map(e => ({ task: e.name, event:e.eventType })));
             handleUnknownPostFailure(eventArray, failureCache);
         }
     };
     
     // Send the request, with the serialised event text as the message body.
+    console.log("Sending POST event: " + eventArray.map(e => ({ task: e.name, event:e.eventType })));
     httpRequest.send(JSON.stringify(eventArray));
 }

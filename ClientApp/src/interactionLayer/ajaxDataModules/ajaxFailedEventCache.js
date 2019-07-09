@@ -24,9 +24,7 @@ export function InstantiateNewFailedEventCacheScope() {
     // Exported function. Places all of the events back into the cache queue, then sorts the queue based on event
     // timestamp, to ensure subsequently fetched events are correctly ordered.
     function InsertEventsIntoCache(eventArray) {
-        console.log("Inserting some item(s) into the failure cache! Logging them at debug log level:");
-        eventArray.forEach(s => console.debug(s));
-
+        console.log("Inserting failed events into the failure cache: " + eventArray.map(e => ({ task: e.name, event: e.eventType })));
         eventArray.forEach(o => {
             if (o.timestamp === undefined || o.timestamp === null || o.timestamp < 0) {
                 throw new Error("ERROR: Invalid event string inserted into failure cache! " + o);
