@@ -2,15 +2,11 @@ import React, { Component } from 'react';
 import { NavigationStateWrapper } from '../NavigationTabs';
 import { Category, MAX_TASK_NAME_LEN  } from '../../logicLayer/Task';
 
-import { SvgIconWrapper } from '../TaskButtons';
 import { TaskList } from '../TaskList';
 import { CreationForm } from '../CreationForm';
 
 import { ShortCutManager } from '../../viewLogic/keyboardShortcutHandler';
 import { ColourIdTracker } from '../../viewLogic/colourSetManager';
-
-import { ReactComponent as CrossIcon } from '../../icons/close-button.svg';
-
 
 export class BacklogSection extends Component {
     constructor(props) {
@@ -46,7 +42,6 @@ export class BacklogSection extends Component {
     }
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (prevProps.dataModelScope !== this.props.dataModelScope) {
-            console.log("Backlog section got a newly instantiated data-model. We need to refresh our registrations, and re-render!");
             this.setupWithNewDataModelInstance();
         }
     }

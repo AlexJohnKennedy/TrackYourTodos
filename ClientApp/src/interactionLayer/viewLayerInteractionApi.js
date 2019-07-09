@@ -56,7 +56,7 @@ import { mapToClosedTasklistWithSpacers, mapBacklogTasklistWithSpacers } from '.
 // there is a context switch! This is sensible, since it means we are not saving out-of-context tasks in memory. This approuch should help
 // to reduce the size of the event log the browser has to manage at a given time; unless they are viewing the global context of course.
 export function InstantiateNewDataModelScope(currContext) {
-    console.log("Instantiating a new data model scope. Context for data-model: " + currContext);
+    console.debug("Instantiating a new data model scope. Context for data-model: " + currContext);
     
     // default to the global context, defined in the domain layer. Also, trim that sucka, just in case.
     if (currContext === null || currContext === undefined || currContext === "") { currContext = DEFAULT_GLOBAL_CONTEXT_STRING; }
@@ -104,7 +104,6 @@ export function InstantiateNewDataModelScope(currContext) {
     // Undo stack filtering operations. They are automatically performed as part of the view layer callbacks.
     let scheduledFilteringOperation = null;
     ViewLayerCallbacks.push(() => {
-        console.log("Performing a periodic forced-viewlayer update! This will filter the undo actions stack!");
         UndoStackObj.FilterExpiredUndoActions(Date.now());  // Filter the undo stack any time the ui updates
         window.clearTimeout(scheduledFilteringOperation);
         if (UndoStackObj.GetSize() > 0) {
@@ -307,7 +306,6 @@ export function InstantiateNewDataModelScope(currContext) {
     // Exported inner function: Performs an undo operation, if it is valid to do so. If the undo operation actually is performed, we
     // will trigger a data event for the undo, and trigger a view layer callback.
     function PerformUndo() {
-        console.log("Attempting to perform an undo operation. Current undo stack size: " + UndoStackObj.GetSize());
 
         // Define a mapping of callback lists, so we can trigger the correct data event depending on what is undone by a given undo action
         const dataEventHandlerMappers = new Map([

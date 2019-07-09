@@ -82,7 +82,7 @@ export function BuildNewUndoStack() {
 
         // Only perform the undo if the action has not expired
         if (currTime - undoableAction.timestamp > UNDO_ACTION_MAX_AGE_MILLISECONDS) {
-            console.warn("top of stack undo item is expired. Returning false");
+            console.log("top of stack undo item is expired. Returning false");
             // Clear the entire stack, since the latest of them is expired.
             UndoStack.length = 0;
             return null;

@@ -38,8 +38,6 @@ class App extends Component {
   }
 
   componentDidMount() {
-    console.log("Application is mounting!");
-    
     // Register to receive a callback when google auth loads up. Doing this before polling the load, so that weird races don't happen.
     window.registerForGapiLoadedCallback(this.respondToGapiLoad);
 
@@ -71,14 +69,14 @@ class App extends Component {
       
       // Setup a listener for global sign-in/sign-out events. This means our app will respond even if another tab signs us out, or in!
       window.gapi.auth2.getAuthInstance().isSignedIn.listen(justSignedIn => {
-        console.log("GOOGLE API: Sign-in state listener triggered! The sign in state just changed to " + justSignedIn);
+        console.debug("GOOGLE API: Sign-in state listener triggered! The sign in state just changed to " + justSignedIn);
         if (justSignedIn) {
-          console.log("User just signed in: Name is" + window.gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile().getName());
+          console.debug("User just signed in: Name is" + window.gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile().getName());
           // User just signed in!
           this.setGoogleSignedIn(window.gapi.auth2.getAuthInstance().currentUser.get());
         }
         else {
-          console.log("===> User just signed out <===");
+          console.log("User just signed out");
           // User just signed out.
           this.setGoogleSignedOut();
         }
@@ -101,9 +99,6 @@ class App extends Component {
   // if a user signs in or out; for example if they sign in on the sign in page.
   setGoogleSignedIn(GoogleUserObj) {
     const googleIdToken = GoogleUserObj.getAuthResponse().id_token;   // This should be sent with AJAX as a header, (HTTPS only!!)
-
-    console.log(GoogleUserObj.getBasicProfile());
-    console.log(GoogleUserObj.getBasicProfile().getId());
 
     // Store the token in local storage, so it can be accessed later.
     window.localStorage.setItem("googleIdToken", googleIdToken);
@@ -129,15 +124,15 @@ class App extends Component {
       refreshUserToken(GoogleUserObj, (throwAwayAuthResponse) => onCompleted());
     });
     setAuthFailureHandler((message) => {
-      console.warn("Authentication Failure occurred.");
+      console.log("Authentication Failure occurred.");
       this.signUserOut();
     });
     setServerFailureAction((message) => {
-      console.warn("Server failure action invoked.");
+      console.log("Server failure action invoked.");
       this.setErrorPage(message);
     });
     setUnknownErrorAction(() => {
-      console.warn("App is triggering the 'unknown error' action. Often this is a timeout occurrance.");
+      console.log("App is triggering the 'unknown error' action. Often this is a timeout occurrance.");
       this.setErrorPage("Hmm... things don't seem to be working. Maybe... try turning it off and on again?");
     });
 
@@ -218,7 +213,7 @@ class App extends Component {
 export default App;
 
 function refreshUserToken(GoogleUserObj, actionOnCompletion) {
-  console.log("STARTING TO REFRESH TOKEN");
+  console.debug("Sending refresh token request");
   GoogleUserObj.reloadAuthResponse().then(refreshedAuthResponse => {
     window.localStorage.setItem("googleIdToken", refreshedAuthResponse.id_token);
     actionOnCompletion(refreshedAuthResponse);
@@ -226,11 +221,9 @@ function refreshUserToken(GoogleUserObj, actionOnCompletion) {
 }
 let cancellationToken = null;
 function setCancellationToken(t) {
-  console.log("new scheduled id job token was recieved: " + t);
   cancellationToken = t;
 }
 function cancelTokenRefresh() {
-  console.log("Cancelling scheduled id token update job: " + cancellationToken + ". A user probably just logged in or out.")
   if (cancellationToken !== null) {
     window.clearTimeout(cancellationToken);
   }

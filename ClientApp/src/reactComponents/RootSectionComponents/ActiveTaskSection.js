@@ -37,7 +37,7 @@ export class ActiveTaskSection extends Component {
 
         // Setup timing callbacks for task-failure checks. This will the be the callback we register for OnDataLoad callbacks.
         const checkAction = () => {
-            console.log("Checking for failed tasks, via timed callback!");
+            console.log("Periodically checking for failed tasks now.");
             let ids = this.activeTaskListAPI.PerformFailureCheck(800, id => this.unregisterForAnimation(id, false));
             ids.forEach(id => this.registerForAnimation(id, false));
         };
@@ -61,7 +61,6 @@ export class ActiveTaskSection extends Component {
     }
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (prevProps.dataModelScope !== this.props.dataModelScope) {
-            console.log("ActiveTasksSection got a newly instantiated data-model. We need to refresh our registrations, and re-render!");
             this.setupWithNewDataModelInstance();
         }
     }
