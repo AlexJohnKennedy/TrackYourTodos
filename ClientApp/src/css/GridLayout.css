@@ -19,6 +19,7 @@
 @media (min-width: 1270px) {
     #appPageRoot {
         display: grid;
+        min-height: 110rem;     /* min(max-content, 100rem) would be the ideal... */
         height: 100vh;
         grid-template-columns: 1fr 0.8rem minmax(auto, 115rem) var(--divider-column-width) minmax(var(--backlog-tasks-total-width-squashed), var(--backlog-tasks-total-width)) 0.8rem 1fr;
         grid-template-rows: 3.4rem 3.4rem 1fr auto auto;
@@ -59,7 +60,7 @@
         grid-row-start: 3;
         grid-row-end: 4;
 
-        max-height: 80rem;
+        min-height: 100%;
         width: 100%;
 
         min-width: var(--active-tasks-min-total-width);
@@ -139,6 +140,7 @@
 @media (max-width: 1270px) {
     #appPageRoot {
         display: grid;
+        min-height: 110rem;     /* min(max-content, 100rem) would be the ideal... */
         height: 100vh;
         grid-template-columns: 1fr 0.8rem minmax(auto, 115rem) 0.8rem 1fr;
         grid-template-rows: 3.4rem 3.4rem 1fr auto auto;
@@ -179,8 +181,7 @@
         grid-row-start: 3;
         grid-row-end: 4;
 
-        max-height: 80rem;
-        height: 100%;
+        min-height: 100%;
         width: 100%;
 
         padding-left: var(--board-spacing-amount);

@@ -24,7 +24,8 @@
 }
 .board .task-list-container {
     flex-grow: 1;       /* Make the task list always fill the Board. The title grow should be zero, to insist it stays default size */
-    overflow: auto;     /* Make individual tasklists scrollable if too many tasks are added */
+    overflow-y: auto;
+    overflow-x: hidden;     /* Make individual tasklists scrollable if too many tasks are added */
 }
 .board h2 {
     margin-top: 0.8rem;
@@ -38,6 +39,8 @@
 }
 .task-list-container {
     scrollbar-width: none;
+    overflow-y: auto;
+    overflow-x: hidden;     /* Make individual tasklists scrollable if too many tasks are added */
 }
 
 .task-list-container .dateSpacer {
