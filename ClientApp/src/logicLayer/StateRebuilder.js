@@ -205,8 +205,6 @@ function replayTaskRevivedUndoEvent(eventData, tasklist, taskMap, undoStack) {
 }
 function replayTaskDeletedUndoEvent(eventData, tasklist, taskMap, undoStack) {
     const data = undoStack.PerformUndo(eventData.timestamp, tasklist);
-    console.log("LOGGING RESULT OF TASK UNDO EVENT:");
-    console.log(data);
     taskMap.set(eventData.id, data.task);
 }
 function replayTaskCompletedUndoEvent(eventData, tasklist, taskMap, undoStack) {

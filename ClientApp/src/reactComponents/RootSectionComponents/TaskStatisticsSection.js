@@ -63,7 +63,6 @@ export class TaskStatisticsSection extends Component {
     }
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (prevProps.dataModelScope !== this.props.dataModelScope) {
-            console.log("TaskStatisticsSection got a newly instantiated data-model. We need to refresh our registrations, and re-render!");
             this.setupWithNewDataModelInstance();
         }
     }

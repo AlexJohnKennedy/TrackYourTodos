@@ -7,7 +7,6 @@ export function TemporaryStateManager() {
     let cleanUpCallbacks = [];
     function registerCleanUpCallback(func) {
         cleanUpCallbacks.push(func);
-        console.log("Registering another form-state callback! Num callbacks = " + cleanUpCallbacks.length);
     }
     function triggerCleanup() {
         for (let f of cleanUpCallbacks) {
