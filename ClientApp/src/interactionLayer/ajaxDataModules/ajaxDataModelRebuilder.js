@@ -13,7 +13,13 @@ export function ScheduleEventLogUpdate(tasklist, undoStack, visibleContexts, onL
     PerformEventLogUpdate(tasklist, undoStack, visibleContexts, onLoadFunc, 2, false);    
 }
 
+// For logging and debugging purposes, we will track an id for each request our client makes.
+let postRequestNumber = 0;
+const getPostRequestNumber = () => postRequestNumber++;
+
 function PerformEventLogUpdate(tasklist, undoStack, visibleContexts, onLoadFunc, retryCount, logoutOnAuthFailure) {
+    const reqNum = getPostRequestNumber();  // For logging
+
     // We need to be authenticated on our backend using the google JWT. Thus, we must fetch it from our saved location in local storage.
     // The local storage key to place it is written in App.js as of 28th May 2019.
     const googleToken = window.localStorage.getItem("googleIdToken");
@@ -38,24 +44,43 @@ function PerformEventLogUpdate(tasklist, undoStack, visibleContexts, onLoadFunc,
     // Setup Authorization details, carried in header. Specify the 'Bearer' authentication scheme, under Authorization header.
     httpRequest.setRequestHeader("Authorization", "Bearer " + googleToken);
 
+    // Define a retry function, which we will attach to certain event types.
+    function buildRetryHandler(retryLogMsg, noMoreRetriesLogMsg) {
+        return () => {
+            if (retryCount > 0) {
+                console.log(retryLogMsg);
+                PerformEventLogUpdate(tasklist, undoStack, visibleContexts, onLoadFunc, retryCount - 1, logoutOnAuthFailure);
+            }
+            else {
+                console.log(noMoreRetriesLogMsg);
+                handleUnknownGetFailure("Oh dear. Was your PC snoozing? Maybe a nice, refreshing refresh will freshen up your refreshed computer");
+            }
+        };
+    }
+
     // Setup AJAX timeout action. We MUST set a timeout otherwise uncaught exceptions will be thrown in scenarios where the browser is unable to complete reqeusts. (e.g. PC is asleep)
     httpRequest.timeout = 10000;
-    httpRequest.ontimeout = () => {
-        if (retryCount > 0) {
-            console.log("GET request timed out. Retrying: " + contructedUrl);
-            PerformEventLogUpdate(tasklist, undoStack, visibleContexts, onLoadFunc, retryCount - 1, logoutOnAuthFailure);
-        }
-        else {
-            console.log("GET request timed out. Ran out of retries. Invoking get failure handler.");
-            handleUnknownGetFailure("Oh dear. Was your PC snoozing? Maybe a nice, refreshing refresh will freshen up your refreshed computer");
-        }
-    }
+    httpRequest.ontimeout = buildRetryHandler("GET #" + reqNum + " request timed out. Retrying: " + contructedUrl, "GET #" + reqNum + " request timed out. Ran out of retries. Invoking get failure handler.");
+
+    // Setup AJAX error action. This is invoked if an unknown network error occurs, such that the server was never reached or the connection was dropped before completing.
+    httpRequest.onerror = buildRetryHandler("Network error on GET #" + reqNum + ". Retrying: " + contructedUrl, "Network error on GET #" + reqNum + ". Ran out of retries. Invoking get failure handler.");
+
+    //httpRequest.ontimeout = () => {
+    //    if (retryCount > 0) {
+    //        console.log("GET #" + reqNum + " request timed out. Retrying: " + contructedUrl);
+    //        PerformEventLogUpdate(tasklist, undoStack, visibleContexts, onLoadFunc, retryCount - 1, logoutOnAuthFailure);
+    //    }
+    //    else {
+    //        console.log("GET #" + reqNum + " request timed out. Ran out of retries. Invoking get failure handler.");
+    //        handleUnknownGetFailure("Oh dear. Was your PC snoozing? Maybe a nice, refreshing refresh will freshen up your refreshed computer");
+    //    }
+    //}
 
     // Assign a response handler function
     httpRequest.onreadystatechange = () => {
         // Ensure the response object is ready to be read (Response is finished, and was successful)
         if (httpRequest.readyState === 4 && httpRequest.status === 200) {
-            console.log("GET Response recieved (200). Eventlog loaded successfully.");
+            console.log("GET #" + reqNum + " Response recieved (200). Eventlog loaded successfully.");
 
             const responseData = JSON.parse(httpRequest.responseText);
 
@@ -64,33 +89,33 @@ function PerformEventLogUpdate(tasklist, undoStack, visibleContexts, onLoadFunc,
         }
         else if (httpRequest.readyState === 4 && httpRequest.status === 500) {
             if (retryCount > 0) {
-                console.warn("Server Error on GET (500) Retrying: " + contructedUrl);
+                console.log("Server Error on GET #" + reqNum + " (500) Retrying: " + contructedUrl);
                 PerformEventLogUpdate(tasklist, undoStack, visibleContexts, onLoadFunc, retryCount - 1, logoutOnAuthFailure);
             }
             else {
-                console.warn("Server Error on GET (500). Ran out of retries. Invoking 'server failure' handler.");
-                handleServerFailure("We couldn't fetch your data. Please try again later!");
+                console.log("Server Error on GET #" + reqNum + " (500). Ran out of retries. Invoking 'server failure' handler.");
+                handleServerFailure("Our system fell down the stairs! Give us a sec, and try again?");
             }
         }
         else if (httpRequest.readyState === 4 && httpRequest.status === 401) {
             // Authentication error. Try to force an id_token token refresh and then try again, or just handle auth failure.
             if (logoutOnAuthFailure) {
-                console.log("Authentication failure on GET (401). No more retries remaining. Invoking 'Auth Error' handler.");
+                console.log("Authentication failure on GET #" + reqNum + " (401). No more retries remaining. Invoking 'Auth Error' handler.");
                 handleAuthFailure("We are having trouble accessing your Google account at the moment. It's probably their fault... probably. Please try again later!");
             }
             else {
-                console.log("Authentication failure on GET (401). Forcing a token refresh, and retrying: " + contructedUrl);                
+                console.log("Authentication failure on GET #" + reqNum + " (401). Forcing a token refresh, and retrying: " + contructedUrl);                
                 forceTokenRefresh(() => PerformEventLogUpdate(tasklist, undoStack, visibleContexts, onLoadFunc, retryCount, true));
             }
         }
-        else if (httpRequest.readyState === 4) {
-            // Unknown error if we get in here. Invoke the generic AJAX error handler for GET.
-            console.warn("Unknown Error on GET (" + httpRequest.status + "). Invoking the generic GET error handler.");
-            handleUnknownGetFailure("We couldn't fetch your data. Please try again later!");
+        else if (httpRequest.readyState === 4 && (httpRequest.status === 400 || httpRequest.status === 403 || httpRequest.status === 404)) {
+            // Bad requests. Do not retry these.
+            console.log("Bad request Error on GET #" + reqNum + " (" + httpRequest.status + "). Invoking the generic GET error handler.");
+            handleUnknownGetFailure("Oh dear, we screwed up. Please try again later!");
         }
     };
     
     // Send the request
-    console.log("Sending GET request: " + contructedUrl);
+    console.log("Sending GET #" + reqNum + " request: " + contructedUrl);
     httpRequest.send();
 }
