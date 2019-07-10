@@ -63,17 +63,35 @@ function postEvent(eventArray, failureCache, retryCount, logoutOnAuthFailure, se
     httpRequest.open('POST', API_ENDPOINT, true); // Define a GET to our API endpoint, true marks asynchronous.
     httpRequest.setRequestHeader("Content-type", "application/json");    // Inform the reciever that the format is JSON.
     httpRequest.setRequestHeader("Authorization", "Bearer " + googleToken); // Specify the 'Bearer' authentication scheme, under Authorization header.
-    httpRequest.timeout = 10000;     // We MUST set a timeout otherwise uncaught exceptions will be thrown in scenarios where the browser is unable to complete reqeusts. (e.g. PC is asleep)
-    httpRequest.ontimeout = () => {
-        if (retryCount > 0) {
-            console.log("POST #" + reqNum + " request timed out. Retrying: " + toEventString(eventArray));
-            postEvent(eventArray, failureCache, retryCount - 1, logoutOnAuthFailure, sendFromFailureCache);
-        }
-        else {
-            console.log("POST #" + reqNum + " request timed out. Ran out of retries. Saving failed events to failure cache.");
-            handleUnknownPostFailure(eventArray, failureCache);     // In these scenarios, don't try again just yet..
-        }
+    
+    // Define a retry function, which we will attach to certain event types.
+    function buildRetryHandler(retryLogMsg, noMoreRetriesLogMsg) {
+        return () => {
+            if (retryCount > 0) {
+                console.log(retryLogMsg);
+                postEvent(eventArray, failureCache, retryCount - 1, logoutOnAuthFailure, sendFromFailureCache);
+            }
+            else {
+                console.log(noMoreRetriesLogMsg);
+                handleUnknownPostFailure(eventArray, failureCache);     // In these scenarios, don't try again just yet..
+            }
+        };
     }
+
+    httpRequest.timeout = 10000;     // We MUST set a timeout otherwise uncaught exceptions will be thrown in scenarios where the browser is unable to complete reqeusts. (e.g. PC is asleep)
+    httpRequest.ontimeout = buildRetryHandler("POST #" + reqNum + " request timed out. Retrying: " + toEventString(eventArray), "POST #" + reqNum + " request timed out. Ran out of retries. Saving failed events to failure cache.");
+    httpRequest.onerror = buildRetryHandler("Network error on POST #" + reqNum + ". Retrying: " + toEventString(eventArray), "Network error on POST #" + reqNum + ". Ran out of retries. Saving failed events to failure cache.");
+
+    //httpRequest.ontimeout = () => {
+    //    if (retryCount > 0) {
+    //        console.log("POST #" + reqNum + " request timed out. Retrying: " + toEventString(eventArray));
+    //        postEvent(eventArray, failureCache, retryCount - 1, logoutOnAuthFailure, sendFromFailureCache);
+    //    }
+    //    else {
+    //        console.log("POST #" + reqNum + " request timed out. Ran out of retries. Saving failed events to failure cache.");
+    //        handleUnknownPostFailure(eventArray, failureCache);     // In these scenarios, don't try again just yet..
+    //    }
+    //}
 
     // Assign a response handler function. If we get back a 200, we are done! If it fails with a server error, we will recursively retry,
     // unless our retry count is 0.
@@ -106,8 +124,8 @@ function postEvent(eventArray, failureCache, retryCount, logoutOnAuthFailure, se
             console.log("State Conflict on POST #" + reqNum + " (409) for events: " + toEventString(eventArray) + ". This means the data we tried to post is conflicting with the events already saved in the server! I am initiating 409 response handling");
             handleConflictingDataOccurrance(eventArray);
         }
-        else if (httpRequest.readyState === 4) {
-            console.log("Unknown error on POST #" + reqNum + " (" + httpRequest.status + "). For events " + toEventString(eventArray));
+        else if (httpRequest.readyState === 4 && (httpRequest.status === 400 || httpRequest.status === 403 || httpRequest.status === 404)) {
+            console.log("Bad Reqeust Error on POST #" + reqNum + " (" + httpRequest.status + "). For events " + toEventString(eventArray));
             handleUnknownPostFailure(eventArray, failureCache);
         }
     };
