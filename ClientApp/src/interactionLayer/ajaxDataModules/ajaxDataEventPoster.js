@@ -87,9 +87,10 @@ function postEvent(eventArray, failureCache, retryCount, logoutOnAuthFailure, se
     httpRequest.onreadystatechange = () => {
         if (httpRequest.readyState === 4 && httpRequest.status === 200) {
             const response = JSON.parse(httpRequest.response);
-            console.log("POST #" + reqNum + " was successful for: " + toEventString(eventArray) + ". ShouldTriggerRefresh response = " + response.triggerRefresh);
+            console.log("POST #" + reqNum + " was successful for: " + toEventString(eventArray) + ". Response data = " + httpRequest.response);
             
             if (response.triggerRefresh) {
+                // TODO: Only perform refreshes once all pending POST requests have completed.
                 handleConflictingDataOccurrance(eventArray);
             }
         }

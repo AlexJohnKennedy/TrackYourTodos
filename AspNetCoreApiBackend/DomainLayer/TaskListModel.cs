@@ -86,6 +86,16 @@ namespace todo_app.DomainLayer.TaskListModel {
         public static readonly HashSet<int> ClosedTaskValues = new HashSet<int>() {Completed, Aborted, Failed, Reattempted};
         public static readonly int MaxIndex = Enumerable.Max(ValidValues);
         public static readonly int MinIndex = Enumerable.Min(ValidValues);
+
+        public static String getString(int i) {
+            if (i == NotStarted) { return "Not Started"; }
+            else if (i == Started) { return "Started"; }
+            else if (i == Completed) { return "Completed"; }
+            else if (i == Aborted) { return "Aborted"; }
+            else if (i == Failed) { return "Failed"; }
+            else if (i == Reattempted) { return "Reattempted"; }
+            else { return "INVALID NUMBER PASSED"; }
+        }
     }
 
     // Collection of tasks.
