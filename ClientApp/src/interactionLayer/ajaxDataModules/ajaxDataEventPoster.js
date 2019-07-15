@@ -82,22 +82,16 @@ function postEvent(eventArray, failureCache, retryCount, logoutOnAuthFailure, se
     httpRequest.ontimeout = buildRetryHandler("POST #" + reqNum + " request timed out. Retrying: " + toEventString(eventArray), "POST #" + reqNum + " request timed out. Ran out of retries. Saving failed events to failure cache.");
     httpRequest.onerror = buildRetryHandler("Network error on POST #" + reqNum + ". Retrying: " + toEventString(eventArray), "Network error on POST #" + reqNum + ". Ran out of retries. Saving failed events to failure cache.");
 
-    //httpRequest.ontimeout = () => {
-    //    if (retryCount > 0) {
-    //        console.log("POST #" + reqNum + " request timed out. Retrying: " + toEventString(eventArray));
-    //        postEvent(eventArray, failureCache, retryCount - 1, logoutOnAuthFailure, sendFromFailureCache);
-    //    }
-    //    else {
-    //        console.log("POST #" + reqNum + " request timed out. Ran out of retries. Saving failed events to failure cache.");
-    //        handleUnknownPostFailure(eventArray, failureCache);     // In these scenarios, don't try again just yet..
-    //    }
-    //}
-
     // Assign a response handler function. If we get back a 200, we are done! If it fails with a server error, we will recursively retry,
     // unless our retry count is 0.
     httpRequest.onreadystatechange = () => {
         if (httpRequest.readyState === 4 && httpRequest.status === 200) {
-            console.log("POST #" + reqNum + " was successful: " + toEventString(eventArray));
+            const response = JSON.parse(httpRequest.response);
+            console.log("POST #" + reqNum + " was successful for: " + toEventString(eventArray) + ". ShouldTriggerRefresh response = " + response.triggerRefresh);
+            
+            if (response.triggerRefresh) {
+                handleConflictingDataOccurrance(eventArray);
+            }
         }
         else if (httpRequest.readyState === 4 && httpRequest.status === 500) {
             if (retryCount > 0) {

@@ -105,7 +105,7 @@ namespace todo_app.Controllers {
         private async Task<IActionResult> ValidateAndSave(IList<GenericTodoEvent> newEvents, IList<GenericTodoEvent> savedEvents) {
             // Try to validate. If we fail, just save nothing and return a 409 to indicate the client's data is conflicting.
             EventLogReconciler logReconciler = new EventLogReconciler(savedEvents, keySelector, keyComparer, eventComparer);
-            logReconciler.SimpleFullStateRebuildValidation(newEvents, out IList<GenericTodoEvent> acceptedEvents, out bool eventsRejected, out bool shouldTriggerRefresh, out string err);
+            logReconciler.SimpleFullStateRebuildValidation(newEvents, out IList<GenericTodoEvent> acceptedEvents, out IList<GenericTodoEvent> skippedEvents, out bool eventsRejected, out bool shouldTriggerRefresh, out string err);
 
             if (eventsRejected) {
                 return StatusCode(409, err);
@@ -113,14 +113,19 @@ namespace todo_app.Controllers {
             else if (acceptedEvents.Count > 0) {
                 dbContext.TodoEvents.AddRange(acceptedEvents);
                 await dbContext.SaveChangesAsync();
-                return Ok(savedEvents.Concat(acceptedEvents).OrderBy(keySelector, keyComparer));
-            }
-            else if (shouldTriggerRefresh) {
-                return StatusCode(409);
+
+                return ValidPostResponseData(skippedEvents, acceptedEvents, shouldTriggerRefresh);
             }
             else {
-                return Ok(savedEvents.OrderBy(keySelector, keyComparer));
+                return ValidPostResponseData(skippedEvents, acceptedEvents, shouldTriggerRefresh);
             }
+        }
+        private IActionResult ValidPostResponseData(IList<GenericTodoEvent> skippedEvents, IList<GenericTodoEvent> savedEvents, bool shouldTriggerRefresh) {
+            return Ok(new {
+                triggerRefresh = shouldTriggerRefresh,
+                eventsSaved = savedEvents.Select(e => new { e.Name, e.EventType }).ToArray(),
+                eventsSkipped = skippedEvents.Select(e => new { e.Name, e.EventType }).ToArray()
+            });
         }
 
         private void PrintClaimsPrincipal(ClaimsPrincipal userDetails) {

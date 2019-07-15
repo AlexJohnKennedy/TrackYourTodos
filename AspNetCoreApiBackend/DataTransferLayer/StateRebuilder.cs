@@ -24,11 +24,12 @@ namespace todo_app.DataTransferLayer.EventReconciliationSystem {
 
         // Validation algorithm. Replays events, and depending on circumstances, sets flags which inform the caller how to save/reject/respond to the incoming
         // events.
-        public void SimpleFullStateRebuildValidation(IList<GenericTodoEvent> newEvents, out IList<GenericTodoEvent> acceptedEvents, out bool rejected, out bool shouldTriggerRefresh, out string errorMsg) {
+        public void SimpleFullStateRebuildValidation(IList<GenericTodoEvent> newEvents, out IList<GenericTodoEvent> acceptedEvents, out IList<GenericTodoEvent> skippedEvents, out bool rejected, out bool shouldTriggerRefresh, out string errorMsg) {
             TaskList tasklist = new TaskList();
             ISet<GenericTodoEvent> newEventSet = newEvents.ToHashSet(eventComparer);
             errorMsg = "";
             acceptedEvents = new List<GenericTodoEvent>(newEvents.Count);
+            skippedEvents = new List<GenericTodoEvent>(newEvents.Count);
             shouldTriggerRefresh = false;
             rejected = false;
 
@@ -42,6 +43,9 @@ namespace todo_app.DataTransferLayer.EventReconciliationSystem {
                     
                     // Only save the event if the event replay does not want to skip it, AND the event has not already been saved (i.e. is 'new')
                     if (saveIfNewEvent && newEventSet.Contains(currEvent)) { acceptedEvents.Add(currEvent); }
+                    else if (!saveIfNewEvent && newEventSet.Contains(currEvent)) { skippedEvents.Add(currEvent); }
+
+                    // Signal if validating this particular event means that the client should probably refresh their data. (E.g. they are clearly out of date).
                     if (demandsRefresh) { shouldTriggerRefresh = true; }
                 }
             }
