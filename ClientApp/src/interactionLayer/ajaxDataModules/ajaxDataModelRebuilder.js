@@ -65,17 +65,6 @@ function PerformEventLogUpdate(tasklist, undoStack, visibleContexts, onLoadFunc,
     // Setup AJAX error action. This is invoked if an unknown network error occurs, such that the server was never reached or the connection was dropped before completing.
     httpRequest.onerror = buildRetryHandler("Network error on GET #" + reqNum + ". Retrying: " + contructedUrl, "Network error on GET #" + reqNum + ". Ran out of retries. Invoking get failure handler.");
 
-    //httpRequest.ontimeout = () => {
-    //    if (retryCount > 0) {
-    //        console.log("GET #" + reqNum + " request timed out. Retrying: " + contructedUrl);
-    //        PerformEventLogUpdate(tasklist, undoStack, visibleContexts, onLoadFunc, retryCount - 1, logoutOnAuthFailure);
-    //    }
-    //    else {
-    //        console.log("GET #" + reqNum + " request timed out. Ran out of retries. Invoking get failure handler.");
-    //        handleUnknownGetFailure("Oh dear. Was your PC snoozing? Maybe a nice, refreshing refresh will freshen up your refreshed computer");
-    //    }
-    //}
-
     // Assign a response handler function
     httpRequest.onreadystatechange = () => {
         // Ensure the response object is ready to be read (Response is finished, and was successful)

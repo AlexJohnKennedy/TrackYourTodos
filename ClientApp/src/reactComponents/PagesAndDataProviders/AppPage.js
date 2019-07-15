@@ -113,7 +113,7 @@ export class AppPage extends Component {
     // subtree visible as well! But for now, it's either global, or just one.
     performSwitch(context) {
         if (!this.props.failedEventCacheInstance.IsEmpty()) {
-            RetryPostingFailedEvents(this.props.ajaxFailedEventCacheInstance);
+            RetryPostingFailedEvents(this.props.failedEventCacheInstance);
         }
 
         if (context === DEFAULT_GLOBAL_CONTEXT_STRING) {
