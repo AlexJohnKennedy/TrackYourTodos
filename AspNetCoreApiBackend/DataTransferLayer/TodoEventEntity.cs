@@ -151,7 +151,7 @@ namespace todo_app.DataTransferLayer.Entities {
         public Guid Id { get; set; }
 
         [Required]
-        [StringLength(120)]   // Must match the string length defined in code on client app.
+        [StringLength(240)]   // Must match the string length defined in code on client app.
         public string Name { get; set; }
 
         [Required]
