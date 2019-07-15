@@ -32,12 +32,17 @@ namespace todo_app.DataTransferLayer.EventReconciliationSystem {
             skippedEvents = new List<GenericTodoEvent>(newEvents.Count);
             shouldTriggerRefresh = false;
             rejected = false;
+            GenericTodoEvent eventUnderQuestion = null;     // Used in catch scenarios.
+            int eventNum = 0;                               // Used in catch scenarios.
 
             // Create the full event log. We will attempt to execute these events in order, validating the state each time.
             IList<GenericTodoEvent> fullEventLog = truthLog.Concat(newEvents).OrderBy(keySelector, keyComparer).ToList();
 
             try {
                 foreach (GenericTodoEvent currEvent in fullEventLog) {
+                    eventUnderQuestion = currEvent;
+                    eventNum++;
+
                     // Try to apply the event, and examine the validation results.
                     tasklist = EventReplayer.Replay(currEvent, tasklist, out bool saveIfNewEvent, out bool demandsRefresh);
                     
@@ -53,7 +58,7 @@ namespace todo_app.DataTransferLayer.EventReconciliationSystem {
             // This is our response if we deem that the posted events are so out-of-sync and inherently incompatible with the truth log, that
             // it would be dangerous to attempt any kind of saving from these events.
             catch (InvalidOperationException e) {
-                errorMsg = e.Message;
+                errorMsg = "The following error occurred when trying to replay event { " + eventUnderQuestion.EventType + ", " + eventUnderQuestion.Name + " }. The event was event " + eventNum + " out of " + fullEventLog.Count + " events in the event log. Error message: " + e.Message;
                 rejected = true;
                 shouldTriggerRefresh = true;
             }
@@ -272,63 +277,74 @@ namespace todo_app.DataTransferLayer.EventReconciliationSystem {
             // Acquire the task from the global task list, to determine it's current state.
             Task task = tasklist.AllTaskReader(e.Id);
            
-            // Handle cases where the task does not yet exist. If the event is a creation event, (or undo deletion event) then this is obviously expected.
-            // If the event is an 'undo' of a creation event, then we can safely dispose of the event, since it would just erase the expected task anyway.
-            // If the event is a 'Task activated' or 'Task Started' or 'Task Edited' event, then we will create the event implicitly, since we can do so with no harm done.
-            if (task == null) {
-                if (e.EventType == EventTypes.TaskAdded || e.EventType == EventTypes.ChildTaskAdded || e.EventType == EventTypes.TaskRevived || e.EventType == EventTypes.TaskDeletedUndo) {
-                    return Handlers[e.EventType](e, tasklist);
-                }
-                else if (e.EventType == EventTypes.TaskAddedUndo || e.EventType == EventTypes.ChildTaskAddedUndo || e.EventType == EventTypes.TaskEdited || e.EventType == EventTypes.TaskDeleted) {
-                    // Throw this event away, it is harmless and uneeded in this case.
-                    saveEvent = false;
-                    triggerRefresh = false;
-                    return tasklist;
-                }
-                else if (e.EventType == EventTypes.TaskActivated || e.EventType == EventTypes.TaskStarted) {
-                    // If the task does not exist yet, we are happy to create it implicitly.
-                    if (e.Parent.HasValue) { tasklist.CreateNewSubtask(e.Name, tasklist.AllTaskReader(e.Parent.Value), e.Category, e.Timestamp, e.Id); }
-                    else { tasklist.CreateNewIndependentTask(e.Name, e.Category, e.Timestamp, e.ColourId, e.Id); }
-                    return Handlers[e.EventType](e, tasklist);
-                }
-                else {
-                    throw new InvalidOperationException("Illegal event applied to a task id with no-corresponding-existing task. Eventtype: " + e.EventType);
-                }
-            }
-            // Handle cases where the task is deferred.
-            // If the event is a creation event, undo-activation event, or undo-deletion event, we can safely dispose of the event.
-            // If the event is a 'start task' or 'fail task', we are happy to fill in the implicit activation action.
-            else if (task.Category == CategoryVals.Deferred) {
-                if (e.EventType == EventTypes.TaskAdded || e.EventType == EventTypes.ChildTaskAdded || e.EventType == EventTypes.TaskActivatedUndo || e.EventType == EventTypes.TaskDeletedUndo) {
-                    // Throw this event away, it is harmless and uneeded in this case.
-                    saveEvent = false;
-                    triggerRefresh = false;
-                    return tasklist;
-                }
-                else if (e.EventType == EventTypes.TaskStarted || e.EventType == EventTypes.TaskFailed) {
-                    tasklist.ActivateTask(task, e.Category, e.Timestamp);
-                    return Handlers[e.EventType](e, tasklist);
-                }
-                else {
-                    return Handlers[e.EventType](e, tasklist);
-                }
-            }
-            // Handle the cases where the state is denoted by progress status of the task (the only remaining option)
-            else {
-                if (IncomingEventsWhichTriggerRefreshForProgressStatusMappings[task.ProgressStatus].Contains(e.EventType)) {
-                    triggerRefresh = true;
-                }
-                if (IncomingEventsToIgnoreForProgressStatusMappings[task.ProgressStatus].Contains(e.EventType)) {
-                    saveEvent = false;
-                    return tasklist;
-                }
-                if (IncomingEventsWithLinkingEventProgressStatusMappings[task.ProgressStatus].ContainsKey(e.EventType)) {
-                    // This is a valid incoming event type, but we must 'link' it by executing the implicit event which is currently missing.
-                    Handlers[IncomingEventsWithLinkingEventProgressStatusMappings[task.ProgressStatus][e.EventType]](e, tasklist);
-                }
+            try {
 
-                return Handlers[e.EventType](e, tasklist);
+                // Handle cases where the task does not yet exist. If the event is a creation event, (or undo deletion event) then this is obviously expected.
+                // If the event is an 'undo' of a creation event, then we can safely dispose of the event, since it would just erase the expected task anyway.
+                // If the event is a 'Task activated' or 'Task Started' or 'Task Edited' event, then we will create the event implicitly, since we can do so with no harm done.
+                if (task == null) {
+                    if (e.EventType == EventTypes.TaskAdded || e.EventType == EventTypes.ChildTaskAdded || e.EventType == EventTypes.TaskRevived || e.EventType == EventTypes.TaskDeletedUndo) {
+                        return Handlers[e.EventType](e, tasklist);
+                    }
+                    else if (e.EventType == EventTypes.TaskAddedUndo || e.EventType == EventTypes.ChildTaskAddedUndo || e.EventType == EventTypes.TaskEdited || e.EventType == EventTypes.TaskDeleted) {
+                        // Throw this event away, it is harmless and uneeded in this case.
+                        saveEvent = false;
+                        triggerRefresh = false;
+                        return tasklist;
+                    }
+                    else if (e.EventType == EventTypes.TaskActivated || e.EventType == EventTypes.TaskStarted) {
+                        // If the task does not exist yet, we are happy to create it implicitly.
+                        if (e.Parent.HasValue) { tasklist.CreateNewSubtask(e.Name, tasklist.AllTaskReader(e.Parent.Value), e.Category, e.Timestamp, e.Id); }
+                        else { tasklist.CreateNewIndependentTask(e.Name, e.Category, e.Timestamp, e.ColourId, e.Id); }
+                        return Handlers[e.EventType](e, tasklist);
+                    }
+                    else {
+                        throw new InvalidOperationException("Illegal event applied to a task id with no-corresponding-existing task. Eventtype: " + e.EventType);
+                    }
+                }
+                // Handle cases where the task is deferred.
+                // If the event is a creation event, undo-activation event, or undo-deletion event, we can safely dispose of the event.
+                // If the event is a 'start task' or 'fail task', we are happy to fill in the implicit activation action.
+                else if (task.Category == CategoryVals.Deferred) {
+                    if (e.EventType == EventTypes.TaskAdded || e.EventType == EventTypes.ChildTaskAdded || e.EventType == EventTypes.TaskActivatedUndo || e.EventType == EventTypes.TaskDeletedUndo) {
+                        // Throw this event away, it is harmless and uneeded in this case.
+                        saveEvent = false;
+                        triggerRefresh = false;
+                        return tasklist;
+                    }
+                    else if (e.EventType == EventTypes.TaskStarted || e.EventType == EventTypes.TaskFailed) {
+                        tasklist.ActivateTask(task, e.Category, e.Timestamp);
+                        return Handlers[e.EventType](e, tasklist);
+                    }
+                    else {
+                        return Handlers[e.EventType](e, tasklist);
+                    }
+                }
+                // Handle the cases where the state is denoted by progress status of the task (the only remaining option)
+                else {
+                    if (IncomingEventsWhichTriggerRefreshForProgressStatusMappings[task.ProgressStatus].Contains(e.EventType)) {
+                        triggerRefresh = true;
+                    }
+                    if (IncomingEventsToIgnoreForProgressStatusMappings[task.ProgressStatus].Contains(e.EventType)) {
+                        saveEvent = false;
+                        return tasklist;
+                    }
+                    if (IncomingEventsWithLinkingEventProgressStatusMappings[task.ProgressStatus].ContainsKey(e.EventType)) {
+                        // This is a valid incoming event type, but we must 'link' it by executing the implicit event which is currently missing.
+                        Handlers[IncomingEventsWithLinkingEventProgressStatusMappings[task.ProgressStatus][e.EventType]](e, tasklist);
+                    }
+
+                    return Handlers[e.EventType](e, tasklist);
+                }
             }
-        } 
+            catch (InvalidOperationException exception) {
+                // Add additional loggable information about the error that was thrown.
+                throw new InvalidOperationException(exception.Message + ". When this error was thrown, the task was in state: " + 
+                ((task == null) ? "NON-EXISTENT (NULL)" : (task.Category == CategoryVals.Deferred) ? "Deferred" : ProgressStatusVals.getString(task.ProgressStatus)),
+                exception);
+            }
+        }
+
+
     }
 }
