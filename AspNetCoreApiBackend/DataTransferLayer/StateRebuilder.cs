@@ -33,6 +33,7 @@ namespace todo_app.DataTransferLayer.EventReconciliationSystem {
             shouldTriggerRefresh = false;
             rejected = false;
             GenericTodoEvent eventUnderQuestion = null;     // Used in catch scenarios.
+            int eventNum = 0;                               // Used in catch scenarios.
 
             // Create the full event log. We will attempt to execute these events in order, validating the state each time.
             IList<GenericTodoEvent> fullEventLog = truthLog.Concat(newEvents).OrderBy(keySelector, keyComparer).ToList();
@@ -40,6 +41,8 @@ namespace todo_app.DataTransferLayer.EventReconciliationSystem {
             try {
                 foreach (GenericTodoEvent currEvent in fullEventLog) {
                     eventUnderQuestion = currEvent;
+                    eventNum++;
+
                     // Try to apply the event, and examine the validation results.
                     tasklist = EventReplayer.Replay(currEvent, tasklist, out bool saveIfNewEvent, out bool demandsRefresh);
                     
@@ -55,7 +58,7 @@ namespace todo_app.DataTransferLayer.EventReconciliationSystem {
             // This is our response if we deem that the posted events are so out-of-sync and inherently incompatible with the truth log, that
             // it would be dangerous to attempt any kind of saving from these events.
             catch (InvalidOperationException e) {
-                errorMsg = "The following error occurred when trying to replay event { " + eventUnderQuestion.EventType + ", " + eventUnderQuestion.Name + " }: " + e.Message;
+                errorMsg = "The following error occurred when trying to replay event { " + eventUnderQuestion.EventType + ", " + eventUnderQuestion.Name + " }. The event was event " + eventNum + " out of " + fullEventLog.Count + " events in the event log. Error message: " + e.Message;
                 rejected = true;
                 shouldTriggerRefresh = true;
             }
