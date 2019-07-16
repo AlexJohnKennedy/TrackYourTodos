@@ -121,6 +121,9 @@ stages:
         DEPLOYUSER: $(track-your-todos-api-deployment-account-username)
         DEPLOYPASS: $(track-your-todos-api-deployment-account-password)
         ENDPOINT: $(track-your-todos-api-kudu-deployment-endpoint)
+    - bash: echo ${COMMITID}
+      env:
+        COMMITID: $(Build.SourceVersion)  #Commit hash of the commit being deployed. This is apparently a pre-defined variable in Azure Pipelines.
     # Sends a command to kudu, which in turn executes another bash command on the virtual machine kudu deployed to, which invokes ef database update
     - bash: curl -H "Content-Type:application/json" --user ${DEPLOYUSER}:${DEPLOYPASS} -X POST ${ENDPOINT}/api/command -d '{"command":"dotnet ef database update","dir":"site\\repository/AspNetCoreApiBackend"}'
       env:

@@ -59,9 +59,20 @@ namespace todo_app.DataTransferLayer.EventReconciliationSystem {
             // it would be dangerous to attempt any kind of saving from these events.
             catch (InvalidOperationException e) {
                 errorMsg = "The following error occurred when trying to replay event { " + eventUnderQuestion.EventType + ", " + eventUnderQuestion.Name + " }. The event was event " + eventNum + " out of " + fullEventLog.Count + " events in the event log. Error message: " + e.Message;
+                errorMsg = errorMsg + buildFullEventLogErrorMessage(fullEventLog);
                 rejected = true;
                 shouldTriggerRefresh = true;
             }
+        }
+
+        private string buildFullEventLogErrorMessage(IList<GenericTodoEvent> log) {
+            string s = "\nFull Event Log which was validated against during error:\n";
+            int i=1;
+            foreach (GenericTodoEvent e in log) {
+                s = s + $"Event {i} => Time: {e.Timestamp} - {{  {e.Name}, {e.EventType} }}\n";
+                i++;
+            }
+            return s;
         }
     }
 
