@@ -229,10 +229,10 @@ namespace todo_app.DataTransferLayer.EventReconciliationSystem {
         // WARNING! ONLY APPLICABLE IF NOT DEFERRED!
         private static readonly Dictionary<int, HashSet<string>> IncomingEventsToIgnoreForProgressStatusMappings = new Dictionary<int, HashSet<string>>() {
             { ProgressStatusVals.NotStarted, new HashSet<string>() {
-                EventTypes.TaskAdded, EventTypes.ChildTaskAdded, EventTypes.TaskActivated, EventTypes.TaskStartedUndo
+                EventTypes.TaskAdded, EventTypes.ChildTaskAdded, EventTypes.TaskActivated
             }},
             { ProgressStatusVals.Started, new HashSet<string>() {
-                EventTypes.TaskAdded, EventTypes.ChildTaskAdded, EventTypes.TaskActivated, EventTypes.TaskStarted, EventTypes.TaskCompletedUndo
+                EventTypes.TaskAdded, EventTypes.ChildTaskAdded, EventTypes.TaskActivated, EventTypes.TaskStarted
             }},
             { ProgressStatusVals.Completed, new HashSet<string>() {
                 EventTypes.TaskAdded, EventTypes.ChildTaskAdded, EventTypes.TaskActivated, EventTypes.TaskStarted, EventTypes.TaskCompleted
@@ -242,6 +242,25 @@ namespace todo_app.DataTransferLayer.EventReconciliationSystem {
             }},
             { ProgressStatusVals.Reattempted, new HashSet<string>() {
                 EventTypes.TaskAdded, EventTypes.ChildTaskAdded, EventTypes.TaskActivated, EventTypes.TaskStarted, EventTypes.TaskFailed, EventTypes.TaskRevived
+            }}
+        };
+
+        // WARNING! ONLY APPLICABLE IF NOT DEFERRED!
+        private static readonly Dictionary<int, HashSet<string>> IncomingEventsToSaveButNotExecuteForProgressStatusMappings = new Dictionary<int, HashSet<string>>() {
+            { ProgressStatusVals.NotStarted, new HashSet<string>() {
+                EventTypes.TaskStartedUndo
+            }},
+            { ProgressStatusVals.Started, new HashSet<string>() {
+                EventTypes.TaskCompletedUndo
+            }},
+            { ProgressStatusVals.Completed, new HashSet<string>() {
+                /* None */
+            }},
+            { ProgressStatusVals.Failed, new HashSet<string>() {
+                EventTypes.TaskRevivedUndo
+            }},
+            { ProgressStatusVals.Reattempted, new HashSet<string>() {
+                /* None */
             }}
         };
 
@@ -290,15 +309,15 @@ namespace todo_app.DataTransferLayer.EventReconciliationSystem {
             try {
 
                 // Handle cases where the task does not yet exist. If the event is a creation event, (or undo deletion event) then this is obviously expected.
-                // If the event is an 'undo' of a creation event, then we can safely dispose of the event, since it would just erase the expected task anyway.
+                // If the event is an 'undo' of a creation event, then we can safely dispose of the event, since it would just erase the expected task anyway. We will still save it though, in case of an out-or-order arrival
                 // If the event is a 'Task activated' or 'Task Started' or 'Task Edited' event, then we will create the event implicitly, since we can do so with no harm done.
                 if (task == null) {
                     if (e.EventType == EventTypes.TaskAdded || e.EventType == EventTypes.ChildTaskAdded || e.EventType == EventTypes.TaskRevived || e.EventType == EventTypes.TaskDeletedUndo) {
                         return Handlers[e.EventType](e, tasklist, undoStack);
                     }
                     else if (e.EventType == EventTypes.TaskAddedUndo || e.EventType == EventTypes.ChildTaskAddedUndo || e.EventType == EventTypes.TaskEdited || e.EventType == EventTypes.TaskDeleted) {
-                        // Throw this event away, it is harmless and uneeded in this case.
-                        saveEvent = false;
+                        // Save the event, but do not actually do anything. We will still save this event incase a subsequent request 'fills in the gap' so to speak (I.e. out of order arrival).
+                        saveEvent = true;
                         triggerRefresh = false;
                         return tasklist;
                     }
@@ -313,12 +332,19 @@ namespace todo_app.DataTransferLayer.EventReconciliationSystem {
                     }
                 }
                 // Handle cases where the task is deferred.
-                // If the event is a creation event, undo-activation event, or undo-deletion event, we can safely dispose of the event.
+                // If the event is a creation event, we can safely dispose of the event without saving it, because the task has already progressed to a state beyond the state that those incoming events cause.
+                // If the event is an undo-activation event, or undo-deletion event, we can skip execution of the event, but it must still be saved in order to handle out-of-order arrival; for example an activation event could 'fill the gap'.
                 // If the event is a 'start task' or 'fail task', we are happy to fill in the implicit activation action.
                 else if (task.Category == CategoryVals.Deferred) {
-                    if (e.EventType == EventTypes.TaskAdded || e.EventType == EventTypes.ChildTaskAdded || e.EventType == EventTypes.TaskActivatedUndo || e.EventType == EventTypes.TaskDeletedUndo) {
+                    if (e.EventType == EventTypes.TaskAdded || e.EventType == EventTypes.ChildTaskAdded) {
                         // Throw this event away, it is harmless and uneeded in this case.
                         saveEvent = false;
+                        triggerRefresh = false;
+                        return tasklist;
+                    }
+                    else if (e.EventType == EventTypes.TaskActivatedUndo || e.EventType == EventTypes.TaskDeletedUndo) {
+                        // Save this event, but do not execute the replay of this event, since it would have no effect. We still save it to handle out of order arrival.
+                        saveEvent = true;
                         triggerRefresh = false;
                         return tasklist;
                     }
@@ -337,6 +363,10 @@ namespace todo_app.DataTransferLayer.EventReconciliationSystem {
                     }
                     if (IncomingEventsToIgnoreForProgressStatusMappings[task.ProgressStatus].Contains(e.EventType)) {
                         saveEvent = false;
+                        return tasklist;
+                    }
+                    if (IncomingEventsToSaveButNotExecuteForProgressStatusMappings[task.ProgressStatus].Contains(e.EventType)) {
+                        saveEvent = true;
                         return tasklist;
                     }
                     if (IncomingEventsWithLinkingEventProgressStatusMappings[task.ProgressStatus].ContainsKey(e.EventType)) {

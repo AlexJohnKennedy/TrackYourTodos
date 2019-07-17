@@ -50,6 +50,25 @@ const IncomingEventsWithLinkingEventProgressStatusMappings = new Map([
     [ProgressStatus.Reattempted, new Map([ /* None */ ])]
 ]);
 
+// Events which can be safely skipped without executing, for a given progress status denoting task state.
+const SkippableEventsForProgressStatusMappings = new Map([
+    [ProgressStatus.NotStarted, new Set([
+        EventTypes.taskAdded, EventTypes.childTaskAdded, EventTypes.taskActivated, EventTypes.taskStartedUndo
+    ])],
+    [ProgressStatus.Started, new Set([
+        EventTypes.taskAdded, EventTypes.childTaskAdded, EventTypes.taskActivated, EventTypes.taskStarted, EventTypes.taskCompletedUndo
+    ])],
+    [ProgressStatus.Completed, new Set([
+        EventTypes.taskAdded, EventTypes.childTaskAdded, EventTypes.taskActivated, EventTypes.taskStarted, EventTypes.taskCompleted
+    ])],
+    [ProgressStatus.Failed, new Set([
+        EventTypes.taskAdded, EventTypes.childTaskAdded, EventTypes.taskActivated, EventTypes.taskStarted, EventTypes.taskFailed, EventTypes.taskRevivedUndo
+    ])],
+    [ProgressStatus.Reattempted, new Set([
+        EventTypes.taskAdded, EventTypes.childTaskAdded, EventTypes.taskActivated, EventTypes.taskStarted, EventTypes.taskFailed, EventTypes.taskRevived
+    ])]
+]);
+
 // Replays all event in the json log to rebuild the state exactly. It also tracks the largest id it found, which is returned.
 // The return value should therefore be used to tell the logic layer what 'id' to start at to avoid id collisions when new
 // tasks are created by the user.
@@ -57,6 +76,7 @@ export function RebuildState(eventLogAsArray, tasklist, undoStack) {
     let taskMap = createTaskMap(tasklist);
     let latestid = "";
     eventLogAsArray.forEach(eventObj => {
+        console.debug("{ " + eventObj.eventType + ", " + eventObj.name + "}");
         replayEvent(eventObj, tasklist, taskMap, undoStack);
         latestid = eventObj.id;
     });
@@ -85,6 +105,10 @@ function replayEvent(event, tasklist, taskMap, undoStack) {
             EventReplayFunctions.get(event.eventType)(event, tasklist, taskMap, undoStack);
             return;
         }
+        // Skip execution of these events, since they have no effect in this case.
+        else if (event.eventType === EventTypes.taskAddedUndo || event.eventType === EventTypes.childTaskAddedUndo || event.eventType === EventTypes.taskEdited || event.eventType === EventTypes.taskDeleted) {
+            return;
+        }
         // In these cases, we must implicitly create the task first, to 'join' the missing link.
         else if (event.eventType === EventTypes.taskActivated || event.eventType === EventTypes.taskStarted) {
             // If the task does not exist yet, we are happy to create it implicitly.
@@ -98,8 +122,12 @@ function replayEvent(event, tasklist, taskMap, undoStack) {
         }
     }
     else if (task.category === Category.Deferred) {
+        // Skip these events, since they will have no impact on the current state.
+        if (event.eventType === EventTypes.taskAdded || event.eventType === EventTypes.childTaskAdded || event.eventType === EventTypes.taskActivatedUndo || event.eventType === EventTypes.taskDeletedUndo) {
+            return;
+        }
         // In these cases, we must implicitly activate the task first, to jump the 'missing event' gap.
-        if (event.eventType === EventTypes.taskStarted || event.eventType === EventTypes.TaskFailed) {
+        else if (event.eventType === EventTypes.taskStarted || event.eventType === EventTypes.TaskFailed) {
             tasklist.ActivateTask(task, event.category, event.timestamp);
             undoStack.PushUndoableActivateTask(task, event.timestamp);
             EventReplayFunctions.get(event.eventType)(event, tasklist, taskMap, undoStack);
@@ -114,6 +142,10 @@ function replayEvent(event, tasklist, taskMap, undoStack) {
         EventReplayFunctions.get(IncomingEventsWithLinkingEventProgressStatusMappings.get(task.progressStatus).get(event.eventType))(event, tasklist, taskMap, undoStack);
         EventReplayFunctions.get(event.eventType)(event, tasklist, taskMap, undoStack);
         return;
+    }
+    else if (SkippableEventsForProgressStatusMappings.get(task.progressStatus).has(event.eventType)) {
+        console.debug("SKIPPING => { " + event.eventType + ", " + event.name + "}");
+        return;     // This event can be safely skipped in these cases
     }
     else {
         EventReplayFunctions.get(event.eventType)(event, tasklist, taskMap, undoStack);
