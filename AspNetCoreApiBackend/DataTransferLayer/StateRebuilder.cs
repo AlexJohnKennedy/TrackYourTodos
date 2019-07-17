@@ -229,10 +229,10 @@ namespace todo_app.DataTransferLayer.EventReconciliationSystem {
         // WARNING! ONLY APPLICABLE IF NOT DEFERRED!
         private static readonly Dictionary<int, HashSet<string>> IncomingEventsToIgnoreForProgressStatusMappings = new Dictionary<int, HashSet<string>>() {
             { ProgressStatusVals.NotStarted, new HashSet<string>() {
-                EventTypes.TaskAdded, EventTypes.ChildTaskAdded, EventTypes.TaskActivated, EventTypes.TaskStartedUndo
+                EventTypes.TaskAdded, EventTypes.ChildTaskAdded, EventTypes.TaskActivated
             }},
             { ProgressStatusVals.Started, new HashSet<string>() {
-                EventTypes.TaskAdded, EventTypes.ChildTaskAdded, EventTypes.TaskActivated, EventTypes.TaskStarted, EventTypes.TaskCompletedUndo
+                EventTypes.TaskAdded, EventTypes.ChildTaskAdded, EventTypes.TaskActivated, EventTypes.TaskStarted
             }},
             { ProgressStatusVals.Completed, new HashSet<string>() {
                 EventTypes.TaskAdded, EventTypes.ChildTaskAdded, EventTypes.TaskActivated, EventTypes.TaskStarted, EventTypes.TaskCompleted
@@ -242,6 +242,25 @@ namespace todo_app.DataTransferLayer.EventReconciliationSystem {
             }},
             { ProgressStatusVals.Reattempted, new HashSet<string>() {
                 EventTypes.TaskAdded, EventTypes.ChildTaskAdded, EventTypes.TaskActivated, EventTypes.TaskStarted, EventTypes.TaskFailed, EventTypes.TaskRevived
+            }}
+        };
+
+        // WARNING! ONLY APPLICABLE IF NOT DEFERRED!
+        private static readonly Dictionary<int, HashSet<string>> IncomingEventsToSaveButNotExecuteForProgressStatusMappings = new Dictionary<int, HashSet<string>>() {
+            { ProgressStatusVals.NotStarted, new HashSet<string>() {
+                EventTypes.TaskStartedUndo
+            }},
+            { ProgressStatusVals.Started, new HashSet<string>() {
+                EventTypes.TaskCompletedUndo
+            }},
+            { ProgressStatusVals.Completed, new HashSet<string>() {
+                /* None */
+            }},
+            { ProgressStatusVals.Failed, new HashSet<string>() {
+                EventTypes.TaskRevivedUndo
+            }},
+            { ProgressStatusVals.Reattempted, new HashSet<string>() {
+                /* None */
             }}
         };
 
@@ -344,6 +363,10 @@ namespace todo_app.DataTransferLayer.EventReconciliationSystem {
                     }
                     if (IncomingEventsToIgnoreForProgressStatusMappings[task.ProgressStatus].Contains(e.EventType)) {
                         saveEvent = false;
+                        return tasklist;
+                    }
+                    if (IncomingEventsToSaveButNotExecuteForProgressStatusMappings[task.ProgressStatus].Contains(e.EventType)) {
+                        saveEvent = true;
                         return tasklist;
                     }
                     if (IncomingEventsWithLinkingEventProgressStatusMappings[task.ProgressStatus].ContainsKey(e.EventType)) {
