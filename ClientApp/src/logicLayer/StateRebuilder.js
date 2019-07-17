@@ -85,6 +85,10 @@ function replayEvent(event, tasklist, taskMap, undoStack) {
             EventReplayFunctions.get(event.eventType)(event, tasklist, taskMap, undoStack);
             return;
         }
+        // Skip execution of these events, since they have no effect in this case.
+        else if (event.eventType === EventTypes.taskAddedUndo || event.eventType === EventTypes.childTaskAddedUndo || event.eventType === EventTypes.taskEdited || event.eventType === EventTypes.taskDeleted) {
+            return;
+        }
         // In these cases, we must implicitly create the task first, to 'join' the missing link.
         else if (event.eventType === EventTypes.taskActivated || event.eventType === EventTypes.taskStarted) {
             // If the task does not exist yet, we are happy to create it implicitly.
@@ -98,8 +102,12 @@ function replayEvent(event, tasklist, taskMap, undoStack) {
         }
     }
     else if (task.category === Category.Deferred) {
+        // Skip these events, since they will have no impact on the current state.
+        if (event.eventType === EventTypes.taskAdded || event.eventType === EventTypes.childTaskAdded || event.eventType === EventTypes.taskActivatedUndo || event.eventType === EventTypes.taskDeletedUndo) {
+            return;
+        }
         // In these cases, we must implicitly activate the task first, to jump the 'missing event' gap.
-        if (event.eventType === EventTypes.taskStarted || event.eventType === EventTypes.TaskFailed) {
+        else if (event.eventType === EventTypes.taskStarted || event.eventType === EventTypes.TaskFailed) {
             tasklist.ActivateTask(task, event.category, event.timestamp);
             undoStack.PushUndoableActivateTask(task, event.timestamp);
             EventReplayFunctions.get(event.eventType)(event, tasklist, taskMap, undoStack);
