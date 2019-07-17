@@ -53,19 +53,19 @@ const IncomingEventsWithLinkingEventProgressStatusMappings = new Map([
 // Events which can be safely skipped without executing, for a given progress status denoting task state.
 const SkippableEventsForProgressStatusMappings = new Map([
     [ProgressStatus.NotStarted, new Set([
-        EventTypes.TaskAdded, EventTypes.ChildTaskAdded, EventTypes.TaskActivated, EventTypes.TaskStartedUndo
+        EventTypes.taskAdded, EventTypes.childTaskAdded, EventTypes.taskActivated, EventTypes.taskStartedUndo
     ])],
     [ProgressStatus.Started, new Set([
-        EventTypes.TaskAdded, EventTypes.ChildTaskAdded, EventTypes.TaskActivated, EventTypes.TaskStarted, EventTypes.TaskCompletedUndo
+        EventTypes.taskAdded, EventTypes.childTaskAdded, EventTypes.taskActivated, EventTypes.taskStarted, EventTypes.taskCompletedUndo
     ])],
     [ProgressStatus.Completed, new Set([
-        EventTypes.TaskAdded, EventTypes.ChildTaskAdded, EventTypes.TaskActivated, EventTypes.TaskStarted, EventTypes.TaskCompleted
+        EventTypes.taskAdded, EventTypes.childTaskAdded, EventTypes.taskActivated, EventTypes.taskStarted, EventTypes.taskCompleted
     ])],
     [ProgressStatus.Failed, new Set([
-        EventTypes.TaskAdded, EventTypes.ChildTaskAdded, EventTypes.TaskActivated, EventTypes.TaskStarted, EventTypes.TaskFailed, EventTypes.TaskRevivedUndo
+        EventTypes.taskAdded, EventTypes.childTaskAdded, EventTypes.taskActivated, EventTypes.taskStarted, EventTypes.taskFailed, EventTypes.taskRevivedUndo
     ])],
     [ProgressStatus.Reattempted, new Set([
-        EventTypes.TaskAdded, EventTypes.ChildTaskAdded, EventTypes.TaskActivated, EventTypes.TaskStarted, EventTypes.TaskFailed, EventTypes.TaskRevived
+        EventTypes.taskAdded, EventTypes.childTaskAdded, EventTypes.taskActivated, EventTypes.taskStarted, EventTypes.taskFailed, EventTypes.taskRevived
     ])]
 ]);
 
@@ -76,6 +76,7 @@ export function RebuildState(eventLogAsArray, tasklist, undoStack) {
     let taskMap = createTaskMap(tasklist);
     let latestid = "";
     eventLogAsArray.forEach(eventObj => {
+        console.debug("{ " + eventObj.eventType + ", " + eventObj.name + "}");
         replayEvent(eventObj, tasklist, taskMap, undoStack);
         latestid = eventObj.id;
     });
@@ -143,6 +144,7 @@ function replayEvent(event, tasklist, taskMap, undoStack) {
         return;
     }
     else if (SkippableEventsForProgressStatusMappings.get(task.progressStatus).has(event.eventType)) {
+        console.debug("SKIPPING => { " + event.eventType + ", " + event.name + "}");
         return;     // This event can be safely skipped in these cases
     }
     else {
