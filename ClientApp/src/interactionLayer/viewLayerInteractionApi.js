@@ -477,6 +477,7 @@ function BuildNewTaskView(domainTaskObj, activeList, undoStack, viewLayerCallbac
         progressStatus : domainTaskObj.progressStatus,
         parent : (domainTaskObj.parent === null) ? null : domainTaskObj.parent.id,
         children : domainTaskObj.children.map((task) => task.id),
+        timeActivated : domainTaskObj.eventTimestamps.timeActivated,
         // Update functions
         CanCreateChildren : canCreateChildren,
         CreateChild : createChild,

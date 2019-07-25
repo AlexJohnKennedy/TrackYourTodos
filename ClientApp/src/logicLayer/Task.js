@@ -228,20 +228,24 @@ export class TaskObjects {
     }
 
     AbandonTask(task) {
-        // We can only abandon goals or deferred tasks
-        if (task === null || task.progressStatus > ProgressStatus.Started || task.category !== Category.Deferred) {
-            throw new Error("Cannot abandon a task which is not a deferred task");
+        // We cannot abandon tasks which are closed, or null
+        if (task === null || task.progressStatus > ProgressStatus.Started) {
+            throw new Error("Cannot abandon a task which is closed or null");
         }
-        if (task.parent !== null || task.children.length > 0) throw new Error("Cannot abandon task with relatives");
+        if (task.children.length > 0) throw new Error("Cannot abandon task with children");
 
         // Remove it from our list, and invoke!
         this.tasks = this.tasks.filter((t) => t !== task);
+        
+        // Do not use removeChild() since we need the deleted-task to maintain reference to parent in case of undo-abandon-task event
+        if (task.parent !== null) task.parent.children = task.parent.children.filter(t => t !== task);
     }
     UndoAbandonTask(task) {
-        if (task.category !== Category.Deferred) throw new Error("Cannot undo-abandon of a task which is not deferred");
+        if (task.progressStatus > ProgressStatus.Started) throw new Error("Cannot undo-abandon of a task which is closed");
 
         // Simply add the task back into our list, since it's state has not changed.
         this.tasks = this.tasks.concat([task]).sort((a, b) => a.eventTimestamps.timeCreated - b.eventTimestamps.timeCreated);
+        if (task.parent !== null) task.parent.addChild(task);
     }
 
     StartTask(task, timeStartedUNIX) {

@@ -257,21 +257,25 @@ namespace todo_app.DomainLayer.TaskListModel {
         // Abandoning deferred tasks without activating them.
         public void AbandonTask(Task task) {
             // We can only abandon goals or deferred tasks
-            if (task == null || task.ProgressStatus > ProgressStatusVals.Started || task.Category != CategoryVals.Deferred) {
-                throw new InvalidOperationException("Cannot abandon a task which is not a deferred task");
+            if (task == null || task.ProgressStatus > ProgressStatusVals.Started) {
+                throw new InvalidOperationException("Cannot abandon a task which is already closed or is null.");
             }
-            if (task.Parent != null || task.Children.Count > 0) throw new InvalidOperationException("Cannot abandon task with relatives");
+            if (task.Children.Count > 0) throw new InvalidOperationException("Cannot abandon task with children");
 
             // Remove it from our list, and invoke!
             this.activeTasks.Remove(task.Id);
             this.allTasks.Remove(task.Id);
+
+            // Do not use removeChild() since we need the deleted-task to maintain reference to parent in case of undo-abandon-task event
+            if (task.Parent != null) task.Parent.Children.Remove(task);
         }
         public void UndoAbandonTask(Task task) {
-            if (task.Category != CategoryVals.Deferred) throw new InvalidOperationException("Cannot undo-abandon of a task which is not deferred");
+            if (task.ProgressStatus > ProgressStatusVals.Started) throw new InvalidOperationException("Cannot undo-abandon of a task which is closed");
 
-            // Simply add the task back into our list, since it's state has not changed.
+            // Simply add the task back into our list, since its state has not changed.
             this.activeTasks.Add(task.Id, task);
             this.allTasks.Add(task.Id, task);
+            if (task.Parent != null) task.Parent.AddChild(task);
         }
 
         // Starting Tasks.
