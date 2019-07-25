@@ -298,7 +298,9 @@ namespace todo_app.DomainLayer.TaskListModel {
             if (reviveAsActive && original.Parent != null && ProgressStatusVals.ActiveTaskValues.Contains(original.Parent.ProgressStatus) && original.Parent.Category != CategoryVals.Deferred) {
                 CreateNewSubtask(original.Name, original.Parent, newCategory, timeStamp, id);
             }
-            CreateNewIndependentTask(original.Name, newCategory, timeStamp, original.ColourId, id);
+            else {
+                CreateNewIndependentTask(original.Name, newCategory, timeStamp, original.ColourId, id);
+            }
         }
         public void UndoReviveTaskAsClone(Task newTask, Task originalTask) {
             if (newTask == null || originalTask == null) throw new InvalidOperationException("Cannot undo a revival of tasks, they were not found");
@@ -311,7 +313,7 @@ namespace todo_app.DomainLayer.TaskListModel {
             // Remove the newly created task from our active task collection, and reset the state of the original task.
             this.allTasks.Remove(newTask.Id);
             this.activeTasks.Remove(newTask.Id);
-            newTask.Parent.RemoveChild(newTask);
+            if (newTask.Parent != null) newTask.Parent.RemoveChild(newTask);
             originalTask.ProgressStatus = ProgressStatusVals.Failed;
             originalTask.EventTimeStamps.TimeRevived = null;
         }
