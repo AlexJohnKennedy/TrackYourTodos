@@ -418,6 +418,14 @@ function BuildNewTaskView(domainTaskObj, activeList, undoStack, viewLayerCallbac
         dataEventCallbacksLists.childTaskAddedHandlers.forEach(callback => callback(domainTaskObj, newTask, activeList));
     }
 
+    function createDeferredChild(name) {
+        const timestamp = Date.now();
+        let newTask = activeList.CreateNewSubtask(name, domainTaskObj, Category.Deferred, timestamp);
+        undoStack.PushUndoableCreateNewSubtask(newTask, timestamp);
+        viewLayerCallbackList.forEach(callback => callback());
+        dataEventCallbacksLists.childTaskAddedHandlers.forEach(callback => callback(domainTaskObj, newTask, activeList));
+    }
+
     function deleteTask() {
         const timestamp = Date.now();
         activeList.AbandonTask(domainTaskObj);
@@ -481,6 +489,7 @@ function BuildNewTaskView(domainTaskObj, activeList, undoStack, viewLayerCallbac
         CanCreateChildren : canCreateChildren,
         CreateChild : createChild,
         CreateDailyChild : createDailyChild,
+        CreateDeferredChild : createDeferredChild,
         AbandonTask : deleteTask,
         VoluntarilyFailTask: voluntarilyFailTask,
         ActivateTask : activateTask,
