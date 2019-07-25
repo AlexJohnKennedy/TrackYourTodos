@@ -163,19 +163,12 @@ function replayTaskAddedEvent(eventData, tasklist, taskMap, undoStack) {
 function replayChildTaskAddedEvent(eventData, tasklist, taskMap, undoStack) {
     if (eventData.parent === null) throw new Error("Invalid event state: Tried to add a child, but the eventData stated the task had no parent");
     let parentTask = taskMap.get(eventData.parent);
-    if (eventData.category === Category.Weekly) {
-        const task = tasklist.CreateNewSubtask(eventData.name, parentTask, eventData.timestamp, eventData.id);
-        taskMap.set(eventData.id, task);
-        undoStack.PushUndoableCreateNewSubtask(task, eventData.timestamp);
-    }
-    else if (eventData.category === Category.Daily) {
-        const task = tasklist.CreateNewDailySubtask(eventData.name, parentTask, eventData.timestamp, eventData.id);
-        taskMap.set(eventData.id, task);
-        undoStack.PushUndoableCreateNewSubtask(task, eventData.timestamp);
-    }
-    else {
+    if (eventData.category !== Category.Weekly && eventData.category !== Category.Daily) {
         throw new Error("Illegal category for subtask event!");
     }
+    const task = tasklist.CreateNewSubtask(eventData.name, parentTask, eventData.category, eventData.timestamp, eventData.id);
+    taskMap.set(eventData.id, task);
+    undoStack.PushUndoableCreateNewSubtask(task, eventData.timestamp);
 }
 function replayTaskRevivedEvent(eventData, tasklist, taskMap, undoStack) {
     if (eventData.original === null) throw new Error("Invalid event state: Tried to revive a task, but there was no 'original' id in the eventData");

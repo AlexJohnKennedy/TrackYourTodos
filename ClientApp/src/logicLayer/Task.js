@@ -43,14 +43,6 @@ export const ProgressStatus = Object.freeze({
 });
 
 const DefaultColourId = 0;
-function DowngradeCategory(category) {
-    if (category >= Category.Daily) {
-        throw new Error("CANNOT DOWNGRADE");
-    }
-    else {
-        return category + 1;
-    }
-}
 
 let GetNewId = () => NewUuid();
 export function SetIdStartVal(newStartVal) {
@@ -121,24 +113,12 @@ export class TaskObjects {
     }
     
     // Creates a new child task, in the category one level below the parent's category.
-    CreateNewSubtask(name, parent, timeCreatedUNIX, id = null) {
+    CreateNewSubtask(name, parent, category, timeCreatedUNIX, id = null) {
         if (id === null || id === undefined) {
             id = GetNewId();
         }
 
-        let newTask = new Task(id, name, DowngradeCategory(parent.category), parent, parent.colourid, timeCreatedUNIX, parent.context);
-        this.tasks.push(newTask);
-        parent.addChild(newTask);
-
-        return newTask;
-    }
-    // Creates a new child task, two categories below the parent's category, if the parent task is a Goal object.
-    CreateNewDailySubtask(name, parent, timeCreatedUNIX, id = null) {
-        if (id === null || id === undefined) {
-            id = GetNewId();
-        }
-
-        let newTask = new Task(id, name, Category.Daily, parent, parent.colourid, timeCreatedUNIX, parent.context);
+        let newTask = new Task(id, name, category, parent, parent.colourid, timeCreatedUNIX, parent.context);
         this.tasks.push(newTask);
         parent.addChild(newTask);
 
