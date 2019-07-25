@@ -2,18 +2,18 @@ import React, { Component } from 'react';
 import { GetColourMapping, ThemeId, HSLAColour } from '../viewLogic/colourSetManager';
 import { CheckBox, SvgIconWrapper } from './TaskButtons';
 import { CreationForm } from './CreationForm.js';
-import { Category, ProgressStatus, MAX_TASK_NAME_LEN } from '../logicLayer/Task';
+import { Category, ProgressStatus, MAX_TASK_NAME_LEN, UNDO_ACTION_MAX_AGE_MILLISECONDS } from '../logicLayer/Task';
 
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 
 import { ReactComponent as BinIcon } from '../icons/rubbish-bin-delete-button.svg';
-import { ReactComponent as SubtaskIcon } from '../icons/subtask-arrow-button.svg';
 import { ReactComponent as ReviveArrowIcon } from '../icons/revive-arrow-button.svg';
 import { ReactComponent as TrophyIcon } from '../icons/trophy.svg';
 import { ReactComponent as WeekIcon } from '../icons/calendar.svg';
 import { ReactComponent as DailyCheckMarkIcon } from '../icons/DailyCheckMark.svg';
 import { ReactComponent as CrossIcon } from '../icons/close-button.svg';
+import { ReactComponent as QuestionMarkIcon } from '../icons/question-mark.svg';
 
 
 export class Task extends Component {
@@ -167,6 +167,21 @@ export class Task extends Component {
             doubleClickAction = () => this.toggleEditFormOn();
         }
 
+        // Determine if this task is 'committed' yet. If we would still be able to undo the activation of this task, then it is decidely NOT committed.
+        const ageSinceActivated = this.props.taskView.timeActivated === null ? 0 : Date.now() - this.props.taskView.timeActivated;
+        const committed = ageSinceActivated > UNDO_ACTION_MAX_AGE_MILLISECONDS ;
+
+        // Define the 'delete task' action for activated tasks, which depends on whether the task is committed yet.
+        const activeTaskBinAction = () => {
+            if (committed || this.props.taskView.children.length > 0) { this.renderAreYouSure(); }
+            else { this.props.taskView.AbandonTask(); }
+        };
+
+        // Define the bin icon tooltip message for active tasks, which also depends on whether the task is committed yet.
+        const binIconTooltipMessage = committed ? "Give up on this task. This will count as a failed task, because you have already committed to it!" 
+        : this.props.taskView.children.length === 0 ? "Delete this task. This will not count as a failure, since you created this less than an hour ago." 
+        : "Give up on this task. This will count as a failed task, even though it is uncommitted, because this task has sub-tasks. Delete those first if you want to remove this one.";
+
         return (
             <div className={classstring} style={style} onDoubleClick={doubleClickAction} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
                 <p> {this.props.taskView.name} </p>
@@ -193,10 +208,10 @@ export class Task extends Component {
                         {!this.isShowingAnyForm() &&
                             <>
                             <SvgIconWrapper className="iconWrapper subtaskButton" clickAction={() => this.toggleFormOn(true)} title="Create a daily subtask">
-                                <SubtaskIcon className="iconButton"/>
+                                <DailyCheckMarkIcon className="iconButton"/>
                             </SvgIconWrapper>
-                            <SvgIconWrapper className="iconWrapper subtaskButton" clickAction={() => this.toggleFormOn(false)} title="Create a subtask">                        
-                                <SubtaskIcon className="iconButton"/>
+                            <SvgIconWrapper className="iconWrapper subtaskButton" clickAction={() => this.toggleFormOn(false)} title="Create a weekly subtask">                        
+                                <WeekIcon className="iconButton"/>
                             </SvgIconWrapper>
                             </>
                         }
@@ -221,8 +236,8 @@ export class Task extends Component {
                 {this.props.taskView.category === Category.Weekly && this.props.taskView.progressStatus <= ProgressStatus.Started &&
                     <>
                         {!this.isShowingAnyForm() &&
-                            <SvgIconWrapper className="iconWrapper subtaskButton" clickAction={() => this.toggleFormOn(false)} title="Create a subtask">                        
-                                <SubtaskIcon className="iconButton"/>
+                            <SvgIconWrapper className="iconWrapper subtaskButton" clickAction={() => this.toggleFormOn(false)} title="Create a daily subtask">                        
+                                <DailyCheckMarkIcon className="iconButton"/>
                             </SvgIconWrapper>
                         }
                         <CreationForm
@@ -249,8 +264,13 @@ export class Task extends Component {
                             }}
                         />
                         {!this.isShowingAnyForm() &&
-                            <SvgIconWrapper className="iconWrapper deleteButton" clickAction={() => this.renderAreYouSure()} title="Give up on this task. This will count as a failed task!">
+                            <SvgIconWrapper className="iconWrapper deleteButton" clickAction={activeTaskBinAction} title={binIconTooltipMessage}>
                                 <BinIcon className="iconButton"/>
+                            </SvgIconWrapper>
+                        }
+                        {!committed &&
+                            <SvgIconWrapper className="iconWrapper uncommittedButton" clickAction={() => {}} title="This task is not committed yet, so it can still be safely deleted if it has no sub-tasks">
+                                <QuestionMarkIcon className="icon"/>
                             </SvgIconWrapper>
                         }
                     </>

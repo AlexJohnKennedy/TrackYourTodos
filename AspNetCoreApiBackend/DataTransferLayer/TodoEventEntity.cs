@@ -48,7 +48,7 @@ namespace todo_app.DataTransferLayer.Entities {
     }
     internal class NotInTheFutureValidatorAttribute : ValidationAttribute {
         private long clockSkewMilliseconds;     // How many milliseconds either side we are allowing.
-        private const long ageTolerance = 5_000_000_000;
+        private const long ageTolerance = 50_000_000_000;
 
         public NotInTheFutureValidatorAttribute(long clockSkew) {
             this.clockSkewMilliseconds = clockSkew;

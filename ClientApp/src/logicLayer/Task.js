@@ -43,19 +43,6 @@ export const ProgressStatus = Object.freeze({
 });
 
 const DefaultColourId = 0;
-function DowngradeCategory(category) {
-    if (category >= Category.Daily) {
-        throw new Error("CANNOT DOWNGRADE");
-    }
-    else {
-        return category + 1;
-    }
-}
-
-//let GetNewId = ((startVal) => () => startVal++)(0);
-//export function SetIdStartVal(newStartVal) {
-//    GetNewId = ((startVal) => () => startVal++)(newStartVal);
-//} 
 
 let GetNewId = () => NewUuid();
 export function SetIdStartVal(newStartVal) {
@@ -126,24 +113,12 @@ export class TaskObjects {
     }
     
     // Creates a new child task, in the category one level below the parent's category.
-    CreateNewSubtask(name, parent, timeCreatedUNIX, id = null) {
+    CreateNewSubtask(name, parent, category, timeCreatedUNIX, id = null) {
         if (id === null || id === undefined) {
             id = GetNewId();
         }
 
-        let newTask = new Task(id, name, DowngradeCategory(parent.category), parent, parent.colourid, timeCreatedUNIX, parent.context);
-        this.tasks.push(newTask);
-        parent.addChild(newTask);
-
-        return newTask;
-    }
-    // Creates a new child task, two categories below the parent's category, if the parent task is a Goal object.
-    CreateNewDailySubtask(name, parent, timeCreatedUNIX, id = null) {
-        if (id === null || id === undefined) {
-            id = GetNewId();
-        }
-
-        let newTask = new Task(id, name, Category.Daily, parent, parent.colourid, timeCreatedUNIX, parent.context);
+        let newTask = new Task(id, name, category, parent, parent.colourid, timeCreatedUNIX, parent.context);
         this.tasks.push(newTask);
         parent.addChild(newTask);
 
@@ -253,20 +228,24 @@ export class TaskObjects {
     }
 
     AbandonTask(task) {
-        // We can only abandon goals or deferred tasks
-        if (task === null || task.progressStatus > ProgressStatus.Started || task.category !== Category.Deferred) {
-            throw new Error("Cannot abandon a task which is not a deferred task");
+        // We cannot abandon tasks which are closed, or null
+        if (task === null || task.progressStatus > ProgressStatus.Started) {
+            throw new Error("Cannot abandon a task which is closed or null");
         }
-        if (task.parent !== null || task.children.length > 0) throw new Error("Cannot abandon task with relatives");
+        if (task.children.length > 0) throw new Error("Cannot abandon task with children");
 
         // Remove it from our list, and invoke!
         this.tasks = this.tasks.filter((t) => t !== task);
+        
+        // Do not use removeChild() since we need the deleted-task to maintain reference to parent in case of undo-abandon-task event
+        if (task.parent !== null) task.parent.children = task.parent.children.filter(t => t !== task);
     }
     UndoAbandonTask(task) {
-        if (task.category !== Category.Deferred) throw new Error("Cannot undo-abandon of a task which is not deferred");
+        if (task.progressStatus > ProgressStatus.Started) throw new Error("Cannot undo-abandon of a task which is closed");
 
         // Simply add the task back into our list, since it's state has not changed.
         this.tasks = this.tasks.concat([task]).sort((a, b) => a.eventTimestamps.timeCreated - b.eventTimestamps.timeCreated);
+        if (task.parent !== null) task.parent.addChild(task);
     }
 
     StartTask(task, timeStartedUNIX) {
@@ -301,14 +280,23 @@ export class TaskObjects {
         let category = asActive ? task.category : Category.Deferred;
         task.progressStatus = ProgressStatus.Reattempted;   // Signal that this task has been revived. We only want to be able to do this once per failure.
         task.eventTimestamps.timeRevived = timeRevivedUNIX;
-        return this.CreateNewIndependentTask(task.name, category, timeRevivedUNIX, task.context, task.colourid, id);
+
+        // If the task being revived has a parent task which is still active, we want the revived task to remain linked.
+        if (asActive && task.parent !== null && task.parent.progressStatus <= ProgressStatus.Started && task.category !== Category.Deferred) {
+            let newTask = new Task(id === null ? GetNewId() : id, task.name, category, task.parent, task.colourid, timeRevivedUNIX, task.context);
+            this.tasks.push(newTask);
+            task.parent.addChild(newTask);
+            return newTask;
+        }
+        else {
+            return this.CreateNewIndependentTask(task.name, category, timeRevivedUNIX, task.context, task.colourid, id);
+        }
     }
     UndoReviveTaskAsClone(newTask, originalTask) {
         if (newTask === null || newTask === undefined || originalTask === null || originalTask === undefined) throw new Error("Null task is invalid to undo operation");
 
         // Check if the tasks is in a valid state to be reverted
-        if (newTask.progressStatus !== ProgressStatus.NotStarted || newTask.parent !== null || newTask.children.length > 0
-        ||  originalTask.progressStatus !== ProgressStatus.Reattempted) {
+        if (newTask.progressStatus !== ProgressStatus.NotStarted || newTask.children.length > 0 || originalTask.progressStatus !== ProgressStatus.Reattempted) {
             console.error(newTask);
             console.error(originalTask);
             throw new Error("Illegal state for undo-ing TaskRevived action. See STDERR for task object logs");
@@ -316,6 +304,7 @@ export class TaskObjects {
 
         // Remove the newly created task from our active task collection.
         this.tasks = this.tasks.filter(t => t !== newTask);
+        if (newTask.parent !== null) newTask.parent.removeChild(newTask);
         originalTask.progressStatus = ProgressStatus.Failed;
         originalTask.eventTimestamps.timeRevived = null;
     }
