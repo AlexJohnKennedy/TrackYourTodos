@@ -52,11 +52,6 @@ function DowngradeCategory(category) {
     }
 }
 
-//let GetNewId = ((startVal) => () => startVal++)(0);
-//export function SetIdStartVal(newStartVal) {
-//    GetNewId = ((startVal) => () => startVal++)(newStartVal);
-//} 
-
 let GetNewId = () => NewUuid();
 export function SetIdStartVal(newStartVal) {
     /* do nothing, since we are using v4 uuids for now! */
@@ -301,14 +296,23 @@ export class TaskObjects {
         let category = asActive ? task.category : Category.Deferred;
         task.progressStatus = ProgressStatus.Reattempted;   // Signal that this task has been revived. We only want to be able to do this once per failure.
         task.eventTimestamps.timeRevived = timeRevivedUNIX;
-        return this.CreateNewIndependentTask(task.name, category, timeRevivedUNIX, task.context, task.colourid, id);
+
+        // If the task being revived has a parent task which is still active, we want the revived task to remain linked.
+        if (asActive && task.parent !== null && task.parent.progressStatus <= ProgressStatus.Started && task.category !== Category.Deferred) {
+            let newTask = new Task(id === null ? GetNewId() : id, task.name, category, task.parent, task.colourid, timeRevivedUNIX, task.context);
+            this.tasks.push(newTask);
+            task.parent.addChild(newTask);
+            return newTask;
+        }
+        else {
+            return this.CreateNewIndependentTask(task.name, category, timeRevivedUNIX, task.context, task.colourid, id);
+        }
     }
     UndoReviveTaskAsClone(newTask, originalTask) {
         if (newTask === null || newTask === undefined || originalTask === null || originalTask === undefined) throw new Error("Null task is invalid to undo operation");
 
         // Check if the tasks is in a valid state to be reverted
-        if (newTask.progressStatus !== ProgressStatus.NotStarted || newTask.parent !== null || newTask.children.length > 0
-        ||  originalTask.progressStatus !== ProgressStatus.Reattempted) {
+        if (newTask.progressStatus !== ProgressStatus.NotStarted || newTask.children.length > 0 || originalTask.progressStatus !== ProgressStatus.Reattempted) {
             console.error(newTask);
             console.error(originalTask);
             throw new Error("Illegal state for undo-ing TaskRevived action. See STDERR for task object logs");
@@ -316,6 +320,7 @@ export class TaskObjects {
 
         // Remove the newly created task from our active task collection.
         this.tasks = this.tasks.filter(t => t !== newTask);
+        if (newTask.parent !== null) newTask.parent.removeChild(newTask);
         originalTask.progressStatus = ProgressStatus.Failed;
         originalTask.eventTimestamps.timeRevived = null;
     }

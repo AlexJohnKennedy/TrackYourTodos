@@ -193,10 +193,10 @@ export class Task extends Component {
                         {!this.isShowingAnyForm() &&
                             <>
                             <SvgIconWrapper className="iconWrapper subtaskButton" clickAction={() => this.toggleFormOn(true)} title="Create a daily subtask">
-                                <SubtaskIcon className="iconButton"/>
+                                <DailyCheckMarkIcon className="iconButton"/>
                             </SvgIconWrapper>
-                            <SvgIconWrapper className="iconWrapper subtaskButton" clickAction={() => this.toggleFormOn(false)} title="Create a subtask">                        
-                                <SubtaskIcon className="iconButton"/>
+                            <SvgIconWrapper className="iconWrapper subtaskButton" clickAction={() => this.toggleFormOn(false)} title="Create a weekly subtask">                        
+                                <WeekIcon className="iconButton"/>
                             </SvgIconWrapper>
                             </>
                         }
@@ -221,8 +221,8 @@ export class Task extends Component {
                 {this.props.taskView.category === Category.Weekly && this.props.taskView.progressStatus <= ProgressStatus.Started &&
                     <>
                         {!this.isShowingAnyForm() &&
-                            <SvgIconWrapper className="iconWrapper subtaskButton" clickAction={() => this.toggleFormOn(false)} title="Create a subtask">                        
-                                <SubtaskIcon className="iconButton"/>
+                            <SvgIconWrapper className="iconWrapper subtaskButton" clickAction={() => this.toggleFormOn(false)} title="Create a daily subtask">                        
+                                <DailyCheckMarkIcon className="iconButton"/>
                             </SvgIconWrapper>
                         }
                         <CreationForm
