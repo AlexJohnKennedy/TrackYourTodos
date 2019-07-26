@@ -179,7 +179,8 @@ export class Task extends Component {
 
         // Define the bin icon tooltip message for active tasks, which also depends on whether the task is committed yet.
         const binIconTooltipMessage = committed ? "Give up on this task. This will count as a failed task, because you have already committed to it!" 
-        : this.props.taskView.children === null || this.props.taskView.children.length === 0 ? "Delete this task. This will not count as a failure, since you created this less than an hour ago." 
+        : this.props.taskView.children === null || this.props.taskView.children === undefined || this.props.taskView.children.length === 0
+        ? "Delete this task. This will not count as a failure, since you created this less than an hour ago." 
         : "Give up on this task. This will count as a failed task, even though it is uncommitted, because this task has sub-tasks. Delete those first if you want to remove this one.";
 
         return (
