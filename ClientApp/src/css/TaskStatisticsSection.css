@@ -40,8 +40,9 @@
 }
 
 .TaskStatisticsSection .historyBarChartWrapper {
+    box-sizing: border-box;
     width: 100%;
-    padding-right: 0.8rem;
+    padding-right: 0.4rem;
     padding-bottom: 0.2rem;
     display: inline-flex;
     flex-direction: row;
@@ -116,4 +117,58 @@
 .TaskStatisticsSection .historyBarChartWrapper .barChartWrapper .subChartContainer {
     height: 50%;
     /*width: 300rem; OVERRIDEN IN CODE */
+}
+
+@media (max-width: 800px) {
+    .TaskStatisticsSection .historyBarChartWrapper {
+        width: 100%;
+        padding-right: 0.4rem;
+        padding-left: 0.4rem;
+        padding-bottom: 0.2rem;
+        display: grid;
+        grid-template-rows: 20rem 5rem;
+        grid-template-columns: auto minmax(0, 1fr);
+    }
+    
+    .TaskStatisticsSection .historyBarChartWrapper .groupingControllerBlock {
+        grid-row-start: 2;
+        grid-row-end: 3;
+        grid-column-start: 1;
+        grid-column-end: 3;
+
+        width: 100%;
+        padding: 0rem;
+        display: inline-flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+    }
+    .TaskStatisticsSection .historyBarChartWrapper .slider {
+        display: none;
+    }
+    .TaskStatisticsSection .historyBarChartWrapper .slider .text {
+        font-size: 1.2rem;
+    }
+    
+    .TaskStatisticsSection .historyBarChartWrapper input {
+        width: 9rem;
+    }
+    
+    .TaskStatisticsSection .historyBarChartWrapper .groupingControllerBlock .button {
+        margin-right: 0.8rem;
+        margin-bottom: 0rem;
+    }
+    
+    .TaskStatisticsSection .historyBarChartWrapper .axisContainer {
+        grid-row-start: 1;
+        grid-row-end: 2;
+        grid-column-start: 1;
+        grid-column-end: 2;
+    }
+    .TaskStatisticsSection .historyBarChartWrapper .barChartWrapper {
+        grid-row-start: 1;
+        grid-row-end: 2;
+        grid-column-start: 2;
+        grid-column-end: 3;
+    }
 }

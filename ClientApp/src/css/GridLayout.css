@@ -331,7 +331,7 @@
         grid-template-columns: 1fr 1fr;
         
         /* Top row for the summary blocks, the next three rows for the timeline graphs. Hardcoded heights :) */
-        grid-template-rows: 22rem 20rem;
+        grid-template-rows: 22rem 25rem;
     }
     .TaskStatisticsSection .RadialSummaryBlock {
         grid-column-start: 1;
