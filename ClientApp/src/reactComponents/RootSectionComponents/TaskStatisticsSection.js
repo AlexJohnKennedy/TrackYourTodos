@@ -43,7 +43,7 @@ export class TaskStatisticsSection extends Component {
             historyStats: emptyStatsObj,
             startIndex: 0,
             stopIndex: 60,
-            barWidth: 60
+            barWidth: 40
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -162,7 +162,7 @@ export class TaskStatisticsSection extends Component {
                         <SelectionController key={0} startIndex={this.state.startIndex} stopIndex={this.state.stopIndex}
                             startincrement={() => this.adjustRange(true, true)} stopincrement={() => this.adjustRange(true, false)}
                             startdecrement={() => this.adjustRange(false, true)} stopdecrement={() => this.adjustRange(false, false)}
-                            minBarWidth={15} maxBarWidth={100} handleBarWidthChange={this.adjustBarWidth} barWidth={this.state.barWidth} />
+                            minBarWidth={15} maxBarWidth={70} handleBarWidthChange={this.adjustBarWidth} barWidth={this.state.barWidth} />
                         <ScrollableBarChart key={1} groupingTypeText="Daily" stopIndex={this.state.stopIndex} startIndex={this.state.startIndex} barWidth={this.state.barWidth}
                             stats={this.state.historyStats.dayStats} tickFormatFunc={dayTickFormatter} />
                         <ScrollableBarChart key={2} groupingTypeText="Weekly" stopIndex={this.state.stopIndex} startIndex={this.state.startIndex} barWidth={this.state.barWidth}
