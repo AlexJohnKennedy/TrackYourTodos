@@ -19,10 +19,10 @@
 @media (min-width: 1270px) {
     #appPageRoot {
         display: grid;
-        min-height: 110rem;     /* min(max-content, 100rem) would be the ideal... */
+        min-height: 105rem;     /* min(max-content, 100rem) would be the ideal... */
         height: 100vh;
         grid-template-columns: 1fr 0.8rem minmax(auto, 115rem) var(--divider-column-width) minmax(var(--backlog-tasks-total-width-squashed), var(--backlog-tasks-total-width)) 0.8rem 1fr;
-        grid-template-rows: 3.4rem 3.4rem 1fr auto auto;
+        grid-template-rows: 3.4rem 3.4rem minmax(0, 1fr) auto auto;
     }
     .Header {
         grid-column-start: 3;
@@ -140,10 +140,10 @@
 @media (max-width: 1270px) {
     #appPageRoot {
         display: grid;
-        min-height: 110rem;     /* min(max-content, 100rem) would be the ideal... */
+        min-height: 105rem;     /* min(max-content, 100rem) would be the ideal... */
         height: 100vh;
         grid-template-columns: 1fr 0.8rem minmax(auto, 115rem) 0.8rem 1fr;
-        grid-template-rows: 3.4rem 3.4rem 1fr auto auto;
+        grid-template-rows: 3.4rem 3.4rem minmax(0, 1fr) auto auto;
     }
     .Header {
         grid-column-start: 3;
@@ -248,7 +248,8 @@
 @media (max-width: 800px) {
     #appPageRoot {
         display: grid;
-        height: unset;
+        height: auto;
+        min-height: 100vh;
         grid-template-columns: 1fr 0.4rem minmax(var(--active-tasks-single-board-min-width), var(--active-tasks-single-board-max-width)) 0.4rem 1fr;
         grid-template-rows: 3.4rem 3.4rem auto auto auto;
     }
@@ -288,7 +289,6 @@
         grid-row-start: 3;
         grid-row-end: 4;
 
-        height: unset;
         width: 100%;
 
         min-height: 0rem;
