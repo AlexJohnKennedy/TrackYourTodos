@@ -301,12 +301,16 @@
         flex-direction: column;
     }
     .board {
-        min-height: 10rem;
-        max-height: 40rem;
+        min-height: 12rem;
+        max-height: 100rem;
         border-bottom: 0.2rem solid var(--sidebar-background-colour);
         padding: 1rem;
         padding-bottom: 0.4rem;   /* tasks have a margin on the bottom, which will form this spacing instead */
         padding-top: 0.2rem;
+    }
+    .task:hover {
+        padding-top: 2rem;
+        padding-bottom: 2rem;
     }
     .ContextTabsWrapper .navigation-tabs-container .navigation-tab {
         padding-left: 0.6rem;

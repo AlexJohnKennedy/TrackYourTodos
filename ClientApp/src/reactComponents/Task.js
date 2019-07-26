@@ -265,14 +265,16 @@ export class Task extends Component {
                             }}
                         />
                         {!this.isShowingAnyForm() &&
+                            <>
                             <SvgIconWrapper className="iconWrapper deleteButton" clickAction={activeTaskBinAction} title={binIconTooltipMessage}>
                                 <BinIcon className="iconButton"/>
                             </SvgIconWrapper>
-                        }
-                        {!committed &&
-                            <SvgIconWrapper className="iconWrapper uncommittedButton" clickAction={() => {}} title="This task is not committed yet, so it can still be safely deleted if it has no sub-tasks">
-                                <QuestionMarkIcon className="icon"/>
-                            </SvgIconWrapper>
+                            {!committed &&
+                                <SvgIconWrapper className="iconWrapper uncommittedButton" clickAction={() => {}} title="This task is not committed yet, so it can still be safely deleted if it has no sub-tasks">
+                                    <QuestionMarkIcon className="icon"/>
+                                </SvgIconWrapper>
+                            }
+                            </>
                         }
                     </>
                 }
