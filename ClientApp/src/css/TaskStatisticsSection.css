@@ -101,7 +101,6 @@
 .TaskStatisticsSection .historyBarChartWrapper .barChartWrapper::-webkit-scrollbar {
     width: 0rem;  /* Width of vertical scrollbars */
     height: 0.8rem; /* Height of horizontal scrollbars */
-    color: 'red';
     background-color: var(--editor-background-colour); 
     opacity: 1;
 }

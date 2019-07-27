@@ -22,7 +22,7 @@
         min-height: 105rem;     /* min(max-content, 100rem) would be the ideal... */
         height: 100vh;
         grid-template-columns: 1fr 0.8rem minmax(auto, 115rem) var(--divider-column-width) minmax(var(--backlog-tasks-total-width-squashed), var(--backlog-tasks-total-width)) 0.8rem 1fr;
-        grid-template-rows: 3.4rem 3.4rem minmax(0, 1fr) auto auto;
+        grid-template-rows: 3.4rem auto minmax(0, 1fr) auto auto;
     }
     .Header {
         grid-column-start: 3;
@@ -143,7 +143,7 @@
         min-height: 105rem;     /* min(max-content, 100rem) would be the ideal... */
         height: 100vh;
         grid-template-columns: 1fr 0.8rem minmax(auto, 115rem) 0.8rem 1fr;
-        grid-template-rows: 3.4rem 3.4rem minmax(0, 1fr) auto auto;
+        grid-template-rows: 3.4rem auto minmax(0, 1fr) auto auto;
     }
     .Header {
         grid-column-start: 3;
@@ -251,7 +251,6 @@
         height: auto;
         min-height: 100vh;
         grid-template-columns: 1fr 0.4rem minmax(var(--active-tasks-single-board-min-width), var(--active-tasks-single-board-max-width)) 0.4rem 1fr;
-        grid-template-rows: 3.4rem 3.4rem auto auto auto;
     }
     .Header {
         grid-column-start: 3;
