@@ -17,6 +17,11 @@
     --num-boards: 3;
     flex-basis: calc(100% / var(--num-boards));
 }
+@media (max-width: 800px) {
+    .ActiveTaskSection .board {
+        flex-basis: auto;   /* In the vertical stacking arrangement, we want the boards to size vertically based on content */
+    }
+}
 
 .board .board-title-container {
     flex-grow: 0;       /* Make title never re-size itself based on board size */

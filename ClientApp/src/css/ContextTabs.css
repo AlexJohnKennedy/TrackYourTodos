@@ -59,3 +59,37 @@
 .ContextTabsWrapper .navigation-tabs-container > .active-navigation-tab {
     background-color: var(--editor-background-colour);
 }
+
+@media (max-width: 800px) {
+    /* Scroll bar for context tabs instead of shrinking, when in mobile view */
+    .ContextTabsWrapper .navigation-tabs-container::-webkit-scrollbar {
+        height: 0.8rem; /* Height of horizontal scrollbars */
+        background-color: var(--sidebar-background-colour); 
+        opacity: 1;
+    }
+    .ContextTabsWrapper .navigation-tabs-container {
+        scrollbar-color: var(--sidebar-background-colour) var(--dull-text-colour);
+    }
+    .ContextTabsWrapper .navigation-tabs-container::-webkit-scrollbar-thumb {
+        background-color: var(--dull-text-colour);
+        opacity: 0.5;
+    }
+
+    .ContextTabsWrapper .navigation-tabs-container {
+        overflow-x: auto;
+    }
+
+    .ContextTabsWrapper {
+        grid-template-columns: 1fr 4.6rem 3.4rem;
+        max-height: 4.5rem;
+    }
+    .ContextTabsWrapper .contextSettingsButton {
+        padding-right: 1rem;
+        padding-left: 0.2rem;
+        border-left: 1px solid var(--divider-colour-lighter);
+    }
+
+    .ContextTabsWrapper .navigation-tabs-container .navigation-tab {
+        flex-shrink: 0;
+    }
+}
