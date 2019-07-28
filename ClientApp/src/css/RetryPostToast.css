@@ -1,0 +1,31 @@
+/* Add a border to the toast icon */
+.Toastify__toast--error {
+    border: solid 2px var(--text-colour);
+    background-color: hsl(0, 62%, 51%) !important;
+}
+
+/* Layout for the custom component rendered inside the toast */
+.postErrorPopup {
+    display: inline-flex;
+    align-items: center;
+    height: 5rem;
+}
+.postErrorPopup .text p {
+    text-align: left;
+    font-size: 1.45rem;
+}
+.postErrorPopup .button {
+    margin-right: 1rem;
+    width: 12rem;
+    height: 1.6rem;
+    padding-top: 0.4rem;
+    padding-bottom: 0.2rem;
+    cursor: pointer;
+    border: 1px solid var(--text-colour);
+    line-height: 100%;
+    font-size: 1.45rem;
+
+}
+.postErrorPopup .button:hover {
+    background-color: hsl(0, 62%, 33%);
+}

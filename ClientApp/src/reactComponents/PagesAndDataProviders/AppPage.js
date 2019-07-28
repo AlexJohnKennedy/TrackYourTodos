@@ -19,6 +19,9 @@ import { setConflictingDataAction } from '../../interactionLayer/ajaxDataModules
 
 import { DEFAULT_GLOBAL_CONTEXT_STRING, MAX_CONTEXT_NAME_LEN } from '../../logicLayer/Task';
 
+import { toast } from 'react-toastify';
+import { RetryPostToast } from '../RetryPostToast';
+
 // Define a constant which others may want to use.
 export const MAX_SELECTABLE_CONTEXTS = 7;
 export const CONTEXT_STATE_LOCAL_STORAGE_KEY = "prev-context-state";    // User id + this key will be the local storage key we search for.
@@ -171,7 +174,7 @@ export class AppPage extends Component {
         }
         else {
             if (!this.props.failedEventCacheInstance.IsEmpty()) {
-                RetryPostingFailedEvents(this.props.ajaxFailedEventCacheInstance);
+                RetryPostingFailedEvents(this.props.failedEventCacheInstance);
             }
             
             this.state.dataModelScope.ClearAllRegisteredCallbacks();
