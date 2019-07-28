@@ -78,7 +78,7 @@ function postEvent(eventArray, failureCache, retryCount, logoutOnAuthFailure, se
         };
     }
 
-    httpRequest.timeout = 10000;     // We MUST set a timeout otherwise uncaught exceptions will be thrown in scenarios where the browser is unable to complete reqeusts. (e.g. PC is asleep)
+    httpRequest.timeout = 5000;     // We MUST set a timeout otherwise uncaught exceptions will be thrown in scenarios where the browser is unable to complete reqeusts. (e.g. PC is asleep)
     httpRequest.ontimeout = buildRetryHandler("POST #" + reqNum + " request timed out. Retrying: " + toEventString(eventArray), "POST #" + reqNum + " request timed out. Ran out of retries. Saving failed events to failure cache.");
     httpRequest.onerror = buildRetryHandler("Network error on POST #" + reqNum + ". Retrying: " + toEventString(eventArray), "Network error on POST #" + reqNum + ". Ran out of retries. Saving failed events to failure cache.");
 
