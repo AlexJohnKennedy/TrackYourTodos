@@ -5,6 +5,9 @@
 // However, this functionality in general is a bit 'funky', so I might want to remove it later if it causes any issues. So the logic has been
 // completely extracted out and placed into this file, to facilitate the ability to remove or modify it later.
 
+// SEE: https://developer.mozilla.org/en-US/docs/Web/API/History_API
+// SEE: https://stackoverflow.com/questions/11548558/html5-history-disabling-forward-button (HumanAndPeace's answer)
+
 export function initBrowserHistoryManipulation(areFormsOpen, cleanUpAction) {
     // Modify the current 'back state' so we can recognise when we land back here after going "back" from a "formIsOpen" state.
     window.history.replaceState({ noForms: true }, "no forms");
