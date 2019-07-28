@@ -4,6 +4,11 @@
 // This should be set by the Application on startup.
 // It is a function which is able to be called with an 'on completed' function as a parameter.
 // The 'on completed' or 'retry action' is another function with no parameters.
+import React from 'react';
+import { toast } from 'react-toastify';
+import { RetryPostToast } from '../../reactComponents/RetryPostToast';
+import { RetryPostingFailedEvents } from './ajaxDataEventPoster';
+
 let refreshAuthenticationFunc = null;
 export function setIdTokenRefreshFunction(func) {
     refreshAuthenticationFunc = func;
@@ -67,4 +72,7 @@ export function handleUnknownError(message) {
 export function handleUnknownPostFailure(failedEventData, failedCacheInstance) {
     if (failedEventData === null || failedEventData === undefined || failedEventData.length === 0) return;
     failedCacheInstance.InsertEventsIntoCache(failedEventData);
+
+    // Show a UI notification using the 'react toast' library.
+    toast.error(<RetryPostToast clickAction={() => RetryPostingFailedEvents(failedCacheInstance)}/>);
 }

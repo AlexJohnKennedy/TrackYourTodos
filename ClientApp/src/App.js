@@ -5,6 +5,10 @@ import { AppPage } from './reactComponents/PagesAndDataProviders/AppPage';
 import { LoadingPage, ErrorPage } from './reactComponents/PagesAndDataProviders/LoadingPage';
 import { LoginPage } from './reactComponents/PagesAndDataProviders/LoginPage';
 
+import { ToastContainer, toast, Slide } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+
 // Setters for application-level handlers for AJAX and Network errors. E.g. token expired, GET or POST failure, Authorization failed.
 import { setIdTokenRefreshFunction, setServerFailureAction, setAuthFailureHandler, setUnknownErrorAction } from './interactionLayer/ajaxDataModules/ajaxErrorcaseHandlers';
 import { InstantiateNewFailedEventCacheScope } from './interactionLayer/ajaxDataModules/ajaxFailedEventCache';
@@ -205,7 +209,21 @@ class App extends Component {
     }
 
     return (
-      <> {PageToRender} </>
+      <> 
+      {PageToRender} 
+      <ToastContainer
+        position="bottom-right"
+        autoClose={6000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnVisibilityChange
+        draggable
+        pauseOnHover
+        transition={Slide}
+      />
+      </>
     );
   }
 }
