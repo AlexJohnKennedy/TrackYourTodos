@@ -120,8 +120,6 @@ export class AppPage extends Component {
     // If we end up implemented nested contexts, then for a given current context, we would search and make the current's entire
     // subtree visible as well! But for now, it's either global, or just one.
     performSwitch(context) {
-        toast.error(<RetryPostToast/>);
-
         if (!this.props.failedEventCacheInstance.IsEmpty()) {
             RetryPostingFailedEvents(this.props.failedEventCacheInstance);
         }
@@ -176,7 +174,7 @@ export class AppPage extends Component {
         }
         else {
             if (!this.props.failedEventCacheInstance.IsEmpty()) {
-                RetryPostingFailedEvents(this.props.ajaxFailedEventCacheInstance);
+                RetryPostingFailedEvents(this.props.failedEventCacheInstance);
             }
             
             this.state.dataModelScope.ClearAllRegisteredCallbacks();
