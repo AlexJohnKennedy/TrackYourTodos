@@ -183,6 +183,8 @@ export class Task extends Component {
         ? "Delete this task. This will not count as a failure, since you created this less than an hour ago." 
         : "Give up on this task. This will count as a failed task, even though it is uncommitted, because this task has sub-tasks. Delete those first if you want to remove this one.";
 
+        const clearFormStateCallbacks = () => this.props.formStateManager.clearCallbacks();
+
         return (
             <div className={classstring} style={style} onDoubleClick={doubleClickAction} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
                 <p> {this.props.taskView.name} </p>
@@ -197,7 +199,7 @@ export class Task extends Component {
                         creationFunction={this.props.taskView.EditTaskName}
                         formText="Edit task text"
                         showingForm={this.state.showingEditForm}
-                        submitAction={() => this.toggleEditFormOff()}
+                        submitAction={() => { clearFormStateCallbacks(); this.toggleEditFormOff(); }}
                         formStateManager={this.props.formStateManager}
                         maxFieldLength={MAX_TASK_NAME_LEN}
                         initialValue={this.props.taskView.name}
@@ -220,7 +222,7 @@ export class Task extends Component {
                             creationFunction={this.props.taskView.CreateDailyChild}
                             formText="New daily subtask"
                             showingForm={this.state.showingDailyForm}
-                            submitAction={() => this.toggleFormOff(true)}
+                            submitAction={() => { clearFormStateCallbacks(); this.toggleFormOff(true); }}
                             formStateManager={this.props.formStateManager}
                             maxFieldLength={MAX_TASK_NAME_LEN}
                         />
@@ -228,7 +230,7 @@ export class Task extends Component {
                             creationFunction={this.props.taskView.CreateChild}
                             formText="New weekly subtask"
                             showingForm={this.state.showingForm}
-                            submitAction={() => this.toggleFormOff(false)}
+                            submitAction={() => { clearFormStateCallbacks(); this.toggleFormOff(false); }}
                             formStateManager={this.props.formStateManager}
                             maxFieldLength={MAX_TASK_NAME_LEN}
                         />
@@ -245,7 +247,7 @@ export class Task extends Component {
                             creationFunction={this.props.taskView.CreateChild}
                             formText="New daily subtask"
                             showingForm={this.state.showingForm}
-                            submitAction={() => this.toggleFormOff(false)}
+                            submitAction={() => { clearFormStateCallbacks(); this.toggleFormOff(false); }}
                             formStateManager={this.props.formStateManager}
                             maxFieldLength={MAX_TASK_NAME_LEN}
                         />

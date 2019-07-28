@@ -10,6 +10,7 @@ import { ContextManagerPage } from './ContextManagerPage';
 import { TemporaryStateManager } from '../../viewLogic/temporaryStateManager';
 import { ShortCutManager } from '../../viewLogic/keyboardShortcutHandler';
 import { ThemeId, currThemeId } from '../../viewLogic/colourSetManager';
+import { initBrowserHistoryManipulation, onFormStateRegistrationAction } from '../../viewLogic/backButtonStateManager';
 
 import { InstantiateNewDataModelScope } from '../../interactionLayer/viewLayerInteractionApi';
 import { BuildDataEventHttpPostHandlers, RetryPostingFailedEvents } from '../../interactionLayer/ajaxDataModules/ajaxDataEventPoster';
@@ -38,9 +39,6 @@ export class AppPage extends Component {
             showingContextManagerPage: false
         }
 
-        // Create a temporary state context for creation forms
-        this.formStateManager = TemporaryStateManager();
-
         this.cleanUpFormStates = this.cleanUpFormStates.bind(this);
         this.switchContext = this.switchContext.bind(this);
         this.createNewContext = this.createNewContext.bind(this);
@@ -49,6 +47,13 @@ export class AppPage extends Component {
         this.addSelectableContext = this.addSelectableContext.bind(this);
         this.removeSelectableContext = this.removeSelectableContext.bind(this);
         this.updateSelectableContextsInLocalStorage = this.updateSelectableContextsInLocalStorage.bind(this);
+        
+        // Create a temporary state context for creation forms. Pass in the callback which the backButtonStateManager provides, for the purposes of history manipulation.
+        this.formStateManager = TemporaryStateManager(onFormStateRegistrationAction);
+        
+        // Setup browser-history manipulation, which will prevent the browser from navigating away from the app page if 'back' is pressed while a form is open.
+        const areFormsOpen = () => this.formStateManager.length() > 0 || this.state.showingContextManagerPage;
+        initBrowserHistoryManipulation(areFormsOpen, this.cleanUpFormStates);
     }
     setupInitialDataFetch() {
         const conflictingDataAction = () => this.state.dataModelScope.TriggerEventLogDataRefresh(this.state.visibleContexts);
@@ -115,6 +120,8 @@ export class AppPage extends Component {
         if (!this.props.failedEventCacheInstance.IsEmpty()) {
             RetryPostingFailedEvents(this.props.failedEventCacheInstance);
         }
+        
+        this.formStateManager.triggerCleanup();
 
         if (context === DEFAULT_GLOBAL_CONTEXT_STRING) {
             this.state.dataModelScope.ClearAllRegisteredCallbacks();
