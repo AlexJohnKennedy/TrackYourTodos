@@ -48,7 +48,11 @@ export class AppPage extends Component {
             console.log(e.state);
 
             if (e.state !== undefined && e.state !== null) {
-                if (e.state.noForms) {
+                // If we get back to the 'root' state ("no forms = true"), but no forms are actually open, then go back again.
+                if (e.state.noForms && this.formStateManager.length() === 0 && !this.state.showingContextManagerPage) {
+                    window.history.back();
+                }
+                else if (e.state.noForms) {
                     console.log("cleaning up forms, due to back button");
                     this.cleanUpFormStates();
     

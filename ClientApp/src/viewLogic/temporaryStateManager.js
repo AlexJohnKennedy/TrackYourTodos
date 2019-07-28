@@ -24,6 +24,6 @@ export function TemporaryStateManager() {
     return Object.freeze({
         registerCleanUpCallback : registerCleanUpCallback,
         triggerCleanup : triggerCleanup,
-        length : () => cleanUpCallbacks.length
+        length : () => { console.log(cleanUpCallbacks.length); return cleanUpCallbacks.length }
     });
 }
