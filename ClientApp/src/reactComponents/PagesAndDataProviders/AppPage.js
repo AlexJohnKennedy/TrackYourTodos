@@ -40,6 +40,29 @@ export class AppPage extends Component {
 
         // Create a temporary state context for creation forms
         this.formStateManager = TemporaryStateManager();
+        window.history.replaceState({ noForms: true }, "no forms");
+
+        // Setup handlers so that back button only removes form presence, acutally 'going back'.
+        window.onpopstate = e => {
+            console.log("POPSTATE FIRED");
+            console.log(e.state);
+
+            if (e.state !== undefined && e.state !== null) {
+                if (e.state.noForms) {
+                    console.log("cleaning up forms, due to back button");
+                    this.cleanUpFormStates();
+    
+                    // In order to disable the forward button, since it semantically makes no sense here, we must push another 'fake' state.
+                    // But we must first mark the current state as obsolete so that going back from here doesn't require two clicks.
+                    window.history.replaceState({ obsoleteHistoryEntry: true }, "obsolete");
+                    window.history.pushState({ noForms: true }, "no forms");
+                }
+                else if (e.state.obsoleteHistoryEntry || e.state.formIsOpen) {
+                    window.history.back();  // Go back again, since we don't want to impede the actual back functionality with our 'fake' history.
+                }
+            }
+            e.preventDefault();
+        };
 
         this.cleanUpFormStates = this.cleanUpFormStates.bind(this);
         this.switchContext = this.switchContext.bind(this);

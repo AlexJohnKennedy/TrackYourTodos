@@ -6,9 +6,15 @@
 export function TemporaryStateManager() {
     let cleanUpCallbacks = [];
     function registerCleanUpCallback(func) {
+        console.log("registering");
         cleanUpCallbacks.push(func);
+        if (window.history.state === null || window.history.state === undefined || !window.history.state.formIsOpen) {
+            console.log("pushing history state");
+            window.history.pushState({ formIsOpen: true }, "temporary state is open");
+        }
     }
     function triggerCleanup() {
+        console.log("cleaning up");
         for (let f of cleanUpCallbacks) {
             f();
         }
@@ -18,5 +24,6 @@ export function TemporaryStateManager() {
     return Object.freeze({
         registerCleanUpCallback : registerCleanUpCallback,
         triggerCleanup : triggerCleanup,
+        length : () => cleanUpCallbacks.length
     });
 }
