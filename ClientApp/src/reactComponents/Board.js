@@ -43,6 +43,8 @@ export class Board extends Component {
     }
 
     render() {
+        const clearFormStateCallbacks = () => this.props.formStateManager.clearCallbacks();
+
         // Everything is wrapped in a 'bubble' thing.
         // The bubble thing has children; for the board, we want a title, an add task button, following by a list of tasks.
         return (
@@ -64,7 +66,7 @@ export class Board extends Component {
                 <CreationForm
                     creationFunction={this.props.creationFunction}
                     showingForm={this.state.showingForm}
-                    submitAction={this.toggleFormOff}
+                    submitAction={() => { clearFormStateCallbacks(); this.toggleFormOff(); }}
                     formStateManager={this.props.formStateManager}
                     formText={this.props.formText}
                     maxFieldLength={MAX_TASK_NAME_LEN}

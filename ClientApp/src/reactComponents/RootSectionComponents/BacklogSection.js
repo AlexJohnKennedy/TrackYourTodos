@@ -95,6 +95,8 @@ export class BacklogSection extends Component {
     }
     
     render() {
+        const clearFormStateCallbacks = () => this.props.formStateManager.clearCallbacks();
+
         return(
             <div className="BacklogSection">
                 <NavigationStateWrapper
@@ -158,7 +160,7 @@ export class BacklogSection extends Component {
                     <CreationForm
                         creationFunction={this.state.deferredTaskCreationFunc} 
                         showingForm={this.state.showingForm}
-                        submitAction={this.toggleFormOff}
+                        submitAction={() => { clearFormStateCallbacks(); this.toggleFormOff(); }}
                         formStateManager={this.props.formStateManager}
                         formText={this.props.formText}
                         maxFieldLength={MAX_TASK_NAME_LEN}

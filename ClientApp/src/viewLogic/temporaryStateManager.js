@@ -20,10 +20,14 @@ export function TemporaryStateManager() {
         }
         cleanUpCallbacks = [];
     }
+    function clearCallbacks() {
+        cleanUpCallbacks = [];
+    }
 
     return Object.freeze({
         registerCleanUpCallback : registerCleanUpCallback,
         triggerCleanup : triggerCleanup,
+        clearCallbacks : clearCallbacks,
         length : () => { console.log(cleanUpCallbacks.length); return cleanUpCallbacks.length }
     });
 }

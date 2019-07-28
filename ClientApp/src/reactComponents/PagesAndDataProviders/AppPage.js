@@ -142,6 +142,8 @@ export class AppPage extends Component {
         if (!this.props.failedEventCacheInstance.IsEmpty()) {
             RetryPostingFailedEvents(this.props.failedEventCacheInstance);
         }
+        
+        this.formStateManager.triggerCleanup();
 
         if (context === DEFAULT_GLOBAL_CONTEXT_STRING) {
             this.state.dataModelScope.ClearAllRegisteredCallbacks();
