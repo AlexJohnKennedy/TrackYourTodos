@@ -10,6 +10,7 @@ import { ContextManagerPage } from './ContextManagerPage';
 import { TemporaryStateManager } from '../../viewLogic/temporaryStateManager';
 import { ShortCutManager } from '../../viewLogic/keyboardShortcutHandler';
 import { ThemeId, currThemeId } from '../../viewLogic/colourSetManager';
+import { initBrowserHistoryManipulation, onFormStateRegistrationAction } from '../../viewLogic/backButtonStateManager';
 
 import { InstantiateNewDataModelScope } from '../../interactionLayer/viewLayerInteractionApi';
 import { BuildDataEventHttpPostHandlers, RetryPostingFailedEvents } from '../../interactionLayer/ajaxDataModules/ajaxDataEventPoster';
@@ -38,36 +39,6 @@ export class AppPage extends Component {
             showingContextManagerPage: false
         }
 
-        // Create a temporary state context for creation forms
-        this.formStateManager = TemporaryStateManager();
-        window.history.replaceState({ noForms: true }, "no forms");
-
-        // Setup handlers so that back button only removes form presence, acutally 'going back'.
-        window.onpopstate = e => {
-            console.log("POPSTATE FIRED");
-            console.log(e.state);
-
-            if (e.state !== undefined && e.state !== null) {
-                // If we get back to the 'root' state ("no forms = true"), but no forms are actually open, then go back again.
-                if (e.state.noForms && this.formStateManager.length() === 0 && !this.state.showingContextManagerPage) {
-                    window.history.back();
-                }
-                else if (e.state.noForms) {
-                    console.log("cleaning up forms, due to back button");
-                    this.cleanUpFormStates();
-    
-                    // In order to disable the forward button, since it semantically makes no sense here, we must push another 'fake' state.
-                    // But we must first mark the current state as obsolete so that going back from here doesn't require two clicks.
-                    window.history.replaceState({ obsoleteHistoryEntry: true }, "obsolete");
-                    window.history.pushState({ noForms: true }, "no forms");
-                }
-                else if (e.state.obsoleteHistoryEntry || e.state.formIsOpen) {
-                    window.history.back();  // Go back again, since we don't want to impede the actual back functionality with our 'fake' history.
-                }
-            }
-            e.preventDefault();
-        };
-
         this.cleanUpFormStates = this.cleanUpFormStates.bind(this);
         this.switchContext = this.switchContext.bind(this);
         this.createNewContext = this.createNewContext.bind(this);
@@ -76,6 +47,13 @@ export class AppPage extends Component {
         this.addSelectableContext = this.addSelectableContext.bind(this);
         this.removeSelectableContext = this.removeSelectableContext.bind(this);
         this.updateSelectableContextsInLocalStorage = this.updateSelectableContextsInLocalStorage.bind(this);
+        
+        // Create a temporary state context for creation forms. Pass in the callback which the backButtonStateManager provides, for the purposes of history manipulation.
+        this.formStateManager = TemporaryStateManager(onFormStateRegistrationAction);
+        
+        // Setup browser-history manipulation, which will prevent the browser from navigating away from the app page if 'back' is pressed while a form is open.
+        const areFormsOpen = () => this.formStateManager.length() > 0 || this.state.showingContextManagerPage;
+        initBrowserHistoryManipulation(areFormsOpen, this.cleanUpFormStates);
     }
     setupInitialDataFetch() {
         const conflictingDataAction = () => this.state.dataModelScope.TriggerEventLogDataRefresh(this.state.visibleContexts);

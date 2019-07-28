@@ -3,23 +3,22 @@
 // Each time this function is called, it will return a new object, with its
 // own context. I.e., if you have two independent temp-state managers, then
 // when one clears its state, the other will persist.
-export function TemporaryStateManager() {
+
+// You can optionally provide a function which will be called each time "registerCleanUpCallback" is called.
+export function TemporaryStateManager(onRegisterFunc = null) {
     let cleanUpCallbacks = [];
     function registerCleanUpCallback(func) {
-        console.log("registering");
         cleanUpCallbacks.push(func);
-        if (window.history.state === null || window.history.state === undefined || !window.history.state.formIsOpen) {
-            console.log("pushing history state");
-            window.history.pushState({ formIsOpen: true }, "temporary state is open");
-        }
+        if (onRegisterFunc !== null) { onRegisterFunc(); }
     }
+    
     function triggerCleanup() {
-        console.log("cleaning up");
         for (let f of cleanUpCallbacks) {
             f();
         }
         cleanUpCallbacks = [];
     }
+
     function clearCallbacks() {
         cleanUpCallbacks = [];
     }
@@ -28,6 +27,6 @@ export function TemporaryStateManager() {
         registerCleanUpCallback : registerCleanUpCallback,
         triggerCleanup : triggerCleanup,
         clearCallbacks : clearCallbacks,
-        length : () => { console.log(cleanUpCallbacks.length); return cleanUpCallbacks.length }
+        length : () => cleanUpCallbacks.length
     });
 }
