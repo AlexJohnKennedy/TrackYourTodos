@@ -51,26 +51,34 @@ function ContextMappings(maps) {
         }
         return false;
     }
-
-    // Functional mutators. These return new instances that contain the updated data, requiring the old instances to be disposed of.
-    function createNewContext(name, colourid) {
-        if (isNameTaken(name)) {
-            throw new Error("Not allowed to create a new context with a name which already exists");
+    function isIdTaken(id) {
+        for (let k of maps.names.keys()) {
+            if (k === id) return true;
         }
-        let idTaken = false;
-        maps.names.keys().forEach(k => {
-            if (k === name) idTaken = true;
-        });
-
+        return false;
+    }
+    function getUniqueIdForName(name) {
+        const idTaken = isIdTaken(name);
+        
         // If the key happens to already be taken, generate a random uuid to prefix onto the key, to avoid conflicts.
         // We are going to concatenate in a particular way which the backend can understand, so that the 'rename' is automatically saved
         // by the server when it see's a task with a prefixed-context-id-string.
-        const id = idTaken ? NewUuid() + "$$" + name : name;
-        const rename = idTaken ? name : null;
+        return idTaken ? NewUuid() + "$$" + name : name;
+    }
+
+
+    // Functional mutators. These return new instances that contain the updated data, requiring the old instances to be disposed of.
+    function createNewContext(id, name, colourid) {
+        if (isNameTaken(name)) {
+            throw new Error("Not allowed to create a new context with a name which already exists");
+        }
+        if (isIdTaken(id)) {
+            throw new Error("Not allowed to create a new context with an id which already exists. Use 'getUniqueIdForName()' to get a unique one instead");
+        }
         
         // Clone maps, and add the new context to it.
         const newMaps = cloneMaps(maps);
-        newMaps.names.set(id, rename);
+        newMaps.names.set(id, name);
         newMaps.colours.set(id, colourid);
 
         return ContextMappings(newMaps);
@@ -99,6 +107,8 @@ function ContextMappings(maps) {
         GetName: getName,
         GetColourId: getColourId,
         IsNameTaken: isNameTaken,
+        IsIdTaken: isIdTaken,
+        GetUniqueIdForName: getUniqueIdForName,
         CreateNewContext: createNewContext,
         Renamecontext: renameContext,
         ChangeContextColour: changeContextColour,
