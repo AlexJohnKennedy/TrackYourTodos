@@ -57,7 +57,7 @@ function ContextMappings(maps) {
         if (isNameTaken(name)) {
             throw new Error("Not allowed to create a new context with a name which already exists");
         }
-        const idTaken = false;
+        let idTaken = false;
         maps.names.keys().forEach(k => {
             if (k === name) idTaken = true;
         });
@@ -94,4 +94,14 @@ function ContextMappings(maps) {
         newMaps.colours.delete(idString);
         return ContextMappings(newMaps);
     }
+
+    return Object.freeze({
+        GetName: getName,
+        GetColourId: getColourId,
+        IsNameTaken: isNameTaken,
+        CreateNewContext: createNewContext,
+        Renamecontext: renameContext,
+        ChangeContextColour: changeContextColour,
+        DeleteContext: deleteContext
+    });
 }
