@@ -13,6 +13,7 @@ namespace todo_app.DataTransferLayer.DatabaseContext {
         }
 
         public DbSet<GenericTodoEvent> TodoEvents { get; set; }
+        public DbSet<ContextMapping> ContextMappings { get; set; }
 
         // Provide a value converter for the children array, since arrays of primitives cannot be mapped to a database.
         // We will convert this array into a comma separated string, so it does not require storage in an additional table.
