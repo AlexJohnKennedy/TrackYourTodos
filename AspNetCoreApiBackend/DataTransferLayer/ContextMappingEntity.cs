@@ -10,7 +10,7 @@ namespace todo_app.DataTransferLayer.Entities {
     public class ContextMapping {
         [Key]
         [StringLength(68)]  // 30 is max name size, plus 32 for a potential uuid prefix, plus 2 for the '$$' delimiter
-        public string IdString { get; set; }
+        public string Id { get; set; }
 
         [Required]
         public string UserId { get; set; }
@@ -19,7 +19,7 @@ namespace todo_app.DataTransferLayer.Entities {
         public string Name { get; set; }
 
         [Required]
-        public int ColourId { get; set; }
+        public int Colourid { get; set; }
     }
 
 }
