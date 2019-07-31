@@ -10,7 +10,7 @@ export const PUT_NEW_TASKS_AT_TOP_OF_LIST = false;
 // Character limit for text fields of an item.
 export const MAX_TASK_NAME_LEN = 240;
 
-export const MAX_CONTEXT_NAME_LEN = 30;
+export const MAX_CONTEXT_NAME_LEN = 68;
 
 export const DEFAULT_GLOBAL_CONTEXT_STRING = "global";  // Context strings are NOT case sensitive.
 
@@ -20,6 +20,7 @@ function isValidContextString(s) {
     if (s === undefined || s === null || s === "" || s.length > MAX_CONTEXT_NAME_LEN) return false;
 
     // TODO: Alpha numeric check, no whitespace check
+    // TODO: If context length is over 30, then it must have a valid 'uuid$$' prefix
 
     return true;
 }
