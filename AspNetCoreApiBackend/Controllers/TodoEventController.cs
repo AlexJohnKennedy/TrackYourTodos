@@ -99,9 +99,9 @@ namespace todo_app.Controllers {
             List<GenericTodoEvent> savedEvents = await dbContext.TodoEvents.Where(e => e.UserId.Equals(userId)).OrderBy(e => e.Timestamp).ToListAsync();
             HashSet<GenericTodoEvent> savedEventSet = savedEvents.ToHashSet(eventComparer); // Create a set of saved events, which uses our custom comparison logic as it's equality checker.
             var nonDups = newEvents.Where(e => !savedEventSet.Contains(e)).ToList();
-            return await ValidateAndSave(nonDups, savedEvents);
+            return await ValidateAndSave(nonDups, savedEvents, userId);
         }
-        private async Task<IActionResult> ValidateAndSave(IList<GenericTodoEvent> newEvents, IList<GenericTodoEvent> savedEvents) {
+        private async Task<IActionResult> ValidateAndSave(IList<GenericTodoEvent> newEvents, IList<GenericTodoEvent> savedEvents, string userId) {
             // Try to validate. If we fail, just save nothing and return a 409 to indicate the client's data is conflicting.
             EventLogReconciler logReconciler = new EventLogReconciler(savedEvents, keySelector, keyComparer, eventComparer);
             logReconciler.SimpleFullStateRebuildValidation(newEvents, out IList<GenericTodoEvent> acceptedEvents, out IList<GenericTodoEvent> skippedEvents, out bool eventsRejected, out bool shouldTriggerRefresh, out string err);
@@ -110,6 +110,10 @@ namespace todo_app.Controllers {
                 return StatusCode(409, err);
             }
             else if (acceptedEvents.Count > 0) {
+                IList<ContextMapping> newContexts = await DetectNewContexts(acceptedEvents, userId);
+                if (newContexts.Count > 0) {
+                    dbContext.ContextMappings.AddRange(newContexts);
+                }
                 dbContext.TodoEvents.AddRange(acceptedEvents);
                 await dbContext.SaveChangesAsync();
 
@@ -118,6 +122,24 @@ namespace todo_app.Controllers {
             else {
                 return ValidPostResponseData(skippedEvents, acceptedEvents, shouldTriggerRefresh);
             }
+        }
+        private async Task<IList<ContextMapping>> DetectNewContexts(IList<GenericTodoEvent> events, string userId) {
+            // Gather all of the current context data, in order to determine if we have any new contexts implied in the events we were just passed.
+            List<ContextMapping> currentContexts = await dbContext.ContextMappings.Where(e => e.UserId.Equals(userId)).ToListAsync();
+            HashSet<string> existingContextIds = currentContexts.Select(c => c.Id).ToHashSet();
+            return events.Where(e => !existingContextIds.Contains(e.Context)).Select(e => BuildNewContext(e.Context, userId)).ToList();
+        }
+        private ContextMapping BuildNewContext(string id, string userId) {
+            // If the id begins with a uuid string, concatenated with a name via '$$' characters, then we need to strip out that prefix and set the suffix as the 'name'.
+            string name = null;
+            if (id.Length > 38) {
+                name = id.Substring(38);
+            }
+            ContextMapping toRet = new ContextMapping();
+            toRet.Id = id;
+            toRet.Name = name;
+            toRet.Colourid = 0;     // New contexts always default to 0, which represents 'no colour specified'. This is the colour id the Global context always has.
+            return toRet;
         }
         private IActionResult ValidPostResponseData(IList<GenericTodoEvent> skippedEvents, IList<GenericTodoEvent> savedEvents, bool shouldTriggerRefresh) {
             return Ok(new {

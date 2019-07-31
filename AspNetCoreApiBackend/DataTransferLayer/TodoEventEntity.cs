@@ -166,8 +166,9 @@ namespace todo_app.DataTransferLayer.Entities {
         public int ColourId { get; set; }
 
         [Required]
-        [StringLength(30, MinimumLength = 1)]
+        [StringLength(68, MinimumLength = 1)]
         //[AlphaNumericSpacesAllowed]   // TODO: Fix this validator. It's causing some whack issues at the moment, and I don't know why
+        // TODO: Make this only allow length > 30 if the first 38 characters are a legal UUID representation, followed by '$$'.
         public string Context { get; set; }
 
         public Guid? Parent { get; set; }        // Nullable, since some event types do not support this.
