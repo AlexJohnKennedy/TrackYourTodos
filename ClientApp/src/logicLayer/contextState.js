@@ -23,14 +23,12 @@ function cloneMaps(maps) {
 
 // Builds context mappings from the json data that the server will send to us on GET
 // requests.
-export function BuildContextMappingsFromJson(availableContextJsonData) {
+export function BuildContextMappings(data) {
     const maps = makeMaps();
-    const data = JSON.parse(availableContextJsonData);
     data.forEach(contextdata => {
         maps.colours.set(contextdata.id, contextdata.colourid);
         maps.names.set(contextdata.id, contextdata.name);
     });
-
     return ContextMappings(maps);
 }
 
@@ -51,19 +49,11 @@ function ContextMappings(maps) {
         }
         return false;
     }
-    function isIdTaken(id) {
-        for (let k of maps.names.keys()) {
-            if (k === id) return true;
-        }
-        return false;
-    }
     function getUniqueIdForName(name) {
-        const idTaken = isIdTaken(name);
-        
         // If the key happens to already be taken, generate a random uuid to prefix onto the key, to avoid conflicts.
         // We are going to concatenate in a particular way which the backend can understand, so that the 'rename' is automatically saved
         // by the server when it see's a task with a prefixed-context-id-string.
-        return idTaken ? NewUuid() + "$$" + name : name;
+        return maps.names.has(name) ? NewUuid() + "$$" + name : name;
     }
 
 
@@ -72,7 +62,7 @@ function ContextMappings(maps) {
         if (isNameTaken(name)) {
             throw new Error("Not allowed to create a new context with a name which already exists");
         }
-        if (isIdTaken(id)) {
+        if (maps.names.has(id)) {
             throw new Error("Not allowed to create a new context with an id which already exists. Use 'getUniqueIdForName()' to get a unique one instead");
         }
         
@@ -107,11 +97,20 @@ function ContextMappings(maps) {
         GetName: getName,
         GetColourId: getColourId,
         IsNameTaken: isNameTaken,
-        IsIdTaken: isIdTaken,
+        HasId: id => maps.names.has(id),
         GetUniqueIdForName: getUniqueIdForName,
         CreateNewContext: createNewContext,
         Renamecontext: renameContext,
         ChangeContextColour: changeContextColour,
-        DeleteContext: deleteContext
+        DeleteContext: deleteContext,
+        IdArray: [ ...maps.names.keys()],
+        NamesArray: [ ...maps.names.values()],
+
+        // Generator function, which iterates. Makes this an iterable object
+        *[Symbol.iterator]() {
+            for (let [id, name] of maps.names) {
+                yield [id, name, maps.colours.get(id)];
+            }
+        }
     });
 }

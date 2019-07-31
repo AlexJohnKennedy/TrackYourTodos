@@ -69,14 +69,15 @@ export class ContextTabs extends Component {
         const currActiveIndex = this.props.selectableContexts.findIndex(s => s === this.props.currentContext);
         if (currActiveIndex < 0 || currActiveIndex > this.props.selectableContexts.length) throw new Error("Invalid current context passed: " + currActiveIndex);
 
-        const capitaliseFirstLetter = s => s.charAt(0).toUpperCase() + s.slice(1);
-
         const undoButtonClassstring = "undoButton" + (this.state.peekStack() === null ? " greyedOut" : "");
+        
+        const capitaliseFirstLetter = s => s.charAt(0).toUpperCase() + s.slice(1);
+        const names = this.props.selectableContexts.map(s => capitaliseFirstLetter(this.props.contextMappings.GetName(s)));
 
         return (
             <div className="ContextTabsWrapper">
                 <NavigationTabs 
-                    names={this.props.selectableContexts.map(s => capitaliseFirstLetter(s))}
+                    names={names}
                     callbackList={callbacks}
                     currActiveIndex={currActiveIndex}
                 />
