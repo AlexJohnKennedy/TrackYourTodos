@@ -371,6 +371,9 @@ export class AppPage extends Component {
                             removeSelectableContext={this.removeSelectableContext}
                             formStateManager={this.formStateManager}
                             maxSelectable={MAX_SELECTABLE_CONTEXTS}
+                            renameContext={this.renameContext}
+                            reviveContext={this.reviveContext}
+                            deleteContext={this.deleteContext}
                         />
                     }
                     <Footer />

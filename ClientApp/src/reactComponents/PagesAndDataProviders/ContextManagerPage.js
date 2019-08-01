@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import { CreationForm } from '../CreationForm';
 import { DEFAULT_GLOBAL_CONTEXT_STRING, MAX_CONTEXT_NAME_LEN } from '../../logicLayer/Task';
-import { SvgIconWrapper } from '../TaskButtons';
 import { TemporaryStateManager } from '../../viewLogic/temporaryStateManager';
 
+import { SvgIconWrapper } from '../TaskButtons';
 import { ReactComponent as CrossIcon } from '../../icons/close-button.svg';
+import { ReactComponent as BinIcon } from '../../icons/rubbish-bin-delete-button.svg';
+import { ReactComponent as EditIcon } from '../../icons/pencil-edit-button.svg';
+
 
 export class ContextManagerPage extends Component {
     
@@ -23,21 +26,24 @@ export class ContextManagerPage extends Component {
                 if (this.props.selectableContexts.includes(context)) {
                     checkboxitems.push(
                         <ContextSelectionCheckbox key={context} name={this.props.contextMappings.GetName(context)} isSelected={true} isDisabled={false} 
-                        toggleCheckbox={() => this.props.removeSelectableContext(context)} formStateManager={this.formStateManager}/>
+                        toggleCheckbox={() => this.props.removeSelectableContext(context)} formStateManager={this.formStateManager} contextid={context}
+                        deleteContext={this.props.deleteContext} renameContext={this.props.renameContext} reviveContext={this.props.reviveContext}/>
                     );
                 }
                 // If it's not selected, and the selection list is not at max capacity, allow the users to toggle them on. Plus one because the global context does not count!
                 else if (this.props.selectableContexts.length < this.props.maxSelectable) {
                     checkboxitems.push(
                         <ContextSelectionCheckbox key={context} name={this.props.contextMappings.GetName(context)} isSelected={false} isDisabled={false} 
-                        toggleCheckbox={() => this.props.addSelectableContext(context)} formStateManager={this.formStateManager}/>                        
+                        toggleCheckbox={() => this.props.addSelectableContext(context)} formStateManager={this.formStateManager} contextid={context}
+                        deleteContext={this.props.deleteContext} renameContext={this.props.renameContext} reviveContext={this.props.reviveContext}/>                        
                     );
                 }
                 // Else, they are unselected, and should not be selected, due to the number of selected items being too many!
                 else {
                     checkboxitems.push(
                         <ContextSelectionCheckbox key={context} name={this.props.contextMappings.GetName(context)} isSelected={false} isDisabled={true}
-                        toggleCheckbox={() => {}} formStateManager={this.formStateManager}/>
+                        toggleCheckbox={() => {}} formStateManager={this.formStateManager} contextid={context}
+                        deleteContext={this.props.deleteContext} renameContext={this.props.renameContext} reviveContext={this.props.reviveContext}/>
                     );
                 }
             }
@@ -106,7 +112,7 @@ class ContextSelectionCheckbox extends Component {
             <div className="contextSelectionCheckboxWrapper">
                 { this.state.showingForm &&
                     <CreationForm 
-                        creationFunction={this.props.createNewContext} 
+                        creationFunction={this.props.renameContext} 
                         formText="" 
                         showingForm={true}
                         submitAction={onSubmit}
@@ -119,6 +125,12 @@ class ContextSelectionCheckbox extends Component {
                     <>
                     {checkbox}
                     {capitaliseFirstLetter(this.props.name)}
+                    <SvgIconWrapper className="iconWrapper editButton" clickAction={() => this.toggleForm(true)} title="Edit context">
+                        <EditIcon className="iconButton"/>
+                    </SvgIconWrapper>
+                    <SvgIconWrapper className="iconWrapper deleteButton" clickAction={() => this.props.deleteContext(this.props.contextid)} title="Delete this context">
+                        <BinIcon className="iconButton"/>
+                    </SvgIconWrapper>
                     </>
                 }
             </div>
