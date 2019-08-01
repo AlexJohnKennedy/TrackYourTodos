@@ -24,6 +24,9 @@ namespace todo_app.DataTransferLayer.Entities {
 
         [Required]
         public int Colourid { get; set; }
+
+        [Required]
+        public bool Deleted { get; set; }
     }
 
 }

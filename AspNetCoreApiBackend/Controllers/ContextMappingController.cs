@@ -53,5 +53,59 @@ namespace todo_app.Controllers {
                 });
             }
         }
+
+        // Endpoint for Soft-deleting Contexts. This will throw 400 responses if the context attempting to be renamed does not actually exist!
+        [Authorize]
+        [EnableCors("UserFacingApplications")]
+        [HttpDelete("/contexts")]
+        public async Task<IActionResult> DeleteContext([FromQuery] string contextid) {
+            HashSet<string> userIdStrings = User.FindAll(googleSubjectClaimType).Select(claim => claim.Value.Trim()).ToHashSet();
+
+            // Get all of the user's current context information from the context mappings table
+            ContextMapping matchingcontext = await dbContext.ContextMappings.FirstOrDefaultAsync(e => userIdStrings.Contains(e.UserId.Trim()) && e.Id.Equals(contextid.Trim()));
+
+            // Throw 404 if the context does not exist
+            if (matchingcontext == null) {
+                return StatusCode(404, $"Context with id-string: {contextid} does not exist. You can not rename a context which does not exist!");
+            }
+            else {
+                // Apply the update, and save!
+                matchingcontext.Deleted = true;
+                dbContext.ContextMappings.Update(matchingcontext);
+                await dbContext.SaveChangesAsync();
+
+                return Ok(new {
+                    id = matchingcontext.Id,
+                    deletedFlag = matchingcontext.Deleted
+                });
+            }
+        }
+
+        // Endpoint for Reviving soft-deleted Contexts. This will throw 400 responses if the context attempting to be renamed does not actually exist!
+        [Authorize]
+        [EnableCors("UserFacingApplications")]
+        [HttpPut("/revivecontext")]
+        public async Task<IActionResult> RevivesContext([FromQuery] string contextid) {
+            HashSet<string> userIdStrings = User.FindAll(googleSubjectClaimType).Select(claim => claim.Value.Trim()).ToHashSet();
+
+            // Get all of the user's current context information from the context mappings table
+            ContextMapping matchingcontext = await dbContext.ContextMappings.FirstOrDefaultAsync(e => userIdStrings.Contains(e.UserId.Trim()) && e.Id.Equals(contextid.Trim()));
+
+            // Throw 404 if the context does not exist
+            if (matchingcontext == null) {
+                return StatusCode(404, $"Context with id-string: {contextid} does not exist. You can not rename a context which does not exist!");
+            }
+            else {
+                // Apply the update, and save!
+                matchingcontext.Deleted = false;
+                dbContext.ContextMappings.Update(matchingcontext);
+                await dbContext.SaveChangesAsync();
+
+                return Ok(new {
+                    id = matchingcontext.Id,
+                    deletedFlag = matchingcontext.Deleted
+                });
+            }
+        }
     }
 }

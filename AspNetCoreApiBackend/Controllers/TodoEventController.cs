@@ -140,6 +140,7 @@ namespace todo_app.Controllers {
             toRet.Name = name;
             toRet.Colourid = 0;     // New contexts always default to 0, which represents 'no colour specified'. This is the colour id the Global context always has.
             toRet.UserId = userId;
+            toRet.Deleted = false;
             return toRet;
         }
         private IActionResult ValidPostResponseData(IList<GenericTodoEvent> skippedEvents, IList<GenericTodoEvent> savedEvents, bool shouldTriggerRefresh) {
