@@ -9,6 +9,10 @@ namespace todo_app.DataTransferLayer.Entities {
     // The 'IdString' field corresponds to the data saved in the todo-event 'context' field, i.e., is a foreign key in that data.
     public class ContextMapping {
         [Key]
+        public int DatabaseId { get; set; }
+
+        // This is the 'id string' of the context. This is NOT the database id.
+        [Required]
         [StringLength(68)]  // 30 is max name size, plus 36 (32 + 4 hyphens) for a potential uuid prefix, plus 2 for the '$$' delimiter
         public string Id { get; set; }
 
