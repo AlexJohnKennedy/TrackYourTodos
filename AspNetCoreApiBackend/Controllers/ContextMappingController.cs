@@ -33,25 +33,7 @@ namespace todo_app.Controllers {
         [HttpPut("/contexts")]
         public async Task<IActionResult> RenameContext([FromQuery] string contextid, [FromQuery] string name) {
             HashSet<string> userIdStrings = User.FindAll(googleSubjectClaimType).Select(claim => claim.Value.Trim()).ToHashSet();
-
-            // Get all of the user's current context information from the context mappings table
-            ContextMapping matchingcontext = await dbContext.ContextMappings.FirstOrDefaultAsync(e => userIdStrings.Contains(e.UserId.Trim()) && e.Id.Equals(contextid.Trim()));
-
-            // Throw 404 if the context does not exist
-            if (matchingcontext == null) {
-                return StatusCode(404, $"Context with id-string: {contextid} does not exist. You can not rename a context which does not exist!");
-            }
-            else {
-                // Apply the update, and save!
-                matchingcontext.Name = name.ToLower().Trim();
-                dbContext.ContextMappings.Update(matchingcontext);
-                await dbContext.SaveChangesAsync();
-
-                return Ok(new {
-                    id = matchingcontext.Id,
-                    name = matchingcontext.Name
-                });
-            }
+            return await MutateContextRecord(userIdStrings, contextid, c => c.Name = name.Trim().ToLower(), c => Ok(new { id = c.Id, name = c.Name }));
         }
 
         // Endpoint for Soft-deleting Contexts. This will throw 400 responses if the context attempting to be renamed does not actually exist!
@@ -60,25 +42,7 @@ namespace todo_app.Controllers {
         [HttpDelete("/contexts")]
         public async Task<IActionResult> DeleteContext([FromQuery] string contextid) {
             HashSet<string> userIdStrings = User.FindAll(googleSubjectClaimType).Select(claim => claim.Value.Trim()).ToHashSet();
-
-            // Get all of the user's current context information from the context mappings table
-            ContextMapping matchingcontext = await dbContext.ContextMappings.FirstOrDefaultAsync(e => userIdStrings.Contains(e.UserId.Trim()) && e.Id.Equals(contextid.Trim()));
-
-            // Throw 404 if the context does not exist
-            if (matchingcontext == null) {
-                return StatusCode(404, $"Context with id-string: {contextid} does not exist. You can not rename a context which does not exist!");
-            }
-            else {
-                // Apply the update, and save!
-                matchingcontext.Deleted = true;
-                dbContext.ContextMappings.Update(matchingcontext);
-                await dbContext.SaveChangesAsync();
-
-                return Ok(new {
-                    id = matchingcontext.Id,
-                    deletedFlag = matchingcontext.Deleted
-                });
-            }
+            return await MutateContextRecord(userIdStrings, contextid, c => c.Deleted = true, c => Ok(new { id = c.Id, deletedFlag = c.Deleted }));
         }
 
         // Endpoint for Reviving soft-deleted Contexts. This will throw 400 responses if the context attempting to be renamed does not actually exist!
@@ -87,7 +51,10 @@ namespace todo_app.Controllers {
         [HttpPut("/revivecontext")]
         public async Task<IActionResult> RevivesContext([FromQuery] string contextid) {
             HashSet<string> userIdStrings = User.FindAll(googleSubjectClaimType).Select(claim => claim.Value.Trim()).ToHashSet();
+            return await MutateContextRecord(userIdStrings, contextid, c => c.Deleted = false, c => Ok(new { id = c.Id, deletedFlag = c.Deleted }));
+        }
 
+        private async Task<IActionResult> MutateContextRecord(HashSet<string> userIdStrings, string contextid, Action<ContextMapping> MutatorFunc, Func<ContextMapping, IActionResult> BuildSuccessResponse) {
             // Get all of the user's current context information from the context mappings table
             ContextMapping matchingcontext = await dbContext.ContextMappings.FirstOrDefaultAsync(e => userIdStrings.Contains(e.UserId.Trim()) && e.Id.Equals(contextid.Trim()));
 
@@ -97,14 +64,12 @@ namespace todo_app.Controllers {
             }
             else {
                 // Apply the update, and save!
-                matchingcontext.Deleted = false;
+                MutatorFunc(matchingcontext);
+
                 dbContext.ContextMappings.Update(matchingcontext);
                 await dbContext.SaveChangesAsync();
 
-                return Ok(new {
-                    id = matchingcontext.Id,
-                    deletedFlag = matchingcontext.Deleted
-                });
+                return BuildSuccessResponse(matchingcontext);
             }
         }
     }
