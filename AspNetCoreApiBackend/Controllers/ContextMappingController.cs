@@ -35,6 +35,9 @@ namespace todo_app.Controllers {
             if (name == null || name.Trim().Count() == 0) {
                 return StatusCode(400, "'name' query parameter must not be null or empty!");
             }
+            else if (await dbContext.ContextMappings.FirstOrDefaultAsync(e => e.Name.Equals(name.Trim().ToLower())) != null) {
+                return StatusCode(400, $"The name '{name.Trim().ToLower()} is already taken by another context.");
+            }
             HashSet<string> userIdStrings = User.FindAll(googleSubjectClaimType).Select(claim => claim.Value.Trim()).ToHashSet();
             return await MutateContextRecord(userIdStrings, contextid, c => c.Name = name.Trim().ToLower(), c => Ok(new { id = c.Id, name = c.Name }));
         }

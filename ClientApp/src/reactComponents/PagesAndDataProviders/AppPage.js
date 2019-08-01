@@ -21,7 +21,6 @@ import { setConflictingDataAction } from '../../interactionLayer/ajaxDataModules
 import { DEFAULT_GLOBAL_CONTEXT_STRING, MAX_CONTEXT_NAME_LEN } from '../../logicLayer/Task';
 
 import { toast } from 'react-toastify';
-import { RetryPostToast } from '../RetryPostToast';
 
 // Define constants which others may want to use.
 export const MAX_SELECTABLE_CONTEXTS = 9;
@@ -295,6 +294,24 @@ export class AppPage extends Component {
             return null;
         }
         return context.trim().toLowerCase();
+    }
+
+    renameContext(idString, newName) {
+        newName = this.validateContextString(newName);
+        if (newName === null) return;
+        if (newName === DEFAULT_GLOBAL_CONTEXT_STRING || this.state.contextMappings.IsNameTaken(newName)) {
+            toast.warn("That name is already taken!");
+            return;
+        }
+
+        // Simply reset the state, applying the modification, and send a PUT request to the backend to make the change!
+        
+        this.setState((state, props) => {
+            return {
+                contextMappings: state.contextMappings.RenameContext(idString, newName)
+            };
+        });
+
     }
 
     render() {
