@@ -123,6 +123,7 @@ export class AppPage extends Component {
     // Encapsultates the logic for choosing the visible contexts for a given current context. E.g., global => all are visible. 
     // If we end up implemented nested contexts, then for a given current context, we would search and make the current's entire
     // subtree visible as well! But for now, it's either global, or just one.
+    // The parameter passed here should be the ID STRING of the context we are switching to, not the name!
     performSwitch(context) {
         if (!this.props.failedEventCacheInstance.IsEmpty()) {
             RetryPostingFailedEvents(this.props.failedEventCacheInstance);
@@ -144,7 +145,6 @@ export class AppPage extends Component {
                 // If the selectable contexts list is full, then we will simply replace the last item in the list, sorry bro!
                 let newSelectables = state.selectableContexts;
                 if (state.selectableContexts.length === MAX_SELECTABLE_CONTEXTS) {
-                    console.log(newSelectables.length)
                     newSelectables[newSelectables.length - 1] = context;
                 }
                 else {
@@ -170,34 +170,40 @@ export class AppPage extends Component {
     }
 
     // Pased down to our children, allowing them to create new contexts.
-    createNewContext(newContext) {
-        newContext = this.validateContextString(newContext);
-        if (newContext === null) { return; }
-        if (this.state.availableContexts.includes(newContext) || newContext === DEFAULT_GLOBAL_CONTEXT_STRING) {
-            this.performSwitch(newContext);
+    createNewContext(newContextName) {
+        newContextName = this.validateContextString(newContextName);
+        if (newContextName === null) { return; }
+
+        if (this.state.contextMappings.IsNameTaken(newContextName) || newContextName === DEFAULT_GLOBAL_CONTEXT_STRING) {
+            this.performSwitch(this.state.contextMappings.GetIdForName(newContextName));
         }
         else {
             if (!this.props.failedEventCacheInstance.IsEmpty()) {
                 RetryPostingFailedEvents(this.props.failedEventCacheInstance);
             }
             
+            // Aquire unique id string for this name. The ColourId always defaults to '0' which means no explicitly assigned colour.
+            const id = this.state.contextMappings.GetUniqueIdForName(newContextName);
+            const colourId = 0;
+
             this.state.dataModelScope.ClearAllRegisteredCallbacks();
             this.setState((state, props) => {
                 // If the selectable contexts list is full, then we will simply replace the last item in the list, sorry bro!
                 let newSelectables = state.selectableContexts;
                 if (state.selectableContexts.length === MAX_SELECTABLE_CONTEXTS) {
-                    newSelectables[newSelectables.length - 1] = newContext;
+                    newSelectables[newSelectables.length - 1] = id;
                 }
                 else {
-                    newSelectables = newSelectables.concat([newContext]);
+                    newSelectables = newSelectables.concat([id]);
                 }
                 this.updateSelectableContextsInLocalStorage(newSelectables);
                 return {
-                    currentContext: newContext,
-                    visibleContexts: [newContext],
-                    availableContexts: state.availableContexts.concat([newContext]),
+                    contextMappings: state.contextMappings.CreateNewContext(id, newContextName, colourId),
+                    currentContext: id,
+                    visibleContexts: [id],
+                    availableContexts: state.availableContexts.concat([id]),
                     selectableContexts: newSelectables,
-                    dataModelScope: InstantiateNewDataModelScope(newContext)
+                    dataModelScope: InstantiateNewDataModelScope(id)
                 }
             });
         }

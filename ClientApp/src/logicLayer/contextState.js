@@ -49,6 +49,12 @@ function ContextMappings(maps) {
         }
         return false;
     }
+    function getIdForName(name) {
+        for (let k of maps.names.keys()) {
+            if (name === getName(k)) return k;
+        }
+        return null;
+    }
     function getUniqueIdForName(name) {
         // If the key happens to already be taken, generate a random uuid to prefix onto the key, to avoid conflicts.
         // We are going to concatenate in a particular way which the backend can understand, so that the 'rename' is automatically saved
@@ -97,6 +103,7 @@ function ContextMappings(maps) {
         GetName: getName,
         GetColourId: getColourId,
         IsNameTaken: isNameTaken,
+        GetIdForName: getIdForName,
         HasId: id => maps.names.has(id),
         GetUniqueIdForName: getUniqueIdForName,
         CreateNewContext: createNewContext,
