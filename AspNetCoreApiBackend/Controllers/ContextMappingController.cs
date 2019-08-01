@@ -32,6 +32,9 @@ namespace todo_app.Controllers {
         [EnableCors("UserFacingApplications")]
         [HttpPut("/contexts")]
         public async Task<IActionResult> RenameContext([FromQuery] string contextid, [FromQuery] string name) {
+            if (name == null || name.Trim().Count() == 0) {
+                return StatusCode(400, "'name' query parameter must not be null or empty!");
+            }
             HashSet<string> userIdStrings = User.FindAll(googleSubjectClaimType).Select(claim => claim.Value.Trim()).ToHashSet();
             return await MutateContextRecord(userIdStrings, contextid, c => c.Name = name.Trim().ToLower(), c => Ok(new { id = c.Id, name = c.Name }));
         }
@@ -49,12 +52,16 @@ namespace todo_app.Controllers {
         [Authorize]
         [EnableCors("UserFacingApplications")]
         [HttpPut("/revivecontext")]
-        public async Task<IActionResult> RevivesContext([FromQuery] string contextid) {
+        public async Task<IActionResult> ReviveContext([FromQuery] string contextid) {
             HashSet<string> userIdStrings = User.FindAll(googleSubjectClaimType).Select(claim => claim.Value.Trim()).ToHashSet();
             return await MutateContextRecord(userIdStrings, contextid, c => c.Deleted = false, c => Ok(new { id = c.Id, deletedFlag = c.Deleted }));
         }
 
         private async Task<IActionResult> MutateContextRecord(HashSet<string> userIdStrings, string contextid, Action<ContextMapping> MutatorFunc, Func<ContextMapping, IActionResult> BuildSuccessResponse) {
+            if (contextid == null || contextid.Trim().Count() == 0) {
+                return StatusCode(400, "contextid query parameter must not be null or empty!");
+            }
+
             // Get all of the user's current context information from the context mappings table
             ContextMapping matchingcontext = await dbContext.ContextMappings.FirstOrDefaultAsync(e => userIdStrings.Contains(e.UserId.Trim()) && e.Id.Equals(contextid.Trim()));
 
@@ -65,10 +72,8 @@ namespace todo_app.Controllers {
             else {
                 // Apply the update, and save!
                 MutatorFunc(matchingcontext);
-
                 dbContext.ContextMappings.Update(matchingcontext);
                 await dbContext.SaveChangesAsync();
-
                 return BuildSuccessResponse(matchingcontext);
             }
         }
