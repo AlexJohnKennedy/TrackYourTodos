@@ -17,6 +17,7 @@ import { InstantiateNewDataModelScope } from '../../interactionLayer/viewLayerIn
 import { BuildDataEventHttpPostHandlers, RetryPostingFailedEvents } from '../../interactionLayer/ajaxDataModules/ajaxDataEventPoster';
 
 import { setConflictingDataAction } from '../../interactionLayer/ajaxDataModules/ajaxErrorcaseHandlers';
+import { SendRenameContextRequest, SendDeleteContextRequest, SendReviveContextRequest } from '../../interactionLayer/ajaxDataModules/ajaxContextChangeEventPoster';
 
 import { DEFAULT_GLOBAL_CONTEXT_STRING, MAX_CONTEXT_NAME_LEN } from '../../logicLayer/Task';
 
@@ -53,6 +54,9 @@ export class AppPage extends Component {
         this.addSelectableContext = this.addSelectableContext.bind(this);
         this.removeSelectableContext = this.removeSelectableContext.bind(this);
         this.updateSelectableContextsInLocalStorage = this.updateSelectableContextsInLocalStorage.bind(this);
+        this.deleteContext = this.deleteContext.bind(this);
+        this.reviveContext = this.reviveContext.bind(this);
+        this.renameContext = this.renameContext.bind(this);
         
         // Create a temporary state context for creation forms. Pass in the callback which the backButtonStateManager provides, for the purposes of history manipulation.
         this.formStateManager = TemporaryStateManager(onFormStateRegistrationAction);
@@ -305,13 +309,36 @@ export class AppPage extends Component {
         }
 
         // Simply reset the state, applying the modification, and send a PUT request to the backend to make the change!
-        
+        SendRenameContextRequest(idString, newName, 2);
+
         this.setState((state, props) => {
             return {
                 contextMappings: state.contextMappings.RenameContext(idString, newName)
             };
         });
+    }
+    deleteContext(idString) {
+        if (!this.state.contextMappings.HasId(idString)) {
+            throw new Error("illegal id-string passed to delete-context function: " + idString);
+        }
 
+        SendDeleteContextRequest(idString);
+        this.setState((state, props) => {
+            return {
+                contextMappings: state.contextMappings.DeleteContext(idString)
+            };
+        });
+    }
+    reviveContext(idString) {
+        if (!this.state.contextMappings.HasId(idString)) {
+            throw new Error("illegal id-string passed to revive-context function: " + idString);
+        }
+        SendReviveContextRequest(idString);
+        this.setState((state, props) => {
+            return {
+                contextMappings: state.contextMappings.ReviveContext(idString)
+            };
+        });
     }
 
     render() {
