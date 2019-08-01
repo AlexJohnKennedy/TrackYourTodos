@@ -8,16 +8,19 @@ import NewUuid from 'uuid/v4';
 function makeMaps() {
     const nameMappings = new Map();
     const colourIdMappings = new Map();
+    const deletedFlags = new Map();
 
     return Object.freeze({
         names: nameMappings,
-        colours: colourIdMappings
+        colours: colourIdMappings,
+        deletedflags: deletedFlags
     });
 }
 function cloneMaps(maps) {
     return Object.freeze({
         names: new Map(maps.names),
-        colours: new Map(maps.colours)
+        colours: new Map(maps.colours),
+        deletedflags: new Map(maps.deletedFlags)
     });
 }
 
@@ -28,6 +31,7 @@ export function BuildContextMappings(data) {
     data.forEach(contextdata => {
         maps.colours.set(contextdata.id, contextdata.colourid);
         maps.names.set(contextdata.id, contextdata.name);
+        maps.deletedflags.set(contextdata.id, contextdata.deleted);
     });
     return ContextMappings(maps);
 }
@@ -61,6 +65,9 @@ function ContextMappings(maps) {
         // by the server when it see's a task with a prefixed-context-id-string.
         return maps.names.has(name) ? NewUuid() + "$$" + name : name;
     }
+    function isDeleted(id) {
+        return maps.deletedflags.get(id);
+    }
 
 
     // Functional mutators. These return new instances that contain the updated data, requiring the old instances to be disposed of.
@@ -87,15 +94,19 @@ function ContextMappings(maps) {
         newMaps.names.set(idString, newName);
         return ContextMappings(newMaps);
     }
+    function deleteContext(idString) {
+        const newMaps = cloneMaps(maps);
+        newMaps.deletedflags.set(idString, true);
+        return ContextMappings(newMaps);
+    }
+    function reviveContext(idString) {
+        const newMaps = cloneMaps(maps);
+        newMaps.deletedflags.set(idString, false);
+        return ContextMappings(newMaps);
+    }
     function changeContextColour(idString, newColourid) {
         const newMaps = cloneMaps(maps);
         newMaps.colours.set(idString, newColourid);
-        return ContextMappings(newMaps);
-    }
-    function deleteContext(idString) {
-        const newMaps = cloneMaps(maps);
-        newMaps.names.delete(idString);
-        newMaps.colours.delete(idString);
         return ContextMappings(newMaps);
     }
 
@@ -106,10 +117,12 @@ function ContextMappings(maps) {
         GetIdForName: getIdForName,
         HasId: id => maps.names.has(id),
         GetUniqueIdForName: getUniqueIdForName,
+        IsDeleted: isDeleted,
         CreateNewContext: createNewContext,
         Renamecontext: renameContext,
         ChangeContextColour: changeContextColour,
         DeleteContext: deleteContext,
+        ReviveContext: reviveContext,
         IdArray: [ ...maps.names.keys()],
         NamesArray: [ ...maps.names.values()],
 
