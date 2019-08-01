@@ -72,6 +72,7 @@ function ContextMappings(maps) {
 
     // Functional mutators. These return new instances that contain the updated data, requiring the old instances to be disposed of.
     function createNewContext(id, name, colourid) {
+        console.log("creating new context");
         if (isNameTaken(name)) {
             throw new Error("Not allowed to create a new context with a name which already exists");
         }

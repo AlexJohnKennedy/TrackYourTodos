@@ -207,7 +207,7 @@ export class AppPage extends Component {
                     availableContexts: state.availableContexts.concat([id]),
                     selectableContexts: newSelectables,
                     dataModelScope: InstantiateNewDataModelScope(id)
-                }
+                };
             });
         }
     }
@@ -318,6 +318,7 @@ export class AppPage extends Component {
         });
     }
     deleteContext(idString) {
+        console.log(this.state.contextMappings.IdArray);
         if (!this.state.contextMappings.HasId(idString)) {
             throw new Error("illegal id-string passed to delete-context function: " + idString);
         }
