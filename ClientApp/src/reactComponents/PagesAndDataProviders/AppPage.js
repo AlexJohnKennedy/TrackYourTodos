@@ -200,8 +200,9 @@ export class AppPage extends Component {
                     newSelectables = newSelectables.concat([id]);
                 }
                 this.updateSelectableContextsInLocalStorage(newSelectables);
+                const newState = state.contextMappings.CreateNewContext(id, newContextName, colourId);
                 return {
-                    contextMappings: state.contextMappings.CreateNewContext(id, newContextName, colourId),
+                    contextMappings: newState,
                     currentContext: id,
                     visibleContexts: [id],
                     availableContexts: state.availableContexts.concat([id]),
