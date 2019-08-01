@@ -2,13 +2,15 @@ import React, { Component } from 'react';
 import { CreationForm } from '../CreationForm';
 import { DEFAULT_GLOBAL_CONTEXT_STRING, MAX_CONTEXT_NAME_LEN } from '../../logicLayer/Task';
 import { SvgIconWrapper } from '../TaskButtons';
+import { TemporaryStateManager } from '../../viewLogic/temporaryStateManager';
+
 import { ReactComponent as CrossIcon } from '../../icons/close-button.svg';
 
 export class ContextManagerPage extends Component {
-    // For now, this page is just a big, selectable checklist of all the available contexts, displayed in 'most frequently used' order.
-    // This allows the user to specify a set of contexts to appear in the context tab-list, and create new contexts.
-    // There should be a limit on the number of contexts the user can make at a time, and they should eventually be able to delete
-    // contexts as well!
+    
+    componentDidMount() {
+        this.formStateManager = TemporaryStateManager();
+    }
 
     render() {
         // For each available context (except the global context), generate a check-box list item which allows us to toggle
@@ -20,19 +22,22 @@ export class ContextManagerPage extends Component {
                 // If this context is already selected, then render the checkbox as 'checked' and have to toggle remove it.
                 if (this.props.selectableContexts.includes(context)) {
                     checkboxitems.push(
-                        <ContextSelectionCheckbox key={context} name={this.props.contextMappings.GetName(context)} isSelected={true} isDisabled={false} toggleCheckbox={() => this.props.removeSelectableContext(context)}/>
+                        <ContextSelectionCheckbox key={context} name={this.props.contextMappings.GetName(context)} isSelected={true} isDisabled={false} 
+                        toggleCheckbox={() => this.props.removeSelectableContext(context)} formStateManager={this.formStateManager}/>
                     );
                 }
                 // If it's not selected, and the selection list is not at max capacity, allow the users to toggle them on. Plus one because the global context does not count!
                 else if (this.props.selectableContexts.length < this.props.maxSelectable) {
                     checkboxitems.push(
-                        <ContextSelectionCheckbox key={context} name={this.props.contextMappings.GetName(context)} isSelected={false} isDisabled={false} toggleCheckbox={() => this.props.addSelectableContext(context)}/>                        
+                        <ContextSelectionCheckbox key={context} name={this.props.contextMappings.GetName(context)} isSelected={false} isDisabled={false} 
+                        toggleCheckbox={() => this.props.addSelectableContext(context)} formStateManager={this.formStateManager}/>                        
                     );
                 }
                 // Else, they are unselected, and should not be selected, due to the number of selected items being too many!
                 else {
                     checkboxitems.push(
-                        <ContextSelectionCheckbox key={context} name={this.props.contextMappings.GetName(context)} isSelected={false} isDisabled={true} toggleCheckbox={() => console.warn("User just tried to add " + context + " as a selectable context, but there are too many selected. TODO: Add a 'grey out' onto these!")}/>
+                        <ContextSelectionCheckbox key={context} name={this.props.contextMappings.GetName(context)} isSelected={false} isDisabled={true}
+                        toggleCheckbox={() => {}} formStateManager={this.formStateManager}/>
                     );
                 }
             }
@@ -68,6 +73,15 @@ class ContextSelectionCheckbox extends Component {
         super(props);
         this.CheckboxInputRef = React.createRef();
         this.handleClick = this.handleClick.bind(this);
+        this.toggleForm = this.toggleForm.bind(this);
+        this.state = {
+            showingForm: false
+        };
+    }
+    toggleForm(on) {
+        this.setState({
+            showingForm: on
+        });
     }
     componentDidMount() {
         this.CheckboxInputRef.current.checked = this.props.isSelected;  // boolean
@@ -86,10 +100,27 @@ class ContextSelectionCheckbox extends Component {
 
         const capitaliseFirstLetter = s => s.charAt(0).toUpperCase() + s.slice(1);
 
+        const onSubmit = () => { this.props.formStateManager.triggerCleanup(); this.toggleForm(false); };
+
         return (
             <div className="contextSelectionCheckboxWrapper">
-                {checkbox}
-                {capitaliseFirstLetter(this.props.name)}
+                { this.state.showingForm &&
+                    <CreationForm 
+                        creationFunction={this.props.createNewContext} 
+                        formText="" 
+                        showingForm={true}
+                        submitAction={onSubmit}
+                        formStateManager={this.props.formStateManager}
+                        maxFieldLength={MAX_CONTEXT_NAME_LEN}
+                        initialValue={capitaliseFirstLetter(this.props.name)}
+                    />
+                }
+                { !this.state.showingForm &&
+                    <>
+                    {checkbox}
+                    {capitaliseFirstLetter(this.props.name)}
+                    </>
+                }
             </div>
         );
     }
