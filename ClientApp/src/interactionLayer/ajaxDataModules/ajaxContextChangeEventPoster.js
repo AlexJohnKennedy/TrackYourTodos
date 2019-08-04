@@ -1,5 +1,5 @@
 import { forceTokenRefresh, handleAuthFailure, handleServerFailure } from './ajaxErrorcaseHandlers';
-import { API_ENDPOINT } from './apiEndpointConfiguration';
+import { API_ADDRESS } from './apiEndpointConfiguration';
 
 import { toast } from 'react-toastify';
 import { RetryPostToast } from '../../reactComponents/RetryPostToast';
@@ -11,15 +11,15 @@ let postRequestNumber = 0;
 const getPostRequestNumber = () => postRequestNumber++;
 
 export function SendRenameContextRequest(idstring, name, retryCount) {
-    const url = API_ENDPOINT + "/contexts?contextid=" + encodeURIComponent(idstring) + "&name=" + encodeURIComponent(name);
+    const url = API_ADDRESS + "/contexts?contextid=" + encodeURIComponent(idstring) + "&name=" + encodeURIComponent(name);
     sendRequest('PUT', url, retryCount);
 }
 export function SendDeleteContextRequest(idstring, retryCount) {
-    const url = API_ENDPOINT + "/contexts?contextid=" + encodeURIComponent(idstring);
+    const url = API_ADDRESS + "/contexts?contextid=" + encodeURIComponent(idstring);
     sendRequest('DELETE', url, retryCount);
 }
 export function SendReviveContextRequest(idstring, retryCount) {
-    const url = API_ENDPOINT + "/revivecontext?contextid=" + encodeURIComponent(idstring);
+    const url = API_ADDRESS + "/revivecontext?contextid=" + encodeURIComponent(idstring);
     sendRequest('PUT', url, retryCount);
 }
 
