@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
-import { GetColourMapping, ThemeId, HSLAColour } from '../viewLogic/colourSetManager';
+
+/* SOON TO BE DEPRECATED */import { GetColourMapping, ThemeId, HSLAColour } from '../viewLogic/colourSetManager';
+/* Something from here will replace! */ import { GetColour } from '../viewLogic/colourMappings';
+
 import { CheckBox, SvgIconWrapper } from './TaskButtons';
 import { CreationForm } from './CreationForm.js';
 import { Category, ProgressStatus, MAX_TASK_NAME_LEN, UNDO_ACTION_MAX_AGE_MILLISECONDS } from '../logicLayer/Task';

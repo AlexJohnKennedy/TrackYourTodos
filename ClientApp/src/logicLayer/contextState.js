@@ -44,7 +44,7 @@ function ContextMappings(maps) {
         return name === undefined || name === null ? idString : name;
     }
     function getColourId(idString) {
-        return maps.names.get(idString);
+        return maps.colours.get(idString);
     }
     function isNameTaken(name) {
         name = name.trim();

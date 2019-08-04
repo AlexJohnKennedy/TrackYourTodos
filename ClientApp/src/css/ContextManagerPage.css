@@ -149,4 +149,7 @@
     .contextManagerPage .iconWrapper ~ .iconWrapper {
         right: 3.6rem;
     }
+    .colourPickIcon {
+        right: 6.6rem;
+    }
 }

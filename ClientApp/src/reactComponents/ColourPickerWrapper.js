@@ -1,7 +1,7 @@
 import { CirclePicker } from 'react-color';
 import React, { Component } from 'react';
 
-import { ColoursArray } from '../viewLogic/colourMappings';
+import { ColoursArray, GetColour } from '../viewLogic/colourMappings';
 
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
@@ -29,16 +29,16 @@ export class ColourPickerForm extends Component {
     }
 
     render() {
+        const colour = GetColour(this.props.colourId);
         return (
-            <div className="colourPickIcon" onClick={this.renderColourPicker} title="Pick a colour!"/>
+            <div className="colourPickIcon" style={{ backgroundColor: colour }} onClick={this.renderColourPicker} title="Pick a colour!"/>
         );
     }
 }
 
-
-
 class ColourPickerWrapper extends Component {
     handleChangeComplete = (color) => {
+        console.log(color);
         this.props.onColourChange(ColoursArray.findIndex(s => s === color.hex));
     };
 
@@ -46,7 +46,7 @@ class ColourPickerWrapper extends Component {
         return (
             <div className="colourConfirmationBox">
                 <CirclePicker
-                    color={this.props.colourId < 0 ? '#000000' : ColoursArray[this.props.colourId]}
+                    color={GetColour(this.props.colourId)}
                     colors={ColoursArray}
                     onChangeComplete={this.handleChangeComplete}
                 />
