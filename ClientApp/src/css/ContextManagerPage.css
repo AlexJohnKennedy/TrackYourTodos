@@ -129,6 +129,16 @@
 .contextManagerPage .iconButton:hover {
     fill: var(--dull-text-colour);
 }
+.colourPickIcon {
+    position: absolute;
+    border-radius: 50%;
+    width: 2rem;
+    height: 2rem;
+    border: 1px solid var(--divider-colour-lighter);
+    top: calc(50% - 1rem);
+    right: 4.4rem;
+    cursor: pointer;
+}
 
 @media (max-width: 800px) {
     .contextManagerPage .iconWrapper {

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { CreationForm } from '../CreationForm';
 import { DEFAULT_GLOBAL_CONTEXT_STRING, MAX_CONTEXT_NAME_LEN_NO_UUID } from '../../logicLayer/Task';
 import { TemporaryStateManager } from '../../viewLogic/temporaryStateManager';
+import { ColourPickerForm } from '../ColourPickerWrapper';
 
 import { SvgIconWrapper } from '../TaskButtons';
 import { ReactComponent as CrossIcon } from '../../icons/close-button.svg';
@@ -33,7 +34,8 @@ export class ContextManagerPage extends Component {
                     checkboxitems.push(
                         <ContextSelectionCheckbox key={contextid} name={this.props.contextMappings.GetName(contextid)} isSelected={true} isDisabled={false} 
                         toggleCheckbox={() => this.props.removeSelectableContext(contextid)} formStateManager={this.formStateManager} contextid={contextid}
-                        deleteContext={this.props.deleteContext} renameContext={this.props.renameContext} reviveContext={this.props.reviveContext}/>
+                        deleteContext={this.props.deleteContext} renameContext={this.props.renameContext} reviveContext={this.props.reviveContext}
+                        colourId={this.props.contextMappings.GetColourId(contextid)}/>
                     );
                 }
                 // If it's not selected, and the selection list is not at max capacity, allow the users to toggle them on. Plus one because the global context does not count!
@@ -41,7 +43,8 @@ export class ContextManagerPage extends Component {
                     checkboxitems.push(
                         <ContextSelectionCheckbox key={contextid} name={this.props.contextMappings.GetName(contextid)} isSelected={false} isDisabled={false} 
                         toggleCheckbox={() => this.props.addSelectableContext(contextid)} formStateManager={this.formStateManager} contextid={contextid}
-                        deleteContext={this.props.deleteContext} renameContext={this.props.renameContext} reviveContext={this.props.reviveContext}/>                        
+                        deleteContext={this.props.deleteContext} renameContext={this.props.renameContext} reviveContext={this.props.reviveContext}
+                        colourId={this.props.contextMappings.GetColourId(contextid)}/>                        
                     );
                 }
                 // Else, they are unselected, and should not be selected, due to the number of selected items being too many!
@@ -49,7 +52,8 @@ export class ContextManagerPage extends Component {
                     checkboxitems.push(
                         <ContextSelectionCheckbox key={contextid} name={this.props.contextMappings.GetName(contextid)} isSelected={false} isDisabled={true}
                         toggleCheckbox={() => {}} formStateManager={this.formStateManager} contextid={contextid}
-                        deleteContext={this.props.deleteContext} renameContext={this.props.renameContext} reviveContext={this.props.reviveContext}/>
+                        deleteContext={this.props.deleteContext} renameContext={this.props.renameContext} reviveContext={this.props.reviveContext}
+                        colourId={this.props.contextMappings.GetColourId(contextid)}/>
                     );
                 }
             }
@@ -140,6 +144,7 @@ class ContextSelectionCheckbox extends Component {
                     <SvgIconWrapper className="iconWrapper editButton" clickAction={() => this.toggleForm(true)} title="Edit context">
                         <EditIcon className="iconButton"/>
                     </SvgIconWrapper>
+                    <ColourPickerForm colourId={this.props.colourId} onColourChange={id => console.log("Colour switched to id:", id)}/>
                     </>
                 }
             </div>

@@ -30,7 +30,7 @@ export class ColourPickerForm extends Component {
 
     render() {
         return (
-            <div className="colourPickIcon" onClick={this.renderColourPicker}/>
+            <div className="colourPickIcon" onClick={this.renderColourPicker} title="Pick a colour!"/>
         );
     }
 }
@@ -39,19 +39,19 @@ export class ColourPickerForm extends Component {
 
 class ColourPickerWrapper extends Component {
     handleChangeComplete = (color) => {
-        this.props.onColourChange(ColoursArray.findIndex(color.hex));
+        this.props.onColourChange(ColoursArray.findIndex(s => s === color.hex));
     };
 
     render() {
         return (
-            <>
-            <CirclePicker
-                color={this.props.colourId < 0 ? '#000000' : ColoursArray[this.props.colourId]}
-                colors={ColoursArray}
-                onChangeComplete={this.handleChangeComplete}
-            />
-            <div className="cancelButton" onClick={this.props.onClose}>Cancel</div>
-            </>
+            <div className="colourConfirmationBox">
+                <CirclePicker
+                    color={this.props.colourId < 0 ? '#000000' : ColoursArray[this.props.colourId]}
+                    colors={ColoursArray}
+                    onChangeComplete={this.handleChangeComplete}
+                />
+                <div className="cancelButton" onClick={this.props.onClose}>Cancel</div>
+            </div>
         );
     }
 }
