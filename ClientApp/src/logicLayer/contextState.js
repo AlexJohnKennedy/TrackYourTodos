@@ -74,10 +74,10 @@ function ContextMappings(maps) {
     function createNewContext(id, name, colourid) {
         console.log("creating new context");
         if (name != null && isNameTaken(name)) {
-            throw new Error("Not allowed to create a new context with a name which already exists");
+            throw new Error("Not allowed to create a new context with a name which already exists: " + name);
         }
         if (maps.names.has(id)) {
-            throw new Error("Not allowed to create a new context with an id which already exists. Use 'getUniqueIdForName()' to get a unique one instead");
+            throw new Error("Not allowed to create a new context with an id which already exists: " + id + ". Use 'getUniqueIdForName()' to get a unique one instead");
         }
         
         // Clone maps, and add the new context to it.
@@ -135,7 +135,7 @@ function ContextMappings(maps) {
         GetUniqueIdForName: getUniqueIdForName,
         IsDeleted: isDeleted,
         CreateNewContext: createNewContext,
-        Renamecontext: renameContext,
+        RenameContext: renameContext,
         ChangeContextColour: changeContextColour,
         DeleteContext: deleteContext,
         ReviveContext: reviveContext,

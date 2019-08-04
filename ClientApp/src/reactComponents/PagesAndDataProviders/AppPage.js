@@ -219,7 +219,7 @@ export class AppPage extends Component {
         if (contextData === undefined || contextData === null) throw new Error("Cannot parse null contexts to updateAvailableContexts.");
 
         // Merge the incoming mappings with the ones we have, but make sure the incoming mappings take precedence
-        const contextState = BuildContextMappings(contextData).CreateNewContext(DEFAULT_GLOBAL_CONTEXT_STRING, null, 0).MergeOtherMappingsIntoThis(this.state.contextMappings);
+        const contextState = BuildContextMappings(contextData).MergeOtherMappingsIntoThis(this.state.contextMappings);
 
         // Merges the recieved context id-strings with the current ones and the default, then removes the duplicates by placing them in a set, and converting back to an array. 
         const validatedStrings = [ ...new Set([DEFAULT_GLOBAL_CONTEXT_STRING].concat(this.state.availableContexts).concat(contextState.IdArray).filter(s => s !== null && s !== undefined)) ];
@@ -299,16 +299,18 @@ export class AppPage extends Component {
     validateContextString(context) {
         if (context === null || context === undefined || context === "" || context.trim().length === 0 || context.trim().length > MAX_CONTEXT_NAME_LEN) {
             console.warn("Invalid context passed to ContextState! Just doing nothing instead of crashing. Context was: " + context);
+            console.trace();
             return null;
         }
         return context.trim().toLowerCase();
     }
 
     renameContext(idString, newName) {
+        console.log("ID STRING:", idString, "NAME:", newName);
         newName = this.validateContextString(newName);
         if (newName === null) return;
         if (newName === DEFAULT_GLOBAL_CONTEXT_STRING || this.state.contextMappings.IsNameTaken(newName)) {
-            toast.warn("That name is already taken!");
+            toast.warn(this.state.contextMappings.IsDeleted(idString) ? "That name is already taken by an archived context! Rename that one first if you want to use this name again" : "That name is already taken!");
             return;
         }
 

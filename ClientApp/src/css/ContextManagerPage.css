@@ -89,6 +89,17 @@
     height: 1.6rem;
     cursor: pointer;
 }
+.contextManagerPage .iconWrapper {
+    position: absolute;
+    right: 0.4rem;
+    top: calc(50% - 0.7rem);
+    cursor: pointer;    
+    width: 1.4rem;
+    height: 1.4rem;
+}
+.contextManagerPage .iconWrapper ~ .iconWrapper {
+    right: 2.4rem;
+}
 .contextManagerPage .iconButton {
     position: absolute;
     top: 0px;
