@@ -346,7 +346,6 @@ export class AppPage extends Component {
     }
 
     render() {
-        console.log("context state when AppPage rendered:", this.state.contextMappings);
         return (
             // Return each 'section' of the app as siblings, so that the root div can arrange them using CSS Grid!
             <ThemeId.Provider value={{ themeId: currThemeId }}> 

@@ -21,8 +21,6 @@ export class ContextManagerPage extends Component {
     }
 
     render() {
-        console.log(this.formStateManager);
-
         // For each available context (except the global context), generate a check-box list item which allows us to toggle
         // the state of them.
         const checkboxitems = [];
@@ -92,6 +90,7 @@ class ContextSelectionCheckbox extends Component {
         };
     }
     toggleForm(on) {
+        this.props.formStateManager.triggerCleanup();
         this.setState({
             showingForm: on
         });
@@ -119,20 +118,22 @@ class ContextSelectionCheckbox extends Component {
             <div className="contextSelectionCheckboxWrapper">
                 { this.state.showingForm &&
                     <CreationForm 
-                        creationFunction={name => this.props.renameContext(this.props.contextid, name)} 
+                        creationFunction={name => { if (name.toLowerCase() !== this.props.name.toLowerCase()) this.props.renameContext(this.props.contextid, name); }} 
                         formText="" 
                         showingForm={true}
                         submitAction={onSubmit}
                         formStateManager={this.props.formStateManager}
                         maxFieldLength={MAX_CONTEXT_NAME_LEN}
                         initialValue={capitaliseFirstLetter(this.props.name)}
-                    />
+                    >
+                        <div className="cancelButton" onClick={this.props.formStateManager.triggerCleanup}>Cancel</div>
+                    </CreationForm>
                 }
                 { !this.state.showingForm &&
                     <>
                     {checkbox}
                     {capitaliseFirstLetter(this.props.name)}
-                    <SvgIconWrapper className="iconWrapper deleteButton" clickAction={() => this.props.deleteContext(this.props.contextid)} title="Delete this context">
+                    <SvgIconWrapper className="iconWrapper deleteButton" clickAction={() => this.props.deleteContext(this.props.contextid)} title="Archive this context">
                         <BinIcon className="iconButton"/>
                     </SvgIconWrapper>
                     <SvgIconWrapper className="iconWrapper editButton" clickAction={() => this.toggleForm(true)} title="Edit context">

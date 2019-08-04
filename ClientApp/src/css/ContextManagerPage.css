@@ -71,7 +71,25 @@
     padding-bottom: 1rem;
 }
 
-.contextManagerPage .contextSelectionCheckboxWrapper input {
+
+.contextManagerPage .contextSelectionCheckboxWrapper .creation-form form {
+    display: inline-grid;
+    grid-template-rows: auto auto;
+    grid-template-columns: 1fr 1fr;
+    row-gap: 0.6rem;
+    column-gap: 0.2rem;
+}
+.contextManagerPage .contextSelectionCheckboxWrapper .creation-form form input[type=text] {
+    grid-area: 1 / 1 / 2 / 3;
+}
+.contextManagerPage .contextSelectionCheckboxWrapper .creation-form form input[type=submit] {
+    justify-self: right;
+}
+.contextManagerPage .contextSelectionCheckboxWrapper .creation-form form .cancelButton {
+    justify-self: left;
+}
+
+.contextManagerPage .contextSelectionCheckboxWrapper input[type=checkbox] {
     position: absolute;
     left: 0.4rem;
     top: 0rem;

@@ -47,7 +47,8 @@
 }
 
 /* Style the submit button itself */
-input[type=submit] {
+input[type=submit], .cancelButton {
+    box-sizing: border-box;
     border-radius: 0%;
     width: 8rem;
     height: 2.35rem;
@@ -69,12 +70,12 @@ input[type=text] {
     line-height: 100%;
 }
 
-.board > .creation-form input[type=submit], .wrapper > .creation-form input[type=submit], .contextManagerPage > .creation-form input[type=submit] {
+.board > .creation-form input[type=submit], .wrapper > .creation-form input[type=submit], .contextManagerPage .creation-form input[type=submit], .cancelButton {
     background-color: rgba(0,0,0,0);
     border: 1px solid var(--sidebar-background-colour);
     color: var(--text-colour);
 }
-.board > .creation-form input[type=submit]:hover, .wrapper > .creation-form input[type=submit]:hover, .contextManagerPage > .creation-form input[type=submit]:hover {
+.board > .creation-form input[type=submit]:hover, .wrapper > .creation-form input[type=submit]:hover, .contextManagerPage .creation-form input[type=submit]:hover, .cancelButton:hover {
     background-color: var(--sidebar-background-colour);
 }
 
