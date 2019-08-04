@@ -10,16 +10,20 @@ import React from 'react';
 let postRequestNumber = 0;
 const getPostRequestNumber = () => postRequestNumber++;
 
-export function SendRenameContextRequest(idstring, name, retryCount) {
+export function SendRenameContextRequest(idstring, name, retryCount = 2) {
     const url = API_ADDRESS + "/contexts?contextid=" + encodeURIComponent(idstring) + "&name=" + encodeURIComponent(name);
     sendRequest('PUT', url, retryCount);
 }
-export function SendDeleteContextRequest(idstring, retryCount) {
+export function SendDeleteContextRequest(idstring, retryCount = 2) {
     const url = API_ADDRESS + "/contexts?contextid=" + encodeURIComponent(idstring);
     sendRequest('DELETE', url, retryCount);
 }
-export function SendReviveContextRequest(idstring, retryCount) {
+export function SendReviveContextRequest(idstring, retryCount = 2) {
     const url = API_ADDRESS + "/revivecontext?contextid=" + encodeURIComponent(idstring);
+    sendRequest('PUT', url, retryCount);
+}
+export function SendUpdateContextColourRequest(idstring, newColourId, retryCount = 2) {
+    const url = API_ADDRESS + "/contextcolours?contextid=" + encodeURIComponent(idstring) + "&colourid=" + encodeURIComponent(newColourId);
     sendRequest('PUT', url, retryCount);
 }
 

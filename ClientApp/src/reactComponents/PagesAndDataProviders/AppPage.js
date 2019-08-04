@@ -17,7 +17,7 @@ import { InstantiateNewDataModelScope } from '../../interactionLayer/viewLayerIn
 import { BuildDataEventHttpPostHandlers, RetryPostingFailedEvents } from '../../interactionLayer/ajaxDataModules/ajaxDataEventPoster';
 
 import { setConflictingDataAction } from '../../interactionLayer/ajaxDataModules/ajaxErrorcaseHandlers';
-import { SendRenameContextRequest, SendDeleteContextRequest, SendReviveContextRequest } from '../../interactionLayer/ajaxDataModules/ajaxContextChangeEventPoster';
+import { SendRenameContextRequest, SendDeleteContextRequest, SendReviveContextRequest, SendUpdateContextColourRequest } from '../../interactionLayer/ajaxDataModules/ajaxContextChangeEventPoster';
 
 import { DEFAULT_GLOBAL_CONTEXT_STRING, MAX_CONTEXT_NAME_LEN } from '../../logicLayer/Task';
 
@@ -57,6 +57,7 @@ export class AppPage extends Component {
         this.deleteContext = this.deleteContext.bind(this);
         this.reviveContext = this.reviveContext.bind(this);
         this.renameContext = this.renameContext.bind(this);
+        this.updateContextColour = this.updateContextColour.bind(this);
         
         // Create a temporary state context for creation forms. Pass in the callback which the backButtonStateManager provides, for the purposes of history manipulation.
         this.formStateManager = TemporaryStateManager(onFormStateRegistrationAction);
@@ -347,6 +348,17 @@ export class AppPage extends Component {
             };
         });
     }
+    updateContextColour(idString, colourid) {
+        if (!this.state.contextMappings.HasId(idString)) {
+            throw new Error("illegal id-string passed to revive-context function: " + idString);
+        }
+        SendUpdateContextColourRequest(idString, colourid);
+        this.setState((state, props) => {
+            return {
+                contextMappings: state.contextMappings.ChangeContextColour(idString, colourid)
+            };
+        });
+    }
 
     render() {
         return (
@@ -381,6 +393,7 @@ export class AppPage extends Component {
                             renameContext={this.renameContext}
                             reviveContext={this.reviveContext}
                             deleteContext={this.deleteContext}
+                            updateContextColour={this.updateContextColour}
                         />
                     }
                     <Footer />
