@@ -24,7 +24,8 @@ export class ContextManagerPage extends Component {
         // For each available context (except the global context), generate a check-box list item which allows us to toggle
         // the state of them.
         const checkboxitems = [];
-        for (let contextid of this.props.availableContexts) {
+        const livingContexts = this.props.availableContexts.filter(id => !this.props.contextMappings.IsDeleted(id));
+        for (let contextid of livingContexts) {
             // If this context is not the default global context, we will add it.
             if (contextid !== DEFAULT_GLOBAL_CONTEXT_STRING) {
                 // If this context is already selected, then render the checkbox as 'checked' and have to toggle remove it.

@@ -229,7 +229,7 @@ export class AppPage extends Component {
         if (prevContextStateData !== null) {
             // If there was saved information, then parse it, and add the selectable contexts and current context state, provided they exist in the loaded availableContexts!
             const parsedData = JSON.parse(prevContextStateData);
-            const prevSelectableContexts = [ ...new Set([DEFAULT_GLOBAL_CONTEXT_STRING].concat(parsedData).map(s => this.validateContextString(s)).filter(s => s !== null && validatedStrings.includes(s))) ];
+            const prevSelectableContexts = [ ...new Set([DEFAULT_GLOBAL_CONTEXT_STRING].concat(parsedData).map(s => this.validateContextString(s)).filter(s => s !== null && contextState.HasId(s) && !contextState.IsDeleted(s))) ];
             this.setState({
                 contextMappings: contextState,
                 availableContexts: validatedStrings,
@@ -332,6 +332,9 @@ export class AppPage extends Component {
                 contextMappings: state.contextMappings.DeleteContext(idString)
             };
         });
+
+        // Deleted contexts should no longer be selectable
+        this.removeSelectableContext(idString);
     }
     reviveContext(idString) {
         if (!this.state.contextMappings.HasId(idString)) {
