@@ -299,18 +299,16 @@ export class AppPage extends Component {
     validateContextString(context) {
         if (context === null || context === undefined || context === "" || context.trim().length === 0 || context.trim().length > MAX_CONTEXT_NAME_LEN) {
             console.warn("Invalid context passed to ContextState! Just doing nothing instead of crashing. Context was: " + context);
-            console.trace();
             return null;
         }
         return context.trim().toLowerCase();
     }
 
     renameContext(idString, newName) {
-        console.log("ID STRING:", idString, "NAME:", newName);
         newName = this.validateContextString(newName);
         if (newName === null) return;
         if (newName === DEFAULT_GLOBAL_CONTEXT_STRING || this.state.contextMappings.IsNameTaken(newName)) {
-            toast.warn(this.state.contextMappings.IsDeleted(idString) ? "That name is already taken by an archived context! Rename that one first if you want to use this name again" : "That name is already taken!");
+            toast.info(this.state.contextMappings.IsDeleted(this.state.contextMappings.GetIdForName(newName)) ? "That name is already taken by an archived context! Rename that one first if you want to use this name again" : "That name is already taken!");
             return;
         }
 
