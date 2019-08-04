@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
-/* SOON TO BE DEPRECATED */import { GetColourMapping, ThemeId, HSLAColour } from '../viewLogic/colourSetManager';
-/* Something from here will replace! */ import { GetColour } from '../viewLogic/colourMappings';
+/* SOON TO BE DEPRECATED */import { GetColourMapping, ThemeId } from '../viewLogic/colourSetManager';
+/* Something from here will replace! */ import { GetColour, HSLAColour } from '../viewLogic/colourMappings';
 
 import { CheckBox, SvgIconWrapper } from './TaskButtons';
 import { CreationForm } from './CreationForm.js';
