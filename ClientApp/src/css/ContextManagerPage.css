@@ -129,3 +129,14 @@
 .contextManagerPage .iconButton:hover {
     fill: var(--dull-text-colour);
 }
+
+@media (max-width: 800px) {
+    .contextManagerPage .iconWrapper {
+        width: 2rem;
+        height: 2rem;
+        top: calc(50% - 1rem);
+    }
+    .contextManagerPage .iconWrapper ~ .iconWrapper {
+        right: 3.6rem;
+    }
+}
