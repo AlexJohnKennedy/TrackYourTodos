@@ -201,6 +201,7 @@ export class AppPage extends Component {
                 }
                 this.updateSelectableContextsInLocalStorage(newSelectables);
                 const newState = state.contextMappings.CreateNewContext(id, newContextName, colourId);
+                console.log("New state after creation:", newState);
                 return {
                     contextMappings: newState,
                     currentContext: id,
@@ -217,7 +218,9 @@ export class AppPage extends Component {
     updateAvailableContexts(contextData) {
         if (contextData === undefined || contextData === null) throw new Error("Cannot parse null contexts to updateAvailableContexts.");
 
-        const contextState = BuildContextMappings(contextData);
+        // Merge the incoming mappings with the ones we have, but make sure the incoming mappings take precedence
+        const contextState = BuildContextMappings(contextData).CreateNewContext(DEFAULT_GLOBAL_CONTEXT_STRING, null, 0).MergeOtherMappingsIntoThis(this.state.contextMappings);
+
         // Merges the recieved context id-strings with the current ones and the default, then removes the duplicates by placing them in a set, and converting back to an array. 
         const validatedStrings = [ ...new Set([DEFAULT_GLOBAL_CONTEXT_STRING].concat(this.state.availableContexts).concat(contextState.IdArray).filter(s => s !== null && s !== undefined)) ];
 
@@ -319,7 +322,6 @@ export class AppPage extends Component {
         });
     }
     deleteContext(idString) {
-        console.log(this.state.contextMappings.IdArray);
         if (!this.state.contextMappings.HasId(idString)) {
             throw new Error("illegal id-string passed to delete-context function: " + idString);
         }
@@ -344,6 +346,7 @@ export class AppPage extends Component {
     }
 
     render() {
+        console.log("context state when AppPage rendered:", this.state.contextMappings);
         return (
             // Return each 'section' of the app as siblings, so that the root div can arrange them using CSS Grid!
             <ThemeId.Provider value={{ themeId: currThemeId }}> 

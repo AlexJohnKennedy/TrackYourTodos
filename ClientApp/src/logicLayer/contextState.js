@@ -20,7 +20,7 @@ function cloneMaps(maps) {
     return Object.freeze({
         names: new Map(maps.names),
         colours: new Map(maps.colours),
-        deletedflags: new Map(maps.deletedFlags)
+        deletedflags: new Map(maps.deletedflags)
     });
 }
 
@@ -73,7 +73,7 @@ function ContextMappings(maps) {
     // Functional mutators. These return new instances that contain the updated data, requiring the old instances to be disposed of.
     function createNewContext(id, name, colourid) {
         console.log("creating new context");
-        if (isNameTaken(name)) {
+        if (name != null && isNameTaken(name)) {
             throw new Error("Not allowed to create a new context with a name which already exists");
         }
         if (maps.names.has(id)) {
@@ -84,6 +84,7 @@ function ContextMappings(maps) {
         const newMaps = cloneMaps(maps);
         newMaps.names.set(id, name);
         newMaps.colours.set(id, colourid);
+        newMaps.deletedflags.set(id, false);
 
         return ContextMappings(newMaps);
     }
@@ -110,6 +111,20 @@ function ContextMappings(maps) {
         newMaps.colours.set(idString, newColourid);
         return ContextMappings(newMaps);
     }
+    function mergeOtherMappingsIntoThis(otherContextMappings) {
+        const newMaps = cloneMaps(maps);
+        
+        // data in THIS object is prioritised over data in the other mapping object, in the same idstring has different results in the other
+        for (let [id, name, colourid, deleted] of otherContextMappings) {
+            if (!newMaps.names.has(id)) {
+                newMaps.names.set(id, name);
+                newMaps.colours.set(id, colourid);
+                newMaps.deletedflags.set(id, deleted);
+            }
+        }
+
+        return ContextMappings(newMaps);
+    }
 
     return Object.freeze({
         GetName: getName,
@@ -124,13 +139,16 @@ function ContextMappings(maps) {
         ChangeContextColour: changeContextColour,
         DeleteContext: deleteContext,
         ReviveContext: reviveContext,
+        MergeOtherMappingsIntoThis: mergeOtherMappingsIntoThis,
         IdArray: [ ...maps.names.keys()],
         NamesArray: [ ...maps.names.values()],
+        DeletedFlagsArray: [ ...maps.deletedflags.values()],
+        ColourIdsArray: [ ...maps.colours.values()],
 
         // Generator function, which iterates. Makes this an iterable object
         *[Symbol.iterator]() {
             for (let [id, name] of maps.names) {
-                yield [id, name, maps.colours.get(id)];
+                yield [id, name, maps.colours.get(id), maps.deletedflags.get(id)];
             }
         }
     });
