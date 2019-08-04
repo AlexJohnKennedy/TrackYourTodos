@@ -127,21 +127,7 @@ namespace todo_app.Controllers {
             // Gather all of the current context data, in order to determine if we have any new contexts implied in the events we were just passed.
             List<ContextMapping> currentContexts = await dbContext.ContextMappings.Where(e => e.UserId.Equals(userId)).ToListAsync();
             HashSet<string> existingContextIds = currentContexts.Select(c => c.Id).ToHashSet();
-            return events.Where(e => !existingContextIds.Contains(e.Context)).Select(e => e.Context).ToHashSet().Select(s => BuildNewContext(s, userId)).ToList();
-        }
-        private ContextMapping BuildNewContext(string id, string userId) {
-            // If the id begins with a uuid string, concatenated with a name via '$$' characters, then we need to strip out that prefix and set the suffix as the 'name'.
-            string name = null;
-            if (id.Length > 38) {
-                name = id.Substring(38);
-            }
-            ContextMapping toRet = new ContextMapping();
-            toRet.Id = id;
-            toRet.Name = name;
-            toRet.Colourid = 0;     // New contexts always default to 0, which represents 'no colour specified'. This is the colour id the Global context always has.
-            toRet.UserId = userId;
-            toRet.Deleted = false;
-            return toRet;
+            return events.Where(e => !existingContextIds.Contains(e.Context)).Select(e => e.Context).ToHashSet().Select(s => ContextMapping.BuildNewContext(s, userId)).ToList();
         }
         private IActionResult ValidPostResponseData(IList<GenericTodoEvent> skippedEvents, IList<GenericTodoEvent> savedEvents, bool shouldTriggerRefresh) {
             return Ok(new {
