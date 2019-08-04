@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { CreationForm } from '../CreationForm';
-import { DEFAULT_GLOBAL_CONTEXT_STRING, MAX_CONTEXT_NAME_LEN } from '../../logicLayer/Task';
+import { DEFAULT_GLOBAL_CONTEXT_STRING, MAX_CONTEXT_NAME_LEN_NO_UUID } from '../../logicLayer/Task';
 import { TemporaryStateManager } from '../../viewLogic/temporaryStateManager';
 
 import { SvgIconWrapper } from '../TaskButtons';
 import { ReactComponent as CrossIcon } from '../../icons/close-button.svg';
 import { ReactComponent as BinIcon } from '../../icons/rubbish-bin-delete-button.svg';
 import { ReactComponent as EditIcon } from '../../icons/pencil-edit-button.svg';
-
 
 export class ContextManagerPage extends Component {
     constructor(props) {
@@ -25,6 +24,7 @@ export class ContextManagerPage extends Component {
         // the state of them.
         const checkboxitems = [];
         const livingContexts = this.props.availableContexts.filter(id => !this.props.contextMappings.IsDeleted(id));
+
         for (let contextid of livingContexts) {
             // If this context is not the default global context, we will add it.
             if (contextid !== DEFAULT_GLOBAL_CONTEXT_STRING) {
@@ -67,7 +67,7 @@ export class ContextManagerPage extends Component {
                     showingForm={true}
                     submitAction={() => {}}
                     formStateManager={this.props.formStateManager}
-                    maxFieldLength={MAX_CONTEXT_NAME_LEN}
+                    maxFieldLength={MAX_CONTEXT_NAME_LEN_NO_UUID}
                 />
                 <div className="checklistWrapper">
                     {checkboxitems} 
@@ -124,7 +124,7 @@ class ContextSelectionCheckbox extends Component {
                         showingForm={true}
                         submitAction={onSubmit}
                         formStateManager={this.props.formStateManager}
-                        maxFieldLength={MAX_CONTEXT_NAME_LEN}
+                        maxFieldLength={MAX_CONTEXT_NAME_LEN_NO_UUID}
                         initialValue={capitaliseFirstLetter(this.props.name)}
                     >
                         <div className="cancelButton" onClick={this.props.formStateManager.triggerCleanup}>Cancel</div>

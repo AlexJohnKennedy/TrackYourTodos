@@ -10,7 +10,8 @@ export const PUT_NEW_TASKS_AT_TOP_OF_LIST = false;
 // Character limit for text fields of an item.
 export const MAX_TASK_NAME_LEN = 240;
 
-export const MAX_CONTEXT_NAME_LEN = 68;
+export const MAX_CONTEXT_NAME_LEN_NO_UUID = 20;
+export const MAX_CONTEXT_NAME_LEN = MAX_CONTEXT_NAME_LEN_NO_UUID + 38;
 
 export const DEFAULT_GLOBAL_CONTEXT_STRING = "global";  // Context strings are NOT case sensitive.
 

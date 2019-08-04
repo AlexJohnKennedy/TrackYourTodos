@@ -185,9 +185,9 @@ export class AppPage extends Component {
                 RetryPostingFailedEvents(this.props.failedEventCacheInstance);
             }
             
-            // Aquire unique id string for this name. The ColourId always defaults to '0' which means no explicitly assigned colour.
+            // Aquire unique id string for this name. The ColourId always defaults to '-1' which means no explicitly assigned colour.
             const id = this.state.contextMappings.GetUniqueIdForName(newContextName);
-            const colourId = 0;
+            const colourId = -1;
 
             this.state.dataModelScope.ClearAllRegisteredCallbacks();
             this.setState((state, props) => {
