@@ -157,7 +157,7 @@ export class Task extends Component {
         let classstring = "task" + (highlight.length === 0 ? "" : " highlighted") + (animClassname === null ? " entranceAnim" : animClassname);
 
         // Attain background colour programmatically, and apply side padding iff the checkbox is present.
-        let processedColour = this.processColour(GetColourMapping(this.context.themeId).get(this.props.taskView.colourid), completion.length > 0, failure.length > 0);
+        let processedColour = this.processColour(this.props.colourGetter(this.props.taskView), completion.length > 0, failure.length > 0);
         const style = {
             backgroundColor: processedColour.toString(),
         };

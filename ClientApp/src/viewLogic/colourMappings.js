@@ -34,9 +34,8 @@ export const HSLAArray = [
     new HSLAColour(200, 18, 46, 100)
 ];
 
-
 export const GetDefaultColour = () => "#424040";
-export const GetDefaultHSLAColour = () => null; // TODO
+export const GetDefaultHSLAColour = () => new HSLAColour(0, 2, 25, 100);
 
 export const GetColour = id => id < 0 || id >= ColoursArray.length ? GetDefaultColour() : ColoursArray[id];
-export const GetHSLAColour = id => id < 0 || id >= HSLAArray.length ? GetDefaultHSLAColour() : HSLAArray[id];
+export const GetHSLAColour = id => { console.log("called", id); return id < 0 || id >= HSLAArray.length ? GetDefaultHSLAColour() : HSLAArray[id]};

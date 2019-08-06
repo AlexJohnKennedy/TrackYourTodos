@@ -17,6 +17,7 @@ export class TaskList extends Component {
                     failureAnimIds={this.props.failureAnimIds}
                     animTriggerCallbacks={this.props.animTriggerCallbacks}
                     formStateManager={this.props.formStateManager}
+                    colourGetter={this.props.colourGetter}
                 />;
             }
             else {

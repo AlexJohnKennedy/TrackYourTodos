@@ -12,6 +12,7 @@ import { ShortCutManager } from '../../viewLogic/keyboardShortcutHandler';
 import { ThemeId, currThemeId } from '../../viewLogic/colourSetManager';
 import { BuildContextMappings } from '../../logicLayer/contextState';
 import { initBrowserHistoryManipulation, onFormStateRegistrationAction } from '../../viewLogic/backButtonStateManager';
+import { GetHSLAColour } from '../../viewLogic/colourMappings';
 
 import { InstantiateNewDataModelScope } from '../../interactionLayer/viewLayerInteractionApi';
 import { BuildDataEventHttpPostHandlers, RetryPostingFailedEvents } from '../../interactionLayer/ajaxDataModules/ajaxDataEventPoster';
@@ -361,6 +362,12 @@ export class AppPage extends Component {
     }
 
     render() {
+        // If we have more than one context visible, then the 'colour getter' function reads from the context mappings.
+        // If only one, then we use the task's id.
+        const getTaskColour = this.state.visibleContexts.length !== 1 ? 
+        taskView => {console.log("getting colour for context", GetHSLAColour(this.state.contextMappings.GetColourId(taskView.context))); return GetHSLAColour(this.state.contextMappings.GetColourId(this.state.contextMappings.GetIdForName(taskView.context)))} :
+        taskView => {console.log("getting colour for task", GetHSLAColour(taskView.colourid)); return GetHSLAColour(taskView.colourid)};
+
         return (
             // Return each 'section' of the app as siblings, so that the root div can arrange them using CSS Grid!
             <ThemeId.Provider value={{ themeId: currThemeId }}> 
@@ -376,8 +383,8 @@ export class AppPage extends Component {
                         contextMappings={this.state.contextMappings}
                         dataModelScope={this.state.dataModelScope}
                     />
-                    <BacklogSection dataModelScope={this.state.dataModelScope} formStateManager={this.formStateManager} />
-                    <ActiveTaskSection dataModelScope={this.state.dataModelScope} formStateManager={this.formStateManager} />
+                    <BacklogSection dataModelScope={this.state.dataModelScope} formStateManager={this.formStateManager} colourGetter={getTaskColour}/>
+                    <ActiveTaskSection dataModelScope={this.state.dataModelScope} formStateManager={this.formStateManager} colourGetter={getTaskColour}/>
                     <TaskStatisticsSection dataModelScope={this.state.dataModelScope} formStateManager={this.formStateManager} />
                     { this.state.showingContextManagerPage &&
                         <ContextManagerPage 

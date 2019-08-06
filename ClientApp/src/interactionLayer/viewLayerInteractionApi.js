@@ -474,6 +474,7 @@ function BuildNewTaskView(domainTaskObj, activeList, undoStack, viewLayerCallbac
         id   : domainTaskObj.id,
         colourid : domainTaskObj.colourid,
         category : domainTaskObj.category,
+        context : domainTaskObj.context,
         progressStatus : domainTaskObj.progressStatus,
         parent : (domainTaskObj.parent === null) ? null : domainTaskObj.parent.id,
         children : domainTaskObj.children.map((task) => task.id),
