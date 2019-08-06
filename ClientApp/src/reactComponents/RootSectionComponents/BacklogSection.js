@@ -121,6 +121,7 @@ export class BacklogSection extends Component {
                                 unregister : id => id
                             }}
                             formStateManager={this.props.formStateManager}
+                            colourGetter={this.props.colourGetter}
                         />
                     }
                     { this.state.showingCompleted &&
@@ -138,6 +139,7 @@ export class BacklogSection extends Component {
                                 unregister : id => id
                             }}
                             formStateManager={this.props.formStateManager}
+                            colourGetter={this.props.colourGetter}
                         />
                     }
                     { this.state.showingGraveyard &&
@@ -155,6 +157,7 @@ export class BacklogSection extends Component {
                                 unregister : id => id
                             }}
                             formStateManager={this.props.formStateManager}
+                            colourGetter={this.props.colourGetter}
                         />
                     }
                     <CreationForm

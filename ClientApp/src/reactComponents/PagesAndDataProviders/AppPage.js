@@ -62,6 +62,10 @@ export class AppPage extends Component {
         
         // Create a temporary state context for creation forms. Pass in the callback which the backButtonStateManager provides, for the purposes of history manipulation.
         this.formStateManager = TemporaryStateManager(onFormStateRegistrationAction);
+
+        // Register for some response handlers
+        this.state.dataModelScope.RegisterForOnInitialDataLoadCallback(availableContexts => this.updateAvailableContexts(availableContexts));
+        this.state.dataModelScope.RegisterForOnDataRefreshCallback(availableContexts => this.updateAvailableContexts(availableContexts));
         
         // Setup browser-history manipulation, which will prevent the browser from navigating away from the app page if 'back' is pressed while a form is open.
         const areFormsOpen = () => this.formStateManager.length() > 0 || this.state.showingContextManagerPage;
@@ -70,10 +74,6 @@ export class AppPage extends Component {
     setupInitialDataFetch() {
         const conflictingDataAction = () => this.state.dataModelScope.TriggerEventLogDataRefresh(this.state.visibleContexts);
         setConflictingDataAction(conflictingDataAction);
-
-        // Register for some response handlers
-        this.state.dataModelScope.RegisterForOnInitialDataLoadCallback(availableContexts => this.updateAvailableContexts(availableContexts));
-        this.state.dataModelScope.RegisterForOnDataRefreshCallback(availableContexts => this.updateAvailableContexts(availableContexts));
 
         // All of our children will have mounted by the time we mount, thus, they should have registered their update handlers.
         // Thus, we should now trigger a 'fetch and load data' operation, since everything is now instantiated correctly.
@@ -365,7 +365,7 @@ export class AppPage extends Component {
         // If we have more than one context visible, then the 'colour getter' function reads from the context mappings.
         // If only one, then we use the task's id.
         const getTaskColour = this.state.visibleContexts.length !== 1 ? 
-        taskView => {console.log("getting colour for context", GetHSLAColour(this.state.contextMappings.GetColourId(taskView.context))); return GetHSLAColour(this.state.contextMappings.GetColourId(this.state.contextMappings.GetIdForName(taskView.context)))} :
+        taskView => {console.log("getting colour for context", taskView, this.state.contextMappings, GetHSLAColour(this.state.contextMappings.GetColourId(taskView.context))); return GetHSLAColour(this.state.contextMappings.GetColourId(this.state.contextMappings.GetIdForName(taskView.context)))} :
         taskView => {console.log("getting colour for task", GetHSLAColour(taskView.colourid)); return GetHSLAColour(taskView.colourid)};
 
         return (

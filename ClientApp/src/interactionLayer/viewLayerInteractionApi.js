@@ -509,6 +509,7 @@ function BuildNewInactiveTaskView(domainTaskObj, tasklistobj, undoStack, viewLay
         colourid : domainTaskObj.colourid,
         category : domainTaskObj.category,
         progressStatus : domainTaskObj.progressStatus,
+        context : domainTaskObj.context,
 
         // Revive method, to create a new clone who is not inactive
         ReviveTask : reviveTask
