@@ -15,6 +15,25 @@ using todo_app.DataTransferLayer.DatabaseContext;
 
 namespace todo_app.Controllers {
 
+    // TEMPORARY: ULTRA HACKY WAY TO DO DATABASE MIGRATION LOLOL
+    public class Comparer : EqualityComparer<ContextMapping> {
+        // We say two todo events are duplicates if they have the same 'type' and refer to the same task, and have the same timestamp.
+        // In the case of creation, revival, and failure, we do not check timestamp, since we know this type of event can only be
+        // applied to a given task no-more-than once.
+        // Note that in the case of 'duplicates', we should always accept the earlier-occurring event as the true event.
+        public override bool Equals(ContextMapping c1, ContextMapping c2) {
+            if (c1 == null && c2 == null) return true;
+            else if (c1 == null || c2 == null) return false;
+            else if (!c1.UserId.Equals(c2.UserId)) return false;
+            else if (!c1.Id.Equals(c2.Id)) return false;
+            return true;
+        }
+        public override int GetHashCode(ContextMapping e) {
+            var data = new { e.Id, e.UserId };
+            return data.GetHashCode();
+        }
+    }
+
     [ApiController]
     public class ContextMappingController : ControllerBase {
         private const string googleSubjectClaimType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier";
@@ -25,6 +44,21 @@ namespace todo_app.Controllers {
         public ContextMappingController(TodoEventContext injectedContext, ILogger<ContextMappingController> injectedLogger) {
             this.logger = injectedLogger;
             this.dbContext = injectedContext;
+        }
+
+        // TEMPORARY: ULTRA HACKY WAY TO DO DATABASE MIGRATION LOLOL
+        [Authorize]
+        [EnableCors("UserFacingApplications")]
+        [HttpPut("/hackthemainframe")]
+        public async Task<IActionResult> UpdateContexts() {
+            HashSet<ContextMapping> set = new HashSet<ContextMapping>(new Comparer());
+            IEnumerable<GenericTodoEvent> events = dbContext.TodoEvents.Where(e => true).AsEnumerable();
+            foreach (GenericTodoEvent e in events) {
+                set.Add(ContextMapping.BuildNewContext(e.Context, e.UserId));
+            }
+            dbContext.ContextMappings.AddRange(set);
+            await dbContext.SaveChangesAsync();
+            return Ok(set);
         }
 
         // Endpoint for Renaming Contexts. This will throw 400 responses if the context attempting to be renamed does not actually exist!
