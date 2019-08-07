@@ -34,6 +34,8 @@ export class HSLAColour {
 //     new HSLAColour(200, 18, 46, 100)
 // ];
 
+// Define colours here, such that both arrays match for a given index. They will serve as both the task colours, and the react-color-picker colours.
+// Note that for the colour picker to work, the hex values must all use lower case letters in their strings.
 export const ColoursArray = ["#007acc", "#d03535", "#d68f00", "#ab35d0"];
 export const HSLAArray = [
     new HSLAColour(204, 100, 40, 100),
