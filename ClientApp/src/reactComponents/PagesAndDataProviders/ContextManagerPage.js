@@ -13,9 +13,16 @@ export class ContextManagerPage extends Component {
     constructor(props) {
         super(props);
 
+        this.CheckboxInputRef = React.createRef();
         this.formStateManager = TemporaryStateManager();
     }
-    
+
+    componentDidMount() {
+        this.CheckboxInputRef.current.checked = this.props.isUsingContextColouring;  // boolean
+    }
+    componentDidUpdate() {
+        this.CheckboxInputRef.current.checked = this.props.isUsingContextColouring;  // boolean
+    }
     componentWillUnmount() {
         this.formStateManager.clearCallbacks();
     }
@@ -25,6 +32,8 @@ export class ContextManagerPage extends Component {
         // the state of them.
         const checkboxitems = [];
         const livingContexts = this.props.availableContexts.filter(id => !this.props.contextMappings.IsDeleted(id));
+
+        const toggleAction = () => this.props.toggleContextColouring(!this.props.isUsingContextColouring);
 
         for (let contextid of livingContexts) {
             // If this context is not the default global context, we will add it.
@@ -65,6 +74,10 @@ export class ContextManagerPage extends Component {
                    <h2> Context manangement </h2>
                 </div>
                 <div className="subheading"> You can have up to {this.props.maxSelectable - 1} selected at a time. </div>
+                <div className="colouringToggle" title="If enabled, tasks will be coloured according to their context colours when viewing the Global context">
+                    <input type="checkbox" ref={this.CheckboxInputRef} onClick={toggleAction}/>
+                    Use context colouring?
+                </div>
                 <CreationForm 
                     creationFunction={this.props.createNewContext} 
                     formText="New Context" 

@@ -78,7 +78,8 @@ export class ContextTabs extends Component {
         const names = this.props.selectableContexts.map(s => capitaliseFirstLetter(this.props.contextMappings.GetName(s)));
         
         // If there are multiple contexts visible, then our custom styling function with return a coloured border!
-        const customStylingFunc = this.props.currentContext === DEFAULT_GLOBAL_CONTEXT_STRING ? getStylingFunc(this.props.contextMappings) : undefined;
+        const customStylingFunc = this.props.isUsingContextColouring && this.props.currentContext === DEFAULT_GLOBAL_CONTEXT_STRING 
+        ? getStylingFunc(this.props.contextMappings) : undefined;
 
         return (
             <div className="ContextTabsWrapper">

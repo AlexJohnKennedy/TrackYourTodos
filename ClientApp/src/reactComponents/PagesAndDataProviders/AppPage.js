@@ -44,9 +44,12 @@ export class AppPage extends Component {
             contextMappings: BuildContextMappings([{ id: DEFAULT_GLOBAL_CONTEXT_STRING, name: null, colourid: 0 }]),
             visibleContexts: [],     // Empty means that global is being rendered. Must be empty since we havne't loaded anything yet.
             availableContexts: [DEFAULT_GLOBAL_CONTEXT_STRING],   // This should be re-populated by the GET request handler.
-            selectableContexts: [DEFAULT_GLOBAL_CONTEXT_STRING]
+            selectableContexts: [DEFAULT_GLOBAL_CONTEXT_STRING],
+
+            useContextColouring: true
         }
 
+        this.toggleContextColouring = this.toggleContextColouring.bind(this);
         this.cleanUpFormStates = this.cleanUpFormStates.bind(this);
         this.switchContext = this.switchContext.bind(this);
         this.createNewContext = this.createNewContext.bind(this);
@@ -108,6 +111,14 @@ export class AppPage extends Component {
         if (this.state.showingContextManagerPage) {
             this.setState({
                 showingContextManagerPage: false
+            });
+        }
+    }
+
+    toggleContextColouring(flag) {
+        if (flag !== this.state.useContextColouring) {
+            this.setState({
+                useContextColouring: flag
             });
         }
     }
@@ -364,7 +375,7 @@ export class AppPage extends Component {
     render() {
         // If we have more than one context visible, then the 'colour getter' function reads from the context mappings.
         // If only one, then we use the task's id.
-        const getTaskColour = this.state.visibleContexts.length !== 1 ? 
+        const getTaskColour = this.state.visibleContexts.length !== 1 && this.state.useContextColouring ? 
         taskView => GetHSLAColour(this.state.contextMappings.GetColourId(this.state.contextMappings.GetIdForName(taskView.context))) :
         taskView => GetHSLAColour(taskView.colourid);
 
@@ -382,6 +393,7 @@ export class AppPage extends Component {
                         selectableContexts={this.state.selectableContexts}
                         contextMappings={this.state.contextMappings}
                         dataModelScope={this.state.dataModelScope}
+                        isUsingContextColouring={this.state.useContextColouring}
                     />
                     <BacklogSection dataModelScope={this.state.dataModelScope} formStateManager={this.formStateManager} colourGetter={getTaskColour}/>
                     <ActiveTaskSection dataModelScope={this.state.dataModelScope} formStateManager={this.formStateManager} colourGetter={getTaskColour}/>
@@ -401,6 +413,8 @@ export class AppPage extends Component {
                             reviveContext={this.reviveContext}
                             deleteContext={this.deleteContext}
                             updateContextColour={this.updateContextColour}
+                            toggleContextColouring={this.toggleContextColouring}
+                            isUsingContextColouring={this.state.useContextColouring}
                         />
                     }
                     <Footer />

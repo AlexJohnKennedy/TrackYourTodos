@@ -30,6 +30,10 @@
     margin-bottom: 3rem;
 }
 
+.contextManagerPage .colouringToggle {
+    margin-bottom: 1.5rem;
+}
+
 .contextManagerPage .checklistWrapper {
     overflow-y: scroll;
     display: inline-flex;
