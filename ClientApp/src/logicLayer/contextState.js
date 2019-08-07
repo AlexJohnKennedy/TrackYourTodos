@@ -55,7 +55,7 @@ function ContextMappings(maps) {
     }
     function getIdForName(name) {
         for (let k of maps.names.keys()) {
-            if (name === getName(k)) return k;
+            if (name.toLowerCase() === getName(k).toLowerCase()) return k;
         }
         return null;
     }

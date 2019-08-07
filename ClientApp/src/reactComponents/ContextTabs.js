@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import { NavigationTabs } from './NavigationTabs';
 import { EventTypes } from '../logicLayer/dataEventJsonSchema';
+import { DEFAULT_GLOBAL_CONTEXT_STRING } from '../logicLayer/Task';
+import { GetColour } from '../viewLogic/colourMappings';
 
 import { ReactComponent as SettingsIcon } from '../icons/settings-button.svg';
 import { ReactComponent as UndoIcon } from '../icons/undo-arrow.svg';
+
 
 // Wrapper around some context tabs, which is passed some callbacks from the root AppPage
 // allowing us to specify the navigation-tabs callback to switch the current context.
@@ -73,6 +76,9 @@ export class ContextTabs extends Component {
         
         const capitaliseFirstLetter = s => s.charAt(0).toUpperCase() + s.slice(1);
         const names = this.props.selectableContexts.map(s => capitaliseFirstLetter(this.props.contextMappings.GetName(s)));
+        
+        // If there are multiple contexts visible, then our custom styling function with return a coloured border!
+        const customStylingFunc = this.props.currentContext === DEFAULT_GLOBAL_CONTEXT_STRING ? getStylingFunc(this.props.contextMappings) : undefined;
 
         return (
             <div className="ContextTabsWrapper">
@@ -80,6 +86,7 @@ export class ContextTabs extends Component {
                     names={names}
                     callbackList={callbacks}
                     currActiveIndex={currActiveIndex}
+                    getCustomStyling={customStylingFunc}
                 />
                 <div className="contextSettingsButton">
                     <SettingsIcon className="settingsIcon" onClick={this.props.togglePage}/>
@@ -90,4 +97,13 @@ export class ContextTabs extends Component {
             </div>
         );
     }
+}
+
+function getStylingFunc(contextMappings) {
+    return name => ({
+        borderBottomWidth: "4px",
+        borderBottomStyle: "solid",
+        borderBottomColor: GetColour(contextMappings.GetColourId(contextMappings.GetIdForName(name))),
+        marginRight: "0.1rem"
+    });
 }

@@ -365,8 +365,8 @@ export class AppPage extends Component {
         // If we have more than one context visible, then the 'colour getter' function reads from the context mappings.
         // If only one, then we use the task's id.
         const getTaskColour = this.state.visibleContexts.length !== 1 ? 
-        taskView => {console.log("getting colour for context", taskView, this.state.contextMappings, GetHSLAColour(this.state.contextMappings.GetColourId(taskView.context))); return GetHSLAColour(this.state.contextMappings.GetColourId(this.state.contextMappings.GetIdForName(taskView.context)))} :
-        taskView => {console.log("getting colour for task", GetHSLAColour(taskView.colourid)); return GetHSLAColour(taskView.colourid)};
+        taskView => GetHSLAColour(this.state.contextMappings.GetColourId(this.state.contextMappings.GetIdForName(taskView.context))) :
+        taskView => GetHSLAColour(taskView.colourid);
 
         return (
             // Return each 'section' of the app as siblings, so that the root div can arrange them using CSS Grid!
