@@ -101,7 +101,7 @@ export class ContextTabs extends Component {
 
 function getStylingFunc(contextMappings) {
     return name => ({
-        borderBottomWidth: "4px",
+        borderBottomWidth: "0.2rem",
         borderBottomStyle: "solid",
         borderBottomColor: GetColour(contextMappings.GetColourId(contextMappings.GetIdForName(name))),
         marginRight: "1px"
