@@ -30,6 +30,10 @@
     margin-bottom: 3rem;
 }
 
+.contextManagerPage .colouringToggle {
+    margin-bottom: 1.5rem;
+}
+
 .contextManagerPage .checklistWrapper {
     overflow-y: scroll;
     display: inline-flex;
@@ -48,7 +52,7 @@
     align-items: center;
     justify-content: center;
     
-    width: 30rem;
+    width: 35rem;
     box-sizing: border-box;
     font-size: 1.8rem;
     text-align: center;
@@ -71,7 +75,25 @@
     padding-bottom: 1rem;
 }
 
-.contextManagerPage .contextSelectionCheckboxWrapper input {
+
+.contextManagerPage .contextSelectionCheckboxWrapper .creation-form form {
+    display: inline-grid;
+    grid-template-rows: auto auto;
+    grid-template-columns: 1fr 1fr;
+    row-gap: 0.6rem;
+    column-gap: 0.2rem;
+}
+.contextManagerPage .contextSelectionCheckboxWrapper .creation-form form input[type=text] {
+    grid-area: 1 / 1 / 2 / 3;
+}
+.contextManagerPage .contextSelectionCheckboxWrapper .creation-form form input[type=submit] {
+    justify-self: right;
+}
+.contextManagerPage .contextSelectionCheckboxWrapper .creation-form form .cancelButton {
+    justify-self: left;
+}
+
+.contextManagerPage .contextSelectionCheckboxWrapper input[type=checkbox] {
     position: absolute;
     left: 0.4rem;
     top: 0rem;
@@ -89,6 +111,17 @@
     height: 1.6rem;
     cursor: pointer;
 }
+.contextManagerPage .iconWrapper {
+    position: absolute;
+    right: 0.4rem;
+    top: calc(50% - 0.7rem);
+    cursor: pointer;    
+    width: 1.4rem;
+    height: 1.4rem;
+}
+.contextManagerPage .iconWrapper ~ .iconWrapper {
+    right: 2.4rem;
+}
 .contextManagerPage .iconButton {
     position: absolute;
     top: 0px;
@@ -99,4 +132,28 @@
 }
 .contextManagerPage .iconButton:hover {
     fill: var(--dull-text-colour);
+}
+.colourPickIcon {
+    position: absolute;
+    border-radius: 50%;
+    width: 2rem;
+    height: 2rem;
+    border: 1px solid var(--divider-colour-lighter);
+    top: calc(50% - 1rem);
+    right: 4.4rem;
+    cursor: pointer;
+}
+
+@media (max-width: 800px) {
+    .contextManagerPage .iconWrapper {
+        width: 2rem;
+        height: 2rem;
+        top: calc(50% - 1rem);
+    }
+    .contextManagerPage .iconWrapper ~ .iconWrapper {
+        right: 3.6rem;
+    }
+    .colourPickIcon {
+        right: 6.6rem;
+    }
 }

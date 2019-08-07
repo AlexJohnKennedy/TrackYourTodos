@@ -474,6 +474,7 @@ function BuildNewTaskView(domainTaskObj, activeList, undoStack, viewLayerCallbac
         id   : domainTaskObj.id,
         colourid : domainTaskObj.colourid,
         category : domainTaskObj.category,
+        context : domainTaskObj.context,
         progressStatus : domainTaskObj.progressStatus,
         parent : (domainTaskObj.parent === null) ? null : domainTaskObj.parent.id,
         children : domainTaskObj.children.map((task) => task.id),
@@ -508,6 +509,7 @@ function BuildNewInactiveTaskView(domainTaskObj, tasklistobj, undoStack, viewLay
         colourid : domainTaskObj.colourid,
         category : domainTaskObj.category,
         progressStatus : domainTaskObj.progressStatus,
+        context : domainTaskObj.context,
 
         // Revive method, to create a new clone who is not inactive
         ReviveTask : reviveTask

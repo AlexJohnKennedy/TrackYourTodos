@@ -5,7 +5,7 @@ import { AppPage } from './reactComponents/PagesAndDataProviders/AppPage';
 import { LoadingPage, ErrorPage } from './reactComponents/PagesAndDataProviders/LoadingPage';
 import { LoginPage } from './reactComponents/PagesAndDataProviders/LoginPage';
 
-import { ToastContainer, toast, Slide } from 'react-toastify';
+import { ToastContainer, Slide } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 

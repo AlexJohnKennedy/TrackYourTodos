@@ -62,9 +62,8 @@ namespace todo_app.Controllers {
             IEnumerable<GenericTodoEvent> eventLog = await dbContext.TodoEvents.Where(e => userIdStrings.Contains(e.UserId.Trim())).ToListAsync();
             eventLog = eventLog.OrderBy(keySelector, keyComparer).ToList();
             
-            // Look through all the user's events to find the set of 'contexts' which already exist, so we can send it back to them.
-            // By ordering the event log BACKWARDS for this query (i.e. latest first), then we will 'discover' the contexts in most-recently-used order.
-            List<string> allContextsNoDups = eventLog.OrderByDescending(e => e.Timestamp).Select(e => e.Context.ToLower().Trim()).ToHashSet().ToList();
+            // Get all of the user's current context information from the context mappings table
+            List<ContextMapping> allContextsNoDups = await dbContext.ContextMappings.Where(e => userIdStrings.Contains(e.UserId.Trim())).ToListAsync();
 
             if (contexts.Count > 0) {
                 eventLog = eventLog.Where(e => contexts.Contains(e.Context.Trim().ToLower())).OrderBy(keySelector, keyComparer).ToList();
@@ -100,9 +99,9 @@ namespace todo_app.Controllers {
             List<GenericTodoEvent> savedEvents = await dbContext.TodoEvents.Where(e => e.UserId.Equals(userId)).OrderBy(e => e.Timestamp).ToListAsync();
             HashSet<GenericTodoEvent> savedEventSet = savedEvents.ToHashSet(eventComparer); // Create a set of saved events, which uses our custom comparison logic as it's equality checker.
             var nonDups = newEvents.Where(e => !savedEventSet.Contains(e)).ToList();
-            return await ValidateAndSave(nonDups, savedEvents);
+            return await ValidateAndSave(nonDups, savedEvents, userId);
         }
-        private async Task<IActionResult> ValidateAndSave(IList<GenericTodoEvent> newEvents, IList<GenericTodoEvent> savedEvents) {
+        private async Task<IActionResult> ValidateAndSave(IList<GenericTodoEvent> newEvents, IList<GenericTodoEvent> savedEvents, string userId) {
             // Try to validate. If we fail, just save nothing and return a 409 to indicate the client's data is conflicting.
             EventLogReconciler logReconciler = new EventLogReconciler(savedEvents, keySelector, keyComparer, eventComparer);
             logReconciler.SimpleFullStateRebuildValidation(newEvents, out IList<GenericTodoEvent> acceptedEvents, out IList<GenericTodoEvent> skippedEvents, out bool eventsRejected, out bool shouldTriggerRefresh, out string err);
@@ -111,6 +110,10 @@ namespace todo_app.Controllers {
                 return StatusCode(409, err);
             }
             else if (acceptedEvents.Count > 0) {
+                IList<ContextMapping> newContexts = await DetectNewContexts(acceptedEvents, userId);
+                if (newContexts.Count > 0) {
+                    dbContext.ContextMappings.AddRange(newContexts);
+                }
                 dbContext.TodoEvents.AddRange(acceptedEvents);
                 await dbContext.SaveChangesAsync();
 
@@ -119,6 +122,12 @@ namespace todo_app.Controllers {
             else {
                 return ValidPostResponseData(skippedEvents, acceptedEvents, shouldTriggerRefresh);
             }
+        }
+        private async Task<IList<ContextMapping>> DetectNewContexts(IList<GenericTodoEvent> events, string userId) {
+            // Gather all of the current context data, in order to determine if we have any new contexts implied in the events we were just passed.
+            List<ContextMapping> currentContexts = await dbContext.ContextMappings.Where(e => e.UserId.Equals(userId)).ToListAsync();
+            HashSet<string> existingContextIds = currentContexts.Select(c => c.Id).ToHashSet();
+            return events.Where(e => !existingContextIds.Contains(e.Context)).Select(e => e.Context).ToHashSet().Select(s => ContextMapping.BuildNewContext(s, userId)).ToList();
         }
         private IActionResult ValidPostResponseData(IList<GenericTodoEvent> skippedEvents, IList<GenericTodoEvent> savedEvents, bool shouldTriggerRefresh) {
             return Ok(new {

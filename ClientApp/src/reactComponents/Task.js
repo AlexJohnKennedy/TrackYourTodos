@@ -1,5 +1,11 @@
 import React, { Component } from 'react';
-import { GetColourMapping, ThemeId, HSLAColour } from '../viewLogic/colourSetManager';
+
+/* The acquisition of colours will be done via a function passed down from the AppPage root, which takes a taskView and return a HSLA colour object! */
+/* (taskView) => HSLA. This is so that the AppPage can decide how the colours are mapped: i.e., from the TASKS colourid, or by looking up the context id
+/* in the case of multiple-visible-contexts! */
+/* SOON TO BE DEPRECATED */import { GetColourMapping, ThemeId } from '../viewLogic/colourSetManager';
+import { HSLAColour } from '../viewLogic/colourMappings';
+
 import { CheckBox, SvgIconWrapper } from './TaskButtons';
 import { CreationForm } from './CreationForm.js';
 import { Category, ProgressStatus, MAX_TASK_NAME_LEN, UNDO_ACTION_MAX_AGE_MILLISECONDS } from '../logicLayer/Task';
@@ -151,7 +157,7 @@ export class Task extends Component {
         let classstring = "task" + (highlight.length === 0 ? "" : " highlighted") + (animClassname === null ? " entranceAnim" : animClassname);
 
         // Attain background colour programmatically, and apply side padding iff the checkbox is present.
-        let processedColour = this.processColour(GetColourMapping(this.context.themeId).get(this.props.taskView.colourid), completion.length > 0, failure.length > 0);
+        let processedColour = this.processColour(this.props.colourGetter(this.props.taskView), completion.length > 0, failure.length > 0);
         const style = {
             backgroundColor: processedColour.toString(),
         };

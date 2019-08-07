@@ -62,6 +62,7 @@ export class Board extends Component {
                     failureAnimIds={this.props.failureAnimIds}
                     animTriggerCallbacks={this.props.animTriggerCallbacks}
                     formStateManager={this.props.formStateManager}
+                    colourGetter={this.props.colourGetter}
                 />
                 <CreationForm
                     creationFunction={this.props.creationFunction}
@@ -95,7 +96,8 @@ export class GoalBoard extends Component {
             hightlightEventCallbacks={this.props.hightlightEventCallbacks}
             completionAnimIds={this.props.completionAnimIds}
             failureAnimIds={this.props.failureAnimIds}
-            animTriggerCallbacks={this.props.animTriggerCallbacks}>
+            animTriggerCallbacks={this.props.animTriggerCallbacks}
+            colourGetter={this.props.colourGetter}>
             <SvgIconWrapper clickAction={() => {}} className="iconWrapper goalIcon">
                 <TrophyIcon className="icon"/>
             </SvgIconWrapper>
@@ -117,7 +119,8 @@ export class WeeklyBoard extends Component {
             hightlightEventCallbacks={this.props.hightlightEventCallbacks}
             completionAnimIds={this.props.completionAnimIds}
             failureAnimIds={this.props.failureAnimIds}
-            animTriggerCallbacks={this.props.animTriggerCallbacks}>
+            animTriggerCallbacks={this.props.animTriggerCallbacks}
+            colourGetter={this.props.colourGetter}>
             <SvgIconWrapper clickAction={() => {}} className="iconWrapper weekIcon">
                 <WeekIcon className="icon" />
             </SvgIconWrapper>
@@ -139,7 +142,8 @@ export class DailyBoard extends Component {
             hightlightEventCallbacks={this.props.hightlightEventCallbacks}
             completionAnimIds={this.props.completionAnimIds}
             failureAnimIds={this.props.failureAnimIds}
-            animTriggerCallbacks={this.props.animTriggerCallbacks}>
+            animTriggerCallbacks={this.props.animTriggerCallbacks}
+            colourGetter={this.props.colourGetter}>
             <SvgIconWrapper clickAction={() => {}} className="iconWrapper dayIcon">
                 <DailyCheckMarkIcon className="icon"/>
             </SvgIconWrapper>

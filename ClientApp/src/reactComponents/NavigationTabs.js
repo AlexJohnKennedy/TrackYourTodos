@@ -7,8 +7,10 @@ export class NavigationTabs extends Component {
         const tabs = [];
         for (let i=0; i < this.props.names.length; i++) {
             const classstring = "navigation-tab" + (this.props.currActiveIndex === i ? " active-navigation-tab" : "");
+            const customStylingObj = this.props.getCustomStyling ? this.props.getCustomStyling(this.props.names[i]) : {};
+
             tabs.push(
-                <div className={classstring} key={this.props.names[i]} onClick={this.props.callbackList[i]}>
+                <div className={classstring} style={customStylingObj} key={this.props.names[i]} onClick={this.props.callbackList[i]}>
                     {this.props.names[i]}
                 </div>
             );

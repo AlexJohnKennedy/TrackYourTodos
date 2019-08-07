@@ -12,19 +12,7 @@
 // the sidebar, such that whenever a new task is created, the 'next' colour will
 // be chosen automatically unless overriden by the user on the creation form.
 import React from 'react';
-
-export class HSLAColour {
-    constructor(hue, sat, light, alpha) {
-        this.hue = hue;
-        this.sat = sat;
-        this.light = light;
-        this.alpha = alpha;
-    }
-
-    toString() {
-        return "hsla(" + this.hue + ", " + this.sat + "%, " + this.light + "%, " + this.alpha + "%)";
-    }
-}
+import { HSLAColour } from './colourMappings';
 
 // Set up a context value to define the theme. (Default value 0).
 const themes = {

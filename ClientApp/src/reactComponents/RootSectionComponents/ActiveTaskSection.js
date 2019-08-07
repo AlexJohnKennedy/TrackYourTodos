@@ -187,6 +187,7 @@ export class ActiveTaskSection extends Component {
                         register: this.registerForAnimation,
                         unregister: this.unregisterForAnimation
                     }}
+                    colourGetter={this.props.colourGetter}
                 />
                 <WeeklyBoard 
                     tasks={this.state.weekTaskViews}
@@ -203,6 +204,7 @@ export class ActiveTaskSection extends Component {
                         register: this.registerForAnimation,
                         unregister: this.unregisterForAnimation
                     }}
+                    colourGetter={this.props.colourGetter}
                 />
                 <DailyBoard 
                     tasks={this.state.dayTaskViews}
@@ -219,6 +221,7 @@ export class ActiveTaskSection extends Component {
                         register: this.registerForAnimation,
                         unregister: this.unregisterForAnimation
                     }}
+                    colourGetter={this.props.colourGetter}
                 />
             </div>
         );

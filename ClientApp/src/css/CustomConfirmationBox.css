@@ -1,4 +1,4 @@
-.customConfirmationBox {
+.customConfirmationBox, .colourConfirmationBox {
     background-color: var(--sidebar-background-colour);
     padding-left: 2rem;
     padding-right: 2rem;
@@ -13,6 +13,12 @@
     min-height: 22rem;
     max-width: 50rem;
     border-radius: 2px;
+}
+.colourConfirmationBox {
+    min-height: 14rem;
+}
+.colourConfirmationBox .cancelButton {
+    margin-top: 0.8rem;
 }
 
 .customConfirmationBox .flexwrapper {
