@@ -122,7 +122,7 @@ stages:
         DEPLOYPASS: $(track-your-todos-api-deployment-account-password)
         ENDPOINT: $(track-your-todos-api-kudu-deployment-endpoint)
     # Adds a new database Migration for this deployment, using the commit id as the 'name'. The subsequent 'database update' call performs this migration.
-    - bash: curl -H "Content-Type:application/json" --user ${DEPLOYUSER}:${DEPLOYPASS} -X POST ${ENDPOINT}/api/command -d '{"command":"dotnet ef migrations add ${COMMITID}","dir":"site\\repository/AspNetCoreApiBackend"}'
+    - bash: curl -H "Content-Type:application/json" --user ${DEPLOYUSER}:${DEPLOYPASS} -X POST ${ENDPOINT}/api/command -d "{\"command\":\"dotnet ef migrations add ${COMMITID}\",\"dir\":\"site\\repository/AspNetCoreApiBackend\"}"
       env:
         COMMITID: $(Build.SourceVersion)  #Commit hash of the commit being deployed. This is apparently a pre-defined variable in Azure Pipelines.
         DEPLOYUSER: $(track-your-todos-api-deployment-account-username)

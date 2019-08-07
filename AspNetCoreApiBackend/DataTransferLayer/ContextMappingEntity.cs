@@ -43,4 +43,22 @@ namespace todo_app.DataTransferLayer.Entities {
             return toRet;
         }
     }
+
+    public class ContextMappingComparer : EqualityComparer<ContextMapping> {
+        // We say two todo events are duplicates if they have the same 'type' and refer to the same task, and have the same timestamp.
+        // In the case of creation, revival, and failure, we do not check timestamp, since we know this type of event can only be
+        // applied to a given task no-more-than once.
+        // Note that in the case of 'duplicates', we should always accept the earlier-occurring event as the true event.
+        public override bool Equals(ContextMapping c1, ContextMapping c2) {
+            if (c1 == null && c2 == null) return true;
+            else if (c1 == null || c2 == null) return false;
+            else if (!c1.UserId.Equals(c2.UserId)) return false;
+            else if (!c1.Id.Equals(c2.Id)) return false;
+            return true;
+        }
+        public override int GetHashCode(ContextMapping e) {
+            var data = new { e.Id, e.UserId };
+            return data.GetHashCode();
+        }
+    }
 }
