@@ -104,6 +104,6 @@ function getStylingFunc(contextMappings) {
         borderBottomWidth: "4px",
         borderBottomStyle: "solid",
         borderBottomColor: GetColour(contextMappings.GetColourId(contextMappings.GetIdForName(name))),
-        marginRight: "0.1rem"
+        marginRight: "1px"
     });
 }
