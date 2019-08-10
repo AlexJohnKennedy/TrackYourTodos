@@ -50,7 +50,7 @@ export class Board extends Component {
         return (
             <div className="board" key={this.props.category}>
                 <div className="board-title-container">
-                    {this.props.children}
+                    {this.props.icon}
                     <h2> {this.props.boardTitle} </h2>
                     <AddIcon className="button" onClick={this.toggleFormOn} />
                 </div>
@@ -97,11 +97,13 @@ export class GoalBoard extends Component {
             completionAnimIds={this.props.completionAnimIds}
             failureAnimIds={this.props.failureAnimIds}
             animTriggerCallbacks={this.props.animTriggerCallbacks}
-            colourGetter={this.props.colourGetter}>
+            colourGetter={this.props.colourGetter}
+            icon={
             <SvgIconWrapper clickAction={() => {}} className="iconWrapper goalIcon">
                 <TrophyIcon className="icon"/>
             </SvgIconWrapper>
-        </Board>;
+            }
+        />;
     }
 }
 export class WeeklyBoard extends Component {
@@ -120,11 +122,13 @@ export class WeeklyBoard extends Component {
             completionAnimIds={this.props.completionAnimIds}
             failureAnimIds={this.props.failureAnimIds}
             animTriggerCallbacks={this.props.animTriggerCallbacks}
-            colourGetter={this.props.colourGetter}>
+            colourGetter={this.props.colourGetter}
+            icon={
             <SvgIconWrapper clickAction={() => {}} className="iconWrapper weekIcon">
                 <WeekIcon className="icon" />
             </SvgIconWrapper>
-        </Board>;
+            }
+        />;
     }
 }
 export class DailyBoard extends Component {
@@ -143,10 +147,12 @@ export class DailyBoard extends Component {
             completionAnimIds={this.props.completionAnimIds}
             failureAnimIds={this.props.failureAnimIds}
             animTriggerCallbacks={this.props.animTriggerCallbacks}
-            colourGetter={this.props.colourGetter}>
+            colourGetter={this.props.colourGetter}
+            icon={
             <SvgIconWrapper clickAction={() => {}} className="iconWrapper dayIcon">
                 <DailyCheckMarkIcon className="icon"/>
             </SvgIconWrapper>
-        </Board>;
+            }
+        />;
     }
 }
