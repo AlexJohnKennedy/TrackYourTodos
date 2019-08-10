@@ -7,6 +7,9 @@ import { ColourIdTracker } from '../../viewLogic/colourSetManager';
 
 import { SvgIconWrapper } from '../TaskButtons';
 import { ReactComponent as TrophyIcon } from '../../icons/trophy.svg';
+import { ReactComponent as TombIcon } from '../../icons/tombstone.svg';
+import { ReactComponent as ClockIcon } from '../../icons/clock-outline.svg';
+
 
 export class BacklogTaskStateManager extends Component {
     constructor(props) {
@@ -78,13 +81,13 @@ export class BacklogTaskStateManager extends Component {
                     shortcutkeys={["Digit1", "", ""]}
                     icons={[
                         <SvgIconWrapper clickAction={() => {}} className="iconWrapper goalIcon">
-                            <TrophyIcon className="icon"/>
+                            <ClockIcon className="icon"/>
                         </SvgIconWrapper>,
                         <SvgIconWrapper clickAction={() => {}} className="iconWrapper goalIcon">
                             <TrophyIcon className="icon"/>
                         </SvgIconWrapper>,
                         <SvgIconWrapper clickAction={() => {}} className="iconWrapper goalIcon">
-                            <TrophyIcon className="icon"/>
+                            <TombIcon className="icon"/>
                         </SvgIconWrapper>
                     ]}
                     tasklists={[

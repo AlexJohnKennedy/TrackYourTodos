@@ -6,6 +6,7 @@ import { GetColour } from '../viewLogic/colourMappings';
 
 import { ReactComponent as SettingsIcon } from '../icons/settings-button.svg';
 import { ReactComponent as UndoIcon } from '../icons/undo-arrow.svg';
+import { ReactComponent as SwapIcon } from '../icons/swap-arrows.svg';
 
 
 // Wrapper around some context tabs, which is passed some callbacks from the root AppPage
@@ -91,6 +92,9 @@ export class ContextTabs extends Component {
                 />
                 <div className="contextSettingsButton">
                     <SettingsIcon className="settingsIcon" onClick={this.props.togglePage}/>
+                </div>
+                <div className="toggleMainViewButton" title="Swap active and inactive task views">
+                    <SwapIcon className="swapIcon" onClick={() => this.props.toggleMainView(!this.props.showingActiveTasksAsMain)}/>
                 </div>
                 <div className={undoButtonClassstring} title={this.state.tooltipText}>
                     <UndoIcon className="undoIcon" onClick={this.state.performUndo}/>

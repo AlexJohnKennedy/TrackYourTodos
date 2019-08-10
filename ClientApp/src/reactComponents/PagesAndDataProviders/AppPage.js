@@ -47,9 +47,10 @@ export class AppPage extends Component {
             selectableContexts: [DEFAULT_GLOBAL_CONTEXT_STRING],
 
             useContextColouring: true,
-            showActiveTasks: false   // Controls which tasks are showing on the 'main' view (the boards, which will display on the mobile view). If false, the active tasks are on sidebar!
+            showActiveTasks: true   // Controls which tasks are showing on the 'main' view (the boards, which will display on the mobile view). If false, the active tasks are on sidebar!
         }
 
+        this.toggleMainView = this.toggleMainView.bind(this);
         this.toggleContextColouring = this.toggleContextColouring.bind(this);
         this.cleanUpFormStates = this.cleanUpFormStates.bind(this);
         this.switchContext = this.switchContext.bind(this);
@@ -110,17 +111,18 @@ export class AppPage extends Component {
     cleanUpFormStates() {
         this.formStateManager.triggerCleanup();
         if (this.state.showingContextManagerPage) {
-            this.setState({
-                showingContextManagerPage: false
-            });
+            this.setState({ showingContextManagerPage: false });
         }
     }
 
     toggleContextColouring(flag) {
         if (flag !== this.state.useContextColouring) {
-            this.setState({
-                useContextColouring: flag
-            });
+            this.setState({ useContextColouring: flag });
+        }
+    }
+    toggleMainView(flag) {
+        if (flag !== this.state.showActiveTasks) {
+            this.setState({ showActiveTasks: flag });
         }
     }
 
@@ -395,6 +397,8 @@ export class AppPage extends Component {
                         contextMappings={this.state.contextMappings}
                         dataModelScope={this.state.dataModelScope}
                         isUsingContextColouring={this.state.useContextColouring}
+                        toggleMainView={this.toggleMainView}
+                        showingActiveTasksAsMain={this.state.showActiveTasks}
                     />
                     <ActiveTaskStateManager dataModelScope={this.state.dataModelScope} formStateManager={this.formStateManager} colourGetter={getTaskColour} showActiveTasksAsMain={this.state.showActiveTasks}/>
                     <BacklogTaskStateManager dataModelScope={this.state.dataModelScope} formStateManager={this.formStateManager} colourGetter={getTaskColour} showActiveTasksAsMain={this.state.showActiveTasks}/>
