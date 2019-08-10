@@ -178,6 +178,9 @@ export class ActiveTaskSection extends Component {
         const failureAnimIdsArray = [];
         this.state.failureAnimIds.forEach(o => o.relatives.forEach(id => failureAnimIdsArray.push(id)));
 
+        const tasklistBuilder = buildBuilder(this.props.formStateManager, this.props.colourGetter, this.state.highlightedTaskIds, completionAnimIdsArray,
+            failureAnimIdsArray, this.registerForAnimation, this.unregisterForAnimation, this.registerForHighlights, this.unregisterForHighlights);
+
         return (
             <MainSectionLayout
                 formStateManager={this.props.formStateManager}
@@ -198,57 +201,34 @@ export class ActiveTaskSection extends Component {
                     </SvgIconWrapper>
                 ]}
                 tasklists={[
-                    <TaskList
-                        tasks={this.state.goalTaskViews}
-                        highlights={this.state.highlightedTaskIds}
-                        hightlightEventCallbacks={{
-                            register: this.registerForHighlights,
-                            unregister: this.unregisterForHighlights
-                        }}
-                        completionAnimIds={completionAnimIdsArray}
-                        failureAnimIds={failureAnimIdsArray}
-                        animTriggerCallbacks={{
-                            register: this.registerForAnimation,
-                            unregister: this.unregisterForAnimation
-                        }}
-                        formStateManager={this.props.formStateManager}
-                        colourGetter={this.props.colourGetter}
-                    />,
-                    <TaskList
-                        tasks={this.state.weekTaskViews}
-                        highlights={this.state.highlightedTaskIds}
-                        hightlightEventCallbacks={{
-                            register: this.registerForHighlights,
-                            unregister: this.unregisterForHighlights
-                        }}
-                        completionAnimIds={completionAnimIdsArray}
-                        failureAnimIds={failureAnimIdsArray}
-                        animTriggerCallbacks={{
-                            register: this.registerForAnimation,
-                            unregister: this.unregisterForAnimation
-                        }}
-                        formStateManager={this.props.formStateManager}
-                        colourGetter={this.props.colourGetter}
-                    />,
-                    <TaskList
-                        tasks={this.state.dayTaskViews}
-                        highlights={this.state.highlightedTaskIds}
-                        hightlightEventCallbacks={{
-                            register: this.registerForHighlights,
-                            unregister: this.unregisterForHighlights
-                        }}
-                        completionAnimIds={completionAnimIdsArray}
-                        failureAnimIds={failureAnimIdsArray}
-                        animTriggerCallbacks={{
-                            register: this.registerForAnimation,
-                            unregister: this.unregisterForAnimation
-                        }}
-                        formStateManager={this.props.formStateManager}
-                        colourGetter={this.props.colourGetter}
-                    />
+                    tasklistBuilder(this.state.goalTaskViews),
+                    tasklistBuilder(this.state.weekTaskViews),
+                    tasklistBuilder(this.state.dayTaskViews)
                 ]}
             />
         );
+    }
+}
+
+// helper
+function buildBuilder(formStateManager, colourGetter, highlightIds, completeAnimIds, failAnimIds, regAnim, unregAnim, regHighlight, unregHighlight) {
+    return function buildActiveTasklist(taskViews) {
+        return <TaskList
+            tasks={taskViews}
+            highlights={highlightIds}
+            hightlightEventCallbacks={{
+                register: regHighlight,
+                unregister: unregHighlight
+            }}
+            completionAnimIds={completeAnimIds}
+            failureAnimIds={failAnimIds}
+            animTriggerCallbacks={{
+                register: regAnim,
+                unregister: unregAnim
+            }}
+            formStateManager={formStateManager}
+            colourGetter={colourGetter}
+        />;
     }
 }
 

@@ -28,15 +28,6 @@ export class BacklogSection extends Component {
         // Initialise state of this component.
         this.handleActiveChange();
     }
-    componentDidMount() {
-        this.setupWithNewDataModelInstance();
-    }
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        if (prevProps.dataModelScope !== this.props.dataModelScope) {
-            this.setupWithNewDataModelInstance();
-        }
-    }
-
     handleActiveChange() {
         let deferredTaskViews = this.activeTaskListAPI.GetDeferredTasks();
 
@@ -48,9 +39,16 @@ export class BacklogSection extends Component {
             deferredTaskCreationFunc : this.activeTaskListAPI.GetCreationFunction(Category.Deferred, ColourIdTracker.useNextColour)
         });
     }
+    componentDidMount() {
+        this.setupWithNewDataModelInstance();
+    }
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevProps.dataModelScope !== this.props.dataModelScope) {
+            this.setupWithNewDataModelInstance();
+        }
+    }
 
     render() {
-
         return(
             <SidebarSectionLayout
                 names={['Backlog', 'Completed', 'Graveyard']}
