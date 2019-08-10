@@ -13,19 +13,11 @@ export class BacklogSection extends Component {
         super(props);
 
         this.state = {
-            showingBacklog: true,
-            showingCompleted: false,
-            showingGraveyard: false,
-            tabId: 0,
-            showingForm: false,
             deferredTaskViews: [],
             deferredTaskCreationFunc: null
         };
         
         this.handleActiveChange = this.handleActiveChange.bind(this);
-        this.toggleTab = this.toggleTab.bind(this);
-        this.toggleFormOn = this.toggleFormOn.bind(this);
-        this.toggleFormOff = this.toggleFormOff.bind(this);
     }
     setupWithNewDataModelInstance() {
         // Register to access and recieve updates from the ActiveTaskList from the Data-model instance handed to us.
@@ -37,30 +29,12 @@ export class BacklogSection extends Component {
         this.handleActiveChange();
     }
     componentDidMount() {
-        ShortCutManager.registerShiftShortcut("Digit4", this.toggleFormOn);
         this.setupWithNewDataModelInstance();
     }
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (prevProps.dataModelScope !== this.props.dataModelScope) {
             this.setupWithNewDataModelInstance();
         }
-    }
-
-    componentWillUnmount() {
-        // TODO: Deregister shortcut here?
-    }
-
-    toggleFormOn() {
-        this.props.formStateManager.triggerCleanup();
-        this.toggleTab(0);
-        this.setState({
-            showingForm: true
-        });
-    }
-    toggleFormOff() {
-        this.setState({
-            showingForm: false
-        });
     }
 
     handleActiveChange() {
@@ -75,93 +49,99 @@ export class BacklogSection extends Component {
         });
     }
 
-    toggleTab(tabId) {
-        if (tabId < 0 || tabId > 2) throw new Error("BacklogSection passed invalid tab id in callback!");
-        let bl = tabId === 0 ? true : false;
-        let cm = tabId === 1 ? true : false;
-        let gy = tabId === 2 ? true : false;
+    render() {
 
-        // Toggle off the backlog creation form if the tab clicked is not the backlog tab.
-        if (tabId > 0) {
-            this.toggleFormOff();
-        }
+        return(
+            <SidebarSectionLayout
+                names={['Backlog', 'Completed', 'Graveyard']}
+                creationFunction={this.state.deferredTaskCreationFunc} 
+                formStateManager={this.props.formStateManager}
+                formText={this.props.formText}
+                tasklists={[
+                    buildInactiveTasklist(this.state.deferredTaskViews, this.props.formStateManager, this.props.colourGetter),
+                    buildInactiveTasklist(this.state.completedTaskViews, this.props.formStateManager, this.props.colourGetter),
+                    buildInactiveTasklist(this.state.failedTaskViews, this.props.formStateManager, this.props.colourGetter)
+                ]}
+            />
+        );
+    }
+}
 
+// helper
+function buildInactiveTasklist(taskViews, formStateManager, colourGetter) {
+    return <TaskList
+        tasks={taskViews}
+        highlights={[]}
+        hightlightEventCallbacks={{ 
+            register : (id) => id,
+            unregister : (id) => id
+        }}
+        completionAnimIds={[]}
+        failureAnimIds={[]}
+        animTriggerCallbacks={{
+            register : id => id,
+            unregister : id => id
+        }}
+        formStateManager={formStateManager}
+        colourGetter={colourGetter}
+    />;
+}
+
+
+// Contains all the layout-related state management, such as the currently visible tab and form state.
+export class SidebarSectionLayout extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            tabId: 0,
+            showingForm: false
+        };
+
+        this.toggleTab = this.toggleTab.bind(this);
+        this.toggleFormOn = this.toggleFormOn.bind(this);
+        this.toggleFormOff = this.toggleFormOff.bind(this);
+    }
+    componentDidMount() {
+        ShortCutManager.registerShiftShortcut("Digit4", this.toggleFormOn);
+    }
+    // TODO: Deregister shortcut in componentWillUnmount() ?
+
+    toggleFormOn() {
+        this.props.formStateManager.triggerCleanup();
+        this.toggleTab(0);
         this.setState({
-            showingBacklog: bl,
-            showingCompleted: cm,
-            showingGraveyard: gy,
-            tabId: tabId
+            showingForm: true
         });
     }
-    
+    toggleFormOff() {
+        this.setState({
+            showingForm: false
+        });
+    }
+    toggleTab(tabId) {
+        if (tabId < 0 || tabId >= this.props.names.length) throw new Error("SidebarSectionLayout passed invalid tab id in callback!");
+        this.setState({
+            tabId: tabId,
+            showingForm: false
+        });
+    }
+
     render() {
         const clearFormStateCallbacks = () => this.props.formStateManager.clearCallbacks();
 
         return(
             <div className="BacklogSection">
                 <NavigationStateWrapper
-                    names={['Backlog', 'Completed', 'Graveyard']}
+                    names={this.props.names}
                     toggleCallback={this.toggleTab}
                     currActiveIndex={this.state.tabId}
                 />
                 <div className="spacer"/>
                 <div className="wrapper">
-                    { this.state.showingBacklog &&
-                        <TaskList
-                            tasks={this.state.deferredTaskViews}
-                            highlights={[]}
-                            hightlightEventCallbacks={{ 
-                                register : (id) => id,
-                                unregister : (id) => id
-                            }}
-                            completionAnimIds={[]}
-                            failureAnimIds={[]}
-                            animTriggerCallbacks={{
-                                register : id => id,
-                                unregister : id => id
-                            }}
-                            formStateManager={this.props.formStateManager}
-                            colourGetter={this.props.colourGetter}
-                        />
-                    }
-                    { this.state.showingCompleted &&
-                        <TaskList
-                            tasks={this.state.completedTaskViews}
-                            highlights={[]}
-                            hightlightEventCallbacks={{ 
-                                register : (id) => id,
-                                unregister : (id) => id
-                            }}
-                            completionAnimIds={[]}
-                            failureAnimIds={[]}
-                            animTriggerCallbacks={{
-                                register : id => id,
-                                unregister : id => id
-                            }}
-                            formStateManager={this.props.formStateManager}
-                            colourGetter={this.props.colourGetter}
-                        />
-                    }
-                    { this.state.showingGraveyard &&
-                        <TaskList
-                            tasks={this.state.failedTaskViews}
-                            highlights={[]}
-                            hightlightEventCallbacks={{ 
-                                register : (id) => id,
-                                unregister : (id) => id
-                            }}
-                            completionAnimIds={[]}
-                            failureAnimIds={[]}
-                            animTriggerCallbacks={{
-                                register : id => id,
-                                unregister : id => id
-                            }}
-                            formStateManager={this.props.formStateManager}
-                            colourGetter={this.props.colourGetter}
-                        />
-                    }
+                    {this.props.tasklists[this.state.tabId]}
                     <CreationForm
-                        creationFunction={this.state.deferredTaskCreationFunc} 
+                        creationFunction={this.props.creationFunction} 
                         showingForm={this.state.showingForm}
                         submitAction={() => { clearFormStateCallbacks(); this.toggleFormOff(); }}
                         formStateManager={this.props.formStateManager}
