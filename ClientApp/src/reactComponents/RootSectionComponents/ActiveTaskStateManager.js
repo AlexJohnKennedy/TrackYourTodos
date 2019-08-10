@@ -1,9 +1,19 @@
 import React, { Component } from 'react';
+
+import { MainSectionLayout, SidebarSectionLayout } from './SectionLayouts';
+
 import { Category } from '../../logicLayer/Task';
-import { GoalBoard, WeeklyBoard, DailyBoard } from '../Board';
+import { TaskList } from '../TaskList';
 import { ColourIdTracker } from '../../viewLogic/colourSetManager';
 
-export class ActiveTaskSection extends Component {
+import { SvgIconWrapper } from '../TaskButtons';
+
+import { ReactComponent as TrophyIcon } from '../../icons/trophy.svg';
+import { ReactComponent as WeekIcon } from '../../icons/calendar.svg';
+import { ReactComponent as DailyCheckMarkIcon } from '../../icons/DailyCheckMark.svg';
+
+
+export class ActiveTaskStateManager extends Component {
     constructor(props) {
         super(props);
 
@@ -170,60 +180,73 @@ export class ActiveTaskSection extends Component {
         const failureAnimIdsArray = [];
         this.state.failureAnimIds.forEach(o => o.relatives.forEach(id => failureAnimIdsArray.push(id)));
 
+        const tasklistBuilder = buildBuilder(this.props.formStateManager, this.props.colourGetter, this.state.highlightedTaskIds, completionAnimIdsArray,
+            failureAnimIdsArray, this.registerForAnimation, this.unregisterForAnimation, this.registerForHighlights, this.unregisterForHighlights);
+
         return (
-            <div className="ActiveTaskSection">
-                <GoalBoard 
-                    tasks={this.state.goalTaskViews}
-                    creationFunction={this.state.goalCreationFunc}
+            <>
+            { this.props.showActiveTasksAsMain &&
+                <MainSectionLayout
                     formStateManager={this.props.formStateManager}
-                    highlights={this.state.highlightedTaskIds}
-                    hightlightEventCallbacks={{
-                        register: this.registerForHighlights,
-                        unregister: this.unregisterForHighlights
-                    }}
-                    completionAnimIds={completionAnimIdsArray}
-                    failureAnimIds={failureAnimIdsArray}
-                    animTriggerCallbacks={{
-                        register: this.registerForAnimation,
-                        unregister: this.unregisterForAnimation
-                    }}
-                    colourGetter={this.props.colourGetter}
+                    creationFunctions={[this.state.goalCreationFunc, this.state.weekCreationFunc, this.state.dayCreationFunc]}
+                    titles={["Goal", "Weekly Tasks", "Daily Tasks"]}
+                    tooltips={["Create a new goal task", "Create new weekly task", "Create new daily task"]}
+                    formText={["New goal", "New weekly task", "New daily task"]}
+                    shortcutkeys={["Digit1", "Digit2", "Digit3"]}
+                    icons={[
+                        <SvgIconWrapper clickAction={() => {}} className="iconWrapper goalIcon">
+                            <TrophyIcon className="icon"/>
+                        </SvgIconWrapper>,
+                        <SvgIconWrapper clickAction={() => {}} className="iconWrapper weekIcon">
+                            <WeekIcon className="icon" />
+                        </SvgIconWrapper>,
+                        <SvgIconWrapper clickAction={() => {}} className="iconWrapper dayIcon">
+                            <DailyCheckMarkIcon className="icon"/>
+                        </SvgIconWrapper>
+                    ]}
+                    tasklists={[
+                        tasklistBuilder(this.state.goalTaskViews),
+                        tasklistBuilder(this.state.weekTaskViews),
+                        tasklistBuilder(this.state.dayTaskViews)
+                    ]}
                 />
-                <WeeklyBoard 
-                    tasks={this.state.weekTaskViews}
-                    creationFunction={this.state.weekCreationFunc}
+            }
+            { !this.props.showActiveTasksAsMain &&
+                <SidebarSectionLayout
+                    names={['Goals', 'Weekly', 'Daily']}
+                    useCreationForm={false} 
                     formStateManager={this.props.formStateManager}
-                    highlights={this.state.highlightedTaskIds}
-                    hightlightEventCallbacks={{
-                        register: this.registerForHighlights,
-                        unregister: this.unregisterForHighlights
-                    }}
-                    completionAnimIds={completionAnimIdsArray}
-                    failureAnimIds={failureAnimIdsArray}
-                    animTriggerCallbacks={{
-                        register: this.registerForAnimation,
-                        unregister: this.unregisterForAnimation
-                    }}
-                    colourGetter={this.props.colourGetter}
+                    formText=""
+                    tasklists={[
+                        tasklistBuilder(this.state.goalTaskViews),
+                        tasklistBuilder(this.state.weekTaskViews),
+                        tasklistBuilder(this.state.dayTaskViews)
+                    ]}
                 />
-                <DailyBoard 
-                    tasks={this.state.dayTaskViews}
-                    creationFunction={this.state.dayCreationFunc}
-                    formStateManager={this.props.formStateManager}
-                    highlights={this.state.highlightedTaskIds}
-                    hightlightEventCallbacks={{
-                        register: this.registerForHighlights,
-                        unregister: this.unregisterForHighlights
-                    }}
-                    completionAnimIds={completionAnimIdsArray}
-                    failureAnimIds={failureAnimIdsArray}
-                    animTriggerCallbacks={{
-                        register: this.registerForAnimation,
-                        unregister: this.unregisterForAnimation
-                    }}
-                    colourGetter={this.props.colourGetter}
-                />
-            </div>
+            }
+            </>
         );
+    }
+}
+
+// helper
+function buildBuilder(formStateManager, colourGetter, highlightIds, completeAnimIds, failAnimIds, regAnim, unregAnim, regHighlight, unregHighlight) {
+    return function buildActiveTasklist(taskViews) {
+        return <TaskList
+            tasks={taskViews}
+            highlights={highlightIds}
+            hightlightEventCallbacks={{
+                register: regHighlight,
+                unregister: unregHighlight
+            }}
+            completionAnimIds={completeAnimIds}
+            failureAnimIds={failAnimIds}
+            animTriggerCallbacks={{
+                register: regAnim,
+                unregister: unregAnim
+            }}
+            formStateManager={formStateManager}
+            colourGetter={colourGetter}
+        />;
     }
 }

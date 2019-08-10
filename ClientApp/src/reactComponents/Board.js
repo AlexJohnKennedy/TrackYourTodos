@@ -1,14 +1,10 @@
 import React, { Component } from 'react';
 import { CreationForm } from './CreationForm.js';
 import { ShortCutManager } from '../viewLogic/keyboardShortcutHandler';
-import { TaskList } from './TaskList';
 import { SvgIconWrapper } from './TaskButtons';
 import { MAX_TASK_NAME_LEN } from '../logicLayer/Task';
 
 import { ReactComponent as AddIcon } from '../icons/add-filled-cross-sign.svg';
-import { ReactComponent as TrophyIcon } from '../icons/trophy.svg';
-import { ReactComponent as WeekIcon } from '../icons/calendar.svg';
-import { ReactComponent as DailyCheckMarkIcon } from '../icons/DailyCheckMark.svg';
 import { ReactComponent as CrossIcon } from '../icons/close-button.svg';
 
 
@@ -27,7 +23,9 @@ export class Board extends Component {
         this.toggleFormOff = this.toggleFormOff.bind(this);
     }
     componentDidMount() {
-        ShortCutManager.registerShiftShortcut(this.props.shortcutkey, this.toggleFormOn);
+        if (this.props.useCreationForm === true) {
+            ShortCutManager.registerShiftShortcut(this.props.shortcutkey, this.toggleFormOn);
+        }
     }
 
     toggleFormOn() {
@@ -50,103 +48,30 @@ export class Board extends Component {
         return (
             <div className="board" key={this.props.category}>
                 <div className="board-title-container">
-                    {this.props.children}
+                    {this.props.icon}
                     <h2> {this.props.boardTitle} </h2>
-                    <AddIcon className="button" onClick={this.toggleFormOn} />
+                    { this.props.useCreationForm === true &&
+                        <SvgIconWrapper className="button" clickAction={this.toggleFormOn} title={this.props.newTaskButtonTooltipText}>
+                            <AddIcon className="iconButton"/>
+                        </SvgIconWrapper>
+                    }
                 </div>
-                <TaskList
-                    tasks={this.props.tasks}
-                    highlights={this.props.highlights}
-                    hightlightEventCallbacks={this.props.hightlightEventCallbacks}
-                    completionAnimIds={this.props.completionAnimIds}
-                    failureAnimIds={this.props.failureAnimIds}
-                    animTriggerCallbacks={this.props.animTriggerCallbacks}
-                    formStateManager={this.props.formStateManager}
-                    colourGetter={this.props.colourGetter}
-                />
-                <CreationForm
-                    creationFunction={this.props.creationFunction}
-                    showingForm={this.state.showingForm}
-                    submitAction={() => { clearFormStateCallbacks(); this.toggleFormOff(); }}
-                    formStateManager={this.props.formStateManager}
-                    formText={this.props.formText}
-                    maxFieldLength={MAX_TASK_NAME_LEN}
-                >
-                    <SvgIconWrapper className="button" clickAction={this.toggleFormOff} title="Close form">
-                        <CrossIcon className="iconButton"/>
-                    </SvgIconWrapper>
-                </CreationForm>
+                { this.props.tasklist }
+                { this.props.useCreationForm === true && 
+                    <CreationForm
+                        creationFunction={this.props.creationFunction}
+                        showingForm={this.state.showingForm}
+                        submitAction={() => { clearFormStateCallbacks(); this.toggleFormOff(); }}
+                        formStateManager={this.props.formStateManager}
+                        formText={this.props.formText}
+                        maxFieldLength={MAX_TASK_NAME_LEN}
+                    >
+                        <SvgIconWrapper className="button" clickAction={this.toggleFormOff} title="Close form">
+                            <CrossIcon className="iconButton"/>
+                        </SvgIconWrapper>
+                    </CreationForm>
+                }
             </div>
         );
-    }
-}
-
-export class GoalBoard extends Component {
-    render() {
-        return <Board
-            category="Goal"
-            boardTitle="Goals"
-            newTaskButtonTooltipText="Create new goal task"
-            tasks={this.props.tasks}
-            creationFunction={this.props.creationFunction}
-            formText="New goal"
-            formStateManager={this.props.formStateManager}
-            shortcutkey="Digit1"
-            highlights={this.props.highlights}
-            hightlightEventCallbacks={this.props.hightlightEventCallbacks}
-            completionAnimIds={this.props.completionAnimIds}
-            failureAnimIds={this.props.failureAnimIds}
-            animTriggerCallbacks={this.props.animTriggerCallbacks}
-            colourGetter={this.props.colourGetter}>
-            <SvgIconWrapper clickAction={() => {}} className="iconWrapper goalIcon">
-                <TrophyIcon className="icon"/>
-            </SvgIconWrapper>
-        </Board>;
-    }
-}
-export class WeeklyBoard extends Component {
-    render() {
-        return <Board
-            category="Weekly"
-            boardTitle="Weekly Tasks"
-            newTaskButtonTooltipText="Create new weekly task"
-            tasks={this.props.tasks}
-            creationFunction={this.props.creationFunction}
-            formText="New weekly task"
-            formStateManager={this.props.formStateManager}
-            shortcutkey="Digit2"
-            highlights={this.props.highlights}
-            hightlightEventCallbacks={this.props.hightlightEventCallbacks}
-            completionAnimIds={this.props.completionAnimIds}
-            failureAnimIds={this.props.failureAnimIds}
-            animTriggerCallbacks={this.props.animTriggerCallbacks}
-            colourGetter={this.props.colourGetter}>
-            <SvgIconWrapper clickAction={() => {}} className="iconWrapper weekIcon">
-                <WeekIcon className="icon" />
-            </SvgIconWrapper>
-        </Board>;
-    }
-}
-export class DailyBoard extends Component {
-    render() {
-        return <Board
-            category="Daily"
-            boardTitle="Daily Tasks"
-            newTaskButtonTooltipText="Create new daily task"
-            tasks={this.props.tasks}
-            creationFunction={this.props.creationFunction}
-            formText="New daily task"
-            formStateManager={this.props.formStateManager}
-            shortcutkey="Digit3"
-            highlights={this.props.highlights}
-            hightlightEventCallbacks={this.props.hightlightEventCallbacks}
-            completionAnimIds={this.props.completionAnimIds}
-            failureAnimIds={this.props.failureAnimIds}
-            animTriggerCallbacks={this.props.animTriggerCallbacks}
-            colourGetter={this.props.colourGetter}>
-            <SvgIconWrapper clickAction={() => {}} className="iconWrapper dayIcon">
-                <DailyCheckMarkIcon className="icon"/>
-            </SvgIconWrapper>
-        </Board>;
     }
 }

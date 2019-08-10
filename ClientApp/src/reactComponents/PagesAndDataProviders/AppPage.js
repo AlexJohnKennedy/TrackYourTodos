@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { ActiveTaskSection } from '../RootSectionComponents/ActiveTaskSection';
+import { ActiveTaskStateManager } from '../RootSectionComponents/ActiveTaskStateManager';
+import { BacklogTaskStateManager } from '../RootSectionComponents/BacklogTaskStateManager';
 import { TaskStatisticsSection } from '../RootSectionComponents/TaskStatisticsSection';
-import { BacklogSection } from '../RootSectionComponents/BacklogSection';
 import { Footer } from '../Footer';
 import { Header } from '../Header';
 import { ContextTabs } from '../ContextTabs';
@@ -46,9 +46,11 @@ export class AppPage extends Component {
             availableContexts: [DEFAULT_GLOBAL_CONTEXT_STRING],   // This should be re-populated by the GET request handler.
             selectableContexts: [DEFAULT_GLOBAL_CONTEXT_STRING],
 
-            useContextColouring: true
+            useContextColouring: true,
+            showActiveTasks: true   // Controls which tasks are showing on the 'main' view (the boards, which will display on the mobile view). If false, the active tasks are on sidebar!
         }
 
+        this.toggleMainView = this.toggleMainView.bind(this);
         this.toggleContextColouring = this.toggleContextColouring.bind(this);
         this.cleanUpFormStates = this.cleanUpFormStates.bind(this);
         this.switchContext = this.switchContext.bind(this);
@@ -109,17 +111,18 @@ export class AppPage extends Component {
     cleanUpFormStates() {
         this.formStateManager.triggerCleanup();
         if (this.state.showingContextManagerPage) {
-            this.setState({
-                showingContextManagerPage: false
-            });
+            this.setState({ showingContextManagerPage: false });
         }
     }
 
     toggleContextColouring(flag) {
         if (flag !== this.state.useContextColouring) {
-            this.setState({
-                useContextColouring: flag
-            });
+            this.setState({ useContextColouring: flag });
+        }
+    }
+    toggleMainView(flag) {
+        if (flag !== this.state.showActiveTasks) {
+            this.setState({ showActiveTasks: flag });
         }
     }
 
@@ -394,9 +397,11 @@ export class AppPage extends Component {
                         contextMappings={this.state.contextMappings}
                         dataModelScope={this.state.dataModelScope}
                         isUsingContextColouring={this.state.useContextColouring}
+                        toggleMainView={this.toggleMainView}
+                        showingActiveTasksAsMain={this.state.showActiveTasks}
                     />
-                    <BacklogSection dataModelScope={this.state.dataModelScope} formStateManager={this.formStateManager} colourGetter={getTaskColour}/>
-                    <ActiveTaskSection dataModelScope={this.state.dataModelScope} formStateManager={this.formStateManager} colourGetter={getTaskColour}/>
+                    <ActiveTaskStateManager dataModelScope={this.state.dataModelScope} formStateManager={this.formStateManager} colourGetter={getTaskColour} showActiveTasksAsMain={this.state.showActiveTasks}/>
+                    <BacklogTaskStateManager dataModelScope={this.state.dataModelScope} formStateManager={this.formStateManager} colourGetter={getTaskColour} showActiveTasksAsMain={this.state.showActiveTasks}/>
                     <TaskStatisticsSection dataModelScope={this.state.dataModelScope} formStateManager={this.formStateManager} />
                     { this.state.showingContextManagerPage &&
                         <ContextManagerPage 

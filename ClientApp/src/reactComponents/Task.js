@@ -3,7 +3,8 @@ import React, { Component } from 'react';
 /* The acquisition of colours will be done via a function passed down from the AppPage root, which takes a taskView and return a HSLA colour object! */
 /* (taskView) => HSLA. This is so that the AppPage can decide how the colours are mapped: i.e., from the TASKS colourid, or by looking up the context id
 /* in the case of multiple-visible-contexts! */
-/* SOON TO BE DEPRECATED */import { GetColourMapping, ThemeId } from '../viewLogic/colourSetManager';
+/* SOON TO BE DEPRECATED */
+import { ThemeId } from '../viewLogic/colourSetManager';
 import { HSLAColour } from '../viewLogic/colourMappings';
 
 import { CheckBox, SvgIconWrapper } from './TaskButtons';
