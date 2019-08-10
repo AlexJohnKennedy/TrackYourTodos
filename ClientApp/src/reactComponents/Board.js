@@ -5,9 +5,6 @@ import { SvgIconWrapper } from './TaskButtons';
 import { MAX_TASK_NAME_LEN } from '../logicLayer/Task';
 
 import { ReactComponent as AddIcon } from '../icons/add-filled-cross-sign.svg';
-import { ReactComponent as TrophyIcon } from '../icons/trophy.svg';
-import { ReactComponent as WeekIcon } from '../icons/calendar.svg';
-import { ReactComponent as DailyCheckMarkIcon } from '../icons/DailyCheckMark.svg';
 import { ReactComponent as CrossIcon } from '../icons/close-button.svg';
 
 
@@ -54,7 +51,9 @@ export class Board extends Component {
                     {this.props.icon}
                     <h2> {this.props.boardTitle} </h2>
                     { this.props.useCreationForm === true &&
-                        <AddIcon className="button" onClick={this.toggleFormOn} />
+                        <SvgIconWrapper className="button" clickAction={this.toggleFormOn} title={this.props.newTaskButtonTooltipText}>
+                            <AddIcon className="iconButton"/>
+                        </SvgIconWrapper>
                     }
                 </div>
                 {this.props.tasklist}
