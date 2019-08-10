@@ -5,7 +5,7 @@ import { Category } from '../../logicLayer/Task';
 import { TaskList } from '../TaskList';
 import { ColourIdTracker } from '../../viewLogic/colourSetManager';
 
-export class BacklogSection extends Component {
+export class BacklogTaskStateManager extends Component {
     constructor(props) {
         super(props);
 

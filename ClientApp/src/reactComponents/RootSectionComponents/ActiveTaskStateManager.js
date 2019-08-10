@@ -13,7 +13,7 @@ import { ReactComponent as WeekIcon } from '../../icons/calendar.svg';
 import { ReactComponent as DailyCheckMarkIcon } from '../../icons/DailyCheckMark.svg';
 
 
-export class ActiveTaskSection extends Component {
+export class ActiveTaskStateManager extends Component {
     constructor(props) {
         super(props);
 

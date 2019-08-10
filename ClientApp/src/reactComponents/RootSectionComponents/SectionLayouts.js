@@ -1,5 +1,5 @@
 // Layout components for the 'main sections' of the AppPage, which are generically rendered by either the ActiveTaskStateManager 
-// or BacklogTaskStateManagers. Designed so that they just generically render task lists, and are decoupled form any task-state
+// or BacklogTaskStateManager. Designed so that they just generically render task lists, and are decoupled form any task-state
 // logic (i.e. the viewLayerInteractionApi) 
 import React, { Component } from 'react';
 import { Board } from '../Board';

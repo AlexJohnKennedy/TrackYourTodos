@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { ActiveTaskSection } from '../RootSectionComponents/ActiveTaskSection';
+import { ActiveTaskStateManager } from '../RootSectionComponents/ActiveTaskStateManager';
+import { BacklogTaskStateManager } from '../RootSectionComponents/BacklogTaskStateManager';
 import { TaskStatisticsSection } from '../RootSectionComponents/TaskStatisticsSection';
-import { BacklogSection } from '../RootSectionComponents/BacklogSection';
 import { Footer } from '../Footer';
 import { Header } from '../Header';
 import { ContextTabs } from '../ContextTabs';
@@ -395,8 +395,8 @@ export class AppPage extends Component {
                         dataModelScope={this.state.dataModelScope}
                         isUsingContextColouring={this.state.useContextColouring}
                     />
-                    <BacklogSection dataModelScope={this.state.dataModelScope} formStateManager={this.formStateManager} colourGetter={getTaskColour}/>
-                    <ActiveTaskSection dataModelScope={this.state.dataModelScope} formStateManager={this.formStateManager} colourGetter={getTaskColour}/>
+                    <ActiveTaskStateManager dataModelScope={this.state.dataModelScope} formStateManager={this.formStateManager} colourGetter={getTaskColour}/>
+                    <BacklogTaskStateManager dataModelScope={this.state.dataModelScope} formStateManager={this.formStateManager} colourGetter={getTaskColour}/>
                     <TaskStatisticsSection dataModelScope={this.state.dataModelScope} formStateManager={this.formStateManager} />
                     { this.state.showingContextManagerPage &&
                         <ContextManagerPage 
