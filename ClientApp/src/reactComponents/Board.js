@@ -56,7 +56,7 @@ export class Board extends Component {
                         </SvgIconWrapper>
                     }
                 </div>
-                {this.props.tasklist}
+                { this.props.tasklist }
                 { this.props.useCreationForm === true && 
                     <CreationForm
                         creationFunction={this.props.creationFunction}

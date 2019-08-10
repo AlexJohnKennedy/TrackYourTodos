@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 
-import { SidebarSectionLayout } from './SectionLayouts';
+import { MainSectionLayout, SidebarSectionLayout } from './SectionLayouts';
 import { Category } from '../../logicLayer/Task';
 import { TaskList } from '../TaskList';
 import { ColourIdTracker } from '../../viewLogic/colourSetManager';
+
+import { SvgIconWrapper } from '../TaskButtons';
+import { ReactComponent as TrophyIcon } from '../../icons/trophy.svg';
 
 export class BacklogTaskStateManager extends Component {
     constructor(props) {
@@ -11,6 +14,9 @@ export class BacklogTaskStateManager extends Component {
 
         this.state = {
             deferredTaskViews: [],
+            completedTaskViews: [],
+            failedTaskViews: [],
+
             deferredTaskCreationFunc: null
         };
         
@@ -47,17 +53,48 @@ export class BacklogTaskStateManager extends Component {
 
     render() {
         return(
-            <SidebarSectionLayout
-                names={['Backlog', 'Completed', 'Graveyard']}
-                creationFunction={this.state.deferredTaskCreationFunc} 
-                formStateManager={this.props.formStateManager}
-                formText={this.props.formText}
-                tasklists={[
-                    buildInactiveTasklist(this.state.deferredTaskViews, this.props.formStateManager, this.props.colourGetter),
-                    buildInactiveTasklist(this.state.completedTaskViews, this.props.formStateManager, this.props.colourGetter),
-                    buildInactiveTasklist(this.state.failedTaskViews, this.props.formStateManager, this.props.colourGetter)
-                ]}
-            />
+            <>
+            { this.props.showActiveTasksAsMain &&
+                <SidebarSectionLayout
+                    names={['Backlog', 'Completed', 'Graveyard']}
+                    useCreationForm={true}
+                    creationFunction={this.state.deferredTaskCreationFunc} 
+                    formStateManager={this.props.formStateManager}
+                    formText={this.props.formText}
+                    tasklists={[
+                        buildInactiveTasklist(this.state.deferredTaskViews, this.props.formStateManager, this.props.colourGetter),
+                        buildInactiveTasklist(this.state.completedTaskViews, this.props.formStateManager, this.props.colourGetter),
+                        buildInactiveTasklist(this.state.failedTaskViews, this.props.formStateManager, this.props.colourGetter)
+                    ]}
+                />
+            }
+            { !this.props.showActiveTasksAsMain &&
+                <MainSectionLayout
+                    formStateManager={this.props.formStateManager}
+                    creationFunctions={[this.state.deferredTaskCreationFunc, null, null]}
+                    titles={["Backlog Tasks", "Completed Tasks", "Failed Tasks"]}
+                    tooltips={["Create a new task on the backlog", "", ""]}
+                    formText={["New backlog task", "", ""]}
+                    shortcutkeys={["Digit1", "", ""]}
+                    icons={[
+                        <SvgIconWrapper clickAction={() => {}} className="iconWrapper goalIcon">
+                            <TrophyIcon className="icon"/>
+                        </SvgIconWrapper>,
+                        <SvgIconWrapper clickAction={() => {}} className="iconWrapper goalIcon">
+                            <TrophyIcon className="icon"/>
+                        </SvgIconWrapper>,
+                        <SvgIconWrapper clickAction={() => {}} className="iconWrapper goalIcon">
+                            <TrophyIcon className="icon"/>
+                        </SvgIconWrapper>
+                    ]}
+                    tasklists={[
+                        buildInactiveTasklist(this.state.deferredTaskViews, this.props.formStateManager, this.props.colourGetter),
+                        buildInactiveTasklist(this.state.completedTaskViews, this.props.formStateManager, this.props.colourGetter),
+                        buildInactiveTasklist(this.state.failedTaskViews, this.props.formStateManager, this.props.colourGetter)
+                    ]}
+                />
+            }
+            </>
         );
     }
 }

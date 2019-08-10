@@ -46,7 +46,8 @@ export class AppPage extends Component {
             availableContexts: [DEFAULT_GLOBAL_CONTEXT_STRING],   // This should be re-populated by the GET request handler.
             selectableContexts: [DEFAULT_GLOBAL_CONTEXT_STRING],
 
-            useContextColouring: true
+            useContextColouring: true,
+            showActiveTasks: false   // Controls which tasks are showing on the 'main' view (the boards, which will display on the mobile view). If false, the active tasks are on sidebar!
         }
 
         this.toggleContextColouring = this.toggleContextColouring.bind(this);
@@ -395,8 +396,8 @@ export class AppPage extends Component {
                         dataModelScope={this.state.dataModelScope}
                         isUsingContextColouring={this.state.useContextColouring}
                     />
-                    <ActiveTaskStateManager dataModelScope={this.state.dataModelScope} formStateManager={this.formStateManager} colourGetter={getTaskColour}/>
-                    <BacklogTaskStateManager dataModelScope={this.state.dataModelScope} formStateManager={this.formStateManager} colourGetter={getTaskColour}/>
+                    <ActiveTaskStateManager dataModelScope={this.state.dataModelScope} formStateManager={this.formStateManager} colourGetter={getTaskColour} showActiveTasksAsMain={this.state.showActiveTasks}/>
+                    <BacklogTaskStateManager dataModelScope={this.state.dataModelScope} formStateManager={this.formStateManager} colourGetter={getTaskColour} showActiveTasksAsMain={this.state.showActiveTasks}/>
                     <TaskStatisticsSection dataModelScope={this.state.dataModelScope} formStateManager={this.formStateManager} />
                     { this.state.showingContextManagerPage &&
                         <ContextManagerPage 

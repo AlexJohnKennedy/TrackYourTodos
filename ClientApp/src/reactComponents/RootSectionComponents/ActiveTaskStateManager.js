@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { MainSectionLayout } from './SectionLayouts';
+import { MainSectionLayout, SidebarSectionLayout } from './SectionLayouts';
 
 import { Category } from '../../logicLayer/Task';
 import { TaskList } from '../TaskList';
@@ -184,30 +184,47 @@ export class ActiveTaskStateManager extends Component {
             failureAnimIdsArray, this.registerForAnimation, this.unregisterForAnimation, this.registerForHighlights, this.unregisterForHighlights);
 
         return (
-            <MainSectionLayout
-                formStateManager={this.props.formStateManager}
-                creationFunctions={[this.state.goalCreationFunc, this.state.weekCreationFunc, this.state.dayCreationFunc]}
-                titles={["Goal", "Weekly Tasks", "Daily Tasks"]}
-                tooltips={["Create a new goal task", "Create new weekly task", "Create new daily task"]}
-                formText={["New goal", "New weekly task", "New daily task"]}
-                shortcutkeys={["Digit1", "Digit2", "Digit3"]}
-                icons={[
-                    <SvgIconWrapper clickAction={() => {}} className="iconWrapper goalIcon">
-                        <TrophyIcon className="icon"/>
-                    </SvgIconWrapper>,
-                    <SvgIconWrapper clickAction={() => {}} className="iconWrapper weekIcon">
-                        <WeekIcon className="icon" />
-                    </SvgIconWrapper>,
-                    <SvgIconWrapper clickAction={() => {}} className="iconWrapper dayIcon">
-                        <DailyCheckMarkIcon className="icon"/>
-                    </SvgIconWrapper>
-                ]}
-                tasklists={[
-                    tasklistBuilder(this.state.goalTaskViews),
-                    tasklistBuilder(this.state.weekTaskViews),
-                    tasklistBuilder(this.state.dayTaskViews)
-                ]}
-            />
+            <>
+            { this.props.showActiveTasksAsMain &&
+                <MainSectionLayout
+                    formStateManager={this.props.formStateManager}
+                    creationFunctions={[this.state.goalCreationFunc, this.state.weekCreationFunc, this.state.dayCreationFunc]}
+                    titles={["Goal", "Weekly Tasks", "Daily Tasks"]}
+                    tooltips={["Create a new goal task", "Create new weekly task", "Create new daily task"]}
+                    formText={["New goal", "New weekly task", "New daily task"]}
+                    shortcutkeys={["Digit1", "Digit2", "Digit3"]}
+                    icons={[
+                        <SvgIconWrapper clickAction={() => {}} className="iconWrapper goalIcon">
+                            <TrophyIcon className="icon"/>
+                        </SvgIconWrapper>,
+                        <SvgIconWrapper clickAction={() => {}} className="iconWrapper weekIcon">
+                            <WeekIcon className="icon" />
+                        </SvgIconWrapper>,
+                        <SvgIconWrapper clickAction={() => {}} className="iconWrapper dayIcon">
+                            <DailyCheckMarkIcon className="icon"/>
+                        </SvgIconWrapper>
+                    ]}
+                    tasklists={[
+                        tasklistBuilder(this.state.goalTaskViews),
+                        tasklistBuilder(this.state.weekTaskViews),
+                        tasklistBuilder(this.state.dayTaskViews)
+                    ]}
+                />
+            }
+            { !this.props.showActiveTasksAsMain &&
+                <SidebarSectionLayout
+                    names={['Goals', 'Weekly', 'Daily']}
+                    useCreationForm={false} 
+                    formStateManager={this.props.formStateManager}
+                    formText=""
+                    tasklists={[
+                        tasklistBuilder(this.state.goalTaskViews),
+                        tasklistBuilder(this.state.weekTaskViews),
+                        tasklistBuilder(this.state.dayTaskViews)
+                    ]}
+                />
+            }
+            </>
         );
     }
 }

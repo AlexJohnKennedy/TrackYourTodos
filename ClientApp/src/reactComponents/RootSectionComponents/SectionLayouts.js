@@ -73,7 +73,9 @@ export class SidebarSectionLayout extends Component {
         this.toggleFormOff = this.toggleFormOff.bind(this);
     }
     componentDidMount() {
-        ShortCutManager.registerShiftShortcut("Digit4", this.toggleFormOn);
+        if (this.props.useCreationForm) {
+            ShortCutManager.registerShiftShortcut("Digit4", this.toggleFormOn);
+        }
     }
     // TODO: Deregister shortcut in componentWillUnmount() ?
 
@@ -110,14 +112,16 @@ export class SidebarSectionLayout extends Component {
                 <div className="spacer"/>
                 <div className="wrapper">
                     {this.props.tasklists[this.state.tabId]}
-                    <CreationForm
-                        creationFunction={this.props.creationFunction} 
-                        showingForm={this.state.showingForm}
-                        submitAction={() => { clearFormStateCallbacks(); this.toggleFormOff(); }}
-                        formStateManager={this.props.formStateManager}
-                        formText={this.props.formText}
-                        maxFieldLength={MAX_TASK_NAME_LEN}
-                    />
+                    {this.props.useCreationForm &&
+                        <CreationForm
+                            creationFunction={this.props.creationFunction} 
+                            showingForm={this.state.showingForm}
+                            submitAction={() => { clearFormStateCallbacks(); this.toggleFormOff(); }}
+                            formStateManager={this.props.formStateManager}
+                            formText={this.props.formText}
+                            maxFieldLength={MAX_TASK_NAME_LEN}
+                        />
+                    }
                 </div>
             </div>
         );
