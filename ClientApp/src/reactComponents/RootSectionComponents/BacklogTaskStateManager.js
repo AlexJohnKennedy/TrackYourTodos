@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import { MainSectionLayout, SidebarSectionLayout } from './SectionLayouts';
-import { Category } from '../../logicLayer/Task';
+import { Category, ProgressStatus } from '../../logicLayer/Task';
 import { TaskList } from '../TaskList';
 import { ColourIdTracker } from '../../viewLogic/colourSetManager';
 
@@ -75,7 +75,7 @@ export class BacklogTaskStateManager extends Component {
                 <MainSectionLayout
                     formStateManager={this.props.formStateManager}
                     creationFunctions={[this.state.deferredTaskCreationFunc, null, null]}
-                    titles={["Backlog Tasks", "Completed Tasks", "Failed Tasks"]}
+                    titles={["Backlog Tasks", "Accomplishments", "Failures"]}
                     tooltips={["Create a new task on the backlog", "", ""]}
                     formText={["New backlog task", "", ""]}
                     shortcutkeys={["Digit1", "", ""]}
@@ -91,9 +91,9 @@ export class BacklogTaskStateManager extends Component {
                         </SvgIconWrapper>
                     ]}
                     tasklists={[
-                        buildInactiveTasklist(this.state.deferredTaskViews, this.props.formStateManager, this.props.colourGetter),
-                        buildInactiveTasklist(this.state.completedTaskViews, this.props.formStateManager, this.props.colourGetter),
-                        buildInactiveTasklist(this.state.failedTaskViews, this.props.formStateManager, this.props.colourGetter)
+                        buildInactiveTasklist(this.state.deferredTaskViews.filter(t => !t.isSpacer), this.props.formStateManager, this.props.colourGetter),
+                        buildInactiveTasklist(this.state.completedTaskViews.filter(t => !t.isSpacer && t.category === Category.Goal), this.props.formStateManager, this.props.colourGetter),
+                        buildInactiveTasklist(this.state.failedTaskViews.filter(t => !t.isSpacer && t.progressStatus !== ProgressStatus.Reattempted), this.props.formStateManager, this.props.colourGetter)
                     ]}
                 />
             }
