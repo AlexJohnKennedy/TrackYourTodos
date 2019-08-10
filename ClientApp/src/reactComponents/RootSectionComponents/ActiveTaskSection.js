@@ -1,8 +1,15 @@
 import React, { Component } from 'react';
 import { Category } from '../../logicLayer/Task';
-import { GoalBoard, WeeklyBoard, DailyBoard } from '../Board';
+import { Board } from '../Board';
 import { TaskList } from '../TaskList';
 import { ColourIdTracker } from '../../viewLogic/colourSetManager';
+
+import { SvgIconWrapper } from '../TaskButtons';
+
+import { ReactComponent as TrophyIcon } from '../../icons/trophy.svg';
+import { ReactComponent as WeekIcon } from '../../icons/calendar.svg';
+import { ReactComponent as DailyCheckMarkIcon } from '../../icons/DailyCheckMark.svg';
+
 
 export class ActiveTaskSection extends Component {
     constructor(props) {
@@ -175,6 +182,21 @@ export class ActiveTaskSection extends Component {
             <MainSectionLayout
                 formStateManager={this.props.formStateManager}
                 creationFunctions={[this.state.goalCreationFunc, this.state.weekCreationFunc, this.state.dayCreationFunc]}
+                titles={["Goal", "Weekly Tasks", "Daily Tasks"]}
+                tooltips={["Create a new goal task", "Create new weekly task", "Create new daily task"]}
+                formText={["New goal", "New weekly task", "New daily task"]}
+                shortcutkeys={["Digit1", "Digit2", "Digit3"]}
+                icons={[
+                    <SvgIconWrapper clickAction={() => {}} className="iconWrapper goalIcon">
+                        <TrophyIcon className="icon"/>
+                    </SvgIconWrapper>,
+                    <SvgIconWrapper clickAction={() => {}} className="iconWrapper weekIcon">
+                        <WeekIcon className="icon" />
+                    </SvgIconWrapper>,
+                    <SvgIconWrapper clickAction={() => {}} className="iconWrapper dayIcon">
+                        <DailyCheckMarkIcon className="icon"/>
+                    </SvgIconWrapper>
+                ]}
                 tasklists={[
                     <TaskList
                         tasks={this.state.goalTaskViews}
@@ -234,19 +256,43 @@ export class MainSectionLayout extends Component {
     render() {
         return (
             <div className="ActiveTaskSection">
-                <GoalBoard 
+                <Board
+                    key="0"
+
+                    boardTitle={this.props.titles[0]}
+                    newTaskButtonTooltipText={this.props.tooltips[0]}
+                    formText={this.props.formText[0]}
+                    shortcutkey={this.props.shortcutkeys[0]}
+                    icon={this.props.icons[0]}
+
                     useCreationForm={this.props.creationFunctions[0] !== null && this.props.creationFunctions[0] !== undefined}
                     creationFunction={this.props.creationFunctions[0]}
                     formStateManager={this.props.formStateManager}
                     tasklist={this.props.tasklists[0]}
                 />
-                <WeeklyBoard 
+                <Board
+                    key="1"
+                    
+                    boardTitle={this.props.titles[1]}
+                    newTaskButtonTooltipText={this.props.tooltips[1]}
+                    formText={this.props.formText[1]}
+                    shortcutkey={this.props.shortcutkeys[1]}
+                    icon={this.props.icons[1]}
+
                     useCreationForm={this.props.creationFunctions[1] !== null && this.props.creationFunctions[1] !== undefined}
                     creationFunction={this.props.creationFunctions[1]}
                     formStateManager={this.props.formStateManager}
                     tasklist={this.props.tasklists[1]}
                 />
-                <DailyBoard 
+                <Board
+                    key="2"
+                    
+                    boardTitle={this.props.titles[2]}
+                    newTaskButtonTooltipText={this.props.tooltips[2]}
+                    formText={this.props.formText[2]}
+                    shortcutkey={this.props.shortcutkeys[2]}
+                    icon={this.props.icons[2]}
+
                     useCreationForm={this.props.creationFunctions[2] !== null && this.props.creationFunctions[2] !== undefined}
                     creationFunction={this.props.creationFunctions[2]}
                     formStateManager={this.props.formStateManager}
