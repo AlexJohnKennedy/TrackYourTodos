@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Category } from '../../logicLayer/Task';
 import { GoalBoard, WeeklyBoard, DailyBoard } from '../Board';
+import { TaskList } from '../TaskList';
 import { ColourIdTracker } from '../../viewLogic/colourSetManager';
 
 export class ActiveTaskSection extends Component {
@@ -171,59 +172,158 @@ export class ActiveTaskSection extends Component {
         this.state.failureAnimIds.forEach(o => o.relatives.forEach(id => failureAnimIdsArray.push(id)));
 
         return (
+            <MainSectionLayout
+                formStateManager={this.props.formStateManager}
+                goalCreationFunc={this.state.goalCreationFunc}
+                weekCreationFunc={this.state.weekCreationFunc}
+                dayCreationFunc={this.state.dayCreationFunc}
+
+                tasklists={[
+                    <TaskList
+                        tasks={this.state.goalTaskViews}
+                        highlights={this.state.highlightedTaskIds}
+                        hightlightEventCallbacks={{
+                            register: this.registerForHighlights,
+                            unregister: this.unregisterForHighlights
+                        }}
+                        completionAnimIds={completionAnimIdsArray}
+                        failureAnimIds={failureAnimIdsArray}
+                        animTriggerCallbacks={{
+                            register: this.registerForAnimation,
+                            unregister: this.unregisterForAnimation
+                        }}
+                        formStateManager={this.props.formStateManager}
+                        colourGetter={this.props.colourGetter}
+                    />,
+                    <TaskList
+                        tasks={this.state.weekTaskViews}
+                        highlights={this.state.highlightedTaskIds}
+                        hightlightEventCallbacks={{
+                            register: this.registerForHighlights,
+                            unregister: this.unregisterForHighlights
+                        }}
+                        completionAnimIds={completionAnimIdsArray}
+                        failureAnimIds={failureAnimIdsArray}
+                        animTriggerCallbacks={{
+                            register: this.registerForAnimation,
+                            unregister: this.unregisterForAnimation
+                        }}
+                        formStateManager={this.props.formStateManager}
+                        colourGetter={this.props.colourGetter}
+                    />,
+                    <TaskList
+                        tasks={this.state.dayTaskViews}
+                        highlights={this.state.highlightedTaskIds}
+                        hightlightEventCallbacks={{
+                            register: this.registerForHighlights,
+                            unregister: this.unregisterForHighlights
+                        }}
+                        completionAnimIds={completionAnimIdsArray}
+                        failureAnimIds={failureAnimIdsArray}
+                        animTriggerCallbacks={{
+                            register: this.registerForAnimation,
+                            unregister: this.unregisterForAnimation
+                        }}
+                        formStateManager={this.props.formStateManager}
+                        colourGetter={this.props.colourGetter}
+                    />
+                ]}
+            />
+        );
+    }
+}
+
+export class MainSectionLayout extends Component {
+    render() {
+        return (
             <div className="ActiveTaskSection">
                 <GoalBoard 
-                    tasks={this.state.goalTaskViews}
-                    creationFunction={this.state.goalCreationFunc}
+                    creationFunction={this.props.goalCreationFunc}
                     formStateManager={this.props.formStateManager}
-                    highlights={this.state.highlightedTaskIds}
-                    hightlightEventCallbacks={{
-                        register: this.registerForHighlights,
-                        unregister: this.unregisterForHighlights
-                    }}
-                    completionAnimIds={completionAnimIdsArray}
-                    failureAnimIds={failureAnimIdsArray}
-                    animTriggerCallbacks={{
-                        register: this.registerForAnimation,
-                        unregister: this.unregisterForAnimation
-                    }}
-                    colourGetter={this.props.colourGetter}
+                    tasklist={this.props.tasklists[0]}
                 />
                 <WeeklyBoard 
-                    tasks={this.state.weekTaskViews}
-                    creationFunction={this.state.weekCreationFunc}
+                    creationFunction={this.props.weekCreationFunc}
                     formStateManager={this.props.formStateManager}
-                    highlights={this.state.highlightedTaskIds}
-                    hightlightEventCallbacks={{
-                        register: this.registerForHighlights,
-                        unregister: this.unregisterForHighlights
-                    }}
-                    completionAnimIds={completionAnimIdsArray}
-                    failureAnimIds={failureAnimIdsArray}
-                    animTriggerCallbacks={{
-                        register: this.registerForAnimation,
-                        unregister: this.unregisterForAnimation
-                    }}
-                    colourGetter={this.props.colourGetter}
+                    tasklist={this.props.tasklists[1]}
                 />
                 <DailyBoard 
-                    tasks={this.state.dayTaskViews}
-                    creationFunction={this.state.dayCreationFunc}
+                    creationFunction={this.props.dayCreationFunc}
                     formStateManager={this.props.formStateManager}
-                    highlights={this.state.highlightedTaskIds}
-                    hightlightEventCallbacks={{
-                        register: this.registerForHighlights,
-                        unregister: this.unregisterForHighlights
-                    }}
-                    completionAnimIds={completionAnimIdsArray}
-                    failureAnimIds={failureAnimIdsArray}
-                    animTriggerCallbacks={{
-                        register: this.registerForAnimation,
-                        unregister: this.unregisterForAnimation
-                    }}
-                    colourGetter={this.props.colourGetter}
+                    tasklist={this.props.tasklists[2]}
                 />
             </div>
         );
     }
 }
+
+/*
+** ==== REFERENCE === **
+<TaskList
+    tasks={this.props.tasks}
+    highlights={this.props.highlights}
+    hightlightEventCallbacks={this.props.hightlightEventCallbacks}
+    completionAnimIds={this.props.completionAnimIds}
+    failureAnimIds={this.props.failureAnimIds}
+    animTriggerCallbacks={this.props.animTriggerCallbacks}
+    formStateManager={this.props.formStateManager}
+    colourGetter={this.props.colourGetter}
+/>
+*/
+
+/*
+** ==== REFERENCE === **
+<div className="ActiveTaskSection">
+    <GoalBoard 
+        tasks={this.state.goalTaskViews}
+        creationFunction={this.state.goalCreationFunc}
+        formStateManager={this.props.formStateManager}
+        highlights={this.state.highlightedTaskIds}
+        hightlightEventCallbacks={{
+            register: this.registerForHighlights,
+            unregister: this.unregisterForHighlights
+        }}
+        completionAnimIds={completionAnimIdsArray}
+        failureAnimIds={failureAnimIdsArray}
+        animTriggerCallbacks={{
+            register: this.registerForAnimation,
+            unregister: this.unregisterForAnimation
+        }}
+        colourGetter={this.props.colourGetter}
+    />
+    <WeeklyBoard 
+        tasks={this.state.weekTaskViews}
+        creationFunction={this.state.weekCreationFunc}
+        formStateManager={this.props.formStateManager}
+        highlights={this.state.highlightedTaskIds}
+        hightlightEventCallbacks={{
+            register: this.registerForHighlights,
+            unregister: this.unregisterForHighlights
+        }}
+        completionAnimIds={completionAnimIdsArray}
+        failureAnimIds={failureAnimIdsArray}
+        animTriggerCallbacks={{
+            register: this.registerForAnimation,
+            unregister: this.unregisterForAnimation
+        }}
+        colourGetter={this.props.colourGetter}
+    />
+    <DailyBoard 
+        tasks={this.state.dayTaskViews}
+        creationFunction={this.state.dayCreationFunc}
+        formStateManager={this.props.formStateManager}
+        highlights={this.state.highlightedTaskIds}
+        hightlightEventCallbacks={{
+            register: this.registerForHighlights,
+            unregister: this.unregisterForHighlights
+        }}
+        completionAnimIds={completionAnimIdsArray}
+        failureAnimIds={failureAnimIdsArray}
+        animTriggerCallbacks={{
+            register: this.registerForAnimation,
+            unregister: this.unregisterForAnimation
+        }}
+        colourGetter={this.props.colourGetter}
+    />
+</div>
+*/
