@@ -174,10 +174,7 @@ export class ActiveTaskSection extends Component {
         return (
             <MainSectionLayout
                 formStateManager={this.props.formStateManager}
-                goalCreationFunc={this.state.goalCreationFunc}
-                weekCreationFunc={this.state.weekCreationFunc}
-                dayCreationFunc={this.state.dayCreationFunc}
-
+                creationFunctions={[this.state.goalCreationFunc, this.state.weekCreationFunc, this.state.dayCreationFunc]}
                 tasklists={[
                     <TaskList
                         tasks={this.state.goalTaskViews}
@@ -238,17 +235,20 @@ export class MainSectionLayout extends Component {
         return (
             <div className="ActiveTaskSection">
                 <GoalBoard 
-                    creationFunction={this.props.goalCreationFunc}
+                    useCreationForm={this.props.creationFunctions[0] !== null && this.props.creationFunctions[0] !== undefined}
+                    creationFunction={this.props.creationFunctions[0]}
                     formStateManager={this.props.formStateManager}
                     tasklist={this.props.tasklists[0]}
                 />
                 <WeeklyBoard 
-                    creationFunction={this.props.weekCreationFunc}
+                    useCreationForm={this.props.creationFunctions[1] !== null && this.props.creationFunctions[1] !== undefined}
+                    creationFunction={this.props.creationFunctions[1]}
                     formStateManager={this.props.formStateManager}
                     tasklist={this.props.tasklists[1]}
                 />
                 <DailyBoard 
-                    creationFunction={this.props.dayCreationFunc}
+                    useCreationForm={this.props.creationFunctions[2] !== null && this.props.creationFunctions[2] !== undefined}
+                    creationFunction={this.props.creationFunctions[2]}
                     formStateManager={this.props.formStateManager}
                     tasklist={this.props.tasklists[2]}
                 />

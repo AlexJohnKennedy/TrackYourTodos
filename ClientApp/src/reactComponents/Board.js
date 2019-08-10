@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { CreationForm } from './CreationForm.js';
 import { ShortCutManager } from '../viewLogic/keyboardShortcutHandler';
-import { TaskList } from './TaskList';
 import { SvgIconWrapper } from './TaskButtons';
 import { MAX_TASK_NAME_LEN } from '../logicLayer/Task';
 
@@ -27,7 +26,9 @@ export class Board extends Component {
         this.toggleFormOff = this.toggleFormOff.bind(this);
     }
     componentDidMount() {
-        ShortCutManager.registerShiftShortcut(this.props.shortcutkey, this.toggleFormOn);
+        if (this.props.useCreationForm === true) {
+            ShortCutManager.registerShiftShortcut(this.props.shortcutkey, this.toggleFormOn);
+        }
     }
 
     toggleFormOn() {
@@ -52,21 +53,25 @@ export class Board extends Component {
                 <div className="board-title-container">
                     {this.props.icon}
                     <h2> {this.props.boardTitle} </h2>
-                    <AddIcon className="button" onClick={this.toggleFormOn} />
+                    { this.props.useCreationForm === true &&
+                        <AddIcon className="button" onClick={this.toggleFormOn} />
+                    }
                 </div>
                 {this.props.tasklist}
-                <CreationForm
-                    creationFunction={this.props.creationFunction}
-                    showingForm={this.state.showingForm}
-                    submitAction={() => { clearFormStateCallbacks(); this.toggleFormOff(); }}
-                    formStateManager={this.props.formStateManager}
-                    formText={this.props.formText}
-                    maxFieldLength={MAX_TASK_NAME_LEN}
-                >
-                    <SvgIconWrapper className="button" clickAction={this.toggleFormOff} title="Close form">
-                        <CrossIcon className="iconButton"/>
-                    </SvgIconWrapper>
-                </CreationForm>
+                { this.props.useCreationForm === true && 
+                    <CreationForm
+                        creationFunction={this.props.creationFunction}
+                        showingForm={this.state.showingForm}
+                        submitAction={() => { clearFormStateCallbacks(); this.toggleFormOff(); }}
+                        formStateManager={this.props.formStateManager}
+                        formText={this.props.formText}
+                        maxFieldLength={MAX_TASK_NAME_LEN}
+                    >
+                        <SvgIconWrapper className="button" clickAction={this.toggleFormOff} title="Close form">
+                            <CrossIcon className="iconButton"/>
+                        </SvgIconWrapper>
+                    </CreationForm>
+                }
             </div>
         );
     }
@@ -78,6 +83,7 @@ export class GoalBoard extends Component {
             category="Goal"
             boardTitle="Goals"
             newTaskButtonTooltipText="Create new goal task"
+            useCreationForm={this.props.useCreationForm}
             creationFunction={this.props.creationFunction}
             formText="New goal"
             formStateManager={this.props.formStateManager}
@@ -97,6 +103,7 @@ export class WeeklyBoard extends Component {
             category="Weekly"
             boardTitle="Weekly Tasks"
             newTaskButtonTooltipText="Create new weekly task"
+            useCreationForm={this.props.useCreationForm}
             creationFunction={this.props.creationFunction}
             formText="New weekly task"
             formStateManager={this.props.formStateManager}
@@ -116,6 +123,7 @@ export class DailyBoard extends Component {
             category="Daily"
             boardTitle="Daily Tasks"
             newTaskButtonTooltipText="Create new daily task"
+            useCreationForm={this.props.useCreationForm}
             creationFunction={this.props.creationFunction}
             formText="New daily task"
             formStateManager={this.props.formStateManager}
