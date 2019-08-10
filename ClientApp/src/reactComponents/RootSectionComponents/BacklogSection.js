@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
-import { NavigationStateWrapper } from '../NavigationTabs';
-import { Category, MAX_TASK_NAME_LEN  } from '../../logicLayer/Task';
 
+import { SidebarSectionLayout } from './SectionLayouts';
+import { Category } from '../../logicLayer/Task';
 import { TaskList } from '../TaskList';
-import { CreationForm } from '../CreationForm';
-
-import { ShortCutManager } from '../../viewLogic/keyboardShortcutHandler';
 import { ColourIdTracker } from '../../viewLogic/colourSetManager';
 
 export class BacklogSection extends Component {
@@ -83,71 +80,4 @@ function buildInactiveTasklist(taskViews, formStateManager, colourGetter) {
         formStateManager={formStateManager}
         colourGetter={colourGetter}
     />;
-}
-
-
-// Contains all the layout-related state management, such as the currently visible tab and form state.
-export class SidebarSectionLayout extends Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            tabId: 0,
-            showingForm: false
-        };
-
-        this.toggleTab = this.toggleTab.bind(this);
-        this.toggleFormOn = this.toggleFormOn.bind(this);
-        this.toggleFormOff = this.toggleFormOff.bind(this);
-    }
-    componentDidMount() {
-        ShortCutManager.registerShiftShortcut("Digit4", this.toggleFormOn);
-    }
-    // TODO: Deregister shortcut in componentWillUnmount() ?
-
-    toggleFormOn() {
-        this.props.formStateManager.triggerCleanup();
-        this.toggleTab(0);
-        this.setState({
-            showingForm: true
-        });
-    }
-    toggleFormOff() {
-        this.setState({
-            showingForm: false
-        });
-    }
-    toggleTab(tabId) {
-        if (tabId < 0 || tabId >= this.props.names.length) throw new Error("SidebarSectionLayout passed invalid tab id in callback!");
-        this.setState({
-            tabId: tabId,
-            showingForm: false
-        });
-    }
-
-    render() {
-        const clearFormStateCallbacks = () => this.props.formStateManager.clearCallbacks();
-
-        return(
-            <div className="BacklogSection">
-                <NavigationStateWrapper
-                    names={this.props.names}
-                    toggleCallback={this.toggleTab}
-                    currActiveIndex={this.state.tabId}
-                />
-                <div className="spacer"/>
-                <div className="wrapper">
-                    {this.props.tasklists[this.state.tabId]}
-                    <CreationForm
-                        creationFunction={this.props.creationFunction} 
-                        showingForm={this.state.showingForm}
-                        submitAction={() => { clearFormStateCallbacks(); this.toggleFormOff(); }}
-                        formStateManager={this.props.formStateManager}
-                        formText={this.props.formText}
-                        maxFieldLength={MAX_TASK_NAME_LEN}
-                    />
-                </div>
-            </div>
-        );
-    }
 }

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+
+import { MainSectionLayout } from './SectionLayouts';
+
 import { Category } from '../../logicLayer/Task';
-import { Board } from '../Board';
 import { TaskList } from '../TaskList';
 import { ColourIdTracker } from '../../viewLogic/colourSetManager';
 
@@ -229,56 +231,5 @@ function buildBuilder(formStateManager, colourGetter, highlightIds, completeAnim
             formStateManager={formStateManager}
             colourGetter={colourGetter}
         />;
-    }
-}
-
-export class MainSectionLayout extends Component {
-    render() {
-        return (
-            <div className="ActiveTaskSection">
-                <Board
-                    key="0"
-
-                    boardTitle={this.props.titles[0]}
-                    newTaskButtonTooltipText={this.props.tooltips[0]}
-                    formText={this.props.formText[0]}
-                    shortcutkey={this.props.shortcutkeys[0]}
-                    icon={this.props.icons[0]}
-
-                    useCreationForm={this.props.creationFunctions[0] !== null && this.props.creationFunctions[0] !== undefined}
-                    creationFunction={this.props.creationFunctions[0]}
-                    formStateManager={this.props.formStateManager}
-                    tasklist={this.props.tasklists[0]}
-                />
-                <Board
-                    key="1"
-                    
-                    boardTitle={this.props.titles[1]}
-                    newTaskButtonTooltipText={this.props.tooltips[1]}
-                    formText={this.props.formText[1]}
-                    shortcutkey={this.props.shortcutkeys[1]}
-                    icon={this.props.icons[1]}
-
-                    useCreationForm={this.props.creationFunctions[1] !== null && this.props.creationFunctions[1] !== undefined}
-                    creationFunction={this.props.creationFunctions[1]}
-                    formStateManager={this.props.formStateManager}
-                    tasklist={this.props.tasklists[1]}
-                />
-                <Board
-                    key="2"
-                    
-                    boardTitle={this.props.titles[2]}
-                    newTaskButtonTooltipText={this.props.tooltips[2]}
-                    formText={this.props.formText[2]}
-                    shortcutkey={this.props.shortcutkeys[2]}
-                    icon={this.props.icons[2]}
-
-                    useCreationForm={this.props.creationFunctions[2] !== null && this.props.creationFunctions[2] !== undefined}
-                    creationFunction={this.props.creationFunctions[2]}
-                    formStateManager={this.props.formStateManager}
-                    tasklist={this.props.tasklists[2]}
-                />
-            </div>
-        );
     }
 }
