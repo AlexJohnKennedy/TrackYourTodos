@@ -6,13 +6,6 @@
     box-sizing: border-box;
     transition-property: background-color;
     transition-delay: 0.2s;
-    transition-timing-function: ease-in;
-}
-
-.ActiveTaskSection .task {
-    /* transitions setup to handle completion and failure colour fading, when animations play */
-    transition-property: background-color;
-    transition-delay: 0.2s;
     transition-duration: 0.5s;
     transition-timing-function: ease-in;
 }
