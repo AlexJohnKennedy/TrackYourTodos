@@ -33,4 +33,4 @@ EXPOSE 3000
 
 # Set our images 'primary process' to serve the constructed react application using the 'serve' node application we installed 
 # into our image at the beginning. We are telling it to listen on port 3000
-CMD ["serve", "-s" "build" "-l 3000"]
+CMD ["serve", "-s", "build", "-l", "3000"]
