@@ -36,7 +36,8 @@ namespace todo_app {
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
-            
+            logger.LogInformation($"Configuring services with ASPNETCORE_ENVIRONMENT={Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}");
+
             // We are going to be hosting our API backend as an independent, public API, hosted on a different domain
             // from our front-end client Single-page-app. The SPA will be sending AJAX http requests to us; but browsers
             // do not allow cross-origin javascript requests unless the server recieving them explicitly declares (with a
