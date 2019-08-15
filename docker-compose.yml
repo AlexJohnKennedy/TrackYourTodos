@@ -1,0 +1,22 @@
+version: '3'
+
+# Define our 'services'. These become the hostnames for each container which runs the service
+# inside the docker-compose virtual network, allowing our containers to address each other!
+# This also defines the images that docker-compose with run as containers at the same time
+# when we do 'docker-compose up'.
+services:
+  # React app production build, served statically on port 3000
+  # NOTE: FOR Google Auth to work, when running the containers locally, we need to use xip.io
+  # to resolve a wildcard ip address so that google actually lets us auth. Google doesn't support
+  # public ip addresses, so 192.168.99.100:3000 won't work directly, find the app on:
+  # http://www.192.168.99.100.xip.io:3000/
+  todo-app:
+    build: ./ClientApp
+    ports:
+      - "3000:3000"
+  # Api backend. At this time, it's just running in development mode using 'dotnet run', and using
+  # an in-memory database.
+  todo-api:
+    build: ./AspNetCoreApiBackend
+    ports:
+      - "5000:5000"
