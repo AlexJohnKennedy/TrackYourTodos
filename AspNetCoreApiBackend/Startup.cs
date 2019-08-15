@@ -117,8 +117,11 @@ namespace todo_app {
             // specified policy. Instead, I am going to choose explicitly which CORS policy to apply to each Controller-action
             // endpoint in our API. This allows us to allow request specifically from our SPA domain, (rather than just any), for
             // the user endpoints, but NOT allow requests from our SPA domain to any 'admin only' end-points, for example!
-
-            app.UseHttpsRedirection();
+            
+            // Don't use https redirection for the docker-container environment, as a temp measure just to get the docker-compose.yml working..
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") != "DockerDevelopment") {
+                app.UseHttpsRedirection();
+            }
 
             // Custom middleware to fetch public keys for auth.
             app.UsePublicKeyFetchingMiddleware();
