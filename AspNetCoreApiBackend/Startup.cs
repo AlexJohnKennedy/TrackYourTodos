@@ -118,7 +118,7 @@ namespace todo_app {
             // endpoint in our API. This allows us to allow request specifically from our SPA domain, (rather than just any), for
             // the user endpoints, but NOT allow requests from our SPA domain to any 'admin only' end-points, for example!
 
-            //app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
 
             // Custom middleware to fetch public keys for auth.
             app.UsePublicKeyFetchingMiddleware();
