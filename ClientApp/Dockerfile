@@ -23,6 +23,12 @@ RUN npm install
 # NOTE: We have specified files to ignore in the .dockerignore file, e.g. node_modules.
 COPY ./ ./
 
+# Before we build the app, we have to setup our environment variables, since they get bundled into the build-package.
+# To set environment vars in react, we name them with the REACT_APP prefix. See: https://create-react-app.dev/docs/adding-custom-environment-variables
+
+# Sets a custom address for the backend api. Since we are composing with another container, test it with 192.168.99.100:5000
+ENV REACT_APP_API_ADDRESS=http://192.168.99.100:5000
+
 # NOTE: we could run leave this here, as a 'development' container, by setting CMD to do npm start (Running the react development server)
 # But instead, for this we want to run a statically served build, so we are going to execute react-script to build into a servable, static asset.
 RUN npm run build
