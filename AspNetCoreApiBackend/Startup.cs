@@ -57,6 +57,11 @@ namespace todo_app {
                         builder.WithOrigins("https://tytodosreactapp.z26.web.core.windows.net").AllowAnyHeader().AllowAnyMethod();
                     });
                 }
+                else if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "DockerDevelopment") {
+                    corsOptions.AddPolicy("UserFacingApplications", builder => {
+                        builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+                    });
+                }
                 else {
                     corsOptions.AddPolicy("UserFacingApplications", builder => {
                         builder.WithOrigins("http://localhost:3000", "https://localhost:3000", "https://tytodosreactapp.z26.web.core.windows.net").AllowAnyHeader().AllowAnyMethod();

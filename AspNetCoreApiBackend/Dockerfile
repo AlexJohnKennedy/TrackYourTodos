@@ -3,6 +3,10 @@
 FROM mcr.microsoft.com/dotnet/core/sdk:2.2
 WORKDIR /usr/todo-api/
 
+# Setup an environment variable which tells ASPNETCORE to listen to external endpoints over port 80 (I think..?)
+# SEE: https://github.com/dotnet/dotnet-docker/issues/290
+ENV ASPNETCORE_URLS http://+:80
+
 # Copy csproj and restore as distinct layers
 COPY *.csproj ./
 RUN dotnet restore
