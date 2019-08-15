@@ -17,7 +17,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 using todo_app.DataTransferLayer.DatabaseContext;
-using todo_app.JwtTestCode;
 using todo_app.JwtAuthenticationHelperMiddlewares;
 using todo_app.Services.AuthenticationHelpers;
 using todo_app.CustomAuthenticationOptions;
