@@ -3,10 +3,6 @@
 FROM mcr.microsoft.com/dotnet/core/sdk:2.2
 WORKDIR /usr/todo-api/
 
-# Setup an environment variable which tells ASPNETCORE to listen to external endpoints over port 80 (I think..?)
-# SEE: https://github.com/dotnet/dotnet-docker/issues/290
-ENV ASPNETCORE_URLS http://+:80
-
 # Copy csproj and restore as distinct layers
 COPY *.csproj ./
 RUN dotnet restore
@@ -22,4 +18,11 @@ COPY . ./
 # This is a temporary measure to get it up and running easily so I can test out docker-compose and stuff. Once this works, i'll replace this
 # Dockerfile with something which creates a release build, setting up an environment variable in docker-compose.yml to make the app connect to
 # a postgres database, run 'dotnet ef migrations add XXX' and 'dotnet ef database update', and so on.
+
+# The 'urls' parameter specifies configuration to the app which makes it expose on public network ports, not just localhost, which is usually the
+# case when running asp.net core on kestrel with 'dotnet run'.
+# SEE: https://weblog.west-wind.com/posts/2016/sep/28/external-network-access-to-kestrel-and-iis-express-in-aspnet-core
+
+# NOTE: Replaced the --urls flag with just specifying the listening addresses directly in launchSettings.json, such that they use ip 0.0.0.0 which
+# means "any ip", rather than localhost, because binding to localhost does not expose itself externally by nature.
 CMD ["dotnet", "run", "--launch-profile", "DockerLearning"]
