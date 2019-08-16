@@ -11,7 +11,12 @@ services:
   # public ip addresses, so 192.168.99.100:3000 won't work directly, find the app on:
   # http://www.192.168.99.100.xip.io:3000/
   todo-app:
-    build: ./ClientApp
+    build:
+      context: ./ClientApp
+      dockerfile: Dockerfile
+      # pass in a build-time argument which will be set as an environment variable while the image is being built
+      args:
+        - REACT_APP_API_ADDRESS=http://localhost:5000
     ports:
       - "3000:3000"
   # Api backend. At this time, it's just running in development mode using 'dotnet run', and using
