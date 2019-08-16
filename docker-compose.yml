@@ -16,12 +16,30 @@ services:
       dockerfile: Dockerfile
       # pass in a build-time argument which will be set as an environment variable while the image is being built
       args:
-        - REACT_APP_API_ADDRESS=http://localhost:5000
+        - REACT_APP_API_ADDRESS=http://192.168.99.100:5000
+        # - REACT_APP_API_ADDRESS=http://localhost:5000
     ports:
       - "3000:3000"
+  # Setup a postgres instance, which does not publically expose it's ports because it is only communicated with by
+  # our API app, which will talk to it via the docker-compose private network.
+  postgres:
+    image: postgres:12-alpine
+    environment:
+      - POSTGRES_USER=testuser
+      - POSTGRES_PASSWORD=testpassword
+      - POSTGRES_DB=testpostgres
+    # No volume for now: it will just use temporary data.
+    #volumes:
+    #  - ./volumes/data/db:/var/lib/postgresql/data
+    
   # Api backend. At this time, it's just running in development mode using 'dotnet run', and using
   # an in-memory database.
   todo-api:
-    build: ./AspNetCoreApiBackend
+    build: 
+      context: ./AspNetCoreApiBackend
+      dockerfile: Dockerfile
     ports:
       - "5000:5000"
+      - "5001:5001"
+    depends_on:
+    - "postgres"

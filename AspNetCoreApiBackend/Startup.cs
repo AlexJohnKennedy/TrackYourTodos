@@ -89,11 +89,19 @@ namespace todo_app {
             // NOTE: This environment variable must be set in the Azure target environment, in Azure App Services!
             // The Connection string must ALSO be configured in Azure, which contains the secret details of how to connect to the database.
             if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production") {
+                logger.LogInformation("Connecting to Azure SQL Database");
                 services.AddDbContext<TodoEventContext>(optionsObj => {
                     optionsObj.UseSqlServer(Configuration.GetConnectionString("AzureSqlConnectionString"));
                 });
             }
+            else if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "DockerDevelopment") {
+                logger.LogInformation("Connecting to Dockerised Postgres Database");
+                services.AddDbContext<TodoEventContext>(optionsObj => {
+                    optionsObj.UseNpgsql(Configuration.GetSection("PostgresConfig")["ConnectionString"]);
+                });
+            }
             else {
+                logger.LogInformation("Using an In Memory Database");
                 services.AddDbContext<TodoEventContext>(optionsObj => {
                     optionsObj.UseInMemoryDatabase("TestTodoEventStorage");
                 });
