@@ -10,6 +10,10 @@ RUN dotnet restore
 # Copy the actual codebase over
 COPY . ./
 
+# == Obtaining an argument from docker-compose and setting it as environment variable == #
+ARG POSTGRES_CONNECTION_STRING
+ENV ConnectionStrings__PostgresConnectionString=${POSTGRES_CONNECTION_STRING}
+
 # Run the app in directly from the source code (NOT A PRODUCTION TECHNIQUE).
 # This runs the app without creating a published build and is useful for debugging.
 # When ASP.NET Core apps are run in this fashion, it reads additional configuration from the 'launchSettings.json', which I have setup

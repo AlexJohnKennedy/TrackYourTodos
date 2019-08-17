@@ -97,7 +97,7 @@ namespace todo_app {
             else if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "DockerDevelopment") {
                 logger.LogInformation("Connecting to Dockerised Postgres Database");
                 services.AddDbContext<TodoEventContext>(optionsObj => {
-                    optionsObj.UseNpgsql(Configuration.GetSection("PostgresConfig")["ConnectionString"]);
+                    optionsObj.UseNpgsql(Configuration.GetConnectionString("PostgresConnectionString"));
                 });
             }
             else {

@@ -31,13 +31,15 @@ services:
     # No volume for now: it will just use temporary data.
     #volumes:
     #  - ./volumes/data/db:/var/lib/postgresql/data
-    
+
   # Api backend. At this time, it's just running in development mode using 'dotnet run', and using
   # an in-memory database.
   todo-api:
     build: 
       context: ./AspNetCoreApiBackend
       dockerfile: Dockerfile
+      args:
+        - POSTGRES_CONNECTION_STRING=Server=postgres;Port=5432;Database=testpostgres;User Id=testuser;Password=testpassword;
     ports:
       - "5000:5000"
       - "5001:5001"
