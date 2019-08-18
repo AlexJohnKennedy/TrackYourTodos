@@ -14,6 +14,20 @@ COPY . ./
 ARG POSTGRES_CONNECTION_STRING
 ENV ConnectionStrings__PostgresConnectionString=${POSTGRES_CONNECTION_STRING}
 
+# NOTE: Since our app uses a code-first database, you will need to run EF migrations to setup postgres after running docker-compose up.
+# At the current time, this must be done manually:
+# --- Step 1: Bring up the system with 'docker-compose up'
+# --- Step 2: Open a terminal in the api container with 'docker exec -it <container id> sh'
+# --- Step 3: Set and export a ASPNETCORE_ENVIRONMENT environment variable in the shell to 'DockerDevelopment'. This is needed so when
+#             the migrations tool runs, it uses the correct configs (i.e. the Postgres connection string, instead of the prod or dev one).
+#             Do this with 'export ASPNETCORE_ENVIRONMENT=DockerDevelopment'
+# --- Step 4: Run 'dotnet ef migrations add <name for migration>'
+# --- Step 5: Run 'dotnet ef database update'
+# --- Step 6: Exit the terminal and restart the api container. This needs to be restarted after performing the migrations for some reason,
+#             otherwise you will an Intermediate lanugage error when the app tries to connect to postgres.
+
+# ========================================================================================================================================
+
 # Run the app in directly from the source code (NOT A PRODUCTION TECHNIQUE).
 # This runs the app without creating a published build and is useful for debugging.
 # When ASP.NET Core apps are run in this fashion, it reads additional configuration from the 'launchSettings.json', which I have setup
