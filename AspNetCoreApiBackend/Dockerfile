@@ -26,6 +26,8 @@ ENV ConnectionStrings__PostgresConnectionString=${POSTGRES_CONNECTION_STRING}
 # --- Step 6: Exit the terminal and restart the api container. This needs to be restarted after performing the migrations for some reason,
 #             otherwise you will an Intermediate lanugage error when the app tries to connect to postgres.
 
+# SEE: Migrations CLI reference - https://docs.microsoft.com/en-us/ef/core/miscellaneous/cli/dotnet#dotnet-ef-migrations-add
+
 # ========================================================================================================================================
 
 # Run the app in directly from the source code (NOT A PRODUCTION TECHNIQUE).
