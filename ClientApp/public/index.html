@@ -60,7 +60,7 @@
             
             // This anon-func is 'onError()'. Called if the google library fails to load. Oh dear.
             errorObj => {
-              console.warn("Google auth failed to init! This can happen if 3rd party cookies are blocked in browser settings. I will set the failure flag to let the application know.");
+              console.warn("Google auth failed to init! This can happen if 3rd party cookies are blocked in browser settings. I will set the failure flag to let the application know.", errorObj);
               isGoogleAuthCrashed = true;
               isGoogleAuthReady = false;
               gapiLoadedCallbacks.forEach(callback => callback(false)); // 'false' indicates the loading failed :(

@@ -189,7 +189,7 @@ export class ActiveTaskStateManager extends Component {
                 <MainSectionLayout
                     formStateManager={this.props.formStateManager}
                     creationFunctions={[this.state.goalCreationFunc, this.state.weekCreationFunc, this.state.dayCreationFunc]}
-                    titles={["Goal", "Weekly Tasks", "Daily Tasks"]}
+                    titles={["Goals", "Weekly Tasks", "Daily Tasks"]}
                     tooltips={["Create a new goal task", "Create new weekly task", "Create new daily task"]}
                     formText={["New goal", "New weekly task", "New daily task"]}
                     shortcutkeys={["Digit1", "Digit2", "Digit3"]}

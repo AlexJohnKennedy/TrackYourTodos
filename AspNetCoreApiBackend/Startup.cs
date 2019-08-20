@@ -17,7 +17,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 using todo_app.DataTransferLayer.DatabaseContext;
-using todo_app.JwtTestCode;
 using todo_app.JwtAuthenticationHelperMiddlewares;
 using todo_app.Services.AuthenticationHelpers;
 using todo_app.CustomAuthenticationOptions;
@@ -36,7 +35,8 @@ namespace todo_app {
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
-            
+            logger.LogInformation($"Configuring services with ASPNETCORE_ENVIRONMENT={Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}");
+
             // We are going to be hosting our API backend as an independent, public API, hosted on a different domain
             // from our front-end client Single-page-app. The SPA will be sending AJAX http requests to us; but browsers
             // do not allow cross-origin javascript requests unless the server recieving them explicitly declares (with a
@@ -54,6 +54,11 @@ namespace todo_app {
                 if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production") {
                     corsOptions.AddPolicy("UserFacingApplications", builder => {    // TODO: Move CORS policy names to a Configurations Service binding.
                         builder.WithOrigins("https://tytodosreactapp.z26.web.core.windows.net").AllowAnyHeader().AllowAnyMethod();
+                    });
+                }
+                else if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "DockerDevelopment") {
+                    corsOptions.AddPolicy("UserFacingApplications", builder => {
+                        builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
                     });
                 }
                 else {
@@ -84,11 +89,19 @@ namespace todo_app {
             // NOTE: This environment variable must be set in the Azure target environment, in Azure App Services!
             // The Connection string must ALSO be configured in Azure, which contains the secret details of how to connect to the database.
             if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production") {
+                logger.LogInformation("Connecting to Azure SQL Database");
                 services.AddDbContext<TodoEventContext>(optionsObj => {
                     optionsObj.UseSqlServer(Configuration.GetConnectionString("AzureSqlConnectionString"));
                 });
             }
+            else if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "DockerDevelopment") {
+                logger.LogInformation("Connecting to Dockerised Postgres Database");
+                services.AddDbContext<TodoEventContext>(optionsObj => {
+                    optionsObj.UseNpgsql(Configuration.GetConnectionString("PostgresConnectionString"));
+                });
+            }
             else {
+                logger.LogInformation("Using an In Memory Database");
                 services.AddDbContext<TodoEventContext>(optionsObj => {
                     optionsObj.UseInMemoryDatabase("TestTodoEventStorage");
                 });
@@ -111,8 +124,11 @@ namespace todo_app {
             // specified policy. Instead, I am going to choose explicitly which CORS policy to apply to each Controller-action
             // endpoint in our API. This allows us to allow request specifically from our SPA domain, (rather than just any), for
             // the user endpoints, but NOT allow requests from our SPA domain to any 'admin only' end-points, for example!
-
-            app.UseHttpsRedirection();
+            
+            // Don't use https redirection for the docker-container environment, as a temp measure just to get the docker-compose.yml working..
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") != "DockerDevelopment") {
+                app.UseHttpsRedirection();
+            }
 
             // Custom middleware to fetch public keys for auth.
             app.UsePublicKeyFetchingMiddleware();
