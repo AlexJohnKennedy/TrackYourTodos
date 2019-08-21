@@ -311,8 +311,14 @@ namespace todo_app.DataTransferLayer.EventReconciliationSystem {
                 // Handle cases where the task does not yet exist. If the event is a creation event, (or undo deletion event) then this is obviously expected.
                 // If the event is an 'undo' of a creation event, then we can safely dispose of the event, since it would just erase the expected task anyway. We will still save it though, in case of an out-or-order arrival
                 // If the event is a 'Task activated' or 'Task Started' or 'Task Edited' event, then we will create the event implicitly, since we can do so with no harm done.
+                // If the event is a 'Task revived' event, then this is expected, but only if the 'original' task acutally existed and is a failed state. Otherwise, we will have to implicitly 'fail' the original one first.
                 if (task == null) {
-                    if (e.EventType == EventTypes.TaskAdded || e.EventType == EventTypes.ChildTaskAdded || e.EventType == EventTypes.TaskRevived || e.EventType == EventTypes.TaskDeletedUndo) {
+                    if (e.EventType == EventTypes.TaskAdded || e.EventType == EventTypes.ChildTaskAdded || e.EventType == EventTypes.TaskDeletedUndo || (e.EventType == EventTypes.TaskRevived && tasklist.FailedTaskReader(e.Original.Value) != null)) {
+                        return Handlers[e.EventType](e, tasklist, undoStack);
+                    }
+                    else if (e.EventType == EventTypes.TaskRevived && tasklist.AllTaskReader(e.Original.Value) != null && tasklist.AllTaskReader(e.Original.Value).Category != CategoryVals.Deferred) {
+                        // Implicitly 'fail' the original task first
+                        tasklist.FailTask(tasklist.AllTaskReader(e.Original.Value), e.Timestamp);
                         return Handlers[e.EventType](e, tasklist, undoStack);
                     }
                     else if (e.EventType == EventTypes.TaskAddedUndo || e.EventType == EventTypes.ChildTaskAddedUndo || e.EventType == EventTypes.TaskEdited || e.EventType == EventTypes.TaskDeleted) {
