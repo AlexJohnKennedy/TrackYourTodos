@@ -101,7 +101,14 @@ function replayEvent(event, tasklist, taskMap, undoStack) {
     if (task === undefined || task === null) {
         // Handle cases where the associated task does not exist yet.
         // If the event is a creation event or undo-deletion event, this is expected.
-        if (event.eventType === EventTypes.taskAdded || event.eventType === EventTypes.childTaskAdded || event.eventType === EventTypes.taskRevived || event.eventType === EventTypes.taskDeletedUndo) {
+        if (event.eventType === EventTypes.taskAdded || event.eventType === EventTypes.childTaskAdded || event.eventType === EventTypes.taskDeletedUndo || (event.eventType === EventTypes.taskRevived && taskMap.get(event.original).progressStatus === ProgressStatus.Failed)) {
+            EventReplayFunctions.get(event.eventType)(event, tasklist, taskMap, undoStack);
+            return;
+        }
+        // In this case we need to implicitly fail the original task first.
+        else if (event.eventType === EventTypes.taskRevived && taskMap.get(event.original).category !== Category.Deferred) {
+            tasklist.FailTask(taskMap.get(event.original), event.timestamp);
+            undoStack.ClearStack();
             EventReplayFunctions.get(event.eventType)(event, tasklist, taskMap, undoStack);
             return;
         }

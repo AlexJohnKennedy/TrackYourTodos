@@ -316,9 +316,10 @@ namespace todo_app.DataTransferLayer.EventReconciliationSystem {
                     if (e.EventType == EventTypes.TaskAdded || e.EventType == EventTypes.ChildTaskAdded || e.EventType == EventTypes.TaskDeletedUndo || (e.EventType == EventTypes.TaskRevived && tasklist.FailedTaskReader(e.Original.Value) != null)) {
                         return Handlers[e.EventType](e, tasklist, undoStack);
                     }
-                    else if (e.EventType == EventTypes.TaskRevived && tasklist.AllTaskReader(e.Original.Value) != null && tasklist.AllTaskReader(e.Original.Value).Category != CategoryVals.Deferred) {
+                    else if (e.EventType == EventTypes.TaskRevived && tasklist.ActiveTaskReader(e.Original.Value) != null && tasklist.ActiveTaskReader(e.Original.Value).Category != CategoryVals.Deferred) {
                         // Implicitly 'fail' the original task first
                         tasklist.FailTask(tasklist.AllTaskReader(e.Original.Value), e.Timestamp);
+                        undoStack.Clear();
                         return Handlers[e.EventType](e, tasklist, undoStack);
                     }
                     else if (e.EventType == EventTypes.TaskAddedUndo || e.EventType == EventTypes.ChildTaskAddedUndo || e.EventType == EventTypes.TaskEdited || e.EventType == EventTypes.TaskDeleted) {
