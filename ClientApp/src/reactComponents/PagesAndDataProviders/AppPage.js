@@ -379,7 +379,7 @@ export class AppPage extends Component {
         // If we have more than one context visible, then the 'colour getter' function reads from the context mappings.
         // If only one, then we use the task's id.
         const getTaskColour = this.state.visibleContexts.length !== 1 && this.state.useContextColouring ? 
-        taskView => GetHSLAColour(this.state.contextMappings.GetColourId(this.state.contextMappings.GetIdForName(taskView.context))) :
+        taskView => GetHSLAColour(this.state.contextMappings.GetColourId(taskView.context)) :
         taskView => GetHSLAColour(taskView.colourid);
 
         return (
