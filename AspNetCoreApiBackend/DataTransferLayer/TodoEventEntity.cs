@@ -144,7 +144,7 @@ namespace todo_app.DataTransferLayer.Entities {
         public string EventType { get; set; }
 
         [Required]
-        [NotInTheFutureValidator(5000)]
+        [NotInTheFutureValidator(120000)]
         public long Timestamp { get; set; }
 
         [Required]
