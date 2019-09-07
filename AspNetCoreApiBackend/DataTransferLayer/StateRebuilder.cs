@@ -330,8 +330,27 @@ namespace todo_app.DataTransferLayer.EventReconciliationSystem {
                     }
                     else if (e.EventType == EventTypes.TaskActivated || e.EventType == EventTypes.TaskStarted) {
                         // If the task does not exist yet, we are happy to create it implicitly.
-                        if (e.Parent.HasValue) { tasklist.CreateNewSubtask(e.Name, tasklist.AllTaskReader(e.Parent.Value), e.Category, e.Timestamp, e.Id); }
-                        else { tasklist.CreateNewIndependentTask(e.Name, e.Category, e.Timestamp, e.ColourId, e.Id); }
+                        if (e.Parent.HasValue) { 
+                            tasklist.CreateNewSubtask(e.Name, tasklist.AllTaskReader(e.Parent.Value), e.Category, e.Timestamp, e.Id);
+                            undoStack.Push(new UndoAction(EventTypes.ChildTaskAdded, e.Id));
+                        }
+                        else { 
+                            tasklist.CreateNewIndependentTask(e.Name, e.Category, e.Timestamp, e.ColourId, e.Id);
+                            undoStack.Push(new UndoAction(EventTypes.TaskAdded, e.Id));
+                        }
+                        return Handlers[e.EventType](e, tasklist, undoStack);
+                    }
+                    else if (e.EventType == EventTypes.TaskCompleted && e.Category != CategoryVals.Deferred) {
+                        // Create the task implicitly, then apply the 'linking' event, and then perform the taskCompleted handler itself. This is the only case of a "double link".
+                        if (e.Parent.HasValue) { 
+                            tasklist.CreateNewSubtask(e.Name, tasklist.AllTaskReader(e.Parent.Value), e.Category, e.Timestamp, e.Id);
+                            undoStack.Push(new UndoAction(EventTypes.ChildTaskAddedUndo, e.Id));
+                        }
+                        else { 
+                            tasklist.CreateNewIndependentTask(e.Name, e.Category, e.Timestamp, e.ColourId, e.Id);
+                            undoStack.Push(new UndoAction(EventTypes.TaskAdded, e.Id));
+                        }
+                        Handlers[IncomingEventsWithLinkingEventProgressStatusMappings[ProgressStatusVals.NotStarted][e.EventType]](e, tasklist, undoStack);
                         return Handlers[e.EventType](e, tasklist, undoStack);
                     }
                     else {
