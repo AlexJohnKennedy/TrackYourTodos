@@ -124,6 +124,13 @@ function replayEvent(event, tasklist, taskMap, undoStack) {
             EventReplayFunctions.get(event.eventType)(event, tasklist, taskMap, undoStack);
             return;
         }
+        else if (event.eventType === EventTypes.taskCompleted && event.category !== Category.Deferred) {
+            if (event.parent !== null && event.parent !== undefined) { EventReplayFunctions.get(EventTypes.childTaskAdded)(event, tasklist, taskMap, undoStack); }
+            else { EventReplayFunctions.get(EventTypes.taskAdded)(event, tasklist, taskMap, undoStack); }
+            EventReplayFunctions.get(IncomingEventsWithLinkingEventProgressStatusMappings.get(ProgressStatus.NotStarted).get(event.eventType))(event, tasklist, taskMap, undoStack);
+            EventReplayFunctions.get(event.eventType)(event, tasklist, taskMap, undoStack);
+            return;
+        }
         else {
             throw new Error("Could not find a valid action for event regarding non-existant task. The invalid event was: " + event.toString());
         }
