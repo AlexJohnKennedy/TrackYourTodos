@@ -34,22 +34,6 @@ const EventReplayFunctions = new Map([
     [EventTypes.taskEditedUndo, replayTaskEditedUndoEvent],
 ]);
 
-// Mappings which denotes incoming events, per progress state, which are valid with 1 'missing' event link. The returned dictionary
-// denotes which linking events link to the incoming event.
-// (ProgressStatus, (IncomingEventType, LinkingEventType which makes the incoming event valid))
-const IncomingEventsWithLinkingEventProgressStatusMappings = new Map([
-    [ProgressStatus.NotStarted, new Map([
-        [EventTypes.taskCompleted, EventTypes.taskStarted],
-        [EventTypes.taskRevived, EventTypes.taskFailed]
-    ])],
-    [ProgressStatus.Started, new Map([
-        [EventTypes.taskRevived, EventTypes.taskFailed]
-    ])],
-    [ProgressStatus.Completed, new Map([ /* None */ ])],
-    [ProgressStatus.Failed, new Map([ /* None */ ])],
-    [ProgressStatus.Reattempted, new Map([ /* None */ ])]
-]);
-
 // Events which can be safely skipped without executing, for a given progress status denoting task state.
 const SkippableEventsForProgressStatusMappings = new Map([
     [ProgressStatus.NotStarted, new Set([
@@ -127,8 +111,8 @@ function replayEvent(event, tasklist, taskMap, undoStack) {
         else if (event.eventType === EventTypes.taskCompleted && event.category !== Category.Deferred) {
             if (event.parent !== null && event.parent !== undefined) { EventReplayFunctions.get(EventTypes.childTaskAdded)(event, tasklist, taskMap, undoStack); }
             else { EventReplayFunctions.get(EventTypes.taskAdded)(event, tasklist, taskMap, undoStack); }
-            EventReplayFunctions.get(IncomingEventsWithLinkingEventProgressStatusMappings.get(ProgressStatus.NotStarted).get(event.eventType))(event, tasklist, taskMap, undoStack);
-            EventReplayFunctions.get(event.eventType)(event, tasklist, taskMap, undoStack);
+            EventReplayFunctions.get(EventTypes.taskStarted)(event, tasklist, taskMap, undoStack);
+            EventReplayFunctions.get(EventTypes.taskCompleted)(event, tasklist, taskMap, undoStack);
             return;
         }
         else {
@@ -152,21 +136,43 @@ function replayEvent(event, tasklist, taskMap, undoStack) {
             return;
         }
     }
-    else if (IncomingEventsWithLinkingEventProgressStatusMappings.get(task.progressStatus).has(event.eventType)) {
-        console.debug("PERFORMING LINK: " + task.name + " ==> Task status is " + task.progressStatus + "; event type is " + event.eventType);
-        EventReplayFunctions.get(IncomingEventsWithLinkingEventProgressStatusMappings.get(task.progressStatus).get(event.eventType))(event, tasklist, taskMap, undoStack);
-        console.debug("LINK COMPLETED: " + task.name + "==> New task status is " + task.progressStatus);
-        EventReplayFunctions.get(event.eventType)(event, tasklist, taskMap, undoStack);
-        return;
-    }
     else if (SkippableEventsForProgressStatusMappings.get(task.progressStatus).has(event.eventType)) {
         console.debug("SKIPPING => { " + event.eventType + ", " + event.name + "}");
         return;     // This event can be safely skipped in these cases
+    }
+    else if (doImplicitLinkingEventIfRequired(task, event, tasklist, taskMap, undoStack)) {
+        console.debug("LINK COMPLETED");
+        return;
     }
     else {
         EventReplayFunctions.get(event.eventType)(event, tasklist, taskMap, undoStack);
         return;
     }
+}
+
+// Holy mother of god this code is so fucking terrible.
+function doImplicitLinkingEventIfRequired(task, event, tasklist, taskMap, undoStack) {
+    // CASE: Task is not started but we want to do 'completed'. We can therefore implicitly link the states by first doing a "taskStarted" operation.
+    if (event.eventType === EventTypes.taskCompleted && task.progressStatus === ProgressStatus.NotStarted) {
+        console.debug("PERFORMING LINK for task [" + task.name + "]: Linking from [NotStarted] to [Completed] by performing a [taskStarted] operation");
+        EventReplayFunctions.get(EventTypes.taskStarted)(event, tasklist, taskMap, undoStack);
+        EventReplayFunctions.get(EventTypes.taskCompleted)(event, tasklist, taskMap, undoStack);
+        return true;
+    }
+
+    // CASE: We want to do 'task revived' but the "original task" is not failed yet. In this case, we should implicitly 'fail' the original task first.
+    if (event.eventType === EventTypes.taskRevived) {
+        let original = taskMap.get(event.original);
+        if (original.category !== Category.Deferred && (original.progressStatus === ProgressStatus.NotStarted || original.progressStatus === ProgressStatus.Started)) {
+            console.debug("PERFORMING LINK for task [" + task.name + "]: Linking from [Active original task] to [Revived original task] by performing a [taskRevived] operation");
+            tasklist.FailTask(original, event.timestamp);
+            undoStack.ClearStack();
+            EventReplayFunctions.get(EventTypes.taskRevived)(event, tasklist, taskMap, undoStack);
+            return true;
+        }
+    }
+
+    return false;
 }
 
 // Specific Handlers
@@ -189,6 +195,10 @@ function replayChildTaskAddedEvent(eventData, tasklist, taskMap, undoStack) {
 function replayTaskRevivedEvent(eventData, tasklist, taskMap, undoStack) {
     if (eventData.original === null) throw new Error("Invalid event state: Tried to revive a task, but there was no 'original' id in the eventData");
     let originalTask = taskMap.get(eventData.original);
+    if (originalTask.progressStatus !== ProgressStatus.Failed) {
+        console.warn("Tried to revive a task [" + originalTask.name + "] which is not in the graveyard: The status was " + originalTask.progressStatus + ". This means something weird is going on..." );
+        return;
+    }
     if (eventData.category === Category.Deferred) {
         const newtask = tasklist.ReviveTaskAsClone(originalTask, false, eventData.timestamp, eventData.id);
         taskMap.set(eventData.id, newtask);
