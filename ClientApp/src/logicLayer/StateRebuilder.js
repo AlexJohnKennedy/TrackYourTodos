@@ -76,7 +76,7 @@ export function RebuildState(eventLogAsArray, tasklist, undoStack) {
     let taskMap = createTaskMap(tasklist);
     let latestid = "";
     eventLogAsArray.forEach(eventObj => {
-        //console.debug("{ " + eventObj.eventType + ", " + eventObj.name + "}");
+        console.debug("{ " + eventObj.eventType + ", " + eventObj.name + "}");
         replayEvent(eventObj, tasklist, taskMap, undoStack);
         latestid = eventObj.id;
     });

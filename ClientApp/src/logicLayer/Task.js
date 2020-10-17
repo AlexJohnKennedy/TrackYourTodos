@@ -278,7 +278,7 @@ export class TaskObjects {
 
     ReviveTaskAsClone(task, asActive, timeRevivedUNIX, id = null) {
         // Used to take a dead/failed task and 'revive' it by making a copy of it as an active or deferred task
-        if (task.progressStatus !== ProgressStatus.Failed) throw new Error("Cannot revive a task which is not in the graveyard");
+        if (task.progressStatus !== ProgressStatus.Failed) throw new Error("Cannot revive a task which is not in the graveyard: The status was " + task.progressStatus + ", the task is: " + task.name);
         let category = asActive ? task.category : Category.Deferred;
         task.progressStatus = ProgressStatus.Reattempted;   // Signal that this task has been revived. We only want to be able to do this once per failure.
         task.eventTimestamps.timeRevived = timeRevivedUNIX;
