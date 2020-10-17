@@ -153,7 +153,9 @@ function replayEvent(event, tasklist, taskMap, undoStack) {
         }
     }
     else if (IncomingEventsWithLinkingEventProgressStatusMappings.get(task.progressStatus).has(event.eventType)) {
+        console.debug("PERFORMING LINK: " + task.name + " ==> Task status is " + task.progressStatus + "; event type is " + event.eventType);
         EventReplayFunctions.get(IncomingEventsWithLinkingEventProgressStatusMappings.get(task.progressStatus).get(event.eventType))(event, tasklist, taskMap, undoStack);
+        console.debug("LINK COMPLETED: " + task.name + "==> New task status is " + task.progressStatus);
         EventReplayFunctions.get(event.eventType)(event, tasklist, taskMap, undoStack);
         return;
     }
