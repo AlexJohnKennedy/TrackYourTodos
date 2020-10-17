@@ -229,19 +229,19 @@ namespace todo_app.DataTransferLayer.EventReconciliationSystem {
         // WARNING! ONLY APPLICABLE IF NOT DEFERRED!
         private static readonly Dictionary<int, HashSet<string>> IncomingEventsToIgnoreForProgressStatusMappings = new Dictionary<int, HashSet<string>>() {
             { ProgressStatusVals.NotStarted, new HashSet<string>() {
-                EventTypes.TaskAdded, EventTypes.ChildTaskAdded, EventTypes.TaskActivated
+                EventTypes.TaskAdded, EventTypes.ChildTaskAdded, EventTypes.TaskActivated, EventTypes.TaskRevived
             }},
             { ProgressStatusVals.Started, new HashSet<string>() {
-                EventTypes.TaskAdded, EventTypes.ChildTaskAdded, EventTypes.TaskActivated, EventTypes.TaskStarted
+                EventTypes.TaskAdded, EventTypes.ChildTaskAdded, EventTypes.TaskActivated, EventTypes.TaskRevived, EventTypes.TaskStarted
             }},
             { ProgressStatusVals.Completed, new HashSet<string>() {
-                EventTypes.TaskAdded, EventTypes.ChildTaskAdded, EventTypes.TaskActivated, EventTypes.TaskStarted, EventTypes.TaskCompleted
+                EventTypes.TaskAdded, EventTypes.ChildTaskAdded, EventTypes.TaskActivated, EventTypes.TaskRevived, EventTypes.TaskStarted, EventTypes.TaskCompleted
             }},
             { ProgressStatusVals.Failed, new HashSet<string>() {
-                EventTypes.TaskAdded, EventTypes.ChildTaskAdded, EventTypes.TaskActivated, EventTypes.TaskStarted, EventTypes.TaskFailed, EventTypes.TaskRevivedUndo
+                EventTypes.TaskAdded, EventTypes.ChildTaskAdded, EventTypes.TaskActivated, EventTypes.TaskRevived, EventTypes.TaskStarted, EventTypes.TaskFailed, EventTypes.TaskRevivedUndo
             }},
             { ProgressStatusVals.Reattempted, new HashSet<string>() {
-                EventTypes.TaskAdded, EventTypes.ChildTaskAdded, EventTypes.TaskActivated, EventTypes.TaskStarted, EventTypes.TaskFailed, EventTypes.TaskRevived
+                EventTypes.TaskAdded, EventTypes.ChildTaskAdded, EventTypes.TaskActivated, EventTypes.TaskRevived, EventTypes.TaskStarted, EventTypes.TaskFailed
             }}
         };
 

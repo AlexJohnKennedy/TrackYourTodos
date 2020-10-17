@@ -37,19 +37,19 @@ const EventReplayFunctions = new Map([
 // Events which can be safely skipped without executing, for a given progress status denoting task state.
 const SkippableEventsForProgressStatusMappings = new Map([
     [ProgressStatus.NotStarted, new Set([
-        EventTypes.taskAdded, EventTypes.childTaskAdded, EventTypes.taskActivated, EventTypes.taskStartedUndo
+        EventTypes.taskAdded, EventTypes.childTaskAdded, EventTypes.taskActivated, EventTypes.taskRevived, EventTypes.taskStartedUndo, 
     ])],
     [ProgressStatus.Started, new Set([
-        EventTypes.taskAdded, EventTypes.childTaskAdded, EventTypes.taskActivated, EventTypes.taskStarted, EventTypes.taskCompletedUndo
+        EventTypes.taskAdded, EventTypes.childTaskAdded, EventTypes.taskActivated, EventTypes.taskRevived, EventTypes.taskStarted, EventTypes.taskCompletedUndo
     ])],
     [ProgressStatus.Completed, new Set([
-        EventTypes.taskAdded, EventTypes.childTaskAdded, EventTypes.taskActivated, EventTypes.taskStarted, EventTypes.taskCompleted
+        EventTypes.taskAdded, EventTypes.childTaskAdded, EventTypes.taskActivated, EventTypes.taskRevived, EventTypes.taskStarted, EventTypes.taskCompleted
     ])],
     [ProgressStatus.Failed, new Set([
-        EventTypes.taskAdded, EventTypes.childTaskAdded, EventTypes.taskActivated, EventTypes.taskStarted, EventTypes.taskFailed, EventTypes.taskRevivedUndo
+        EventTypes.taskAdded, EventTypes.childTaskAdded, EventTypes.taskActivated, EventTypes.taskRevived, EventTypes.taskStarted, EventTypes.taskFailed, EventTypes.taskRevivedUndo
     ])],
     [ProgressStatus.Reattempted, new Set([
-        EventTypes.taskAdded, EventTypes.childTaskAdded, EventTypes.taskActivated, EventTypes.taskStarted, EventTypes.taskFailed, EventTypes.taskRevived
+        EventTypes.taskAdded, EventTypes.childTaskAdded, EventTypes.taskActivated, EventTypes.taskRevived, EventTypes.taskStarted, EventTypes.taskFailed
     ])]
 ]);
 
@@ -136,13 +136,13 @@ function replayEvent(event, tasklist, taskMap, undoStack) {
             return;
         }
     }
-    else if (SkippableEventsForProgressStatusMappings.get(task.progressStatus).has(event.eventType)) {
-        console.debug("SKIPPING => { " + event.eventType + ", " + event.name + "}");
-        return;     // This event can be safely skipped in these cases
-    }
     else if (doImplicitLinkingEventIfRequired(task, event, tasklist, taskMap, undoStack)) {
         console.debug("LINK COMPLETED");
         return;
+    }
+    else if (SkippableEventsForProgressStatusMappings.get(task.progressStatus).has(event.eventType)) {
+        console.debug("SKIPPING => { " + event.eventType + ", " + event.name + "}");
+        return;     // This event can be safely skipped in these cases
     }
     else {
         EventReplayFunctions.get(event.eventType)(event, tasklist, taskMap, undoStack);
