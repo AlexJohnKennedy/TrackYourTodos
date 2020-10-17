@@ -139,7 +139,7 @@ namespace todo_app.DataTransferLayer.EventReconciliationSystem {
             }},
             { EventTypes.TaskRevived, (e, t, undoStack) => {
                 Task original = t.FailedTaskReader(e.Original.Value);
-                if (original == null) throw new InvalidOperationException("Cannot revive a task which was not found in the failed tasks collection!");
+                if (original == null) return t;     // Safety against crashes
                 if (e.Category == CategoryVals.Deferred) t.ReviveTaskAsClone(original, false, e.Timestamp, e.Id);
                 else t.ReviveTaskAsClone(original, true, e.Timestamp, e.Id);
                 undoStack.Push(new UndoAction(EventTypes.TaskRevived, e.Id));
@@ -283,22 +283,6 @@ namespace todo_app.DataTransferLayer.EventReconciliationSystem {
             }}
         };
 
-        // Mappings which denotes incoming events, per progress state, which are valid with 1 'missing' event link. The returned dictionary
-        // denotes which linking events link to the incoming event.
-        // (ProgressStatus, (IncomingEventType, LinkingEventType which makes the incoming event valid))
-        private static readonly Dictionary<int, Dictionary<string, string>> IncomingEventsWithLinkingEventProgressStatusMappings = new Dictionary<int, Dictionary<string, string>>() {
-            { ProgressStatusVals.NotStarted, new Dictionary<string, string>() {
-                { EventTypes.TaskCompleted, EventTypes.TaskStarted },
-                { EventTypes.TaskRevived, EventTypes.TaskFailed }
-            }},
-            { ProgressStatusVals.Started, new Dictionary<string, string>() {
-                { EventTypes.TaskRevived, EventTypes.TaskFailed }
-            }},
-            { ProgressStatusVals.Completed, new Dictionary<string, string>() { /* None */ } },
-            { ProgressStatusVals.Failed, new Dictionary<string, string>() { /* None */ } },
-            { ProgressStatusVals.Reattempted, new Dictionary<string, string>() { /* None */ } }
-        };
-
         public static TaskList Replay(GenericTodoEvent e, TaskList tasklist, Stack<UndoAction> undoStack, out bool saveEvent, out bool triggerRefresh) {
             saveEvent = true;
             triggerRefresh = false;
@@ -350,7 +334,7 @@ namespace todo_app.DataTransferLayer.EventReconciliationSystem {
                             tasklist.CreateNewIndependentTask(e.Name, e.Category, e.Timestamp, e.ColourId, e.Id);
                             undoStack.Push(new UndoAction(EventTypes.TaskAdded, e.Id));
                         }
-                        Handlers[IncomingEventsWithLinkingEventProgressStatusMappings[ProgressStatusVals.NotStarted][e.EventType]](e, tasklist, undoStack);
+                        Handlers[EventTypes.TaskStarted](e, tasklist, undoStack);
                         return Handlers[e.EventType](e, tasklist, undoStack);
                     }
                     else {
@@ -395,10 +379,7 @@ namespace todo_app.DataTransferLayer.EventReconciliationSystem {
                         saveEvent = true;
                         return tasklist;
                     }
-                    if (IncomingEventsWithLinkingEventProgressStatusMappings[task.ProgressStatus].ContainsKey(e.EventType)) {
-                        // This is a valid incoming event type, but we must 'link' it by executing the implicit event which is currently missing.
-                        Handlers[IncomingEventsWithLinkingEventProgressStatusMappings[task.ProgressStatus][e.EventType]](e, tasklist, undoStack);
-                    }
+                    DoImplicitLinkingEventIfRequired(task, e, tasklist, undoStack);
 
                     return Handlers[e.EventType](e, tasklist, undoStack);
                 }
@@ -411,6 +392,23 @@ namespace todo_app.DataTransferLayer.EventReconciliationSystem {
             }
         }
 
+        // Holy mother of god this code is so fucking terrible.
+        private static void DoImplicitLinkingEventIfRequired(Task task, GenericTodoEvent e, TaskList tasklist, Stack<UndoAction> undoStack) {
+            // CASE: Task is not started but we want to do 'completed'. We can therefore implicitly link the states by first doing a "taskStarted" operation.
+            if (e.EventType == EventTypes.TaskCompleted && task.ProgressStatus == ProgressStatusVals.NotStarted) {
+                Handlers[EventTypes.TaskStarted](e, tasklist, undoStack);
+                return;
+            }
 
+            // CASE: We want to do 'task revived' but the "original task" is not failed yet. In this case, we should implicitly 'fail' the original task first.
+            if (e.EventType == EventTypes.TaskRevived) {
+                Task original = tasklist.ActiveTaskReader(e.Original.Value);
+                if (original != null && original.Category != CategoryVals.Deferred) {
+                    tasklist.FailTask(original, e.Timestamp);
+                    undoStack.Clear();
+                    return;
+                }
+            }
+        }
     }
 }
